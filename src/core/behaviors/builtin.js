@@ -242,6 +242,7 @@ defineBehavior('eatable', {
     then: 'gone',       // after the last look: 'gone' (eaten up) or 'stay' (a core stays)
     leaves: null,       // 'gone' dishes: the kind left behind (plate, bowl, glass, tray), or null
     sound: 'munch',
+    tap: true,          // false: a tap doesn't nibble (the Mystery Dish giggles instead; eating still bites)
   },
   check(p, { sounds, kinds }) {
     if (!isStrList(p.looks)) return 'looks must list the bite looks';
@@ -250,7 +251,7 @@ defineBehavior('eatable', {
     return soundOk(p.sound, sounds) ? null : 'unknown sound ' + p.sound;
   },
   look: (e, p) => p.looks[clampIdx(e.props.bites || 0, p.looks.length)],
-  onTap: bite,
+  onTap: (e, rx, p) => (p.tap === false ? false : bite(e, rx, p)),
   verbs: { bite },
 });
 

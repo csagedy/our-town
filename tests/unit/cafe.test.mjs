@@ -284,6 +284,11 @@ test('mystery: colour nearest the ingredients, look by colour and bites, composi
   const w = world();
   const md = w.spawn('mystery-dish', { color: 'orange', eyes: 'happy', mouth: 'o', topper: 'bow' });
   assert.equal(w.b.spriteOf(w.e(md)).overlays.length, 3);
-  for (let i = 0; i < 3; i++) w.b.onTap(w.e(md), w.ctx);
+  // A tap makes it giggle and wiggle (P2a.4); it isn't nibbled.
+  w.b.onTap(w.e(md), w.ctx);
+  assert.equal(w.b.log().at(-1).reason, 'giggle');
+  assert.equal(w.e(md).props.bites, undefined);
+  // Eating it (a character's bite verb) still bites it down.
+  for (let i = 0; i < 3; i++) w.b.act(md, 'bite');
   assert.ok(inRoom(w.store.state, w.def.id).some((q) => q.kind === 'plate'), 'eaten up: the plate stays');
 });

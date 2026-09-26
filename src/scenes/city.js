@@ -2,8 +2,7 @@
 // little town, 2400 units wide so it pans with a finger. Every building
 // reacts to a tap: the cafe opens its door and you go in (town.js runs the
 // transition); so do the construction site (P2c.1) and the theater (P2b.1,
-// its curtains swish); the school is not built yet, so it plays a "coming
-// soon" reaction instead (the bell rings). The sun/moon in the sky toggles night
+// its curtains swish) and the school (P2d.1, its bell rings ding-dong). The sun/moon in the sky toggles night
 // (a `mapSet {night}` op, so it is saved and shared). Lots and the Lost &
 // Found box wiggle for now (structures and the lost-things drawer arrive in
 // P2c.5 and P1.14).
@@ -49,7 +48,7 @@ const OWNER = {
   booth: 'booth', 'booth-curtain': 'booth',   // P1.15: the Character Maker
 };
 // Built locations: a tap goes in. The rest react ("coming soon").
-export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth', construction: 'construction/yard', theater: 'theater/stage' };   // P2c.1: the site; P2b.1: the theater
+export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth', construction: 'construction/yard', theater: 'theater/stage', school: 'school/classroom' };   // P2c.1: the site; P2b.1: the theater; P2d.1: the school
 export const BUILDINGS = ['cafe', 'theater', 'construction', 'school'];
 // P1.14: things and characters carried onto the map rest on the street (the
 // upper sidewalk, the road, the lower sidewalk) and are drawn this much
@@ -312,7 +311,8 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
         later(420, () => onEnter('construction', DOORS.construction, at));
       }
     },
-    school() {
+    school(el, info) {
+      if (entering) return;
       bounce('school', 0.2);
       sparkle('school-bell', 0.5, 8);
       sfx.play('bell', { gain: 0.9 });
@@ -324,6 +324,14 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
           { transform: 'rotate(0deg)' },
         ], { duration: 1100, easing: 'ease-in-out' });
       });
+      // P2d.1: the school is built: ding-dong and in we go (a tap only; the car's poke() just rings).
+      if (info && DOORS.school && onEnter) {
+        entering = true;
+        stats.entered++;
+        const d = doorBox('school');
+        const at = stage.worldToScreen((d.x0 + d.x1) / 2, d.y0 + (d.y1 - d.y0) * 0.55);
+        later(480, () => onEnter('school', DOORS.school, at));
+      }
     },
     bus() {
       sfx.play('squeak');
@@ -441,6 +449,7 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
     /** World point where a location's door is (the transition zooms there). */
     doorPoint(location) {
       if (location === DOORS.construction) return this.doorWorld('construction');   // P2c.1
+      if (location === DOORS.school) return this.doorWorld('school');   // P2d.1
       const piece = location === DOORS.cafe ? 'cafe-door' : location === DOORS.booth ? 'booth-curtain' : location === DOORS.theater ? 'theater-curtains' : null;
       if (!piece) return null;
       const p = map.pieces[piece];

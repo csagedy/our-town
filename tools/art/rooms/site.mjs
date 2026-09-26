@@ -665,8 +665,9 @@ export const ROOM = {
         ${craneMast()}${craneCabInside()}${steelFrame()}${siteOffice()}${toolWall()}` },
     { id: 'counter', baseline: 728,
       art: () => `${pitLip()}${scaffold()}${pottyBody()}${workbench()}` },
+    // P2c.3: the dump truck and the excavator body are only pieces (they drive), never baked into the layer.
     { id: 'mid', baseline: 903,
-      art: () => `${lumberPile()}${brickPallet()}${coneStack()}${leverBox()}${truckBody()}${excavatorBody()}${mixerStand()}` },
+      art: () => `${lumberPile()}${brickPallet()}${coneStack()}${leverBox()}${mixerStand()}` },
     { id: 'front', baseline: 1000,
       art: () => `${lunchBench()}${foreground()}` },
   ],

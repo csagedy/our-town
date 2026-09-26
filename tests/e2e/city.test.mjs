@@ -86,26 +86,25 @@ for (const name of Object.keys(VIEWPORTS)) {
       await page.screenshot(`city-${name}-east`);
     });
 
-    // The construction site (P2c.1, tests/e2e/site.test.mjs) and the theater
-    // (P2b.1, tests/e2e/theater.test.mjs) are built now and go in.
-    it('the unbuilt buildings play a "coming soon" reaction, never a dead tap', async () => {
-      const cases = [
-        ['school', 0.55, 'school-bell', 'bell'],
-      ];
-      for (const [id, dy, part, sound] of cases) {
-        await page.waitFor(settled);
-        const pt = await show(page, id, dy);
-        assert.ok(pt.x > 0 && pt.x < vp.width && pt.y > 0 && pt.y < vp.height, `${id} on screen`);
-        await clearRec(page);
-        await page.tap(pt.x, pt.y);
-        await page.waitFor(`window.__rec.anims.includes(${JSON.stringify(part)})`).catch(() => {});
-        const rec = await page.eval(() => window.__rec);
-        assert.ok(rec.anims.includes(part), `${id}: ${part} moved (${rec.anims})`);
-        assert.ok(rec.anims.includes(id), `${id}: the building bounced`);
-        assert.ok(rec.sounds.includes(sound), `${id}: played ${sound} (${rec.sounds})`);
-        assert.equal(await page.eval(() => window.__town.at), 'city', `${id} is not built yet: we stay on the map`);
-        if (id === 'school') await page.screenshot(`city-${name}-school-bell`);
-      }
+    // The construction site (P2c.1, tests/e2e/site.test.mjs), the theater
+    // (P2b.1, tests/e2e/theater.test.mjs) and the school (P2d.1,
+    // tests/e2e/school.test.mjs) are all built now and go in. The school
+    // still rings its bell (ding-dong) on the way in; the map button brings us back.
+    it('the school rings its bell and goes in; the map button comes back', async () => {
+      await page.waitFor(settled);
+      const pt = await show(page, 'school', 0.55);
+      assert.ok(pt.x > 0 && pt.x < vp.width && pt.y > 0 && pt.y < vp.height, 'school on screen');
+      await clearRec(page);
+      await page.tap(pt.x, pt.y);
+      await page.waitFor('window.__rec.anims.includes("school-bell")').catch(() => {});
+      const rec = await page.eval(() => window.__rec);
+      assert.ok(rec.anims.includes('school-bell'), `the bell swung (${rec.anims})`);
+      assert.ok(rec.anims.includes('school'), 'the building bounced');
+      assert.ok(rec.sounds.includes('bell'), `played bell (${rec.sounds})`);
+      await page.screenshot(`city-${name}-school-bell`);
+      await page.waitFor(() => window.__town.at === 'school/classroom' && !window.__town.busy, { timeout: 20000 });
+      await page.tapElement('.ui-map');
+      await page.waitFor(() => window.__town.at === 'city' && !window.__town.busy, { timeout: 20000 });
     });
 
     it('the lots, the Lost & Found box, the bus and the birds react too', async () => {

@@ -169,10 +169,11 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
 
     it('a full plate refuses: the egg pulled out of the bowl springs back into the bowl', async () => {
       await page.eval((plate) => {
-        for (let i = 0; i < 3; i++) window.__store.dispatch('spawn', { id: window.__store.newId(), kind: i ? 'apple' : 'cupcake', parent: plate, slot: 's' + i });
+        // A plate holds 5 (P2a.4: a sandwich stacks up on it).
+        for (let i = 0; i < 5; i++) window.__store.dispatch('spawn', { id: window.__store.newId(), kind: i ? 'apple' : 'cupcake', parent: plate, slot: 's' + i });
       }, ids.plate2);
       await idle(page);
-      assert.equal((await kidsOf(page, ids.plate2)).length, 3);
+      assert.equal((await kidsOf(page, ids.plate2)).length, 5);
       const egg0 = await ent(page, ids.egg);
       const n = await logLen(page);
       await dragTo(page, ids.egg, ids.plate2, 0.85);
@@ -186,7 +187,7 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
       assert.equal(egg.rev, egg0.rev, 'nothing saved');
       assert.equal(egg.drawnIn, ids.bowl, 'drawn back inside the bowl');
       assert.ok(Math.abs(egg.rect.cx - egg0.rect.cx) < 2 && Math.abs(egg.rect.b - egg0.rect.b) < 2, 'back in its slot');
-      assert.equal((await kidsOf(page, ids.plate2)).length, 3);
+      assert.equal((await kidsOf(page, ids.plate2)).length, 5);
       // Pulled out onto the floor instead, it comes out.
       await dragTo(page, ids.egg, { x: 900, y: 930 }, 0.85);
       const out = await ent(page, ids.egg);

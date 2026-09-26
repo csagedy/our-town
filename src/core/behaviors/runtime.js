@@ -367,7 +367,7 @@ export function createBehaviors({ catalog, store, random = Math.random }) {
       const p = containerOf(parent.kind);
       if (!p) return null;
       const lay = layoutSlots(p, sizeOf(parent), kids.map((k) => Object.assign({ id: k.id, slot: k.slot }, sizeOf(k))));
-      for (const b of listOf(parent.kind)) if (b.def.layoutKids) b.def.layoutKids(parent, kids, lay, b.p);
+      for (const b of listOf(parent.kind)) if (b.def.layoutKids) b.def.layoutKids(parent, kids, lay, b.p, { sizeOf, box: sizeOf(parent) });
       return lay;
     },
 

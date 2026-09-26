@@ -24,11 +24,13 @@ import {
   averageColor, blendHex, nearestColor, contentsOf, drinkFor, cupFill, isMixed, MIX_DONE, STIR_PER_STAGE,
   SMOOTHIE_HEX, BATTER_HEX,
 } from '../../src/core/food.js';
+import { useRecipes } from '../../src/core/recipes.js';
 
 const json = JSON.parse(readFileSync(path.join(ROOT, 'data/catalog.json'), 'utf8'));
 const manifest = JSON.parse(readFileSync(path.join(ROOT, 'assets/art-manifest.json'), 'utf8'));
 const m = manifest.rooms.cafe;
 const catalog = createCatalog(json, manifest);
+useRecipes(JSON.parse(readFileSync(path.join(ROOT, 'data/recipes.json'), 'utf8')));
 const foodP = (kind) => catalog.get(kind).behaviors.find((b) => b.use === 'food');
 
 // ---- pure model ----
@@ -294,7 +296,8 @@ test('blender: fruit in, blend (hidden, the jug colour), a glass on it pours ONE
   assert.equal(w.e(glass), undefined, 'the glass became the smoothie');
   assert.equal(w.kids(bl).length, 0);
   const sm = inRoom(w.store.state, w.def.id).find((e) => e.kind === 'smoothie');
-  assert.deepEqual(sm.props, { color: 'pink', contents: ['banana', 'milk', 'strawberry'] });
+  // P2a.4: the recipe table names it (Zoe's text layer shows props.name).
+  assert.deepEqual(sm.props, { color: 'pink', contents: ['banana', 'milk', 'strawberry'], recipe: 'strawberry-banana', name: 'Strawberry Banana Smoothie' });
   assert.equal(w.b.lookOf(sm), 'pink');
   // An empty blender: the glass bounces back.
   const g2 = w.spawn('glass');

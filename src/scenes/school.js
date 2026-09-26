@@ -275,7 +275,7 @@ export function cubbySpots(kids, { isBag, isLunch }) {
 export const rugIndex = (seat) => (typeof seat === 'string' && /^rug-\d+$/.test(seat) ? Number(seat.slice(4)) - 1 : -1);
 
 /** The kerb spots kids hop off the bus to (world feet points): in front of the bus, by the door. */
-export const KERB = [[372, 936], [462, 958], [552, 936], [636, 960]];
+export const KERB = [[380, 936], [500, 962], [620, 938], [735, 962]];
 
 // ---------------------------------------------------------------------------
 // First visit (pure data)
@@ -323,8 +323,8 @@ export const SCHOOL_CAST = [
 // Worn things: [cast index, kind, slot, colour name].
 export const SCHOOL_CAST_WEAR = [
   [0, 'lanyard', 'wear-over', null],
-  [2, 'school-backpack', 'wear-back', 'butter'],
-  [3, 'school-backpack', 'wear-back', 'rose'],
+  [3, 'school-backpack', 'wear-back', 'rose'],     // Priya
+  [4, 'school-backpack', 'wear-back', 'butter'],   // Kenji (Leo keeps his towel cape on his back)
 ];
 // Maya (SCHOOL_CAST[1]) already has cubby 1 (her face on its label).
 export const SCHOOL_OWNERS = [[1, 0]];
@@ -573,6 +573,15 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     fx.burst('sparkle', c.label[0], c.label[1], { count: 8, spread: 70 });
     if (chars) chars.face(charId, [['laughing', 700], ['happy', 600]]);
   }
+  const nearestCubby = (x) => { let best = -1, bd = Infinity; CUB.forEach((c, i) => { const d = Math.abs(c.label[0] - x); if (d < bd) { bd = d; best = i; } }); return best; };
+  function overCubbies(item) {
+    const v = viewOf(item.id);
+    if (!v || !CUB.length) return false;
+    const cy = v.y - (v.sprite.h * v.scale) / 2;
+    const x0 = CUB[0].label[0] - 26, x1 = CUB[CUB.length - 1].label[0] + 26;
+    const floor = m.surfaces.find((s) => s.id === CUB[0].floor);
+    return v.x >= x0 && v.x <= x1 && cy >= CUB[0].label[1] - 30 && cy <= (floor ? floor.y : 717);
+  }
   function tapCubby(e) {
     const i = cubbyIndex(e);
     const c = CUB[i];
@@ -636,6 +645,10 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     dropTarget(item, other) {
       if (other.kind === FISHBOWL_KIND) return !isChar(item) && isFishFood(item);
       if (other.kind === CUBBY_KIND && isChar(item)) return false;
+      // Only the cubby whose column the thing is over takes it (their drop boxes overlap).
+      if (other.kind === CUBBY_KIND) { const v = viewOf(item.id); if (v && nearestCubby(v.x) !== cubbyIndex(other)) return false; }
+      // Held up in the cubbies, a bag goes into the cubby, not onto the kid standing in front of it.
+      if (isChar(other) && !isChar(item) && overCubbies(item)) return false;
       return base.dropTarget ? base.dropTarget(item, other) : false;
     },
     onDropInto(item, target, ctx) {
@@ -654,7 +667,19 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
       glowCubby(-1);
       const before = e.props.seat || null;
       const r = base.onDrop ? base.onDrop(e, ctx) : false;
-      if (cub >= 0) assignCubby(cub, e.id);
+      if (cub >= 0) {
+        assignCubby(cub, e.id);
+        // Standing right up against the cubbies: a hop forward, so the cubby and its face show.
+        const cur = getEntity(store.state, e.id);
+        if (cur && !cur.props.seat && !cur.parent && cur.y < 760) {
+          later(260, () => {
+            const c2 = getEntity(store.state, e.id);
+            const v = viewOf(e.id);
+            if (!c2 || c2.props.seat || c2.y >= 760 || (v && v.held)) return;
+            if (store.dispatch('move', { id: e.id, room: SCHOOL_ID, x: c2.x, y: 792, z: 0 })) view.animateFrom(e.id, c2.x, c2.y);
+          });
+        }
+      }
       const now = getEntity(store.state, e.id);
       if (now) afterPlace(now, before);
       return r;
@@ -722,7 +747,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     if (ri >= 0) later(180, () => rugNote(ri));
     if (seat === 'rocking-chair') later(320, () => rock({ soft: true }));
     if (seat && seat.indexOf(COT_SEAT) === 0) { stats.naps++; later(400, () => zzz(e.id, 4)); }
-    if (!seat && state('sink-tap') === 'on' && atSink(e)) later(250, () => wash([e]));
+    if (state('sink-tap') === 'on' && atSink(e)) later(250, () => wash([e]));
   }
 
   // ---- the rug ----
@@ -808,7 +833,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
 
   // ---- the sink ----
   const SINK = (m.slots || []).find((s) => s.id === 'sink') || { at: [990.5, 611.8], box: [952, 553, 77, 63] };
-  const atSink = (e) => !e.parent && !e.props.seat && Math.abs(e.x - SINK.at[0]) < 95 && e.y >= m.floor.y0 - 2 && e.y < 880;
+  const atSink = (e) => !e.parent && (!e.props.seat || /^line-/.test(e.props.seat)) && Math.abs(e.x - SINK.at[0]) < 95 && e.y >= m.floor.y0 - 2 && e.y < 880;
   function wash(list) {
     const b = SINK.box;
     const spout = { x: b[0] + b[2] * 0.5, y: b[1] + b[3] * 0.55 };

@@ -26,7 +26,7 @@ export const MYSTERY_HEX = {
   purple: '#D5C8E3', orange: '#F4C7A6', blue: '#A3BEDC', cream: '#EFE4D6',
 };
 const DEFAULTS = { color: 'pink', eyes: 'googly', mouth: 'grin', topper: 'sprout' };
-const PART_VARIANTS = {
+export const MYSTERY_VARIANTS = {
   eyes: ['googly', 'wonky', 'happy', 'sleepy', 'stars', 'dots'],
   mouth: ['grin', 'tongue', 'o', 'wavy', 'teeth', 'smile'],
   topper: ['sprout', 'cherry', 'flag', 'bow', 'steam', 'candle'],
@@ -68,9 +68,9 @@ const pick = (list, random) => list[Math.floor(random() * list.length) % list.le
 export function mysteryProps(random = Math.random, colors = null) {
   return {
     color: colors && colors.length ? mysteryColorFor(colors) : pick(Object.keys(MYSTERY_HEX), random),
-    eyes: pick(PART_VARIANTS.eyes, random),
-    mouth: pick(PART_VARIANTS.mouth, random),
-    topper: pick(PART_VARIANTS.topper, random),
+    eyes: pick(MYSTERY_VARIANTS.eyes, random),
+    mouth: pick(MYSTERY_VARIANTS.mouth, random),
+    topper: pick(MYSTERY_VARIANTS.topper, random),
   };
 }
 

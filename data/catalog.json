@@ -160,7 +160,8 @@
       "tags": ["food", "sweet"],
       "sounds": { "tap": "squish", "drop": "squish" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone" },
+        { "use": "dressed", "top": [0.5, 0.06] }
       ],
       "label": "Cupcake",
       "home": { "room": "cafe/kitchen" }
@@ -405,9 +406,10 @@
       "tags": ["dish", "plate", "container"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
-        { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "plate", "area": [0.16, 0.3, 0.84, 0.5], "scale": 0.85 },
+        { "use": "container", "accepts": ["food"], "capacity": 5, "layout": "stack", "area": [0.16, 0.3, 0.84, 0.5], "scale": 0.85 },
         { "use": "spill", "on": "longPress" },
-        { "use": "dish", "at": 0.35 }
+        { "use": "dish", "at": 0.35 },
+        { "use": "assemble" }
       ],
       "label": "Plate",
       "home": { "room": "cafe/kitchen" }
@@ -1042,7 +1044,8 @@
       "tags": ["food", "dish", "sweet", "breakfast"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Pancake Stack",
       "home": { "room": "cafe/kitchen" }
@@ -1054,7 +1057,8 @@
       "tags": ["food", "dish", "savory"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Burger",
       "home": { "room": "cafe/kitchen" }
@@ -1066,7 +1070,8 @@
       "tags": ["food", "dish", "savory", "baked"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Pizza",
       "home": { "room": "cafe/kitchen" }
@@ -1078,7 +1083,8 @@
       "tags": ["food", "dish", "veg", "healthy"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "bowl" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "bowl" },
+        { "use": "dressed" }
       ],
       "label": "Salad",
       "home": { "room": "cafe/kitchen" }
@@ -1090,7 +1096,8 @@
       "tags": ["food", "dish", "savory"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Spaghetti",
       "home": { "room": "cafe/kitchen" }
@@ -1102,7 +1109,8 @@
       "tags": ["food", "dish", "savory"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Sandwich",
       "home": { "room": "cafe/kitchen" }
@@ -1114,7 +1122,8 @@
       "tags": ["food", "dish", "fish", "savory"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "tray" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "tray" },
+        { "use": "dressed" }
       ],
       "label": "Sushi Roll",
       "home": { "room": "cafe/kitchen" }
@@ -1126,7 +1135,8 @@
       "tags": ["food", "dish", "savory", "warm"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Soup Bowl",
       "home": { "room": "cafe/kitchen" }
@@ -1138,7 +1148,8 @@
       "tags": ["food", "dish", "fruit", "sweet", "healthy"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "bowl" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "bowl" },
+        { "use": "dressed" }
       ],
       "label": "Fruit Bowl",
       "home": { "room": "cafe/kitchen" }
@@ -1150,7 +1161,8 @@
       "tags": ["food", "dish", "sweet", "cold", "dessert"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "glass" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "glass" },
+        { "use": "dressed" }
       ],
       "label": "Ice Cream Sundae",
       "home": { "room": "cafe/kitchen" }
@@ -1162,7 +1174,8 @@
       "tags": ["food", "dish", "sweet", "baked"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Cookies",
       "home": { "room": "cafe/kitchen" }
@@ -1174,7 +1187,8 @@
       "tags": ["food", "dish", "savory", "toasty"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Grilled Cheese",
       "home": { "room": "cafe/kitchen" }
@@ -1186,7 +1200,8 @@
       "tags": ["food", "dish", "breakfast", "savory"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" },
+        { "use": "dressed" }
       ],
       "label": "Egg On Toast",
       "home": { "room": "cafe/kitchen" }
@@ -1198,7 +1213,8 @@
       "tags": ["food", "dish", "drink", "sweet", "cold"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "drink", "key": "color" }
+        { "use": "drink", "key": "color" },
+        { "use": "dressed", "face": [0.45, 0.46] }
       ],
       "label": "Smoothie",
       "home": { "room": "cafe/kitchen" }
@@ -1210,7 +1226,8 @@
       "tags": ["food", "sweet"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
-        { "use": "eatable", "looks": ["whole", "bite1"], "then": "gone" }
+        { "use": "eatable", "looks": ["whole", "bite1"], "then": "gone" },
+        { "use": "dressed", "top": [0.5, 0.18] }
       ],
       "label": "Cake Slice",
       "home": { "room": "cafe/kitchen" }
@@ -1219,13 +1236,25 @@
       "art": { "sprite": "mystery-dish" },
       "ph": { "shape": "blob", "fill": "#E9AFAE" },
       "size": [100, 74],
-      "tags": ["food", "dish", "mystery"],
+      "tags": ["food", "dish", "mystery", "weird"],
       "sounds": { "tap": "squish", "drop": "clink" },
       "behaviors": [
         { "use": "mystery" },
-        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate", "tap": false }
       ],
       "label": "Mystery Dish",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "recipe-book": {
+      "art": { "sprite": "book", "scale": 1.7 },
+      "ph": { "shape": "flat", "fill": "#E9737A" },
+      "size": [92, 32],
+      "tags": ["book", "cafe"],
+      "sounds": { "tap": "whoosh", "drop": "thud" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.5 }
+      ],
+      "label": "Recipe Book",
       "home": { "room": "cafe/kitchen" }
     },
     "fridge-egg": {
@@ -2167,7 +2196,7 @@
       "tags": ["spawner", "stock", "hotspot", "school"],
       "sounds": { "tap": "squish", "drop": "tap" },
       "behaviors": [
-        { "use": "spawner", "kinds": ["nap-cot", "nap-blanket"], "sound": "squish" }
+        { "use": "spawner", "kinds": ["nap-cot"], "sound": "squish" }
       ],
       "fixed": true,
       "home": { "room": "school/classroom" }
@@ -2488,6 +2517,99 @@
       "tags": ["construction", "crane"],
       "sounds": { "tap": "clink", "drop": "clunk" },
       "behaviors": []
+    },
+    "wheelbarrow": {
+      "art": { "sprite": "wheelbarrow" },
+      "ph": { "shape": "cup", "fill": "#96C47F" },
+      "size": [132, 56],
+      "tags": ["construction", "tool", "vehicle", "dirt"],
+      "sounds": { "tap": "squeak", "drop": "thud" },
+      "behaviors": [
+        { "use": "variant", "key": "load" }
+      ],
+      "label": "Wheelbarrow",
+      "home": { "room": "construction/yard" }
+    },
+    "dirt-pile": {
+      "ph": { "shape": "blob", "fill": "#B98A62" },
+      "size": [104, 38],
+      "tags": ["construction", "dirt", "pile"],
+      "sounds": { "tap": "thud", "drop": "thud" },
+      "behaviors": [],
+      "label": "Dirt Pile",
+      "home": { "room": "construction/yard" }
+    },
+    "dino-bone": {
+      "art": { "sprite": "dino-bone" },
+      "ph": { "shape": "flat", "fill": "#F4EEDF" },
+      "size": [101, 61],
+      "tags": ["treasure", "construction"],
+      "sounds": { "tap": "knock", "drop": "knock" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.8, "sound": "knock" }
+      ],
+      "label": "Dinosaur Bone",
+      "home": { "room": "construction/yard" }
+    },
+    "treasure-chest": {
+      "art": { "sprite": "treasure-chest" },
+      "ph": { "shape": "box", "fill": "#C39068" },
+      "size": [80, 70],
+      "tags": ["treasure", "construction"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["knock", "tada"], "fx": "sparkle" }
+      ],
+      "label": "Treasure Chest",
+      "home": { "room": "construction/yard" }
+    },
+    "fossil": {
+      "art": { "sprite": "fossil" },
+      "ph": { "shape": "round", "fill": "#D9D2C5" },
+      "size": [77, 61],
+      "tags": ["treasure", "construction"],
+      "sounds": { "tap": "knock", "drop": "knock" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.6, "sound": "chime" }
+      ],
+      "label": "Fossil",
+      "home": { "room": "construction/yard" }
+    },
+    "rubber-duck": {
+      "art": { "sprite": "rubber-duck" },
+      "ph": { "shape": "blob", "fill": "#F2C75C" },
+      "size": [78, 65],
+      "tags": ["treasure", "toy", "construction"],
+      "sounds": { "tap": "squeak", "drop": "squeak" },
+      "behaviors": [
+        { "use": "squeak" }
+      ],
+      "label": "Rubber Duck",
+      "home": { "room": "construction/yard" }
+    },
+    "toy-robot": {
+      "art": { "sprite": "toy-robot" },
+      "ph": { "shape": "tall", "fill": "#8FB1DC" },
+      "size": [72, 103],
+      "tags": ["treasure", "toy", "construction"],
+      "sounds": { "tap": "whirr", "drop": "clink" },
+      "behaviors": [
+        { "use": "wobble", "amount": 1, "sound": "whirr" }
+      ],
+      "label": "Toy Robot",
+      "home": { "room": "construction/yard" }
+    },
+    "gem": {
+      "art": { "sprite": "gem" },
+      "ph": { "shape": "round", "fill": "#8CBDB8" },
+      "size": [49, 48],
+      "tags": ["treasure", "construction"],
+      "sounds": { "tap": "chime", "drop": "clink" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.5, "sound": "chime" }
+      ],
+      "label": "Gem",
+      "home": { "room": "construction/yard" }
     },
     "lunchbox": {
       "art": { "sprite": "lunchbox" },

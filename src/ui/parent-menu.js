@@ -16,6 +16,7 @@
 //   Play together (the two-iPad pairing flow; was only behind ?together)
 //   This place: Tidy up (the scene's behaviors.tidy()), Start over (confirm)
 //   World file: Save to a file (share sheet / download), Load from a file (confirm)
+//   Recordings: Delete all recordings (confirm; theater mic tapes, src/core/tapes.js)
 //   App version, and "Update now" when a new version is waiting (src/pwa.js)
 //
 //   const menu = installParentMenu({ store, persist, input, town, playTogether });
@@ -27,6 +28,7 @@ import { loadSettings, saveSettings, applySettings } from './settings.js';
 import { installedVersion, waitingVersion, updateNow } from '../pwa.js';
 import { shareWorldFile, pickWorldFile } from '../core/persist.js';
 import { inRoom, childrenOf } from '../engine/world.js';
+import { deleteRecordings } from '../core/tapes.js';
 
 export const HOLD_MS = 2000;          // the press that opens the menu
 export const HOLD_SLOP = 24;          // px the finger may wander while holding
@@ -167,6 +169,8 @@ export function installParentMenu(opts) {
         <div class="pm-btns"><button class="pm-btn" data-pm="tidy">Tidy up</button><button class="pm-btn" data-pm="reset">Start over&hellip;</button></div></div>
       <div class="pm-row"><div class="pm-what"><b>World file</b><small>Back up the whole town, or move it to another iPad.</small></div>
         <div class="pm-btns"><button class="pm-btn" data-pm="save" disabled>Save to a file</button><button class="pm-btn" data-pm="load">Load a file&hellip;</button></div></div>
+      <div class="pm-row"><div class="pm-what"><b>Recordings</b><small>Songs sung into the theater mic. They stay on this iPad and are never uploaded.</small></div>
+        <button class="pm-btn" data-pm="recordings">Delete all recordings&hellip;</button></div>
       <div class="pm-confirm" hidden><p></p><div class="pm-btns"><button class="pm-btn" data-pm="no">Cancel</button><button class="pm-btn pm-danger" data-pm="yes"></button></div></div>
       <p class="pm-status" aria-live="polite"></p>
       <div class="pm-foot"><span class="pm-version"></span><button class="pm-btn pm-update" data-pm="update" hidden>Update now</button></div>
@@ -288,6 +292,12 @@ export function installParentMenu(opts) {
           if (persist.flush) await persist.flush();
           reload();
         });
+      });
+    },
+    recordings() {
+      askConfirm('Delete every recording on this iPad? Their tapes go away too.', 'Delete', async () => {
+        const r = await deleteRecordings(store, persist);
+        status(r.tapes || r.blobs ? `Deleted ${r.tapes} recording${r.tapes === 1 ? '' : 's'}.` : 'There were no recordings.');
       });
     },
     yes() { const fn = confirmYes; closeConfirm(); if (fn) fn(); },

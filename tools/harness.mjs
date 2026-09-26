@@ -42,6 +42,8 @@
 //
 // openPage({ root }) serves another directory instead of the repo (the service
 // worker update test serves a temp copy it can change between versions).
+// openPage({ fakeMic: true }) gives Chrome a fake microphone with no permission
+// prompt (theater mic recording, tests/e2e/theater-mic.test.mjs).
 //
 // Environment: CHROME=/path/to/chrome overrides the browser; HEADFUL=1 shows
 // the window (handy when debugging a test); E2E_TIMEOUT_SCALE=3 multiplies
@@ -216,7 +218,7 @@ class Cdp {
   on(fn) { this.listeners.push(fn); }
 }
 
-async function launchChrome(viewport) {
+async function launchChrome(viewport, extraArgs = []) {
   if (!existsSync(CHROME)) throw new Error(`Chrome not found at ${CHROME} (set CHROME=...)`);
   const profile = mkdtempSync(path.join(tmpdir(), 'ourtown-chrome-'));
   const args = [
@@ -231,6 +233,7 @@ async function launchChrome(viewport) {
     // throttled rAF or timer looks exactly like a flaky test.
     '--disable-background-timer-throttling', '--disable-renderer-backgrounding',
     '--disable-backgrounding-occluded-windows', '--disable-ipc-flooding-protection',
+    ...extraArgs,
     'about:blank',
   ].filter(Boolean);
   const proc = spawn(CHROME, args, { stdio: ['ignore', 'ignore', 'pipe'] });
@@ -267,12 +270,17 @@ function toSource(fnOrExpr, args) {
  * opts.path: page to load, default 'index.html'. Pass null to skip loading.
  * opts.waitForBoot: wait for body[data-boot="ready"], default true.
  * opts.root: directory to serve instead of the repo (e.g. a temp copy).
+ * opts.fakeMic: a fake microphone that needs no permission prompt (Chrome's
+ *   --use-fake-device-for-media-stream --use-fake-ui-for-media-stream); a
+ *   file path instead of true feeds that WAV as the mic (--use-file-for-fake-audio-capture).
  */
 export async function openPage(opts = {}) {
   const server = await startServer(opts.root);
   let chrome;
   try {
-    chrome = await launchChrome(resolveViewport(opts.viewport || 'ipad-air'));
+    const extra = opts.fakeMic ? ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream']
+      .concat(typeof opts.fakeMic === 'string' ? [`--use-file-for-fake-audio-capture=${opts.fakeMic}`] : []) : [];
+    chrome = await launchChrome(resolveViewport(opts.viewport || 'ipad-air'), extra);
   } catch (err) {
     await stopProcess(server.proc);
     throw err;

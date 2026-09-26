@@ -18,7 +18,7 @@
 //     canDrag(e, p),                       optional: false to pin it (spawners)
 //     dragOut(e, rx, p),                   optional: a drag that starts on it pulls out a NEW entity
 //                                          instead (spawners): spawn it and return its id, or null
-//     layoutKids(parent, kids, lay, p),    optional: adjust the container layout's Map (lay) in place
+//     layoutKids(parent, kids, lay, p, {sizeOf, box}), optional: adjust the container layout's Map (lay) in place
 //                                          (a mixing bowl sinks what is stirred in; P2a.2)
 //     verbs: { name(e, rx, p) },           optional: actions other systems call (a character eats: 'bite')
 //   });

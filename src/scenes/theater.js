@@ -40,7 +40,10 @@
 // - POSTER: the picture poster (Zoe's text layer is P2b.7).
 // - LATER BEADS (the pieces only react for now, PIECES[].later): spotlights,
 //   backdrop, effects machines and their console buttons (P2b.2), costume
-//   reactions + hero wardrobe (P2b.3), mic + boombox (P2b.5), instruments (P2b.7).
+//   reactions + hero wardrobe (P2b.3), instruments (P2b.7).
+// - SOUND CORNER (P2b.5/P2b.6, theater-sound.js): the mic stand records
+//   (red dot), tapes, the boombox plays them with lip-sync, six voice filter
+//   boxes on the booth balcony.
 // - FIRST VISIT: Luna on the stage, Maya backstage by the racks, four audience
 //   members in the seats, the stock.
 
@@ -58,6 +61,7 @@ import { useArtSprites } from './art.js';
 import { mountCharacters, seedCharacters, CHAR_KIND } from '../engine/characters.js';
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
+import { createSound, soundArt } from './theater-sound.js';   // P2b.5/P2b.6
 
 export const THEATER_ID = 'theater/stage';
 export const FIXTURES_KIND = 'theater-fixtures';
@@ -171,8 +175,8 @@ export const PIECES = {
   'fx-confetti': { press: 'down', ms: 260, sound: ['tap', { pitch: 0.9 }], later: 'P2b.2' },
   'fx-snow': { press: 'down', ms: 260, sound: ['tap', { pitch: 1.0 }], later: 'P2b.2' },
   'fx-thunder': { press: 'down', ms: 260, sound: ['tap', { pitch: 1.1 }], later: 'P2b.2' },
-  'mic-stand': { react: 'wobble', sound: ['tap', { pitch: 1.2 }], later: 'P2b.5' },
-  boombox: { react: 'squish', sound: ['plink'], later: 'P2b.5' },
+  'mic-stand': { react: 'wobble', sound: ['tap', { pitch: 1.2 }] },   // theater-sound.js records
+  boombox: { react: 'squish', sound: ['plink'] },                        // theater-sound.js plays tapes
   piano: { react: 'squish', sound: ['plink'], later: 'P2b.7' },
   drums: { react: 'squish', sound: ['knock', { pitch: 0.7 }], later: 'P2b.7' },
   xylophone: { react: 'squish', sound: ['plink', { note: 7 }], later: 'P2b.7' },
@@ -340,7 +344,7 @@ export function fixturesOf(state) {
  * Mount the theater. opts: { input, store, manifest, carry (P1.14), from (the
  * place we came from, null on boot), storage (tests) }. Resolves once it is up.
  */
-export async function mountTheater(stage, { input, store, manifest, carry = null, from = null, storage = safeStorage() }) {
+export async function mountTheater(stage, { input, store, manifest, carry = null, from = null, storage = safeStorage(), persist = (typeof window !== 'undefined' && window.__persist) || null }) {
   const m = manifest.rooms.theater;
   const rigStage = m.rigs.stage;
   useArtSprites(manifest);
@@ -350,6 +354,7 @@ export async function mountTheater(stage, { input, store, manifest, carry = null
   const saved = from ? null : loadCam(storage);
   const cameraX = saved != null ? saved : zoneCamera(m, ARRIVE_ZONE);
   const def = theaterRoom(m, { tiled, cameraX });
+  def.art.push(...soundArt());   // P2b.5/6: the red dot's hit box, the six filter boxes
   const room = mountRoom(stage, def);
   const fx = createFx(room.fxLayer);
   const allSurfaces = room.def.surfaces.slice();
@@ -496,7 +501,16 @@ export async function mountTheater(stage, { input, store, manifest, carry = null
   const ropeEl = room.art.get('hit:curtain-rope');
   if (ropeEl) input.register(ropeEl, curtainRope());
 
-  view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: hooks, labels: textLabels(catalog, manifest) });
+  // P2b.5/P2b.6: the mic, tapes, boombox and voice filters.
+  const sound = createSound({
+    store, room, fx, chars, input, persist, m, THEATER_ID,
+    cheer: (o) => cheer(o), performers: () => performers(),
+    setOverride: (pid, v) => { if (v) overrides.set(pid, v); else overrides.delete(pid); renderPieces(); },
+    bodyOf: (pid) => (pieces.get(pid) ? pieces.get(pid).copies[0].body : null),
+    monitor: typeof location !== 'undefined' && new URLSearchParams(location.search).has('micmonitor'),
+  });
+  view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: sound.wrap(hooks), labels: textLabels(catalog, manifest) });
+  sound.bind(view);
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -567,6 +581,7 @@ export async function mountTheater(stage, { input, store, manifest, carry = null
     stats.taps[pid] = (stats.taps[pid] || 0) + 1;
     const body = pieces.get(pid).copies[copy].body;
     if (spec.curtain) { stepCurtain(); return; }
+    if (sound.onPieceTap(pid)) { tween.squish(body, { amount: 0.3 }); return; }
     if (spec.ticket) { ticketWindow(); return; }
     if (spec.toggle) {
       const next = nextToggle(pid, state(pid));
@@ -848,7 +863,7 @@ export async function mountTheater(stage, { input, store, manifest, carry = null
   });
 
   return {
-    id: room.id, room, view, fx, catalog, behaviors, chars, tiles,
+    id: room.id, room, view, fx, catalog, behaviors, chars, tiles, sound,
     zones: m.zones,
     pieces: {
       ids: () => [...pieces.keys()],
@@ -871,6 +886,7 @@ export async function mountTheater(stage, { input, store, manifest, carry = null
     destroy() {
       unsubscribe();
       offStage();
+      sound.destroy();
       clearTimeout(camTimer);
       for (const t of timers) clearTimeout(t);
       timers.clear();

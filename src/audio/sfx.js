@@ -504,6 +504,33 @@ export const RECIPES = {
       });
     },
   },
+  // P2c.3 the dig pit. A spade or a bucket biting into dirt: a short gritty scrape.
+  scrape: {
+    dur: 0.24,
+    play(v) {
+      noise(v, { dur: 0.2, peak: 0.24, attack: 0.012, filter: { type: 'bandpass', f: 1300 + v.rnd() * 500, q: 0.9, sweep: [[0.18, 700]] } });
+      noise(v, { at: 0.02, dur: 0.12, peak: 0.1, attack: 0.01, filter: { type: 'lowpass', f: 500 } });
+      tone(v, { type: 'triangle', f: 150, sweep: [[0.1, 95]], dur: 0.12, peak: 0.08, attack: 0.006 });
+    },
+  },
+  // The dump truck backing up and tipping: three bright beeps.
+  beep: {
+    dur: 0.95, tuned: true,
+    play(v) {
+      for (const at of [0, 0.3, 0.6]) {
+        tone(v, { type: 'triangle', f: 1180, at, dur: 0.16, peak: 0.16, attack: 0.006, hold: 0.1 });
+        tone(v, { f: 2360, at, dur: 0.12, peak: 0.03, attack: 0.006, hold: 0.06 });
+      }
+    },
+  },
+  // Dirt sliding out of the truck bed (or a wheelbarrow): a long soft shhhh with lumps.
+  slide: {
+    dur: 1.3,
+    play(v) {
+      noise(v, { dur: 1.2, peak: 0.26, attack: 0.15, hold: 0.5, filter: { type: 'lowpass', f: 900, q: 0.7, sweep: [[1.1, 380]] } });
+      [0.2, 0.45, 0.7, 0.95].forEach((at) => tone(v, { f: 120 + v.rnd() * 40, sweep: [[0.08, 70]], at, dur: 0.12, peak: 0.12, attack: 0.006 }));
+    },
+  },
   // P2b.1 theater crowd. Applause: three clap "sections" (one noise source
   // each, band-passed at a different body, the claps are gain automation like
   // the sizzle's crackles) that swell in and die away, over a soft room bed.

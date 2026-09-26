@@ -22,6 +22,12 @@
 //           DING and the door pops open: baked (raw cookies -> cookies, a
 //           bowl of batter -> a cupcake, food one doneness step). Opening the
 //           door mid-bake pauses it.
+//   RECIPES (P2a.4, src/core/recipes.js) pick what comes out: a baked bowl
+//           of batter is the recipe's dish (a cupcake, a cake, a pizza...) or
+//           a Mystery Dish; food on the baking tray that makes a recipe (bread,
+//           tomato, cheese) bakes into it; the ladle scoops the pot's recipe
+//           (tomato soup, mac and cheese...); poured dough remembers what it
+//           was made of (props.doughOf) for the tray's tip-off.
 //   WARM    what heat cooked stays warm for HEAT.warmMs (steam curls); a
 //           character fed warm food goes "hot hot hot!" (characters.js asks
 //           behaviors.hotOf), fans its mouth, then yum.
@@ -50,8 +56,9 @@ import { paintSprite } from '../engine/sprites.js';
 import * as tween from '../engine/tween.js';
 import { resolveBehaviors } from '../core/behaviors/index.js';
 import {
-  HEAT, DONENESS_MAX, donenessOf, isHeating, heatDue, isWarm, cookPlan, pourOf, scoopOf, BATTER_HEX,
+  HEAT, DONENESS_MAX, donenessOf, isHeating, heatDue, isWarm, cookPlan, pourOf, scoopOf, BATTER_HEX, isMixed,
 } from '../core/food.js';
+import { resolveDish, findRecipe, itemsOf, discoverArgs } from '../core/recipes.js';
 
 export const BURNER_REACH = 72;     // a thing's middle within this of a burner sits on it
 export const AMBIENT_MS = 700;      // steam / sizzle cadence while something is on heat or warm
@@ -105,7 +112,7 @@ export function createHeat({ store, catalog, behaviors, m, room, fx, pieceApi, n
   const T = Object.assign({}, HEAT);
   const timers = new Set();
   const later = (ms, fn) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; };
-  const stats = { steps: 0, pauses: 0, flips: 0, pours: 0, scoops: 0, serves: 0, fills: 0, dings: 0, ambient: 0, scans: 0 };
+  const stats = { steps: 0, pauses: 0, flips: 0, pours: 0, scoops: 0, serves: 0, fills: 0, dings: 0, ambient: 0, scans: 0, bakes: 0, found: 0 };
   let heated = new Map();
   const lastWhere = new Map();       // id -> where it was last heated (a pause banks that step's progress)
   let view = null;
@@ -126,6 +133,15 @@ export function createHeat({ store, catalog, behaviors, m, room, fx, pieceApi, n
   };
   const capacityOf = (kind) => { const p = behaviors.containerOf ? behaviors.containerOf(kind) : null; return p ? p.capacity : 0; };
   const set = (id, key, value) => store.dispatch('set', { id, path: 'props.' + key, value });
+  const itemsFrom = (list) => itemsOf(list, foodParams);
+  /** A recipe made: its sticker in the recipe book (and a fanfare the first time). */
+  function discover(recipe) {
+    const a = discoverArgs(store.state, recipe);
+    if (!a || !store.dispatch('set', a)) return false;
+    if (view) later(300, () => view && view.play('tada', { gain: 0.7 }));
+    stats.found++;
+    return true;
+  }
 
   // The x of a thing's middle: cookware art knows where its bowl is (manifest `surface`).
   function centerOf(e) {
@@ -271,10 +287,25 @@ export function createHeat({ store, catalog, behaviors, m, room, fx, pieceApi, n
     if (plan.self) cookOne(e);
     for (const id of plan.foods) { const k = getEntity(store.state, id); if (k) cookOne(k); }
     if (plan.bake) {
-      // A bowl of batter: one combine into a cupcake, in the bowl.
-      if (store.dispatch('combine', { ids: plan.bake.ids, resultId: store.newId(), resultKind: plan.bake.kind, parent: e.id, slot: 's0', props: { hotAt: t, method: 'baked' } })) {
+      // A bowl of batter: one combine into the recipe's dish (P2a.4; a
+      // Mystery Dish if it's in no recipe), in the bowl.
+      const baked = kids.filter((k) => plan.bake.ids.includes(k.id));
+      const dish = resolveDish('oven', itemsFrom(baked)) || { kind: plan.bake.kind, props: {}, recipe: null };
+      if (store.dispatch('combine', { ids: plan.bake.ids, resultId: store.newId(), resultKind: dish.kind, parent: e.id, slot: 's0', props: Object.assign({}, dish.props, { hotAt: t, method: 'baked' }) })) {
         changed = true;
+        stats.bakes++;
         if (e.props.batter) set(e.id, 'batter', 0);
+        discover(dish.recipe);
+      }
+    } else if (where === 'oven' && changed && e.kind === 'baking-tray' && !e.props.dough) {
+      // Food on the tray that makes an oven recipe (bread + tomato + cheese:
+      // pizza toast) bakes into it; anything else just bakes on its own.
+      const foods = childrenOf(store.state, e.id).filter((k) => foodParams(k.kind) && !isMixed(k.props || {}));
+      const r = foods.length >= 2 && foods.length === childrenOf(store.state, e.id).length ? findRecipe('oven', itemsFrom(foods)) : null;
+      const dish = r && resolveDish('oven', itemsFrom(foods));
+      if (dish && store.dispatch('combine', { ids: foods.map((k) => k.id).sort(), resultId: store.newId(), resultKind: dish.kind, parent: e.id, slot: 's0', props: Object.assign({}, dish.props, { hotAt: t, method: 'baked' }) })) {
+        stats.bakes++;
+        discover(dish.recipe);
       }
     }
     set(e.id, 'hotAt', t);      // the pan, pot or tray is hot too
@@ -426,6 +457,7 @@ export function createHeat({ store, catalog, behaviors, m, room, fx, pieceApi, n
     if (p.into === 'dough') {
       if (target.props.dough) return false;
       set(target.id, 'dough', p.batter);
+      set(target.id, 'doughOf', kids.map((k) => k.kind).sort());   // P2a.4: the tray's recipe
       if (donenessOf(target.props)) set(target.id, 'cooked', 0);
       for (const k of kids) store.dispatch('remove', { id: k.id, hard: true });
     } else {
@@ -481,9 +513,13 @@ export function createHeat({ store, catalog, behaviors, m, room, fx, pieceApi, n
       st.done = true;
       stats.scoops++;
       const hotAt = Math.max(num(pot.props.hotAt), ...s.take.map((id) => num((getEntity(store.state, id) || { props: {} }).props.hotAt))) || now();
+      // P2a.4: the pot's recipe (tomato soup, mac and cheese...), or a Mystery Dish.
+      const took = s.take.map((id) => getEntity(store.state, id)).filter(Boolean);
+      const made = took.length ? resolveDish('pot', itemsFrom(took)) : null;
       for (const id of s.take) store.dispatch('remove', { id, hard: true });
       set(e.id, 'fill', 'soup');
-      set(e.id, 'dish', s.dish);
+      set(e.id, 'dish', made ? made.kind : s.dish);
+      set(e.id, 'dishProps', made ? made.props : 0);
       set(e.id, 'hotAt', hotAt);
       view.repaint(pot.id);
       // Held: the view redraws it on the drop; show the full ladle now.
@@ -505,9 +541,12 @@ export function createHeat({ store, catalog, behaviors, m, room, fx, pieceApi, n
     const at = target.parent ? { parent: target.parent, slot: target.slot || undefined } : { room: target.room, x: target.x, y: target.y, z: target.z || 0 };
     const id = store.newId();
     const hotAt = num(ladle.props.hotAt) || now();
-    if (!store.dispatch('combine', Object.assign({ ids: [target.id], resultId: id, resultKind: dish, props: { hotAt, method: 'boiled' } }, at))) return false;
+    const extra = ladle.props.dishProps && typeof ladle.props.dishProps === 'object' ? ladle.props.dishProps : {};
+    if (!store.dispatch('combine', Object.assign({ ids: [target.id], resultId: id, resultKind: dish, props: Object.assign({}, extra, { hotAt, method: 'boiled' }) }, at))) return false;
     set(ladle.id, 'fill', 'empty');
     set(ladle.id, 'dish', 0);
+    if (ladle.props.dishProps) set(ladle.id, 'dishProps', 0);
+    discover(extra.recipe);
     stats.serves++;
     view.play('pour');
     view.play('chime');

@@ -34,12 +34,22 @@
 //            is cooked (the pasta is then drawn by the pot's art)
 //   tray     the baking tray (P2a.3): batter poured on is raw cookie dough
 //            (props.dough); baked it shows cookies; a tap tips the cookies
-//            off onto a free spot (a `cookies` dish, still warm)
+//            off onto a free spot (a `cookies` dish, still warm; P2a.4: the
+//            dough's contents, props.doughOf, pick the recipe or a Mystery Dish)
+//   assemble a plate (P2a.4): what is put on it stacks up in the middle; a
+//            tap assembles it with a poof into the recipe's dish (the recipe
+//            table, src/core/recipes.js) or, for two or more things that are
+//            in no recipe, a Mystery Dish with a face and a silly name
+//   dressed  a dish made by a recipe that reuses another dish's art: its
+//            props.tint (a CSS filter), props.topper (a Mystery Dish topper
+//            on top) and props.eyes/mouth (a mystery smoothie's face)
 //
 // Pure except what the reaction context does.
 
 import { defineBehavior, resolveBehaviors, getBehavior } from './registry.js';
-import { mysteryLook, mysterySprite } from '../mystery.js';
+import { mysteryLook, mysterySprite, MYSTERY_KIND } from '../mystery.js';
+import { resolveDish, itemsOf, foodParamsOf, discoverArgs, DISH_TINTS } from '../recipes.js';
+import * as tween from '../../engine/tween.js';
 import {
   DONENESS_MAX, MIX_DONE, foodLook as lookOfFood, prepChain, cutIndex, isPeeled, donenessOf, colorOf,
   averageColor, blendHex, batterOf, mixState, BATTER_HEX, BATTER_ART, toRgb, toHex,
@@ -212,7 +222,7 @@ defineBehavior('food', {
 // mix: bowls and pans (cracking eggs in), the mixing bowl (stirring)
 
 const containerParams = (kind) => (resolveBehaviors(kind && kind.behaviors).find((b) => b.name === 'container') || {}).p || null;
-const itemsOf = (kids) => kids.map((k) => ({ kind: k.kind, props: k.props || {} }));
+const itemsOfKids = (kids) => kids.map((k) => ({ kind: k.kind, props: k.props || {} }));
 
 // Where the batter sits in the mixing bowl's art, as fractions of its
 // image: [left, right, rim (the batter's bottom, under the rim line), top
@@ -254,7 +264,7 @@ function stir(e, rx, p) {
   const todo = kids.filter((k) => (k.props.stir | 0) < MIX_DONE);
   rx.play('whisk', { pitch: 0.9 + rx.random() * 0.25 });
   rx.wobble({ amount: 0.35 });
-  const color = averageColor(itemsOf(kids));
+  const color = averageColor(itemsOfKids(kids));
   rx.burst('swirl', { count: 3, spread: 36, color: darker(color, 0.8), stagger: 30 });
   if (!todo.length) { rx.reason = 'mixed'; return true; }
   const done = todo.every((k) => (k.props.stir | 0) + 1 >= MIX_DONE);
@@ -262,7 +272,7 @@ function stir(e, rx, p) {
   if ((todo[0].props.stir | 0) % 2 === 1) rx.burst('bit', { count: 3, spread: 50, color, angle: -90, arc: 120 });   // a little splatter
   if (done) {
     // All batter: a "done" puff, sparkles and a chime.
-    const look = batterOf(itemsOf(kids));
+    const look = batterOf(itemsOfKids(kids));
     rx.set('batter', look);
     rx.burst('puff', { count: 8, spread: 70 });
     rx.burst('sparkle', { count: 6, spread: 80 });
@@ -305,8 +315,8 @@ defineBehavior('mix', {
     if (!p.stir) return null;
     const kids = w.children();
     if (!kids.length) return null;
-    const st = mixState(itemsOf(kids));
-    if (st.done) return BATTER_ART[batterOf(itemsOf(kids))] || 'batter';
+    const st = mixState(itemsOfKids(kids));
+    if (st.done) return BATTER_ART[batterOf(itemsOfKids(kids))] || 'batter';
     return null;
   },
   sprite(e, p, { catalog, look, children }) {
@@ -337,7 +347,7 @@ defineBehavior('mix', {
  */
 export function batterSprite(catalog, e, p, kids, look) {
   if (!kids.length) return null;
-  const items = itemsOf(kids);
+  const items = itemsOfKids(kids);
   const st = mixState(items);
   const target = batterOf(items);
   if (!st.done && st.t <= 0) return null;          // just a heap so far
@@ -409,7 +419,7 @@ function blend(e, rx) {
   if (rx.trigger !== 'verb:blend') rx.play('whirr');   // the cafe scene whirrs first, then blends
   if (!kids.length) { rx.reason = 'empty'; rx.shake({ amount: 0.5 }); return true; }
   for (const k of kids) if (!isMixed(k.props)) rx.dispatch('inc', { id: k.id, path: 'props.stir', by: MIX_DONE - (k.props.stir | 0) });
-  const color = SMOOTHIE_HEX[smoothieOf(itemsOf(kids))];
+  const color = SMOOTHIE_HEX[smoothieOf(itemsOfKids(kids))];
   rx.burst('swirl', { count: 5, spread: 40, color: darker(color, 0.85), stagger: 60 });
   rx.burst('bit', { count: 4, spread: 50, color, angle: -90, arc: 100, stagger: 90 });
   rx.reason = 'blend';
@@ -422,15 +432,19 @@ defineBehavior('blender', {
     if (!CUPS.includes(item.kind)) return null;
     const kids = rx.children();
     if (!kids.length) { rx.reason = 'empty'; rx.refuse(); return 'refuse'; }
-    const color = smoothieOf(itemsOf(kids));
+    const color = smoothieOf(itemsOfKids(kids));
     const id = rx.newId();
     const at = rx.where();
     const [spot] = rx.spots([{ id, kind: 'smoothie' }], { from: { x: at.x + 55, y: at.y } });
+    // P2a.4: the recipe (its name), or a mystery smoothie with a face.
+    const dish = resolveDish('blender', itemsOf(kids, (kind) => foodParamsOf(rx.catalog, kind)));
+    const props = Object.assign({}, dish ? dish.props : {}, { color, contents: kids.map((k) => k.kind).sort() });
     const ok = rx.dispatch('combine', {
       ids: [item.id].concat(kids.map((k) => k.id)), resultId: id, resultKind: 'smoothie',
-      room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: { color, contents: kids.map((k) => k.kind).sort() },
+      room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props,
     });
     if (!ok) { rx.refuse(); return 'refuse'; }
+    discover(rx, dish);
     rx.popFrom(id, at.x, at.y - 60);
     if (kids.some((k) => !isMixed(k.props))) rx.play('whirr');
     rx.play('pour');
@@ -525,11 +539,19 @@ function tipCookies(e, rx, p) {
   if (!e.props.dough || donenessOf(e.props) < 1) return false;
   const id = rx.newId();
   const at = rx.where();
-  const [spot] = rx.spots([{ id, kind: p.dish }], { from: { x: at.x + 40, y: at.y } });
+  // P2a.4: what the dough was made of picks the recipe (or a Mystery Dish);
+  // dough from before recipes (no doughOf) is plain cookies.
+  const made = Array.isArray(e.props.doughOf) && e.props.doughOf.length
+    ? resolveDish('tray', itemsOf(e.props.doughOf.map((kind) => ({ kind, props: {} })))) : null;
+  const kind = made ? made.kind : p.dish;
+  const [spot] = rx.spots([{ id, kind }], { from: { x: at.x + 40, y: at.y } });
   const hotAt = typeof e.props.hotAt === 'number' ? e.props.hotAt : 0;
-  if (!rx.dispatch('spawn', { id, kind: p.dish, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: { hotAt, method: 'baked' } })) return false;
+  const props = Object.assign({}, made ? made.props : {}, { hotAt, method: 'baked' });
+  if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props })) return false;
   rx.set('dough', 0);
   rx.set('cooked', 0);
+  if (e.props.doughOf) rx.set('doughOf', 0);
+  discover(rx, made);
   rx.popFrom(id, at.x, at.y - 40);
   rx.play('pop', { pitch: 1.1 });
   rx.play('chime');
@@ -561,6 +583,148 @@ defineBehavior('tray', {
 defineBehavior('mystery', {
   look: (e) => mysteryLook(e.props),
   sprite: (e, p, { catalog }) => mysterySprite(catalog, e),
+  // It's alive! A tap: a giggle and a wiggle (it isn't nibbled: eatable tap: false).
+  onTap(e, rx) {
+    rx.play('giggle', { pitch: 0.9 + rx.random() * 0.4 });
+    rx.play('boing', { pitch: 1.5, gain: 0.5 });
+    rx.wobble({ amount: 1.2 });
+    rx.burst('sparkle', { count: 4 });
+    if (rx.random() < 0.5) rx.burst('heart', { count: 1 });
+    rx.reason = 'giggle';
+    return true;
+  },
+});
+
+// ---------------------------------------------------------------------------
+// Recipes (P2a.4): plates assemble, dishes dress up. The rules and the table
+// are src/core/recipes.js + data/recipes.json.
+
+/** Record a recipe as found (the recipe book's sticker); a first find gets a fanfare. */
+function discover(rx, dish) {
+  if (!dish || !dish.recipe) return false;
+  const args = discoverArgs(rx.state, dish.recipe);
+  if (!args || !rx.dispatch('set', args)) return false;
+  rx.play('tada', { gain: 0.7 });
+  rx.found = dish.recipe;
+  return true;
+}
+export { discover as discoverRecipe };
+
+const slotIdx = (k) => { const m = /^s(\d+)$/.exec(k.slot || ''); return m ? +m[1] : 99; };
+
+/** Assemble what is on a plate: one combine into the dish (or a Mystery Dish). */
+function assemble(e, rx) {
+  const kids = rx.children();
+  if (!kids.length) return false;
+  const dish = resolveDish('plate', itemsOf(kids, (kind) => foodParamsOf(rx.catalog, kind)));
+  if (!dish) {
+    // One thing on its own isn't a dish yet: it hops ("add something!").
+    rx.hopKids({ height: 0.35 });
+    rx.play('boing', { pitch: 1.3, gain: 0.6 });
+    rx.reason = 'more';
+    return true;
+  }
+  const id = rx.newId();
+  const k = rx.catalog.get(dish.kind);
+  const eat = k && resolveBehaviors(k.behaviors).find((b) => b.name === 'eatable');
+  // A dish drawn on its own plate (a burger, a salad bowl...) takes the plate
+  // with it; a cupcake or a cake slice sits on the plate.
+  const takesPlate = dish.kind === MYSTERY_KIND || !!(eat && eat.p.leaves);
+  const at = takesPlate
+    ? (e.parent ? { parent: e.parent, slot: e.slot || undefined } : { room: e.room, x: e.x, y: e.y, z: e.z || 0 })
+    : { parent: e.id, slot: 's0' };
+  const ids = (takesPlate ? [e.id] : []).concat(kids.map((q) => q.id));
+  if (!rx.dispatch('combine', Object.assign({ ids, resultId: id, resultKind: dish.kind, props: dish.props }, at))) {
+    rx.refuse();
+    rx.reason = 'busy';
+    return true;
+  }
+  // The poof: a cloud, sparkles, and the dish pops up.
+  rx.burst('puff', { count: 10, spread: 110, scale: 1.2 });
+  rx.burst('sparkle', { count: 8, spread: 120 });
+  rx.play('whoosh', { pitch: 1.3 });
+  rx.play('pop', { pitch: 0.9 });
+  if (dish.mystery) { rx.play('giggle', { pitch: 1.1 }); rx.burst('heart', { count: 2 }); } else rx.play('chime');
+  const v = rx.view.viewOf(id);
+  if (v && v.body) tween.squish(v.body, { amount: 1.4, duration: 520 });
+  if (!takesPlate) rx.squish({ amount: 0.8 });
+  discover(rx, dish);
+  rx.reason = dish.mystery ? 'mystery' : 'assemble';
+  rx.result = id;
+  return true;
+}
+
+defineBehavior('assemble', {
+  params: {
+    stack: true,      // what is put on it stacks up in the middle (building a sandwich)
+    lift: 0.42,       // each thing sits this much (of its height) above the one below
+  },
+  onTap: assemble,
+  layoutKids(parent, kids, lay, p, ctx) {
+    if (!p.stack || !ctx || !ctx.sizeOf || !kids.length) return;
+    const order = kids.slice().sort((a, b) => slotIdx(a) - slotIdx(b) || (a.id < b.id ? -1 : 1));
+    let base = -Infinity;
+    for (const L of lay.values()) base = Math.max(base, L.y);
+    const room = (ctx.box ? ctx.box.w : 90) * 0.8;
+    let top = base;
+    order.forEach((k, i) => {
+      const L = lay.get(k.id);
+      if (!L) return;
+      const sz = ctx.sizeOf(k);
+      const s0 = L.scale || 1;
+      const scale = sz.w * s0 > room ? room / sz.w : s0;
+      L.x = r1((i % 2 ? 3 : -3) * Math.min(i, 1));
+      L.y = r1(top);
+      L.z = Math.min(48, 30 + i);
+      L.scale = Math.round(scale * 100) / 100;
+      L.front = true;
+      top -= sz.h * scale * p.lift;
+    });
+  },
+  verbs: { assemble },
+});
+
+const DRESS_DEFAULTS = { topper: [0.5, 0.12], face: [0.5, 0.46] };
+
+defineBehavior('dressed', {
+  params: {
+    top: null,        // [x, y] fractions of the image where a topper's anchor goes (default [0.5, 0.12])
+    face: null,       // [x, y] fractions of the image where the eyes go (a mystery smoothie)
+  },
+  sprite(e, p, { catalog, look }) {
+    const props = e.props || {};
+    const tint = typeof props.tint === 'string' ? DISH_TINTS[props.tint] || null : null;
+    const topper = typeof props.topper === 'string' ? props.topper : null;
+    const face = typeof props.eyes === 'string' && typeof props.mouth === 'string';
+    if (!tint && !topper && !face) return null;
+    const base = catalog.sprite(e.kind, look);
+    if (!base || base.draw !== 'img' || !base.img) return tint ? Object.assign({}, base, { key: base.key + ':' + props.tint, filter: tint }) : null;
+    const m = catalog.manifest;
+    const kit = m && m.cafe && m.cafe.mystery;
+    const mk = catalog.get(MYSTERY_KIND);
+    const s = (mk && mk.art && mk.art.scale) || 1;
+    const img = base.img;
+    const overlays = (base.overlays || []).slice();
+    const part = (name, variant, fx, fy) => {
+      const pr = kit && m.props && m.props[kit.parts[name]];
+      const v = pr && pr.variants[variant];
+      if (!v) return;
+      const X = img.left + img.w * fx;
+      const Y = img.top + img.h * fy;
+      overlays.push({ part: name, src: v.file, left: r1(X - v.anchor[0] * s), top: r1(Y - v.anchor[1] * s), w: r1(v.size[0] * s), h: r1(v.size[1] * s) });
+    };
+    if (topper) { const t = p.top || DRESS_DEFAULTS.topper; part('topper', topper, t[0], t[1]); }
+    if (face) {
+      const f = p.face || DRESS_DEFAULTS.face;
+      part('eyes', props.eyes, f[0], f[1]);
+      part('mouth', props.mouth, f[0], f[1] + 0.17);
+    }
+    return Object.assign({}, base, {
+      key: [base.key, props.tint || '', topper || '', face ? props.eyes + '+' + props.mouth : ''].join(':'),
+      filter: [base.filter, tint].filter(Boolean).join(' ') || undefined,
+      overlays,
+    });
+  },
 });
 
 // A drink in a glass (the smoothie): its look is its colour until it is

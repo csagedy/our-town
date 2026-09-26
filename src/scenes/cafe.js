@@ -34,6 +34,9 @@
 // - HEAT (P2a.3, cafe-heat.js): pans and pots on lit burners cook, the pan
 //   flips, batter pours, the saucepan boils and the ladle serves; the oven
 //   bakes with the door shut and dings; warm food steams.
+// - RECIPES (P2a.4, cafe-recipes.js): plates stack what is put on them and
+//   assemble on a tap (a recipe's dish or a Mystery Dish), a pan slides its
+//   food onto a plate, and the recipe book on the counter's back shelf opens.
 // - FIRST VISIT: the stock, cookware and dishes on the shelves and tables,
 //   the kitchen cast and two customers at the tables.
 
@@ -53,6 +56,8 @@ import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
 import { createPrep, ensureStations } from './cafe-prep.js';
 import { createHeat } from './cafe-heat.js';
+import { createRecipes } from './cafe-recipes.js';
+import { loadRecipes } from '../core/recipes.js';
 
 export const CAFE_ID = 'cafe/kitchen';
 export const FIXTURES_KIND = 'cafe-fixtures';
@@ -280,7 +285,7 @@ export function fixturesOf(state) {
 export async function mountCafe(stage, { input, store, manifest, carry = null, from = null, storage = safeStorage() }) {
   const m = manifest.rooms.cafe;
   useArtSprites(manifest);
-  const catalog = await loadCatalog();
+  const [catalog] = await Promise.all([loadCatalog(), loadRecipes()]);
   const removeSource = addSpriteSource((kind) => (catalog.has(kind) ? catalog.sprite(kind) : null));
   const tiled = !(typeof location !== 'undefined' && new URLSearchParams(location.search).get('tiles') === '0');
   const saved = from ? null : loadCam(storage);
@@ -381,6 +386,9 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   // Characters ask whether food is hot ("hot hot hot!").
   behaviors.hotOf = (e) => heat.isHot(e);
   const heatHooks = heat.wrap(prepHooks);
+  // P2a.4 recipes: plating, the pan onto a plate, the recipe book.
+  const recipes = createRecipes({ store, catalog, behaviors, m, room, stage, input, sfx, speech, fx });
+  const recHooks = recipes.wrap(heatHooks);
   // Pieces take touches (registered before the entity views, so where a
   // padded hit box is a tie the thing in front of the fixture wins).
   const pieces = new Map();          // id -> {el, body, img, shown, gen}
@@ -392,7 +400,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     pieces.set(pid, rec);
     input.register(el, { onTap: () => tapPiece(pid), pan: true });
   }
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: heatHooks, labels: textLabels(catalog, manifest) });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: recHooks, labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -428,6 +436,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   }
   prep.bind(view);
   heat.bind(view);
+  recipes.bind(view);
 
   // ---- pieces ----
   const overrides = new Map();       // id -> variant shown for a moment (a bell press)
@@ -554,6 +563,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     hidden: () => [...hidden],
     prep,
     heat,
+    recipes,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: inside the front door, in a row. */
@@ -570,6 +580,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       timers.clear();
       prep.destroy();
       heat.destroy();
+      recipes.destroy();
       for (const p of pieces.values()) input.unregister(p.el);
       tiles.destroy();
       view.destroy();
