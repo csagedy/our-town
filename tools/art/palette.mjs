@@ -22,6 +22,8 @@ export const P = {
   chalk: '#56645D',
   denim: '#7F9FC4', denimDeep: '#6886AE', brown: '#8C6E5C', brownDeep: '#735746',
   mouth: '#9C4852', tongue: '#EE9A9C',
+  toasty: '#C98A55', toastyDeep: '#A96F45',      // "extra toasty" food (cafe): warm caramel, never black
+  nori: '#4F6A58', noriDeep: '#3F5748',           // seaweed (sushi)
   nightSky: '#3A4170', nightSkyDeep: '#2E3460',   // the city map at night (rooms/city.mjs)
 };
 

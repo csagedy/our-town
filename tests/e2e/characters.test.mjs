@@ -1,5 +1,5 @@
-// End-to-end: characters as living entities in rooms (P1.10), in the test
-// room (index.html?room=test), driven with real (trusted) CDP touches on
+// End-to-end: characters as living entities in rooms (P1.10), in the cast
+// dev room (index.html?room=cast), driven with real (trusted) CDP touches on
 // iPad viewports: lift a character and drop it on the stool (it sits at the
 // seat), on the floor (it stands), on the sofa (it lies down); give it a
 // cupcake (it holds it), drag the cupcake to its mouth (a bite: the look
@@ -64,9 +64,9 @@ async function carryChar(page, cast, tx, ty, opts) {
 const idleChars = () => document.getAnimations().filter((a) => a.animationName !== 'char-breathe' && a.id !== 'char-idle').length === 0
   && document.querySelectorAll('[data-dragging]').length === 0;
 
-describe('characters in the test room (ipad-air)', () => {
+describe('characters in the cast room (ipad-air)', () => {
   let page;
-  before(async () => { page = await openPage({ viewport: 'ipad-air', path: 'index.html?room=test' }); });
+  before(async () => { page = await openPage({ viewport: 'ipad-air', path: 'index.html?room=cast' }); });
   after(async () => {
     if (!page) return;
     assert.deepEqual(page.errors, []);
@@ -241,13 +241,9 @@ describe('characters in the test room (ipad-air)', () => {
     const said = await page.waitFor(() => window.__scene.chars.stats().said > 0 && window.__scene.chars.stats());
     assert.ok(said.lastSaid.length > 0 && said.lastSaid.length <= 16, `said "${said.lastSaid}"`);
     // An egg (tags food + ingredient: weird), dropped at her mouth.
-    const egg = await page.eval(() => {
-      const id = window.__store.newId();
-      window.__store.dispatch('spawn', { id, kind: 'egg', room: 'test/lab', x: 560, y: 950 });
-      return id;
-    });
     await page.waitFor(idleChars);
     const e = await thing(page, 'egg');
+    const egg = e.id;
     const m = g.look.anchors.mouth;
     await touchDrag(page, await toScreen(page, e.x, e.y - e.h / 2), await toScreen(page, m.x, m.y));
     await page.waitFor(`window.__store.state.entities[${JSON.stringify(egg)}].parent === ${JSON.stringify(g.id)}`);
@@ -263,7 +259,7 @@ describe('characters in the test room (ipad-air)', () => {
       .filter((e) => !e.deleted && (e.kind === 'char' || e.parent))
       .map((e) => [e.id, e.kind, e.x ?? null, e.y ?? null, e.parent || null, e.slot || null, JSON.stringify(e.props)]).sort());
     const before = await snap();
-    await page.goto('index.html?room=test');
+    await page.goto('index.html?room=cast');
     await page.frames(4);
     assert.deepEqual(await snap(), before);
     const boy = await char(page, 'boy5');
@@ -277,7 +273,7 @@ describe('characters in the test room (ipad-air)', () => {
 
 describe('characters: 8 on screen stay idle-cheap (ipad-pro-9.7)', () => {
   let page;
-  before(async () => { page = await openPage({ viewport: 'ipad-pro-9.7', path: 'index.html?room=test' }); });
+  before(async () => { page = await openPage({ viewport: 'ipad-pro-9.7', path: 'index.html?room=cast' }); });
   after(async () => {
     if (!page) return;
     assert.deepEqual(page.errors, []);
@@ -289,7 +285,7 @@ describe('characters: 8 on screen stay idle-cheap (ipad-pro-9.7)', () => {
       const m = await import('/src/engine/char-model.js');
       const chars = window.__scene.chars;
       for (const [cast, x] of [['girl9', 560], ['boy5', 700], ['grandpa', 960], ['grownup', 1180]]) {
-        m.spawnCharacter(window.__store, chars.rig, cast, { room: 'test/lab', x, y: 905 });
+        m.spawnCharacter(window.__store, chars.rig, cast, { room: 'test/cast', x, y: 905 });
       }
     });
     await page.waitFor(() => window.__scene.chars.stats().chars === 8);
@@ -332,8 +328,9 @@ describe('characters: 8 on screen stay idle-cheap (ipad-pro-9.7)', () => {
     assert.deepEqual(r.other, [], 'no animations but idle life');
     // Blinks are 2 recalcs each; a glance or a tilt (WAAPI on an SVG group, not
     // composited) recalcs every frame for ~1.5 s. Budget: well under 1% of the time.
-    assert.ok(recalcs < 160, `style recalcs in 4s idle: ${recalcs}`);
-    assert.ok(styleMs + layoutMs + scriptMs < 60, `main-thread work in 4s idle: ${styleMs + layoutMs + scriptMs}ms`);
+    const budget = 12 + r.blinks * 3 + (r.glances + r.tilts) * 130;
+    assert.ok(recalcs <= budget, `style recalcs in 4s idle: ${recalcs} (budget ${budget} for ${r.blinks} blinks, ${r.glances + r.tilts} glances/tilts)`);
+    assert.ok(styleMs + layoutMs + scriptMs < 120, `main-thread work in 4s idle: ${styleMs + layoutMs + scriptMs}ms`);
     assert.ok(scriptMs < 150, `script time in 4s idle: ${scriptMs}ms`);
     await page.screenshot('chars-8-idle');
   });

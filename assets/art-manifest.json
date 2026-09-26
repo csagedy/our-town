@@ -1749,6 +1749,40 @@
    ],
    "surface": null
   },
+  "car": {
+   "label": "car",
+   "tags": [
+    "vehicle",
+    "container"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/car.webp",
+     "px": [
+      807,
+      358
+     ],
+     "bytes": 14000,
+     "size": [
+      403.5,
+      179
+     ],
+     "anchor": [
+      195.5,
+      175.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -87.75
+   ],
+   "surface": null
+  },
   "blocks": {
    "label": "toy blocks",
    "tags": [

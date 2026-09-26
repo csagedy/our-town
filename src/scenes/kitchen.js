@@ -19,6 +19,7 @@ import { createBehaviors } from '../core/behaviors/index.js';
 import { useArtSprites } from './art.js';
 import { mountCharacters, seedCharacters } from '../engine/characters.js';
 import { speech } from '../audio/index.js';
+import * as tween from '../engine/tween.js';
 
 export const KITCHEN_ID = 'cafe/kitchen';
 
@@ -73,6 +74,21 @@ export function spawnKitchenItems(store, room) {
   }
 }
 
+/**
+ * Zoe's text layer (P1.16): catalog labels, the art manifest's label for
+ * art-only kinds, a name in props (name tags, later). A tap reads it aloud.
+ */
+export function textLabels(catalog, manifest) {
+  return {
+    of: (e) => (e.props && typeof e.props.name === 'string' && e.props.name) || catalog.labelOf(e.kind)
+      || (manifest.props && manifest.props[e.kind] && manifest.props[e.kind].label) || null,
+    say(text, el) {
+      tween.squish(el, { amount: 0.5, duration: 260 });
+      speech.say(text, { interrupt: true }).then((ok) => { if (!ok) sfx.play('chime', { gain: 0.6 }); });
+    },
+  };
+}
+
 /** Mount the kitchen. opts: { input, store, manifest }. Resolves once it is up. */
 export async function mountKitchen(stage, { input, store, manifest }) {
   useArtSprites(manifest);                 // art-only kinds (croissant, bread...)
@@ -82,7 +98,7 @@ export async function mountKitchen(stage, { input, store, manifest }) {
   const fx = createFx(room.fxLayer);
   const behaviors = createBehaviors({ catalog, store });
   const chars = await mountCharacters({ store, input, behaviors, room, sfx, speech });   // null without the rig
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: chars ? chars.hooks : behaviors });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: chars ? chars.hooks : behaviors, labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
   if (!inRoom(store.state, room.id).length) {

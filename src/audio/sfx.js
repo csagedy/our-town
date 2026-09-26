@@ -348,6 +348,16 @@ export const RECIPES = {
       });
     },
   },
+  // A toy-car horn: two soft "beep-beep"s, a major third stacked (P1.14 vehicles).
+  honk: {
+    dur: 0.5,
+    play(v) {
+      for (const at of [0, 0.22]) {
+        tone(v, { type: 'triangle', f: 392, at, dur: 0.18, peak: 0.3, attack: 0.012, hold: 0.07, filter: { type: 'lowpass', f: 1500 } });
+        tone(v, { type: 'triangle', f: 494, at, dur: 0.18, peak: 0.2, attack: 0.012, hold: 0.07, filter: { type: 'lowpass', f: 1500 } });
+      }
+    },
+  },
   doorbell: {
     dur: 1.45, tuned: true,
     play(v) {

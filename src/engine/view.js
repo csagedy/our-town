@@ -75,6 +75,13 @@
 // slot). A drag that starts on a spawner carries the clone cloneFor makes
 // (view.handoff) and the spawner stays put. Kids of a parent without a
 // layout (a character's hands) are not drawn here.
+//
+// Text layer (P1.16, design.md 4; optional): labels = { of(entity) -> text
+// or null, say(text, el) }. A top-level entity with a label gets a small
+// name tag (.ent-label under its feet, created on first need). CSS shows the
+// tags only while body.text-layer is on (src/ui/parent.css), so toggling
+// the layer is one class and no re-render. A tap on a visible tag reads it
+// (labels.say) instead of tapping the thing; a drag from it still drags.
 
 import { inRoom, getEntity, locate } from './world.js';
 import { settle, sortKey, zIndexFor, depthScale, stackZ, Z_DRAG, DEPTH_SCALE } from './surfaces.js';
@@ -86,7 +93,7 @@ const SINGLE = new Set(['spawn', 'move', 'set', 'inc', 'detach']);   // ops that
 const MIN_TARGET = 96;       // drop-target boxes are at least this big (units), like the 64pt hit boxes
 const round1 = (v) => Math.round(v * 10) / 10;
 
-export function createRoomView({ stage, store, input, room, fx = null, sfx = null, behaviors = {} }) {
+export function createRoomView({ stage, store, input, room, fx = null, sfx = null, behaviors = {}, labels = null }) {
   const roomId = room.id;
   const def = room.def;
   const views = new Map();     // entity id -> view
@@ -209,7 +216,28 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
       v.el.dataset.kind = e.kind;
     }
     place(v, e, animate);
+    if (labels) setLabel(v, e);
     if (behaviors.onRender) behaviors.onRender(e, ctx(v, null));
+  }
+
+  // Text layer name tag (see the header). Things inside a container stay unlabeled.
+  function setLabel(v, e) {
+    const text = (!v.parentView && labels.of(e)) || '';
+    if (text === (v.labelText || '')) return;
+    v.labelText = text;
+    if (!v.label) {
+      v.label = document.createElement('div');
+      v.label.className = 'ent-label';
+      v.label.innerHTML = '<span></span>';
+      v.el.appendChild(v.label);
+    }
+    v.label.firstChild.textContent = text;
+    v.label.hidden = !text;
+  }
+  function labelHit(v, info) {
+    if (!v.labelText || !labels.say || !document.body.classList.contains('text-layer')) return false;
+    const b = v.label.firstChild.getBoundingClientRect();
+    return info.sx >= b.left - 8 && info.sx <= b.right + 8 && info.sy >= b.top - 8 && info.sy <= b.bottom + 8;
   }
 
   /** Position v (transform, z, world x/y/scale) from e, then its children's world coordinates. */
@@ -376,6 +404,7 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
   function tap(v, info) {
     const e = entityOf(v);
     if (!e) return;
+    if (labels && labelHit(v, info)) { labels.say(v.labelText, v.label); return; }
     if (behaviors.onTap && behaviors.onTap(e, ctx(v, info))) return;
     tween.squish(v.body);
     play(v.sprite.sound || 'pop');

@@ -144,6 +144,25 @@ const blocks = () => `<g>
   <rect fill="${P.rose}" x="-56" y="-44" width="52" height="44" rx="6"/><circle class="thin" fill="${P.cream}" cx="-30" cy="-22" r="10"/>
   <rect fill="${P.teal}" x="4" y="-44" width="52" height="44" rx="6"/><path class="thin" fill="${P.cream}" d="M30 -34 L40 -12 L20 -12Z"/>
   <rect fill="${P.butter}" x="-26" y="-92" width="52" height="48" rx="6"/><path class="thin" fill="${P.cream}" d="${star(0, -68, 13, 6)}"/></g>`;
+// The town car (P1.14): an open-top convertible facing right, so the
+// passengers (drawn behind the body by the view) peek out over the door
+// line at y -150. Big: about 390 x 180 world units in a room (the city map
+// draws everything smaller).
+const car = () => `<g>
+  <path fill="${P.steelDeep}" d="M86 -150 Q84 -176 104 -178 Q124 -178 122 -150Z"/>
+  <path fill="${P.glass}" d="M150 -150 L176 -238 Q180 -248 190 -244 Q198 -240 196 -230 L186 -150Z"/>
+  <path ${tl('#fff', 'stroke:#fff;stroke-width:5')} d="M178 -160 L192 -224"/>
+  <path fill="${P.mustard}" d="M-262 -66 Q-266 -150 -196 -150 L176 -150 Q206 -150 226 -124 L256 -118 Q284 -112 284 -84 L284 -66 Q284 -40 260 -40 L-240 -40 Q-262 -40 -262 -66Z"/>
+  <path fill="${P.mustardDeep}" d="M-262 -70 L284 -70 L284 -64 Q284 -40 260 -40 L-240 -40 Q-262 -40 -262 -64Z"/>
+  <path ${tl(P.butter, 'stroke-width:7')} d="M-236 -124 L196 -124"/>
+  <path class="d" d="M-40 -146 L-40 -74 M110 -146 L110 -74"/>
+  <rect fill="${P.woodDark}" class="thin" x="60" y="-116" width="30" height="9" rx="4"/>
+  ${heart(-122, -100, 1.3, P.cream)}
+  <rect fill="${P.butter}" class="thin" x="258" y="-108" width="22" height="16" rx="7"/>
+  <rect fill="${P.berry}" class="thin" x="-266" y="-116" width="14" height="22" rx="6"/>
+  <rect fill="${P.steel}" x="262" y="-66" width="30" height="14" rx="6"/><rect fill="${P.steel}" x="-274" y="-66" width="26" height="14" rx="6"/>
+  <circle fill="${P.charDeep}" cx="-170" cy="-44" r="44"/><circle fill="${P.steel}" class="thin" cx="-170" cy="-44" r="18"/>
+  <circle fill="${P.charDeep}" cx="176" cy="-44" r="44"/><circle fill="${P.steel}" class="thin" cx="176" cy="-44" r="18"/></g>`;
 const teapotProp = () => teapot(P.teal);
 
 export const PROPS = {
@@ -169,5 +188,6 @@ export const PROPS = {
   'flower-pot': { label: 'flower pot', tags: ['plant'], variants: { bud: flowerPot(false), bloom: flowerPot(true) }, taps: ['bud', 'bloom'], oneWay: true },
   gift: { label: 'gift box', tags: ['container', 'toy'], variants: { closed: gift(false), open: gift(true) }, taps: ['closed', 'open'] },
   backpack: { label: 'backpack', tags: ['container', 'wearable:back', 'school'], variants: { default: backpack() }, grip: [0, -96] },
+  car: { label: 'car', tags: ['vehicle', 'container'], variants: { default: car() } },
   blocks: { label: 'toy blocks', tags: ['toy', 'buildpiece'], variants: { default: blocks() } },
 };
