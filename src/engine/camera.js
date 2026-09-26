@@ -8,6 +8,13 @@
 // edge), 0 .. roomWidth - 1440. Drag input is in screen px and divided by the
 // stage scale, so the room tracks the finger 1:1.
 //
+// Camera stops (P2a.1, the cafe strip's zones): with cam.setStops([x...]) a
+// fling does not coast freely but eases into the stop nearest where it would
+// have come to rest (ahead of the finger, never back against it), with the
+// release speed as its start speed. Only after the finger lifts, and any new
+// touch catches it, so snapping never fights the finger; a slow release (no
+// fling) stays exactly where it was put.
+//
 // Performance: no per-frame loop when idle. A rAF loop runs only while a fling
 // (momentum after release) or a panTo animation is in progress, and stops
 // itself when the motion settles or hits an edge.
@@ -39,6 +46,29 @@ export function releaseVelocity(samples, tRelease) {
 
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
+export const SNAP_MIN_MS = 220;
+export const SNAP_MAX_MS = 900;
+
+/**
+ * The stop a fling from x at velocity v (units/ms) should ease into, or null
+ * (no stops ahead: coast freely). Pure. Stops outside 0..max are clamped.
+ */
+export function snapTarget(x, v, stops, max = Infinity) {
+  if (!stops || !stops.length || !v) return null;
+  const rest = x + v * FRICTION_TAU;       // where a free fling would stop
+  let best = null;
+  for (const s0 of stops) {
+    const s = clamp(s0, 0, max);
+    if ((s - x) * v < 0) continue;         // behind the finger's direction
+    if (best === null || Math.abs(s - rest) < Math.abs(best - rest)) best = s;
+  }
+  return best;
+}
+
+/** Tween length (ms) so an ease-out-cubic snap starts at the release speed. Pure. */
+export const snapDuration = (from, to, v) =>
+  Math.round(clamp(v ? (3 * Math.abs(to - from)) / Math.abs(v) : SNAP_MAX_MS, SNAP_MIN_MS, SNAP_MAX_MS));
+
 /**
  * opts.onMove(x): called whenever x changes (apply the transform there).
  * opts.onSettle(x): called when a fling or panTo animation ends or is stopped.
@@ -57,6 +87,7 @@ export function createCamera(opts = {}) {
     scale: 1,        // stage scale (screen px per unit), set by the stage
     dragging: false,
     moving: false,   // a fling or panTo animation is running (rAF active)
+    stops: [],       // camera stops a fling snaps to (setStops)
   };
 
   let frame = 0;
@@ -118,6 +149,9 @@ export function createCamera(opts = {}) {
     if (cam.x > cam.max) set(cam.max);
   };
 
+  /** Camera stops (room x) a fling eases into; [] for free flings. */
+  cam.setStops = (list) => { cam.stops = Array.isArray(list) ? list.filter((n) => typeof n === 'number' && isFinite(n)) : []; };
+
   /** Jump (or animate, with {duration} ms) to camera x. */
   cam.panTo = (x, { duration = 0 } = {}) => {
     const to = clamp(x, 0, cam.max);
@@ -154,7 +188,10 @@ export function createCamera(opts = {}) {
     const v = releaseVelocity(drag.samples, t);
     drag = null;
     cam.dragging = false;
-    if (Math.abs(v) >= MIN_FLING && cam.max > 0) start({ kind: 'fling', v, lastT: null });
+    if (!(Math.abs(v) >= MIN_FLING && cam.max > 0)) return;
+    const to = snapTarget(cam.x, v, cam.stops, cam.max);
+    if (to !== null && to !== cam.x) start({ kind: 'tween', from: cam.x, to, t0: null, dur: snapDuration(cam.x, to, v), snap: true });
+    else if (to === null) start({ kind: 'fling', v, lastT: null });
   };
 
   cam.cancelDrag = () => {

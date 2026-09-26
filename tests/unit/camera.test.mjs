@@ -111,3 +111,60 @@ test('panTo animates to a clamped target, panBy returns the applied delta, setRa
   cam.panTo(10);
   assert.equal(cam.x, 10);
 });
+
+// ---- camera stops (P2a.1: the cafe strip snaps to its zones) ----
+import { snapTarget, snapDuration, SNAP_MIN_MS, SNAP_MAX_MS } from '../../src/engine/camera.js';
+
+test('snapTarget: the stop nearest the free-fling rest point, never behind the fling', () => {
+  const stops = [0, 900, 1440];
+  assert.equal(snapTarget(100, 1, stops, 1440), 900);     // rest at 425: 900 is the only stop ahead nearer than 1440
+  assert.equal(snapTarget(1000, 2, stops, 1440), 1440);
+  assert.equal(snapTarget(1000, -0.3, stops, 1440), 900);  // weak fling back: rest at ~902
+  assert.equal(snapTarget(1000, -3, stops, 1440), 0);      // strong fling back: rest well past 0
+  assert.equal(snapTarget(905, 0.06, stops, 1440), 1440, 'the stop just behind (900) is not a target');
+  assert.equal(snapTarget(1440, 1, stops, 1440), 1440, 'at the edge: stays');
+  assert.equal(snapTarget(500, 1, [], 1440), null, 'no stops: free fling');
+  assert.equal(snapTarget(500, 1, [2000], 1440), 1440, 'stops are clamped into range');
+});
+
+test('snapDuration starts the ease-out at the release speed, within bounds', () => {
+  assert.equal(snapDuration(0, 900, 3), 900);
+  assert.equal(snapDuration(0, 300, 3), 300);
+  assert.equal(snapDuration(0, 10, 3), SNAP_MIN_MS);
+  assert.equal(snapDuration(0, 5000, 1), SNAP_MAX_MS);
+});
+
+test('a fling eases into a camera stop and settles there; a slow release stays put; a touch catches the snap', () => {
+  const { cam, frames, settles, queue } = fakeCamera(1440, 1);
+  cam.setStops([0, 900, 1440]);
+  // Fling right (camera x grows): finger moves left fast.
+  cam.beginDrag(1000, 0);
+  cam.dragTo(900, 50);
+  cam.dragTo(800, 100);                // camera 200, velocity 2 units/ms
+  cam.endDrag(100);
+  assert.ok(cam.moving);
+  frames(200);
+  assert.equal(cam.x, 900, 'rest ~850 -> the 900 stop');
+  assert.equal(cam.moving, false);
+  assert.equal(queue.length, 0, 'no frame loop once settled');
+  assert.ok(settles() >= 1);
+  // Slow release: no fling, no snap.
+  cam.beginDrag(500, 1000);
+  cam.dragTo(470, 1100);
+  cam.endDrag(1300);                   // finger rested 200 ms
+  assert.equal(cam.x, 930);
+  assert.equal(cam.moving, false);
+  // A new touch during a snap stops it where it is.
+  cam.beginDrag(500, 2000);
+  cam.dragTo(300, 2050);
+  cam.dragTo(100, 2100);               // velocity 4: toward 1440
+  cam.endDrag(2100);
+  frames(3);
+  const mid = cam.x;
+  assert.ok(mid > 1330 && mid < 1440, `mid-snap ${mid}`);
+  cam.beginDrag(100, 2200);
+  assert.equal(cam.moving, false);
+  frames(5);
+  assert.equal(cam.x, mid, 'the finger holds it');
+  cam.cancelDrag();
+});

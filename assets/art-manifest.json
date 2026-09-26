@@ -353,7 +353,69 @@
       4620,
       1800
      ],
-     "bytes": 362750
+     "bytes": 362750,
+     "tiles": [
+      {
+       "file": "assets/rooms/cafe/tiles/back-0.webp",
+       "x": -100,
+       "y": -100,
+       "w": 881.33,
+       "h": 1200,
+       "px": [
+        1322,
+        1800
+       ],
+       "bytes": 107328
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/back-1.webp",
+       "x": 780,
+       "y": -100,
+       "w": 541.33,
+       "h": 1200,
+       "px": [
+        812,
+        1800
+       ],
+       "bytes": 57968
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/back-2.webp",
+       "x": 1320,
+       "y": -100,
+       "w": 241.33,
+       "h": 1200,
+       "px": [
+        362,
+        1800
+       ],
+       "bytes": 23650
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/back-3.webp",
+       "x": 1560,
+       "y": -100,
+       "w": 901.33,
+       "h": 1200,
+       "px": [
+        1352,
+        1800
+       ],
+       "bytes": 116166
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/back-4.webp",
+       "x": 2460,
+       "y": -100,
+       "w": 520,
+       "h": 1200,
+       "px": [
+        780,
+        1800
+       ],
+       "bytes": 67120
+      }
+     ]
     },
     {
      "id": "counter",
@@ -368,7 +430,69 @@
       3230,
       820
      ],
-     "bytes": 67214
+     "bytes": 67214,
+     "tiles": [
+      {
+       "file": "assets/rooms/cafe/tiles/counter-0.webp",
+       "x": 402,
+       "y": 181.33,
+       "w": 379.33,
+       "h": 546.67,
+       "px": [
+        569,
+        820
+       ],
+       "bytes": 16982
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/counter-1.webp",
+       "x": 780,
+       "y": 181.33,
+       "w": 541.33,
+       "h": 546.67,
+       "px": [
+        812,
+        820
+       ],
+       "bytes": 14212
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/counter-2.webp",
+       "x": 1320,
+       "y": 181.33,
+       "w": 241.33,
+       "h": 546.67,
+       "px": [
+        362,
+        820
+       ],
+       "bytes": 7314
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/counter-3.webp",
+       "x": 1560,
+       "y": 181.33,
+       "w": 901.33,
+       "h": 546.67,
+       "px": [
+        1352,
+        820
+       ],
+       "bytes": 30042
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/counter-4.webp",
+       "x": 2460,
+       "y": 181.33,
+       "w": 95.33,
+       "h": 546.67,
+       "px": [
+        143,
+        820
+       ],
+       "bytes": 5392
+      }
+     ]
     },
     {
      "id": "mid",
@@ -383,7 +507,69 @@
       3535,
       634
      ],
-     "bytes": 52022
+     "bytes": 52022,
+     "tiles": [
+      {
+       "file": "assets/rooms/cafe/tiles/mid-0.webp",
+       "x": 524.67,
+       "y": 500,
+       "w": 256.66,
+       "h": 422.67,
+       "px": [
+        385,
+        634
+       ],
+       "bytes": 10366
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/mid-1.webp",
+       "x": 780,
+       "y": 500,
+       "w": 541.33,
+       "h": 422.67,
+       "px": [
+        812,
+        634
+       ],
+       "bytes": 8834
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/mid-2.webp",
+       "x": 1320,
+       "y": 500,
+       "w": 241.33,
+       "h": 422.67,
+       "px": [
+        362,
+        634
+       ],
+       "bytes": 12242
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/mid-3.webp",
+       "x": 1560,
+       "y": 500,
+       "w": 901.33,
+       "h": 422.67,
+       "px": [
+        1352,
+        634
+       ],
+       "bytes": 17390
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/mid-4.webp",
+       "x": 2460,
+       "y": 500,
+       "w": 421.34,
+       "h": 422.67,
+       "px": [
+        632,
+        634
+       ],
+       "bytes": 10186
+      }
+     ]
     },
     {
      "id": "front",
@@ -398,7 +584,69 @@
       4499,
       518
      ],
-     "bytes": 26820
+     "bytes": 26820,
+     "tiles": [
+      {
+       "file": "assets/rooms/cafe/tiles/front-0.webp",
+       "x": -100,
+       "y": 750.67,
+       "w": 881.33,
+       "h": 345.33,
+       "px": [
+        1322,
+        518
+       ],
+       "bytes": 10054
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/front-1.webp",
+       "x": 780,
+       "y": 750.67,
+       "w": 541.33,
+       "h": 345.33,
+       "px": [
+        812,
+        518
+       ],
+       "bytes": 2104
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/front-2.webp",
+       "x": 1320,
+       "y": 750.67,
+       "w": 241.33,
+       "h": 345.33,
+       "px": [
+        362,
+        518
+       ],
+       "bytes": 6470
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/front-3.webp",
+       "x": 1560,
+       "y": 750.67,
+       "w": 901.33,
+       "h": 345.33,
+       "px": [
+        1352,
+        518
+       ],
+       "bytes": 5406
+      },
+      {
+       "file": "assets/rooms/cafe/tiles/front-4.webp",
+       "x": 2460,
+       "y": 750.67,
+       "w": 439.33,
+       "h": 345.33,
+       "px": [
+        659,
+        518
+       ],
+       "bytes": 6044
+      }
+     ]
     }
    ],
    "floor": {
@@ -1567,7 +1815,7 @@
       2460,
       1800
      ],
-     "bytes": 116050
+     "bytes": 115958
     },
     {
      "id": "mid",
@@ -1583,6 +1831,21 @@
       150
      ],
      "bytes": 4624
+    },
+    {
+     "id": "front",
+     "file": "assets/rooms/booth/front.webp",
+     "baseline": 1000,
+     "opaque": false,
+     "x": -100,
+     "y": 884.67,
+     "w": 215.33,
+     "h": 211.33,
+     "px": [
+      323,
+      317
+     ],
+     "bytes": 9350
     }
    ],
    "floor": {
@@ -1623,6 +1886,1453 @@
      ]
     }
    ]
+  },
+  "site": {
+   "id": "site",
+   "width": 2880,
+   "height": 1000,
+   "canvas": {
+    "x": -100,
+    "y": -100,
+    "w": 3080,
+    "h": 1200
+   },
+   "pxPerUnit": 1.5,
+   "layers": [
+    {
+     "id": "back",
+     "file": "assets/rooms/site/back.webp",
+     "baseline": 0,
+     "opaque": true,
+     "x": -100,
+     "y": -100,
+     "w": 3080,
+     "h": 1200,
+     "px": [
+      4620,
+      1800
+     ],
+     "bytes": 230966,
+     "tiles": [
+      {
+       "file": "assets/rooms/site/tiles/back-0.webp",
+       "x": -100,
+       "y": -100,
+       "w": 681.33,
+       "h": 1200,
+       "px": [
+        1022,
+        1800
+       ],
+       "bytes": 51256
+      },
+      {
+       "file": "assets/rooms/site/tiles/back-1.webp",
+       "x": 580,
+       "y": -100,
+       "w": 741.33,
+       "h": 1200,
+       "px": [
+        1112,
+        1800
+       ],
+       "bytes": 61002
+      },
+      {
+       "file": "assets/rooms/site/tiles/back-2.webp",
+       "x": 1320,
+       "y": -100,
+       "w": 241.33,
+       "h": 1200,
+       "px": [
+        362,
+        1800
+       ],
+       "bytes": 18812
+      },
+      {
+       "file": "assets/rooms/site/tiles/back-3.webp",
+       "x": 1560,
+       "y": -100,
+       "w": 701.33,
+       "h": 1200,
+       "px": [
+        1052,
+        1800
+       ],
+       "bytes": 62802
+      },
+      {
+       "file": "assets/rooms/site/tiles/back-4.webp",
+       "x": 2260,
+       "y": -100,
+       "w": 720,
+       "h": 1200,
+       "px": [
+        1080,
+        1800
+       ],
+       "bytes": 45838
+      }
+     ]
+    },
+    {
+     "id": "counter",
+     "file": "assets/rooms/site/counter.webp",
+     "baseline": 728,
+     "opaque": false,
+     "x": 38,
+     "y": 296.67,
+     "w": 2850,
+     "h": 680.67,
+     "px": [
+      4275,
+      1021
+     ],
+     "bytes": 47486,
+     "tiles": [
+      {
+       "file": "assets/rooms/site/tiles/counter-0.webp",
+       "x": 38,
+       "y": 296.67,
+       "w": 543.33,
+       "h": 680.67,
+       "px": [
+        815,
+        1021
+       ],
+       "bytes": 26834
+      },
+      {
+       "file": "assets/rooms/site/tiles/counter-1.webp",
+       "x": 580,
+       "y": 296.67,
+       "w": 741.33,
+       "h": 680.67,
+       "px": [
+        1112,
+        1021
+       ],
+       "bytes": 6612
+      },
+      {
+       "file": "assets/rooms/site/tiles/counter-2.webp",
+       "x": 1320,
+       "y": 296.67,
+       "w": 241.33,
+       "h": 680.67,
+       "px": [
+        362,
+        1021
+       ],
+       "bytes": 1254
+      },
+      {
+       "file": "assets/rooms/site/tiles/counter-3.webp",
+       "x": 1560,
+       "y": 296.67,
+       "w": 701.33,
+       "h": 680.67,
+       "px": [
+        1052,
+        1021
+       ],
+       "bytes": 5688
+      },
+      {
+       "file": "assets/rooms/site/tiles/counter-4.webp",
+       "x": 2260,
+       "y": 296.67,
+       "w": 628,
+       "h": 680.67,
+       "px": [
+        942,
+        1021
+       ],
+       "bytes": 9940
+      }
+     ]
+    },
+    {
+     "id": "mid",
+     "file": "assets/rooms/site/mid.webp",
+     "baseline": 903,
+     "opaque": false,
+     "x": -4,
+     "y": 671.33,
+     "w": 2871.33,
+     "h": 247.33,
+     "px": [
+      4307,
+      371
+     ],
+     "bytes": 65630,
+     "tiles": [
+      {
+       "file": "assets/rooms/site/tiles/mid-0.webp",
+       "x": -4,
+       "y": 671.33,
+       "w": 585.33,
+       "h": 247.33,
+       "px": [
+        878,
+        371
+       ],
+       "bytes": 9044
+      },
+      {
+       "file": "assets/rooms/site/tiles/mid-1.webp",
+       "x": 580,
+       "y": 671.33,
+       "w": 741.33,
+       "h": 247.33,
+       "px": [
+        1112,
+        371
+       ],
+       "bytes": 15222
+      },
+      {
+       "file": "assets/rooms/site/tiles/mid-2.webp",
+       "x": 1320,
+       "y": 671.33,
+       "w": 241.33,
+       "h": 247.33,
+       "px": [
+        362,
+        371
+       ],
+       "bytes": 6216
+      },
+      {
+       "file": "assets/rooms/site/tiles/mid-3.webp",
+       "x": 1560,
+       "y": 671.33,
+       "w": 701.33,
+       "h": 247.33,
+       "px": [
+        1052,
+        371
+       ],
+       "bytes": 20152
+      },
+      {
+       "file": "assets/rooms/site/tiles/mid-4.webp",
+       "x": 2260,
+       "y": 671.33,
+       "w": 607.33,
+       "h": 247.33,
+       "px": [
+        911,
+        371
+       ],
+       "bytes": 20202
+      }
+     ]
+    },
+    {
+     "id": "front",
+     "file": "assets/rooms/site/front.webp",
+     "baseline": 1000,
+     "opaque": false,
+     "x": -95.33,
+     "y": 950.67,
+     "w": 3025.33,
+     "h": 149.33,
+     "px": [
+      4538,
+      224
+     ],
+     "bytes": 17614,
+     "tiles": [
+      {
+       "file": "assets/rooms/site/tiles/front-0.webp",
+       "x": -95.33,
+       "y": 950.67,
+       "w": 676.66,
+       "h": 149.33,
+       "px": [
+        1015,
+        224
+       ],
+       "bytes": 3398
+      },
+      {
+       "file": "assets/rooms/site/tiles/front-1.webp",
+       "x": 580,
+       "y": 950.67,
+       "w": 741.33,
+       "h": 149.33,
+       "px": [
+        1112,
+        224
+       ],
+       "bytes": 5060
+      },
+      {
+       "file": "assets/rooms/site/tiles/front-2.webp",
+       "x": 1320,
+       "y": 950.67,
+       "w": 241.33,
+       "h": 149.33,
+       "px": [
+        362,
+        224
+       ],
+       "bytes": 738
+      },
+      {
+       "file": "assets/rooms/site/tiles/front-3.webp",
+       "x": 1560,
+       "y": 950.67,
+       "w": 701.33,
+       "h": 149.33,
+       "px": [
+        1052,
+        224
+       ],
+       "bytes": 4004
+      },
+      {
+       "file": "assets/rooms/site/tiles/front-4.webp",
+       "x": 2260,
+       "y": 950.67,
+       "w": 670,
+       "h": 149.33,
+       "px": [
+        1005,
+        224
+       ],
+       "bytes": 7900
+      }
+     ]
+    }
+   ],
+   "floor": {
+    "y0": 707,
+    "y1": 960.4
+   },
+   "surfaces": [
+    {
+     "id": "build-deck",
+     "layer": "back",
+     "x0": 230,
+     "x1": 870,
+     "y": 880
+    },
+    {
+     "id": "scaffold-1",
+     "layer": "counter",
+     "x0": 91,
+     "x1": 441,
+     "y": 574
+    },
+    {
+     "id": "scaffold-2",
+     "layer": "counter",
+     "x0": 91,
+     "x1": 441,
+     "y": 420
+    },
+    {
+     "id": "frame-1",
+     "layer": "back",
+     "x0": 1197,
+     "x1": 1491,
+     "y": 606.2
+    },
+    {
+     "id": "frame-2",
+     "layer": "back",
+     "x0": 1197,
+     "x1": 1491,
+     "y": 487.2
+    },
+    {
+     "id": "frame-3",
+     "layer": "back",
+     "x0": 1197,
+     "x1": 1351,
+     "y": 368.2
+    },
+    {
+     "id": "office-shelf",
+     "layer": "back",
+     "x0": 1533,
+     "x1": 1638,
+     "y": 630
+    },
+    {
+     "id": "tool-shelf",
+     "layer": "back",
+     "x0": 2618,
+     "x1": 2877,
+     "y": 392
+    },
+    {
+     "id": "workbench",
+     "layer": "counter",
+     "x0": 2618,
+     "x1": 2849,
+     "y": 616
+    },
+    {
+     "id": "workbench-low",
+     "layer": "counter",
+     "x0": 2646,
+     "x1": 2849,
+     "y": 686
+    },
+    {
+     "id": "lumber-top",
+     "layer": "mid",
+     "x0": 14,
+     "x1": 196,
+     "y": 758.8
+    },
+    {
+     "id": "brick-top",
+     "layer": "mid",
+     "x0": 875,
+     "x1": 980,
+     "y": 777
+    },
+    {
+     "id": "lever-box",
+     "layer": "mid",
+     "x0": 1113,
+     "x1": 1211,
+     "y": 793.8
+    },
+    {
+     "id": "pit-floor",
+     "layer": "back",
+     "x0": 2100,
+     "x1": 2303,
+     "y": 938
+    },
+    {
+     "id": "bench",
+     "layer": "front",
+     "x0": 1008,
+     "x1": 1183,
+     "y": 954.8
+    },
+    {
+     "id": "truck-bed",
+     "layer": "mid",
+     "x0": 1841,
+     "x1": 1996.4,
+     "y": 761.6,
+     "inside": "truck-bed:down"
+    }
+   ],
+   "seats": [
+    {
+     "id": "excavator-cab",
+     "layer": "mid",
+     "at": [
+      2461.2,
+      826
+     ]
+    },
+    {
+     "id": "crane-cab",
+     "layer": "front",
+     "at": [
+      1078,
+      200.2
+     ]
+    },
+    {
+     "id": "truck-cab",
+     "layer": "mid",
+     "at": [
+      1771,
+      826
+     ]
+    },
+    {
+     "id": "wreck-cab",
+     "layer": "mid",
+     "at": [
+      1478.4,
+      826
+     ]
+    },
+    {
+     "id": "bench-1",
+     "layer": "front",
+     "at": [
+      1057,
+      954.8
+     ]
+    },
+    {
+     "id": "bench-2",
+     "layer": "front",
+     "at": [
+      1134,
+      954.8
+     ]
+    },
+    {
+     "id": "scaffold-sit",
+     "layer": "counter",
+     "at": [
+      217,
+      574
+     ]
+    }
+   ],
+   "pieces": {
+    "dirt": {
+     "layer": "back",
+     "default": "full",
+     "variants": {
+      "full": {
+       "file": "assets/rooms/site/dirt-full.webp",
+       "bytes": 12732
+      }
+     },
+     "px": [
+      616,
+      349
+     ],
+     "x": 1996,
+     "y": 730.67,
+     "w": 410.67,
+     "h": 232.67,
+     "taps": null,
+     "pivot": null
+    },
+    "potty-door": {
+     "layer": "counter",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/site/potty-door-closed.webp",
+       "bytes": 3010
+      },
+      "open": {
+       "file": "assets/rooms/site/potty-door-open.webp",
+       "bytes": 7150
+      }
+     },
+     "px": [
+      227,
+      322
+     ],
+     "x": 795.33,
+     "y": 510.67,
+     "w": 151.33,
+     "h": 214.67,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": [
+      856.8,
+      530.6
+     ]
+    },
+    "crane-lever": {
+     "layer": "mid",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/site/crane-lever-up.webp",
+       "bytes": 2938
+      },
+      "down": {
+       "file": "assets/rooms/site/crane-lever-down.webp",
+       "bytes": 2974
+      }
+     },
+     "px": [
+      254,
+      188
+     ],
+     "x": 1077.33,
+     "y": 673.33,
+     "w": 169.33,
+     "h": 125.33,
+     "taps": [
+      "up",
+      "down"
+     ],
+     "pivot": [
+      1162,
+      784
+     ],
+     "controls": "crane-hook"
+    },
+    "wreck-boom": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/wreck-boom-still.webp",
+       "bytes": 22416
+      }
+     },
+     "px": [
+      449,
+      767
+     ],
+     "x": 1282,
+     "y": 288,
+     "w": 299.33,
+     "h": 511.33,
+     "taps": null,
+     "pivot": [
+      1558.2,
+      781.2
+     ]
+    },
+    "wreck-chain": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/wreck-chain-still.webp",
+       "bytes": 3688
+      }
+     },
+     "px": [
+      32,
+      366
+     ],
+     "x": 1291.33,
+     "y": 315.33,
+     "w": 21.33,
+     "h": 244,
+     "taps": null,
+     "pivot": [
+      1302,
+      308
+     ]
+    },
+    "wreck-ball": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/wreck-ball-still.webp",
+       "bytes": 3558
+      }
+     },
+     "px": [
+      152,
+      184
+     ],
+     "x": 1251.33,
+     "y": 536.67,
+     "w": 101.33,
+     "h": 122.67,
+     "taps": null,
+     "pivot": [
+      1302,
+      308
+     ]
+    },
+    "dump-truck": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/dump-truck-still.webp",
+       "bytes": 14578
+      }
+     },
+     "px": [
+      490,
+      325
+     ],
+     "x": 1699.33,
+     "y": 701.33,
+     "w": 326.67,
+     "h": 216.67,
+     "taps": null,
+     "pivot": null
+    },
+    "truck-bed": {
+     "layer": "mid",
+     "default": "down",
+     "variants": {
+      "down": {
+       "file": "assets/rooms/site/truck-bed-down.webp",
+       "bytes": 3994
+      },
+      "full": {
+       "file": "assets/rooms/site/truck-bed-full.webp",
+       "bytes": 5158
+      },
+      "tilt": {
+       "file": "assets/rooms/site/truck-bed-tilt.webp",
+       "bytes": 10588
+      },
+      "up": {
+       "file": "assets/rooms/site/truck-bed-up.webp",
+       "bytes": 12200
+      }
+     },
+     "px": [
+      428,
+      352
+     ],
+     "x": 1816,
+     "y": 632,
+     "w": 285.33,
+     "h": 234.67,
+     "taps": [
+      "down",
+      "up"
+     ],
+     "pivot": [
+      2010.4,
+      854
+     ]
+    },
+    "excavator": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/excavator-still.webp",
+       "bytes": 11158
+      }
+     },
+     "px": [
+      512,
+      371
+     ],
+     "x": 2382.67,
+     "y": 671.33,
+     "w": 341.33,
+     "h": 247.33,
+     "taps": null,
+     "pivot": null
+    },
+    "excavator-arm": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/excavator-arm-still.webp",
+       "bytes": 14342
+      }
+     },
+     "px": [
+      489,
+      373
+     ],
+     "x": 2161.33,
+     "y": 558.67,
+     "w": 326,
+     "h": 248.67,
+     "taps": null,
+     "pivot": [
+      2450,
+      777
+     ]
+    },
+    "excavator-bucket": {
+     "layer": "mid",
+     "default": "empty",
+     "variants": {
+      "empty": {
+       "file": "assets/rooms/site/excavator-bucket-empty.webp",
+       "bytes": 3010
+      },
+      "full": {
+       "file": "assets/rooms/site/excavator-bucket-full.webp",
+       "bytes": 3598
+      }
+     },
+     "px": [
+      141,
+      142
+     ],
+     "x": 2097.33,
+     "y": 726,
+     "w": 94,
+     "h": 94.67,
+     "taps": null,
+     "pivot": [
+      2177,
+      735
+     ]
+    },
+    "mixer-drum": {
+     "layer": "mid",
+     "default": "spin0",
+     "variants": {
+      "spin0": {
+       "file": "assets/rooms/site/mixer-drum-spin0.webp",
+       "bytes": 8910
+      },
+      "spin1": {
+       "file": "assets/rooms/site/mixer-drum-spin1.webp",
+       "bytes": 8992
+      },
+      "spin2": {
+       "file": "assets/rooms/site/mixer-drum-spin2.webp",
+       "bytes": 8976
+      },
+      "spin3": {
+       "file": "assets/rooms/site/mixer-drum-spin3.webp",
+       "bytes": 9072
+      }
+     },
+     "px": [
+      675,
+      539
+     ],
+     "x": 2530,
+     "y": 588.67,
+     "w": 450,
+     "h": 359.33,
+     "taps": null,
+     "pivot": [
+      2765,
+      777
+     ]
+    },
+    "crane-jib": {
+     "layer": "front",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/crane-jib-still.webp",
+       "bytes": 26176
+      }
+     },
+     "px": [
+      1750,
+      296
+     ],
+     "x": 182,
+     "y": 3.33,
+     "w": 1166.67,
+     "h": 197.33,
+     "taps": null,
+     "pivot": [
+      1015,
+      105
+     ]
+    },
+    "crane-cab": {
+     "layer": "front",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/crane-cab-still.webp",
+       "bytes": 2730
+      }
+     },
+     "px": [
+      221,
+      139
+     ],
+     "x": 980,
+     "y": 126,
+     "w": 147.33,
+     "h": 92.67,
+     "taps": null,
+     "pivot": null
+    },
+    "crane-trolley": {
+     "layer": "front",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/crane-trolley-still.webp",
+       "bytes": 1612
+      }
+     },
+     "px": [
+      88,
+      58
+     ],
+     "x": 530.67,
+     "y": 129.33,
+     "w": 58.67,
+     "h": 38.67,
+     "taps": null,
+     "pivot": null
+    },
+    "crane-cable": {
+     "layer": "front",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/crane-cable-still.webp",
+       "bytes": 790
+      }
+     },
+     "px": [
+      30,
+      398
+     ],
+     "x": 550,
+     "y": 159.33,
+     "w": 20,
+     "h": 265.33,
+     "taps": null,
+     "pivot": [
+      560,
+      163.8
+     ]
+    },
+    "crane-hook": {
+     "layer": "front",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/crane-hook-still.webp",
+       "bytes": 3150
+      }
+     },
+     "px": [
+      164,
+      120
+     ],
+     "x": 506.67,
+     "y": 416,
+     "w": 109.33,
+     "h": 80,
+     "taps": null,
+     "pivot": [
+      560,
+      420
+     ]
+    }
+   },
+   "slots": [
+    {
+     "id": "crane-hook",
+     "kind": "hook",
+     "layer": "front",
+     "at": [
+      578.2,
+      492.8
+     ],
+     "piece": "crane-hook",
+     "box": null
+    },
+    {
+     "id": "crane-lever",
+     "kind": "lever",
+     "layer": "mid",
+     "at": [
+      1162,
+      686
+     ],
+     "piece": "crane-lever",
+     "box": null
+    },
+    {
+     "id": "wreck-ball",
+     "kind": "wrecking-ball",
+     "layer": "mid",
+     "at": [
+      1302,
+      609
+     ],
+     "piece": "wreck-ball",
+     "box": null
+    },
+    {
+     "id": "mixer-mouth",
+     "kind": "mixer",
+     "layer": "mid",
+     "at": [
+      2700.6,
+      711.2
+     ],
+     "box": [
+      2672.6,
+      676.2,
+      63,
+      63
+     ],
+     "piece": "mixer-drum"
+    },
+    {
+     "id": "mixer-pour",
+     "kind": "pour",
+     "layer": "mid",
+     "at": [
+      2658.6,
+      903
+     ],
+     "box": null
+    },
+    {
+     "id": "truck-bed",
+     "kind": "truck-bed",
+     "layer": "mid",
+     "at": [
+      1915.2,
+      761.6
+     ],
+     "box": [
+      1827,
+      721,
+      183.4,
+      133
+     ],
+     "piece": "truck-bed"
+    },
+    {
+     "id": "excavator-bucket",
+     "kind": "bucket",
+     "layer": "mid",
+     "at": [
+      2146.2,
+      777
+     ],
+     "piece": "excavator-bucket",
+     "box": null
+    },
+    {
+     "id": "dig-pit",
+     "kind": "dig",
+     "layer": "back",
+     "box": [
+      2037,
+      728,
+      329,
+      217
+     ],
+     "piece": "dirt",
+     "at": null
+    },
+    {
+     "id": "potty",
+     "kind": "door",
+     "layer": "counter",
+     "at": [
+      899.5,
+      707
+     ],
+     "piece": "potty-door",
+     "box": null
+    },
+    {
+     "id": "bench-saw",
+     "kind": "tool",
+     "layer": "counter",
+     "at": [
+      2660,
+      616
+     ],
+     "tool": "saw",
+     "box": null
+    },
+    {
+     "id": "bench-drill",
+     "kind": "tool",
+     "layer": "counter",
+     "at": [
+      2723,
+      616
+     ],
+     "tool": "drill",
+     "box": null
+    },
+    {
+     "id": "bench-hammer",
+     "kind": "tool",
+     "layer": "counter",
+     "at": [
+      2775.5,
+      616
+     ],
+     "tool": "hammer",
+     "box": null
+    },
+    {
+     "id": "bench-brushes",
+     "kind": "tool",
+     "layer": "counter",
+     "at": [
+      2821,
+      616
+     ],
+     "tool": "paintbrush",
+     "box": null
+    },
+    {
+     "id": "bench-wrench",
+     "kind": "tool",
+     "layer": "counter",
+     "at": [
+      2660,
+      686
+     ],
+     "tool": "wrench",
+     "box": null
+    },
+    {
+     "id": "saw-table",
+     "kind": "saw",
+     "layer": "counter",
+     "at": [
+      2688,
+      616
+     ],
+     "box": [
+      2618,
+      574,
+      140,
+      42
+     ]
+    },
+    {
+     "id": "tool-shelf-1",
+     "kind": "paint",
+     "layer": "back",
+     "at": [
+      2716,
+      392
+     ],
+     "box": null
+    },
+    {
+     "id": "tool-shelf-2",
+     "kind": "paint",
+     "layer": "back",
+     "at": [
+      2758,
+      392
+     ],
+     "box": null
+    },
+    {
+     "id": "tool-shelf-3",
+     "kind": "paint",
+     "layer": "back",
+     "at": [
+      2800,
+      392
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-1",
+     "kind": "treasure",
+     "layer": "back",
+     "at": [
+      2093,
+      854
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-2",
+     "kind": "treasure",
+     "layer": "back",
+     "at": [
+      2184,
+      924
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-3",
+     "kind": "treasure",
+     "layer": "back",
+     "at": [
+      2289,
+      840
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-4",
+     "kind": "treasure",
+     "layer": "back",
+     "at": [
+      2156,
+      812
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-5",
+     "kind": "treasure",
+     "layer": "back",
+     "at": [
+      2289,
+      910
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-6",
+     "kind": "treasure",
+     "layer": "back",
+     "at": [
+      2233,
+      882
+     ],
+     "box": null
+    },
+    {
+     "id": "build-origin",
+     "kind": "grid",
+     "layer": "back",
+     "at": [
+      230,
+      880
+     ],
+     "box": null
+    }
+   ],
+   "spawners": [
+    {
+     "id": "lumber",
+     "surfaces": [
+      "lumber-top"
+     ],
+     "at": [
+      108.5,
+      758.8
+     ],
+     "items": [
+      "plank",
+      "beam"
+     ]
+    },
+    {
+     "id": "bricks",
+     "surfaces": [
+      "brick-top"
+     ],
+     "at": [
+      927.5,
+      777
+     ],
+     "items": [
+      "block-2x1",
+      "block-1x1",
+      "block-2x2"
+     ]
+    },
+    {
+     "id": "cones",
+     "at": [
+      1064,
+      791
+     ],
+     "items": [
+      "traffic-cone"
+     ]
+    },
+    {
+     "id": "paint",
+     "surfaces": [
+      "tool-shelf"
+     ],
+     "at": [
+      2758,
+      392
+     ],
+     "items": [
+      "paint-can"
+     ]
+    },
+    {
+     "id": "hard-hats",
+     "at": [
+      1579.2,
+      679
+     ],
+     "items": [
+      "hard-hat",
+      "safety-vest"
+     ]
+    }
+   ],
+   "zones": [
+    {
+     "id": "build",
+     "x0": 0,
+     "x1": 959,
+     "camera": 0
+    },
+    {
+     "id": "crane",
+     "x0": 959,
+     "x1": 1701,
+     "camera": 700
+    },
+    {
+     "id": "dig",
+     "x0": 1701,
+     "x1": 2879.8,
+     "camera": 1440
+    }
+   ],
+   "grid": {
+    "cell": 40,
+    "x0": 230,
+    "x1": 870,
+    "y": 880,
+    "cols": 16,
+    "maxRows": 14,
+    "note": "Snap columns start at x0; a piece with footprint [w, h] cells at column c, row r has its anchor (bottom centre) at [x0 + (c + w/2) * cell, y - r * cell]."
+   },
+   "rigs": {
+    "towerCrane": {
+     "pieces": {
+      "cab": "crane-cab",
+      "jib": "crane-jib",
+      "trolley": "crane-trolley",
+      "cable": "crane-cable",
+      "hook": "crane-hook"
+     },
+     "trolleyRail": {
+      "x0": 238,
+      "x1": 966,
+      "y": 137.2,
+      "rest": 560
+     },
+     "cableTop": [
+      560,
+      163.8
+     ],
+     "cableLength": 256.2,
+     "hookTop": [
+      560,
+      420
+     ],
+     "hookGrab": [
+      578.2,
+      492.8
+     ],
+     "hookRange": {
+      "yMin": 191.8,
+      "yMax": 803
+     },
+     "note": "Move trolley, cable and hook together along x (trolleyRail). Cable: scaleY = length / cableLength about cableTop; hook: translateY by the same delta. Sway: rotate cable+hook about cableTop."
+    },
+    "lever": {
+     "piece": "crane-lever",
+     "pivot": [
+      1162,
+      784
+     ],
+     "up": "up",
+     "down": "down",
+     "note": "up = hook rises, down = hook lowers"
+    },
+    "wreckingBall": {
+     "pieces": {
+      "boom": "wreck-boom",
+      "chain": "wreck-chain",
+      "ball": "wreck-ball"
+     },
+     "boomPivot": [
+      1558.2,
+      781.2
+     ],
+     "tip": [
+      1302,
+      308
+     ],
+     "ballCentre": [
+      1302,
+      609
+     ],
+     "ballRadius": 46.2,
+     "chainLength": 301,
+     "note": "Swing: rotate chain and ball together about tip (pendulum). Boom may tilt a few degrees about boomPivot."
+    },
+    "excavator": {
+     "pieces": {
+      "body": "excavator",
+      "arm": "excavator-arm",
+      "bucket": "excavator-bucket"
+     },
+     "armPivot": [
+      2450,
+      777
+     ],
+     "elbow": [
+      2289,
+      588
+     ],
+     "bucketPivot": [
+      2177,
+      735
+     ],
+     "bucketMouth": [
+      2146.2,
+      777
+     ],
+     "reach": 276.2,
+     "note": "Rotate the arm about armPivot, then the bucket about the arm tip (bucketPivot transformed by the arm rotation). Bucket variants: empty, full. The body piece can translate for driving; move all three."
+    },
+    "dumpTruck": {
+     "pieces": {
+      "body": "dump-truck",
+      "bed": "truck-bed"
+     },
+     "bedPivot": [
+      2010.4,
+      854
+     ],
+     "tilt": {
+      "down": 0,
+      "full": 0,
+      "tilt": 18,
+      "up": 38
+     },
+     "pour": [
+      2052.4,
+      903
+     ],
+     "note": "Bed variants are pre-rotated about bedPivot (degrees above). Dirt slides out at pour."
+    },
+    "mixer": {
+     "piece": "mixer-drum",
+     "frames": [
+      "spin0",
+      "spin1",
+      "spin2",
+      "spin3"
+     ],
+     "fps": 12,
+     "mouth": [
+      2700.6,
+      711.2
+     ],
+     "pour": [
+      2658.6,
+      903
+     ]
+    },
+    "dig": {
+     "piece": "dirt",
+     "box": [
+      2037,
+      721,
+      329,
+      224
+     ],
+     "note": "Draw the dirt piece into a canvas; erase with a round brush (destination-out) along the bucket or finger path. Treasures sit in slots treasure-1..6 BELOW the dirt: draw them before the dirt canvas."
+    },
+    "potty": {
+     "piece": "potty-door",
+     "pivot": [
+      856.8,
+      530.6
+     ]
+    }
+   }
   }
  },
  "map": {
@@ -7772,7 +9482,3581 @@
    "set": "cafe",
    "prep": null,
    "leaves": null
+  },
+  "block-1x1": {
+   "label": "small block",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "brick"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/block-1x1-red.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2032,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/block-1x1-yellow.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2128,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/block-1x1-blue.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2090,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/block-1x1-green.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2104,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/block-1x1-purple.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1934,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "rainbow": {
+     "file": "assets/sprites/props/block-1x1-rainbow.webp",
+     "px": [
+      96,
+      95
+     ],
+     "bytes": 1974,
+     "size": [
+      48,
+      47.5
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     1,
+     1
+    ],
+    "stack": [
+     [
+      0,
+      -40
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "rainbow": "rainbow"
+   }
+  },
+  "block-2x1": {
+   "label": "brick",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "brick"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/block-2x1-red.webp",
+     "px": [
+      174,
+      94
+     ],
+     "bytes": 2342,
+     "size": [
+      87,
+      47
+     ],
+     "anchor": [
+      43.5,
+      43.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/block-2x1-yellow.webp",
+     "px": [
+      174,
+      94
+     ],
+     "bytes": 2448,
+     "size": [
+      87,
+      47
+     ],
+     "anchor": [
+      43.5,
+      43.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/block-2x1-blue.webp",
+     "px": [
+      174,
+      94
+     ],
+     "bytes": 2410,
+     "size": [
+      87,
+      47
+     ],
+     "anchor": [
+      43.5,
+      43.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/block-2x1-green.webp",
+     "px": [
+      174,
+      94
+     ],
+     "bytes": 2392,
+     "size": [
+      87,
+      47
+     ],
+     "anchor": [
+      43.5,
+      43.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/block-2x1-purple.webp",
+     "px": [
+      174,
+      94
+     ],
+     "bytes": 2186,
+     "size": [
+      87,
+      47
+     ],
+     "anchor": [
+      43.5,
+      43.5
+     ]
+    },
+    "rainbow": {
+     "file": "assets/sprites/props/block-2x1-rainbow.webp",
+     "px": [
+      175,
+      95
+     ],
+     "bytes": 2034,
+     "size": [
+      87.5,
+      47.5
+     ],
+     "anchor": [
+      43.5,
+      43.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     2,
+     1
+    ],
+    "stack": [
+     [
+      -20,
+      -40
+     ],
+     [
+      20,
+      -40
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "rainbow": "rainbow"
+   }
+  },
+  "block-2x2": {
+   "label": "big block",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "brick"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/block-2x2-red.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 3074,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/block-2x2-yellow.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 3312,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/block-2x2-blue.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 3120,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/block-2x2-green.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 3144,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/block-2x2-purple.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 2846,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "rainbow": {
+     "file": "assets/sprites/props/block-2x2-rainbow.webp",
+     "px": [
+      175,
+      176
+     ],
+     "bytes": 2986,
+     "size": [
+      87.5,
+      88
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     2,
+     2
+    ],
+    "stack": [
+     [
+      -20,
+      -80
+     ],
+     [
+      20,
+      -80
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "rainbow": "rainbow"
+   }
+  },
+  "plank": {
+   "label": "plank",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "wood",
+    "sawable"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/plank-natural.webp",
+     "px": [
+      336,
+      55
+     ],
+     "bytes": 1930,
+     "size": [
+      168,
+      27.5
+     ],
+     "anchor": [
+      84,
+      24
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/plank-red.webp",
+     "px": [
+      336,
+      55
+     ],
+     "bytes": 1832,
+     "size": [
+      168,
+      27.5
+     ],
+     "anchor": [
+      84,
+      24
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/plank-yellow.webp",
+     "px": [
+      336,
+      55
+     ],
+     "bytes": 1940,
+     "size": [
+      168,
+      27.5
+     ],
+     "anchor": [
+      84,
+      24
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/plank-blue.webp",
+     "px": [
+      336,
+      55
+     ],
+     "bytes": 1886,
+     "size": [
+      168,
+      27.5
+     ],
+     "anchor": [
+      84,
+      24
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/plank-green.webp",
+     "px": [
+      336,
+      55
+     ],
+     "bytes": 1984,
+     "size": [
+      168,
+      27.5
+     ],
+     "anchor": [
+      84,
+      24
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/plank-purple.webp",
+     "px": [
+      336,
+      55
+     ],
+     "bytes": 1810,
+     "size": [
+      168,
+      27.5
+     ],
+     "anchor": [
+      84,
+      24
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     4,
+     0.5
+    ],
+    "stack": [
+     [
+      -60,
+      -20
+     ],
+     [
+      -20,
+      -20
+     ],
+     [
+      20,
+      -20
+     ],
+     [
+      60,
+      -20
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   },
+   "saw": [
+    "plank-half",
+    "plank-half"
+   ]
+  },
+  "plank-half": {
+   "label": "short plank",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "wood"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/plank-half-natural.webp",
+     "px": [
+      174,
+      55
+     ],
+     "bytes": 1664,
+     "size": [
+      87,
+      27.5
+     ],
+     "anchor": [
+      43.5,
+      24
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/plank-half-red.webp",
+     "px": [
+      174,
+      55
+     ],
+     "bytes": 1640,
+     "size": [
+      87,
+      27.5
+     ],
+     "anchor": [
+      43.5,
+      24
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/plank-half-yellow.webp",
+     "px": [
+      174,
+      55
+     ],
+     "bytes": 1718,
+     "size": [
+      87,
+      27.5
+     ],
+     "anchor": [
+      43.5,
+      24
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/plank-half-blue.webp",
+     "px": [
+      174,
+      55
+     ],
+     "bytes": 1726,
+     "size": [
+      87,
+      27.5
+     ],
+     "anchor": [
+      43.5,
+      24
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/plank-half-green.webp",
+     "px": [
+      174,
+      55
+     ],
+     "bytes": 1694,
+     "size": [
+      87,
+      27.5
+     ],
+     "anchor": [
+      43.5,
+      24
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/plank-half-purple.webp",
+     "px": [
+      174,
+      55
+     ],
+     "bytes": 1554,
+     "size": [
+      87,
+      27.5
+     ],
+     "anchor": [
+      43.5,
+      24
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     2,
+     0.5
+    ],
+    "stack": [
+     [
+      -20,
+      -20
+     ],
+     [
+      20,
+      -20
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "beam": {
+   "label": "steel beam",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "metal"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/beam-natural.webp",
+     "px": [
+      494,
+      55
+     ],
+     "bytes": 2998,
+     "size": [
+      247,
+      27.5
+     ],
+     "anchor": [
+      123.5,
+      24
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/beam-red.webp",
+     "px": [
+      494,
+      55
+     ],
+     "bytes": 2990,
+     "size": [
+      247,
+      27.5
+     ],
+     "anchor": [
+      123.5,
+      24
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/beam-yellow.webp",
+     "px": [
+      494,
+      55
+     ],
+     "bytes": 3312,
+     "size": [
+      247,
+      27.5
+     ],
+     "anchor": [
+      123.5,
+      24
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/beam-blue.webp",
+     "px": [
+      494,
+      55
+     ],
+     "bytes": 3030,
+     "size": [
+      247,
+      27.5
+     ],
+     "anchor": [
+      123.5,
+      24
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/beam-green.webp",
+     "px": [
+      494,
+      55
+     ],
+     "bytes": 3070,
+     "size": [
+      247,
+      27.5
+     ],
+     "anchor": [
+      123.5,
+      24
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/beam-purple.webp",
+     "px": [
+      494,
+      55
+     ],
+     "bytes": 2688,
+     "size": [
+      247,
+      27.5
+     ],
+     "anchor": [
+      123.5,
+      24
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     6,
+     0.5
+    ],
+    "stack": [
+     [
+      -100,
+      -20
+     ],
+     [
+      -60,
+      -20
+     ],
+     [
+      -20,
+      -20
+     ],
+     [
+      20,
+      -20
+     ],
+     [
+      60,
+      -20
+     ],
+     [
+      100,
+      -20
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "roof-triangle": {
+   "label": "roof",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "roof"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/roof-triangle-red.webp",
+     "px": [
+      336,
+      175
+     ],
+     "bytes": 4364,
+     "size": [
+      168,
+      87.5
+     ],
+     "anchor": [
+      84,
+      84
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/roof-triangle-yellow.webp",
+     "px": [
+      336,
+      175
+     ],
+     "bytes": 4646,
+     "size": [
+      168,
+      87.5
+     ],
+     "anchor": [
+      84,
+      84
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/roof-triangle-blue.webp",
+     "px": [
+      336,
+      175
+     ],
+     "bytes": 4474,
+     "size": [
+      168,
+      87.5
+     ],
+     "anchor": [
+      84,
+      84
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/roof-triangle-green.webp",
+     "px": [
+      336,
+      175
+     ],
+     "bytes": 4602,
+     "size": [
+      168,
+      87.5
+     ],
+     "anchor": [
+      84,
+      84
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/roof-triangle-purple.webp",
+     "px": [
+      336,
+      175
+     ],
+     "bytes": 4136,
+     "size": [
+      168,
+      87.5
+     ],
+     "anchor": [
+      84,
+      84
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     4,
+     2
+    ],
+    "stack": [
+     [
+      0,
+      -80
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple"
+   }
+  },
+  "roof-flat": {
+   "label": "flat roof",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "roof"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/roof-flat-natural.webp",
+     "px": [
+      346,
+      60
+     ],
+     "bytes": 2338,
+     "size": [
+      173,
+      30
+     ],
+     "anchor": [
+      86.5,
+      24
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/roof-flat-red.webp",
+     "px": [
+      346,
+      60
+     ],
+     "bytes": 2646,
+     "size": [
+      173,
+      30
+     ],
+     "anchor": [
+      86.5,
+      24
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/roof-flat-yellow.webp",
+     "px": [
+      346,
+      60
+     ],
+     "bytes": 2866,
+     "size": [
+      173,
+      30
+     ],
+     "anchor": [
+      86.5,
+      24
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/roof-flat-blue.webp",
+     "px": [
+      346,
+      60
+     ],
+     "bytes": 2748,
+     "size": [
+      173,
+      30
+     ],
+     "anchor": [
+      86.5,
+      24
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/roof-flat-green.webp",
+     "px": [
+      346,
+      60
+     ],
+     "bytes": 2654,
+     "size": [
+      173,
+      30
+     ],
+     "anchor": [
+      86.5,
+      24
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/roof-flat-purple.webp",
+     "px": [
+      346,
+      60
+     ],
+     "bytes": 2464,
+     "size": [
+      173,
+      30
+     ],
+     "anchor": [
+      86.5,
+      24
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     4,
+     0.5
+    ],
+    "stack": [
+     [
+      -60,
+      -20
+     ],
+     [
+      -20,
+      -20
+     ],
+     [
+      20,
+      -20
+     ],
+     [
+      60,
+      -20
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "window": {
+   "label": "window",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/window-natural.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1822,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/window-red.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1790,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/window-yellow.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1840,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/window-blue.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1836,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/window-green.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1804,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/window-purple.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 1740,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     1,
+     1
+    ],
+    "stack": [
+     [
+      0,
+      -40
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "round-window": {
+   "label": "round window",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/round-window-natural.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2756,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/round-window-red.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2730,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/round-window-yellow.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2836,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/round-window-blue.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2830,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/round-window-green.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2846,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/round-window-purple.webp",
+     "px": [
+      96,
+      94
+     ],
+     "bytes": 2688,
+     "size": [
+      48,
+      47
+     ],
+     "anchor": [
+      24,
+      43.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     1,
+     1
+    ],
+    "stack": [
+     [
+      0,
+      -40
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "door": {
+   "label": "door",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/door-closed.webp",
+     "px": [
+      96,
+      175
+     ],
+     "bytes": 2272,
+     "size": [
+      48,
+      87.5
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/door-open.webp",
+     "px": [
+      96,
+      184
+     ],
+     "bytes": 2134,
+     "size": [
+      48,
+      92
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "closed-red": {
+     "file": "assets/sprites/props/door-closed-red.webp",
+     "px": [
+      96,
+      175
+     ],
+     "bytes": 2280,
+     "size": [
+      48,
+      87.5
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "open-red": {
+     "file": "assets/sprites/props/door-open-red.webp",
+     "px": [
+      96,
+      184
+     ],
+     "bytes": 2124,
+     "size": [
+      48,
+      92
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "closed-yellow": {
+     "file": "assets/sprites/props/door-closed-yellow.webp",
+     "px": [
+      96,
+      175
+     ],
+     "bytes": 2364,
+     "size": [
+      48,
+      87.5
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "open-yellow": {
+     "file": "assets/sprites/props/door-open-yellow.webp",
+     "px": [
+      96,
+      184
+     ],
+     "bytes": 2190,
+     "size": [
+      48,
+      92
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "closed-blue": {
+     "file": "assets/sprites/props/door-closed-blue.webp",
+     "px": [
+      96,
+      175
+     ],
+     "bytes": 2318,
+     "size": [
+      48,
+      87.5
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "open-blue": {
+     "file": "assets/sprites/props/door-open-blue.webp",
+     "px": [
+      96,
+      184
+     ],
+     "bytes": 2180,
+     "size": [
+      48,
+      92
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "closed-green": {
+     "file": "assets/sprites/props/door-closed-green.webp",
+     "px": [
+      96,
+      175
+     ],
+     "bytes": 2334,
+     "size": [
+      48,
+      87.5
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "open-green": {
+     "file": "assets/sprites/props/door-open-green.webp",
+     "px": [
+      96,
+      184
+     ],
+     "bytes": 2152,
+     "size": [
+      48,
+      92
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "closed-purple": {
+     "file": "assets/sprites/props/door-closed-purple.webp",
+     "px": [
+      96,
+      175
+     ],
+     "bytes": 2194,
+     "size": [
+      48,
+      87.5
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    },
+    "open-purple": {
+     "file": "assets/sprites/props/door-open-purple.webp",
+     "px": [
+      96,
+      184
+     ],
+     "bytes": 2090,
+     "size": [
+      48,
+      92
+     ],
+     "anchor": [
+      24,
+      84
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     1,
+     2
+    ],
+    "stack": [
+     [
+      0,
+      -80
+     ]
+    ]
+   },
+   "paint": {
+    "red": "{state}-red",
+    "yellow": "{state}-yellow",
+    "blue": "{state}-blue",
+    "green": "{state}-green",
+    "purple": "{state}-purple",
+    "natural": "{state}"
+   },
+   "states": [
+    "closed",
+    "open"
+   ]
+  },
+  "stairs": {
+   "label": "stairs",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/stairs-natural.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 1574,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/stairs-red.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 1522,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/stairs-yellow.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 1552,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/stairs-blue.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 1558,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/stairs-green.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 1548,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/stairs-purple.webp",
+     "px": [
+      174,
+      175
+     ],
+     "bytes": 1428,
+     "size": [
+      87,
+      87.5
+     ],
+     "anchor": [
+      43.5,
+      84
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     2,
+     2
+    ],
+    "stack": [
+     [
+      -20,
+      -40
+     ],
+     [
+      20,
+      -80
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "flag": {
+   "label": "flag",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "topper"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/flag-red.webp",
+     "px": [
+      96,
+      179
+     ],
+     "bytes": 2864,
+     "size": [
+      48,
+      89.5
+     ],
+     "anchor": [
+      13.5,
+      86
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/flag-yellow.webp",
+     "px": [
+      96,
+      179
+     ],
+     "bytes": 2970,
+     "size": [
+      48,
+      89.5
+     ],
+     "anchor": [
+      13.5,
+      86
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/flag-blue.webp",
+     "px": [
+      96,
+      179
+     ],
+     "bytes": 2938,
+     "size": [
+      48,
+      89.5
+     ],
+     "anchor": [
+      13.5,
+      86
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/flag-green.webp",
+     "px": [
+      96,
+      179
+     ],
+     "bytes": 2904,
+     "size": [
+      48,
+      89.5
+     ],
+     "anchor": [
+      13.5,
+      86
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/flag-purple.webp",
+     "px": [
+      96,
+      179
+     ],
+     "bytes": 2780,
+     "size": [
+      48,
+      89.5
+     ],
+     "anchor": [
+      13.5,
+      86
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     1,
+     2
+    ],
+    "stack": []
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple"
+   }
+  },
+  "chimney": {
+   "label": "chimney",
+   "tags": [
+    "buildpiece",
+    "construction",
+    "paintable",
+    "topper"
+   ],
+   "default": "natural",
+   "variants": {
+    "natural": {
+     "file": "assets/sprites/props/chimney-natural.webp",
+     "px": [
+      90,
+      94
+     ],
+     "bytes": 1852,
+     "size": [
+      45,
+      47
+     ],
+     "anchor": [
+      22.5,
+      43.5
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/chimney-red.webp",
+     "px": [
+      90,
+      94
+     ],
+     "bytes": 1868,
+     "size": [
+      45,
+      47
+     ],
+     "anchor": [
+      22.5,
+      43.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/chimney-yellow.webp",
+     "px": [
+      90,
+      94
+     ],
+     "bytes": 1946,
+     "size": [
+      45,
+      47
+     ],
+     "anchor": [
+      22.5,
+      43.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/chimney-blue.webp",
+     "px": [
+      90,
+      94
+     ],
+     "bytes": 1896,
+     "size": [
+      45,
+      47
+     ],
+     "anchor": [
+      22.5,
+      43.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/chimney-green.webp",
+     "px": [
+      90,
+      94
+     ],
+     "bytes": 1882,
+     "size": [
+      45,
+      47
+     ],
+     "anchor": [
+      22.5,
+      43.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/chimney-purple.webp",
+     "px": [
+      90,
+      94
+     ],
+     "bytes": 1768,
+     "size": [
+      45,
+      47
+     ],
+     "anchor": [
+      22.5,
+      43.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "snap": {
+    "footprint": [
+     1,
+     1
+    ],
+    "stack": [
+     [
+      0,
+      -40
+     ]
+    ]
+   },
+   "paint": {
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue",
+    "green": "green",
+    "purple": "purple",
+    "natural": "natural"
+   }
+  },
+  "hammer": {
+   "label": "hammer",
+   "tags": [
+    "construction",
+    "tool",
+    "hammer"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/hammer.webp",
+     "px": [
+      166,
+      195
+     ],
+     "bytes": 3538,
+     "size": [
+      83,
+      97.5
+     ],
+     "anchor": [
+      58,
+      85
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -9.8,
+    -28
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "wrench": {
+   "label": "wrench",
+   "tags": [
+    "construction",
+    "tool",
+    "wrench"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/wrench.webp",
+     "px": [
+      146,
+      183
+     ],
+     "bytes": 3532,
+     "size": [
+      73,
+      91.5
+     ],
+     "anchor": [
+      55,
+      77.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "saw": {
+   "label": "saw",
+   "tags": [
+    "construction",
+    "tool",
+    "saw"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/saw.webp",
+     "px": [
+      238,
+      85
+     ],
+     "bytes": 2756,
+     "size": [
+      119,
+      42.5
+     ],
+     "anchor": [
+      52.5,
+      40
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    43.4,
+    -19.6
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "drill": {
+   "label": "drill",
+   "tags": [
+    "construction",
+    "tool",
+    "drill"
+   ],
+   "default": "off",
+   "variants": {
+    "off": {
+     "file": "assets/sprites/props/drill-off.webp",
+     "px": [
+      217,
+      146
+     ],
+     "bytes": 2692,
+     "size": [
+      108.5,
+      73
+     ],
+     "anchor": [
+      72.5,
+      69.5
+     ]
+    },
+    "on": {
+     "file": "assets/sprites/props/drill-on.webp",
+     "px": [
+      243,
+      146
+     ],
+     "bytes": 3302,
+     "size": [
+      121.5,
+      73
+     ],
+     "anchor": [
+      85.5,
+      69.5
+     ]
+    }
+   },
+   "taps": [
+    "off",
+    "on"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -7,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "paintbrush": {
+   "label": "paintbrush",
+   "tags": [
+    "construction",
+    "tool",
+    "brush",
+    "paint"
+   ],
+   "default": "clean",
+   "variants": {
+    "clean": {
+     "file": "assets/sprites/props/paintbrush-clean.webp",
+     "px": [
+      104,
+      171
+     ],
+     "bytes": 2820,
+     "size": [
+      52,
+      85.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    },
+    "red": {
+     "file": "assets/sprites/props/paintbrush-red.webp",
+     "px": [
+      105,
+      175
+     ],
+     "bytes": 2962,
+     "size": [
+      52.5,
+      87.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/paintbrush-yellow.webp",
+     "px": [
+      105,
+      175
+     ],
+     "bytes": 3040,
+     "size": [
+      52.5,
+      87.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/paintbrush-blue.webp",
+     "px": [
+      105,
+      175
+     ],
+     "bytes": 3014,
+     "size": [
+      52.5,
+      87.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/paintbrush-green.webp",
+     "px": [
+      105,
+      175
+     ],
+     "bytes": 2944,
+     "size": [
+      52.5,
+      87.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/paintbrush-purple.webp",
+     "px": [
+      105,
+      175
+     ],
+     "bytes": 2854,
+     "size": [
+      52.5,
+      87.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    },
+    "rainbow": {
+     "file": "assets/sprites/props/paintbrush-rainbow.webp",
+     "px": [
+      105,
+      175
+     ],
+     "bytes": 2962,
+     "size": [
+      52.5,
+      87.5
+     ],
+     "anchor": [
+      39.5,
+      79.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    12.6,
+    -63
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "paint-can": {
+   "label": "paint can",
+   "tags": [
+    "construction",
+    "tool",
+    "paint",
+    "container"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/paint-can-red.webp",
+     "px": [
+      110,
+      132
+     ],
+     "bytes": 3278,
+     "size": [
+      55,
+      66
+     ],
+     "anchor": [
+      27.5,
+      62.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/paint-can-yellow.webp",
+     "px": [
+      110,
+      132
+     ],
+     "bytes": 3328,
+     "size": [
+      55,
+      66
+     ],
+     "anchor": [
+      27.5,
+      62.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/paint-can-blue.webp",
+     "px": [
+      110,
+      132
+     ],
+     "bytes": 3310,
+     "size": [
+      55,
+      66
+     ],
+     "anchor": [
+      27.5,
+      62.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/paint-can-green.webp",
+     "px": [
+      110,
+      132
+     ],
+     "bytes": 3276,
+     "size": [
+      55,
+      66
+     ],
+     "anchor": [
+      27.5,
+      62.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/paint-can-purple.webp",
+     "px": [
+      110,
+      132
+     ],
+     "bytes": 3108,
+     "size": [
+      55,
+      66
+     ],
+     "anchor": [
+      27.5,
+      62.5
+     ]
+    },
+    "rainbow": {
+     "file": "assets/sprites/props/paint-can-rainbow.webp",
+     "px": [
+      110,
+      132
+     ],
+     "bytes": 3360,
+     "size": [
+      55,
+      66
+     ],
+     "anchor": [
+      27.5,
+      62.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -63
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "traffic-cone": {
+   "label": "traffic cone",
+   "tags": [
+    "construction",
+    "tool",
+    "cone"
+   ],
+   "default": "up",
+   "variants": {
+    "up": {
+     "file": "assets/sprites/props/traffic-cone-up.webp",
+     "px": [
+      122,
+      177
+     ],
+     "bytes": 3096,
+     "size": [
+      61,
+      88.5
+     ],
+     "anchor": [
+      30.5,
+      85
+     ]
+    },
+    "down": {
+     "file": "assets/sprites/props/traffic-cone-down.webp",
+     "px": [
+      177,
+      121
+     ],
+     "bytes": 2762,
+     "size": [
+      88.5,
+      60.5
+     ],
+     "anchor": [
+      92,
+      57
+     ]
+    }
+   },
+   "taps": [
+    "up",
+    "down"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -49
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "wheelbarrow": {
+   "label": "wheelbarrow",
+   "tags": [
+    "construction",
+    "tool",
+    "container",
+    "vehicle"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/wheelbarrow-empty.webp",
+     "px": [
+      264,
+      112
+     ],
+     "bytes": 3960,
+     "size": [
+      132,
+      56
+     ],
+     "anchor": [
+      50,
+      52.5
+     ]
+    },
+    "dirt": {
+     "file": "assets/sprites/props/wheelbarrow-dirt.webp",
+     "px": [
+      264,
+      149
+     ],
+     "bytes": 5506,
+     "size": [
+      132,
+      74.5
+     ],
+     "anchor": [
+      50,
+      71
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    70,
+    -44.8
+   ],
+   "surface": [
+    -35,
+    28,
+    -44.8
+   ],
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "hose": {
+   "label": "hose",
+   "tags": [
+    "construction",
+    "tool",
+    "water"
+   ],
+   "default": "coiled",
+   "variants": {
+    "coiled": {
+     "file": "assets/sprites/props/hose-coiled.webp",
+     "px": [
+      208,
+      101
+     ],
+     "bytes": 6154,
+     "size": [
+      104,
+      50.5
+     ],
+     "anchor": [
+      45.5,
+      45.5
+     ]
+    },
+    "spray": {
+     "file": "assets/sprites/props/hose-spray.webp",
+     "px": [
+      290,
+      142
+     ],
+     "bytes": 8924,
+     "size": [
+      145,
+      71
+     ],
+     "anchor": [
+      45.5,
+      66
+     ]
+    }
+   },
+   "taps": [
+    "coiled",
+    "spray"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    44.8,
+    -35
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "blueprint": {
+   "label": "blueprint",
+   "tags": [
+    "construction",
+    "tool",
+    "blueprint"
+   ],
+   "default": "rolled",
+   "variants": {
+    "rolled": {
+     "file": "assets/sprites/props/blueprint-rolled.webp",
+     "px": [
+      199,
+      87
+     ],
+     "bytes": 3638,
+     "size": [
+      99.5,
+      43.5
+     ],
+     "anchor": [
+      48.5,
+      32.5
+     ]
+    },
+    "house": {
+     "file": "assets/sprites/props/blueprint-house.webp",
+     "px": [
+      236,
+      166
+     ],
+     "bytes": 6048,
+     "size": [
+      118,
+      83
+     ],
+     "anchor": [
+      59,
+      82
+     ]
+    },
+    "tower": {
+     "file": "assets/sprites/props/blueprint-tower.webp",
+     "px": [
+      236,
+      208
+     ],
+     "bytes": 6742,
+     "size": [
+      118,
+      104
+     ],
+     "anchor": [
+      59,
+      103
+     ]
+    },
+    "bridge": {
+     "file": "assets/sprites/props/blueprint-bridge.webp",
+     "px": [
+      236,
+      166
+     ],
+     "bytes": 6338,
+     "size": [
+      118,
+      83
+     ],
+     "anchor": [
+      59,
+      82
+     ]
+    }
+   },
+   "taps": [
+    "rolled",
+    "house",
+    "tower",
+    "bridge"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "lunchbox": {
+   "label": "lunchbox",
+   "tags": [
+    "construction",
+    "tool",
+    "container",
+    "lunch"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/lunchbox-closed.webp",
+     "px": [
+      144,
+      121
+     ],
+     "bytes": 2872,
+     "size": [
+      72,
+      60.5
+     ],
+     "anchor": [
+      36,
+      57
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/lunchbox-open.webp",
+     "px": [
+      149,
+      154
+     ],
+     "bytes": 4102,
+     "size": [
+      74.5,
+      77
+     ],
+     "anchor": [
+      38.5,
+      73.5
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -50.4
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "thermos": {
+   "label": "thermos",
+   "tags": [
+    "construction",
+    "tool",
+    "drink",
+    "lunch"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/thermos.webp",
+     "px": [
+      93,
+      177
+     ],
+     "bytes": 2986,
+     "size": [
+      46.5,
+      88.5
+     ],
+     "anchor": [
+      19,
+      85
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -35
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "hard-hat": {
+   "label": "hard hat",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "construction"
+   ],
+   "default": "yellow",
+   "variants": {
+    "yellow": {
+     "file": "assets/sprites/props/hard-hat-yellow.webp",
+     "px": [
+      194,
+      113
+     ],
+     "bytes": 3650,
+     "size": [
+      97,
+      56.5
+     ],
+     "anchor": [
+      48.5,
+      55.5
+     ]
+    },
+    "orange": {
+     "file": "assets/sprites/props/hard-hat-orange.webp",
+     "px": [
+      194,
+      113
+     ],
+     "bytes": 3632,
+     "size": [
+      97,
+      56.5
+     ],
+     "anchor": [
+      48.5,
+      55.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -27.75
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "hard-hat",
+    "slot": "hat",
+    "colors": {
+     "yellow": {
+      "hat": "#DFB050",
+      "hat-sh": "#C4933A",
+      "hat-2": "#F4DC98"
+     },
+     "orange": {
+      "hat": "#EE9A55",
+      "hat-sh": "#BC6E4C",
+      "hat-2": "#F6C08E"
+     }
+    }
+   }
+  },
+  "safety-vest": {
+   "label": "safety vest",
+   "tags": [
+    "wear",
+    "wearable:over",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/safety-vest.webp",
+     "px": [
+      178,
+      168
+     ],
+     "bytes": 3990,
+     "size": [
+      89,
+      84
+     ],
+     "anchor": [
+      44.5,
+      80.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -40.25
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "safety-vest",
+    "slot": "over"
+   }
+  },
+  "tool-belt": {
+   "label": "tool belt",
+   "tags": [
+    "wear",
+    "wearable:over",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/tool-belt.webp",
+     "px": [
+      194,
+      139
+     ],
+     "bytes": 4462,
+     "size": [
+      97,
+      69.5
+     ],
+     "anchor": [
+      48.5,
+      66
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -33
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "tool-belt",
+    "slot": "over",
+    "pending": true
+   }
+  },
+  "gloves": {
+   "label": "work gloves",
+   "tags": [
+    "wear",
+    "wearable:hands",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/gloves.webp",
+     "px": [
+      172,
+      138
+     ],
+     "bytes": 4568,
+     "size": [
+      86,
+      69
+     ],
+     "anchor": [
+      43,
+      65.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -32.75
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "gloves",
+    "slot": "hands",
+    "pending": true
+   }
+  },
+  "hero-cape": {
+   "label": "hero cape",
+   "tags": [
+    "wear",
+    "wearable:back",
+    "hero"
+   ],
+   "default": "teal",
+   "variants": {
+    "teal": {
+     "file": "assets/sprites/props/hero-cape-teal.webp",
+     "px": [
+      244,
+      251
+     ],
+     "bytes": 7390,
+     "size": [
+      122,
+      125.5
+     ],
+     "anchor": [
+      40,
+      121.5
+     ]
+    },
+    "orange": {
+     "file": "assets/sprites/props/hero-cape-orange.webp",
+     "px": [
+      244,
+      251
+     ],
+     "bytes": 8184,
+     "size": [
+      122,
+      125.5
+     ],
+     "anchor": [
+      40,
+      121.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/hero-cape-purple.webp",
+     "px": [
+      244,
+      251
+     ],
+     "bytes": 6584,
+     "size": [
+      122,
+      125.5
+     ],
+     "anchor": [
+      40,
+      121.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -60.75
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "hero-cape",
+    "slot": "back",
+    "colors": {
+     "teal": {
+      "back": "#8CBDB8",
+      "back-sh": "#679E9C",
+      "back-2": "#F4DC98"
+     },
+     "orange": {
+      "back": "#EE9A55",
+      "back-sh": "#BC6E4C",
+      "back-2": "#FBF3E8"
+     },
+     "purple": {
+      "back": "#9A7A98",
+      "back-sh": "#7E6180",
+      "back-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "hero-mask": {
+   "label": "hero mask",
+   "tags": [
+    "wear",
+    "wearable:face",
+    "hero"
+   ],
+   "default": "teal",
+   "variants": {
+    "teal": {
+     "file": "assets/sprites/props/hero-mask-teal.webp",
+     "px": [
+      256,
+      75
+     ],
+     "bytes": 4806,
+     "size": [
+      128,
+      37.5
+     ],
+     "anchor": [
+      64,
+      41
+     ]
+    },
+    "orange": {
+     "file": "assets/sprites/props/hero-mask-orange.webp",
+     "px": [
+      256,
+      75
+     ],
+     "bytes": 5096,
+     "size": [
+      128,
+      37.5
+     ],
+     "anchor": [
+      64,
+      41
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/hero-mask-purple.webp",
+     "px": [
+      256,
+      75
+     ],
+     "bytes": 4344,
+     "size": [
+      128,
+      37.5
+     ],
+     "anchor": [
+      64,
+      41
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -20.5
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "hero-mask",
+    "slot": "face",
+    "colors": {
+     "teal": {
+      "face": "#8CBDB8",
+      "face-sh": "#679E9C"
+     },
+     "orange": {
+      "face": "#EE9A55",
+      "face-sh": "#BC6E4C"
+     },
+     "purple": {
+      "face": "#9A7A98",
+      "face-sh": "#7E6180"
+     }
+    }
+   }
+  },
+  "hero-suit": {
+   "label": "hero suit",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "hero"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/hero-suit.webp",
+     "px": [
+      316,
+      236
+     ],
+     "bytes": 11334,
+     "size": [
+      158,
+      118
+     ],
+     "anchor": [
+      79,
+      114.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -57.25
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "hero-suit",
+    "slot": "top",
+    "pending": true,
+    "colors": {
+     "default": {
+      "top": "#8CBDB8",
+      "top-sh": "#679E9C",
+      "top-2": "#EE9A55"
+     }
+    },
+    "design": "teal long-sleeve top; orange sleeves and side panels; an orange disc with a butter star on the chest; tealDeep swirl tone lines"
+   }
+  },
+  "dino-bone": {
+   "label": "dinosaur bone",
+   "tags": [
+    "treasure",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/dino-bone.webp",
+     "px": [
+      203,
+      121
+     ],
+     "bytes": 3954,
+     "size": [
+      101.5,
+      60.5
+     ],
+     "anchor": [
+      55,
+      54.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -27.25
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "treasure-chest": {
+   "label": "treasure chest",
+   "tags": [
+    "treasure",
+    "container",
+    "construction"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/treasure-chest-closed.webp",
+     "px": [
+      160,
+      140
+     ],
+     "bytes": 3622,
+     "size": [
+      80,
+      70
+     ],
+     "anchor": [
+      40,
+      66.5
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/treasure-chest-open.webp",
+     "px": [
+      157,
+      191
+     ],
+     "bytes": 6254,
+     "size": [
+      78.5,
+      95.5
+     ],
+     "anchor": [
+      40,
+      92
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -42
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "fossil": {
+   "label": "fossil",
+   "tags": [
+    "treasure",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/fossil.webp",
+     "px": [
+      154,
+      121
+     ],
+     "bytes": 4790,
+     "size": [
+      77,
+      60.5
+     ],
+     "anchor": [
+      38.5,
+      54
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -27
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "rubber-duck": {
+   "label": "rubber duck",
+   "tags": [
+    "treasure",
+    "toy",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/rubber-duck.webp",
+     "px": [
+      156,
+      129
+     ],
+     "bytes": 4256,
+     "size": [
+      78,
+      64.5
+     ],
+     "anchor": [
+      44.5,
+      61
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -30.5
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "toy-robot": {
+   "label": "lost toy robot",
+   "tags": [
+    "treasure",
+    "toy",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/toy-robot.webp",
+     "px": [
+      144,
+      206
+     ],
+     "bytes": 6056,
+     "size": [
+      72,
+      103
+     ],
+     "anchor": [
+      36,
+      99.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -42
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
+  },
+  "gem": {
+   "label": "gem",
+   "tags": [
+    "treasure",
+    "construction"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/gem.webp",
+     "px": [
+      98,
+      96
+     ],
+     "bytes": 2994,
+     "size": [
+      49,
+      48
+     ],
+     "anchor": [
+      24.5,
+      44.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -22.25
+   ],
+   "surface": null,
+   "set": "site",
+   "prep": null,
+   "leaves": null
   }
+ },
+ "site": {
+  "paints": {
+   "red": "#E4846F",
+   "yellow": "#F2C75C",
+   "blue": "#8FB1DC",
+   "green": "#96C47F",
+   "purple": "#B69BD3",
+   "rainbow": "stripes"
+  },
+  "paintNote": "A piece's `paint` maps a paint colour to its variant (\"{state}\" = the piece's current state, e.g. the door's closed/open). Pieces without that colour keep their look. Rainbow paints stripes on blocks only.",
+  "buildPieces": [
+   "block-1x1",
+   "block-2x1",
+   "block-2x2",
+   "plank",
+   "plank-half",
+   "beam",
+   "roof-triangle",
+   "roof-flat",
+   "window",
+   "round-window",
+   "door",
+   "stairs",
+   "flag",
+   "chimney"
+  ],
+  "treasures": [
+   "dino-bone",
+   "treasure-chest",
+   "fossil",
+   "rubber-duck",
+   "toy-robot",
+   "gem"
+  ],
+  "hero": {
+   "teal": "#8CBDB8",
+   "orange": "#EE9A55",
+   "purple": "#9A7A98"
+  },
+  "blueprints": [
+   "house",
+   "tower",
+   "bridge"
+  ]
  },
  "cafe": {
   "doneness": {

@@ -32,6 +32,10 @@
 <section id="ingredients"><h2>Cafe ingredients (prep and doneness variants), cookware and tools. Last row: every default at real iPad Air size</h2><div class="row" id="ing-row"></div><div class="row" id="ing-small" style="margin-top:14px"></div></section>
 <section id="dishes"><h2>Dishes (whole, bite1, bite2) and the Mystery Dish kit (bases, face parts, and random combos)</h2><div class="row" id="dish-row"></div><div class="row" id="mystery-row" style="margin-top:14px"></div></section>
 <section id="props"><h2>Starter props and tap/bite variants (red dot = anchor, the resting point)</h2><div class="row" id="prop-row"></div></section>
+<section id="site"><h2>Construction site strip (2880 wide; dashed = the three camera stops). Top: default piece states. Bottom: alternate states (toilet open, lever down, truck bed full, bucket full, pit partly dug) with builds, tools and the cast</h2><div id="site-view"></div></section>
+<section id="site-zones"><h2>Construction site zones, one 1440-wide screen each (build yard, crane yard, dig pit + workshop; alternate states)</h2><div id="site-zone-view"></div></section>
+<section id="site-builds"><h2>Building pieces snapped on the 40-unit grid: a house, a tower, a bridge and a shop</h2><div id="site-build-view"></div></section>
+<section id="site-props"><h2>Construction site props: building pieces (paint variants), tools, wearables, hero set, treasures (red dot = anchor)</h2><div class="row" id="site-prop-row"></div></section>
 <section id="layers"><h2>Room layers, separately</h2><div class="row" id="layer-row"></div></section>
 <script type="module">
   import { renderCharacter, svgWrap, bodyBox } from '../../../src/engine/rig-svg.js';
@@ -248,6 +252,83 @@
       }
     }
     document.getElementById('prop-row').innerHTML = h;
+  }
+
+  // ---- construction site (P2c.1) ----
+  if (manifest.rooms.site) {
+    const room = manifest.rooms.site, c = room.canvas, o = [c.x, c.y], grid = room.grid;
+    const surf = Object.fromEntries(room.surfaces.map((s) => [s.id, s]));
+    const seat = Object.fromEntries(room.seats.map((s) => [s.id, s]));
+    const slot = Object.fromEntries(room.slots.map((s) => [s.id, s]));
+    const img = (file, x, y, w, h, extra = '') => `<img src="${A + file}" style="left:${x - c.x}px;top:${y - c.y}px;width:${w}px;height:${h}px;${extra}">`;
+    const wearAs = (id, extra) => { const b = cast[id]; return Object.assign({}, b, { wear: Object.assign({}, b.wear, extra.wear), colors: Object.assign({}, b.colors, extra.colors) }); };
+    // a build: [piece, variant, col, row] on the grid; returns html of prop images
+    const build = (list, gx, gy, org) => list.map(([id, v, col, row]) => { const w = P[id].snap.footprint[0];
+      return propImg(id, v, gx + (col + w / 2) * grid.cell, gy - row * grid.cell, org); }).join('');
+    const HOUSE = [['block-1x1', 'yellow', 0, 0], ['door', 'closed-blue', 1, 0], ['window', 'yellow', 2, 0], ['block-1x1', 'yellow', 3, 0],
+      ['window', 'yellow', 0, 1], ['block-1x1', 'yellow', 2, 1], ['window', 'yellow', 3, 1], ['roof-triangle', 'red', 0, 2]];
+    const TOWER = [['block-2x2', 'blue', 0, 0], ['round-window', 'blue', 0, 2], ['round-window', 'blue', 1, 2], ['block-2x1', 'purple', 0, 3],
+      ['window', 'purple', 0, 4], ['window', 'purple', 1, 4], ['block-2x1', 'rainbow', 0, 5], ['flag', 'green', 1, 6], ['chimney', 'natural', 0, 6]];
+    const BRIDGE = [['block-1x1', 'green', 0, 0], ['block-1x1', 'green', 0, 1], ['block-1x1', 'green', 5, 0], ['block-1x1', 'green', 5, 1],
+      ['door', 'open-red', 2, 0], ['window', 'natural', 3, 0], ['window', 'natural', 3, 1], ['beam', 'natural', 0, 2],
+      ['stairs', 'purple', 0, 2.5], ['block-2x1', 'yellow', 2, 2.5], ['block-1x1', 'red', 4, 2.5], ['flag', 'red', 5, 2.5], ['plank', 'natural', 2, 3.5]];
+    const SHOP = [['block-2x1', 'red', 0, 0], ['door', 'open', 2, 0], ['block-1x1', 'red', 3, 0], ['window', 'red', 0, 1], ['window', 'red', 1, 1], ['round-window', 'red', 3, 1],
+      ['roof-flat', 'natural', 0, 2], ['chimney', 'natural', 1, 2.5], ['flag', 'yellow', 3, 2.5]];
+    const ALT = { 'potty-door': 'open', 'crane-lever': 'down', 'truck-bed': 'full', 'excavator-bucket': 'full', 'mixer-drum': 'spin2' };
+    const siteScene = (alt, zoom, clip = null) => {
+      const after = { back: '', counter: '', mid: '', front: '' };
+      for (const [id, pc] of Object.entries(room.pieces)) {
+        const v = pc.variants[alt ? (ALT[id] || pc.default) : pc.default];
+        let extra = '';
+        if (id === 'dirt' && alt) {
+          // dug holes (the engine does this with a canvas mask) showing treasures beneath
+          after.back += propImg('treasure-chest', 'closed', slot['treasure-1'].at[0], slot['treasure-1'].at[1], o) + propImg('dino-bone', null, slot['treasure-3'].at[0], slot['treasure-3'].at[1], o) + propImg('rubber-duck', null, slot['treasure-5'].at[0], slot['treasure-5'].at[1], o);
+          const hole = (s) => { const [x, y] = slot[s].at; return `radial-gradient(ellipse 58px 44px at ${x - pc.x}px ${y - 22 - pc.y}px, transparent 96%, #000 100%)`; };
+          const m = ['treasure-1', 'treasure-3', 'treasure-5'].map(hole).join(',');
+          extra = `-webkit-mask-image:${m};mask-image:${m};-webkit-mask-composite:source-in;mask-composite:intersect;`;
+        }
+        after[pc.layer] += img(v.file, pc.x, pc.y, pc.w, pc.h, extra);
+      }
+      const on = (id, v, sid, dx = 0) => { const s = surf[sid]; return propImg(id, v, (s.x0 + s.x1) / 2 + dx, s.y, o); };
+      const at = (id, v, sl, dx = 0, dy = 0) => propImg(id, v, slot[sl].at[0] + dx, slot[sl].at[1] + dy, o);
+      // builds on the deck
+      after.back += build(HOUSE, grid.x0 + 40, grid.y, o) + build(TOWER, grid.x0 + 240, grid.y, o) + build(BRIDGE, grid.x0 + 360, grid.y, o);
+      after.counter += at('saw', null, 'bench-saw', 30) + at('drill', alt ? 'on' : 'off', 'bench-drill', 10) + at('hammer', null, 'bench-hammer') + at('paintbrush', 'blue', 'bench-brushes')
+        + at('paint-can', 'red', 'tool-shelf-1') + at('paint-can', 'blue', 'tool-shelf-2') + at('paint-can', 'rainbow', 'tool-shelf-3') + at('wrench', null, 'bench-wrench');
+      after.counter += on('blueprint', 'rolled', 'scaffold-1', 90) + on('traffic-cone', 'up', 'scaffold-2', 160);
+      after.mid += on('lunchbox', 'closed', 'brick-top', 0);
+      after.front += on('lunchbox', alt ? 'open' : 'closed', 'bench', -10) + on('thermos', null, 'bench', 50);
+      after.mid += propImg('traffic-cone', alt ? 'down' : 'up', 1180, 950, o) + propImg('wheelbarrow', alt ? 'dirt' : 'empty', 1940, 985, o) + propImg('hose', alt ? 'spray' : 'coiled', 2560, 990, o);
+      if (alt) {
+        after.mid += placed(cast.builder, { pose: 'wave', expr: 'happy', held: { R: held('hammer') } }, 700, 940, o);
+        after.mid += placed(wearAs('boy5', { wear: { hat: 'hard-hat', over: 'safety-vest', back: null } }), { pose: 'hold-up', expr: 'wheee', held: { L: held('block-2x1', 'red') } }, 520, 960, o);
+        after.mid += placed(wearAs('girl5', { wear: { back: 'hero-cape', face: 'hero-mask', hat: null }, colors: { back: '#8CBDB8', 'back-sh': '#679E9C', 'back-2': '#F4DC98', face: '#EE9A55', 'face-sh': '#BC6E4C' } }), { pose: 'cheer', expr: 'laughing' }, 1330, 965, o);
+        after.mid += placed(cast.dad, { pose: 'sit', expr: 'happy', anchor: 'seat' }, seat['excavator-cab'].at[0], seat['excavator-cab'].at[1], o);
+        after.front += placed(wearAs('grandpa', { wear: { hat: 'hard-hat' }, colors: { hat: '#EE9A55', 'hat-sh': '#BC6E4C', 'hat-2': '#F6C08E' } }), { pose: 'sit-eat', expr: 'yum', anchor: 'seat', held: { R: held('thermos') } }, seat['bench-1'].at[0], seat['bench-1'].at[1], o);
+        after.mid += placed(wearAs('boy9', { wear: { hat: 'hard-hat' } }), { pose: 'hold', expr: 'surprised', held: { R: held('fossil') } }, 2080, 965, o);
+        after.front += placed(wearAs('girl9', { wear: { over: 'safety-vest', hat: 'hard-hat' } }), { pose: 'sit', expr: 'happy', anchor: 'seat' }, seat['crane-cab'].at[0], seat['crane-cab'].at[1], o);
+        after.front += propImg('treasure-chest', 'open', 2500, 1000, o) + propImg('gem', null, 2440, 995, o);
+      }
+      const html = room.layers.map((L) => img(L.file, L.x, L.y, L.w, L.h) + (after[L.id] || '')).join('');
+      const zones = room.zones.map((z) => `<div style="left:${z.camera - c.x}px;top:${-c.y}px;width:1440px;height:1000px;outline:4px dashed rgba(61,44,41,.3)"></div>`).join('');
+      const clipStyle = clip != null ? `width:1440px;height:1000px;` : `width:${c.w}px;height:${c.h}px;`;
+      const inner = `<div class="room" style="width:${c.w}px;height:${c.h}px;${clip != null ? `margin-left:${-(clip - c.x)}px;margin-top:${c.y}px;` : ''}">${html}${clip != null ? '' : zones}</div>`;
+      return `<div class="room" style="${clipStyle}zoom:${zoom};margin:0 8px 8px 0;display:${clip != null ? 'block' : 'inline-block'};position:relative;contain:paint">${inner}</div>`;
+    };
+    document.getElementById('site-view').innerHTML = siteScene(false, 1550 / c.w) + siteScene(true, 1550 / c.w);
+    document.getElementById('site-zone-view').innerHTML = room.zones.map((z) => siteScene(true, 1, z.camera)).join('');
+    // sample buildings on a plain grid
+    {
+      const cols = 24, rows = 9, cell = grid.cell, W = cols * cell, H = rows * cell + 40, org = [0, 0], gy = rows * cell;
+      let lines = '';
+      for (let i = 0; i <= cols; i++) lines += `<div style="left:${i * cell}px;top:0;width:0;height:${gy}px;border-left:1px dashed #D9C8B4"></div>`;
+      for (let j = 0; j <= rows; j++) lines += `<div style="left:0;top:${gy - j * cell}px;width:${W}px;height:0;border-top:1px dashed #D9C8B4"></div>`;
+      const b = build(HOUSE, 0, gy, org) + build(TOWER, 6 * cell, gy, org) + build(BRIDGE, 10 * cell, gy, org) + build(SHOP, 19 * cell, gy, org);
+      document.getElementById('site-build-view').innerHTML = `<div class="room" style="width:${W}px;height:${H}px;zoom:1.6;background:#FBF3E8">${lines}<div style="left:0;top:${gy}px;width:${W}px;height:40px;background:#EDCBA9;border-top:3px solid #3D2C29"></div>${b}</div>`;
+    }
+    let h = '';
+    for (const [id, p] of Object.entries(P)) if (p.set === 'site') for (const vn of Object.keys(p.variants)) h += cell(id, vn, 1.25);
+    document.getElementById('site-prop-row').innerHTML = h;
   }
 
   // ---- layers ----

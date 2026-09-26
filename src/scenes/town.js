@@ -18,7 +18,8 @@
 
 import { loadArt, preload } from './art.js';
 import { mountCity, cityFiles, CITY_ID } from './city.js';
-import { mountKitchen, kitchenFiles, KITCHEN_ID } from './kitchen.js';
+import { KITCHEN_ID } from './kitchen.js';
+import { mountCafe, cafeFiles } from './cafe.js';   // P2a.1: the cafe strip (location id stays 'cafe/kitchen')
 import { mountBooth, boothFiles, BOOTH_ID } from './booth.js';
 import * as tween from '../engine/tween.js';
 import { sfx } from '../audio/index.js';
@@ -84,7 +85,7 @@ export async function mountTown(stage, { input, store, storage } = {}) {
   async function mount(at, from = null) {
     if (scene) scene.destroy();
     scene = null;
-    if (at === KITCHEN_ID) scene = await mountKitchen(stage, { input, store, manifest, carry });
+    if (at === KITCHEN_ID) scene = await mountCafe(stage, { input, store, manifest, carry, from, storage });
     else if (at === BOOTH_ID) scene = await mountBooth(stage, { input, store, manifest, carry });   // P1.15
     else scene = await mountCity(stage, { input, store, manifest, carry, cameraX: here.mapX, from, onEnter: (_, loc, pt) => go(loc, { from: pt }) });
     here.at = at;
@@ -143,7 +144,7 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     roomEl.style.transformOrigin = `${w.x}px ${w.y}px`;
     const zoom = tween.animate(roomEl, [{ transform: 'scale(1)' }, { transform: 'scale(1.8)' }], { duration: ZOOM_MS, easing: 'ease-in', fill: 'forwards' });
     sfx.play('whoosh', { gain: 0.7 });
-    const files = to === KITCHEN_ID ? kitchenFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night);
+    const files = to === KITCHEN_ID ? cafeFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night);
     await Promise.all([tween.done(irisAnim(pt, true, ZOOM_MS)), preload(files), tween.done(zoom)]);
     zoom.cancel();
     await mount(to, leaving);

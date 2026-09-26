@@ -255,6 +255,11 @@ body {
 
 /* ---- rooms from the art pipeline: an <img> filling its art box ---- */
 .art-img img { display: block; width: 100%; height: 100%; }
+/* A tile that is not loaded (engine/tiles.js) shows nothing, not a broken image. */
+.art-img img:not([src]), .art-piece img:not([src]) { visibility: hidden; }
+/* Cafe state pieces (src/scenes/cafe.js): the body squishes/swings about its pivot. */
+.art-piece .piece-body { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.art-piece img { display: block; width: 100%; height: 100%; }
 
 /* ---- city map (src/scenes/city.js, P1.13) ----
    Each art piece holds .city-body (the thing that bounces or turns; its
@@ -448,10 +453,13 @@ body {
   transform: scale(0);
 }
 
-/* Characters (src/engine/characters.js): live SVG in an entity body. The
-   breathing is one composited CSS animation per character (transform on an
-   HTML wrapper, random negative delay set inline); offscreen characters and
-   hidden pages pause it. Blink = the closed eyes shown by a class. */
+/* Characters (src/engine/characters.js): live SVG in an entity body, drawn as
+   a stack of same-size <svg> layers (rig-svg.js `layers`). The breathing is one
+   composited CSS animation per character (transform on the .char-bob wrapper,
+   random negative delay set inline); offscreen characters and hidden pages
+   pause it. Blinks, glances and head tilts are WAAPI transform/opacity on the
+   HTML layer boxes (.char-blink, .char-eyes, .char-tilt), never on SVG
+   internals, so idle life costs no layout (bead lm8). */
 .ent-custom { overflow: visible; }
 .char-bob {
   position: absolute;
@@ -459,18 +467,24 @@ body {
   top: 0;
   animation: char-breathe 1.8s ease-in-out infinite alternate;
 }
+.char-bob svg, .char-tilt, .char-eyes { position: absolute; left: 0; top: 0; }
 .char-bob svg { display: block; overflow: visible; }
+/* Already a stacking context and already transformed/positioned at rest, so
+   an idle animation starting or ending changes no containing block or
+   stacking context: Blink (and WebKit) skip layout. Identity 2D transforms
+   and z-index 0 don't promote a GPU layer (no memory until one animates). */
+.char-tilt, .char-eyes { transform-origin: 0 0; transform: translate(0px, 0px); }
+.char-bob svg[data-l="eyes"], .char-bob svg[data-l="blink"] { z-index: 0; }
+.char-blink { opacity: 0; }
 /* Touch goes to what is painted (a hat, a held cupcake, an arm), not the svg's box. */
-.char-bob, .char-bob svg { pointer-events: none; }
+.char-bob, .char-bob svg, .char-tilt, .char-eyes { pointer-events: none; }
 .char-bob svg * { pointer-events: auto; }
+.char-bob .char-blink * { pointer-events: none; }
 .char-bob.char-off, .chars-paused .char-bob, .char-bob.char-lifted { animation-play-state: paused; }
 @keyframes char-breathe {
   from { transform: scale(1, 1); }
   to { transform: scale(1.012, 1.024); }
 }
-.char-svg [data-slot="blink"] { display: none; }
-.char-svg.blink [data-slot="blink"] { display: inline; }
-.char-svg.blink [data-slot="eyes"] { display: none; }
 /* Test room seats (P1.10): a bench, a stool and a sofa. */
 .ph-bench .top { left: 0; top: 0; width: 100%; height: 22px; background: #c08552; border: 4px solid #6f3b12; border-radius: 8px; box-sizing: border-box; }
 .ph-bench .leg, .ph-stool .leg { top: 18px; bottom: 0; width: 16px; background: #6f3b12; }

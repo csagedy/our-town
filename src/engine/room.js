@@ -6,6 +6,7 @@
 //
 // def = {
 //   id: 'cafe/kitchen', width: 1440, backdrop: {top, bottom, horizon}, cameraX,
+//   cameraStops: [0, 900, 1440],                     // optional: flings snap to these (camera.js)
 //   floor: {top, bottom, x0, x1, sound},            // see surfaces.js
 //   surfaces: [{id, x0, x1, y, depth, sound}],       // see surfaces.js
 //   art: [{id, layer: 'back' | 'mid' | 'front', x, y, w, h, depth, cls, html}],
@@ -35,7 +36,7 @@ export function artZ(piece) {
 /** Start a room on the stage (clears the old one) and build its layers. */
 export function mountRoom(stage, rawDef) {
   const def = normalizeRoom(rawDef);
-  stage.setRoom({ width: def.width, backdrop: def.backdrop, cameraX: def.cameraX || 0 });
+  stage.setRoom({ width: def.width, backdrop: def.backdrop, cameraX: def.cameraX || 0, stops: def.cameraStops || [] });
 
   const el = document.createElement('div');
   el.className = 'room';

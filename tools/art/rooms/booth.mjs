@@ -119,8 +119,11 @@ export const ROOM = {
   layers: [
     { id: 'back', baseline: 0, opaque: true,
       art: () => `${wall()}${floor()}${curtain()}${rail()}${mirror()}${hatShelf()}${stageRug()}${rug()}${plant()}
-        ${at(420, 0, 1, bulb(90))}${at(880, 0, 1, bulb(120))}${at(1500, 60, 1, hangingPlant(120, P.cream))}` },
+        ${at(420, 0, 1, bulb(90))}${at(880, 0, 1, bulb(120))}${at(1150, 20, 1, hangingPlant(100, P.cream))}` },
     { id: 'mid', baseline: 900, art: () => pouf() },
+    // A big floor plant in the front corner (things pass behind it).
+    { id: 'front', baseline: 1000,
+      art: () => at(-30, 1560, .9, `${[-60, -35, -10, 15, 40, 65].map((a, i) => leaf(150 + (i % 3) * 30, 44, a, i % 2 ? P.leaf : P.leafDeep, 0, -110)).join('')}${leaf(180, 48, -4, P.leafLight, 0, -110)}<path fill="${P.terra}" d="M-80 -120 L80 -120 L66 0 L-66 0Z"/><rect fill="${P.terraDeep}" x="-88" y="-132" width="176" height="24" rx="8"/>`) },
   ],
   surfaces: [
     { id: 'hat-shelf', layer: 'back', seg: [970, 1240, 520] },

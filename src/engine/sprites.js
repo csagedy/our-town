@@ -5,7 +5,10 @@
 //
 //   spriteFor(kind, props) -> { key, w, h, sound, draw: 'shape' | 'img', ... }
 //     an 'img' sprite has `src` and optionally `img: {left, top, w, h}`, the
-//     image's box inside the w x h entity box (for an off-center anchor);
+//     image's box inside the w x h entity box (for an off-center anchor),
+//     `filter` (a CSS filter on the image: cafe doneness tints) and
+//     `overlays: [{src, left, top, w, h}]` (more images on top, in the same
+//     box: the Mystery Dish's face);
 //     a 'custom' sprite has paint(bodyEl), which draws it (characters)
 //   addSpriteSource(fn)     fn(kind, props) -> sprite | null, tried before the placeholders
 //   paintSprite(bodyEl, sprite)   (re)draw a sprite into a view's body element
@@ -92,7 +95,16 @@ export function paintSprite(body, sprite) {
       s.width = `${sprite.img.w}px`;
       s.height = `${sprite.img.h}px`;
     }
+    if (sprite.filter) img.style.filter = sprite.filter;
     body.appendChild(img);
+    for (const o of sprite.overlays || []) {
+      const oi = document.createElement('img');
+      oi.src = o.src;
+      oi.alt = '';
+      oi.draggable = false;
+      oi.style.cssText = `position:absolute;display:block;left:${o.left}px;top:${o.top}px;width:${o.w}px;height:${o.h}px`;
+      body.appendChild(oi);
+    }
   } else {
     body.className = `ent-body ph ph-${sprite.shape}`;
     st.background = sprite.fill;

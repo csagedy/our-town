@@ -10,7 +10,8 @@
 //   spill      tap (or long press) tips the contents out onto distinct spots around it
 //   container  accepts drops of things with the right tags into slots drawn by a layout
 //              (P1.9, src/core/containers.js); refuses others, and a full one, with a bounce-back
-//   eatable    tap (or a character, later) takes a bite through the bite looks
+//   eatable    tap (or a character, later) takes a bite through the bite looks; a dish's
+//              last bite leaves its plate (or bowl, glass, tray) behind (`leaves`)
 //   spawner    an infinite source (P1.9): dragging from it pulls out a new clone, a tap pops
 //              one out; a clone dropped back on it goes home. Not draggable itself.
 //   variant    the look is a prop's value (a crayon's color)
@@ -219,7 +220,12 @@ function bite(e, rx, p) {
     rx.burst('puff', { count: 7, scale: 0.6 });
     rx.burst('heart', { count: 2 });
     rx.squish();
-    rx.dispatch('remove', { id: e.id, hard: true });
+    if (p.leaves) {
+      // Eaten up: the plate (or bowl...) stays where the dish was, in the
+      // same hand or container slot. One combine, so it can't half-happen.
+      const at = e.parent ? { parent: e.parent, slot: e.slot || undefined } : { room: e.room, x: e.x, y: e.y, z: e.z || 0 };
+      rx.dispatch('combine', Object.assign({ ids: [e.id], resultId: rx.newId(), resultKind: p.leaves }, at));
+    } else rx.dispatch('remove', { id: e.id, hard: true });
     return true;
   }
   rx.inc('bites', 1);
@@ -233,11 +239,13 @@ defineBehavior('eatable', {
   params: {
     looks: ['whole'],   // bite looks in order; the first is untouched
     then: 'gone',       // after the last look: 'gone' (eaten up) or 'stay' (a core stays)
+    leaves: null,       // 'gone' dishes: the kind left behind (plate, bowl, glass, tray), or null
     sound: 'munch',
   },
-  check(p, { sounds }) {
+  check(p, { sounds, kinds }) {
     if (!isStrList(p.looks)) return 'looks must list the bite looks';
     if (p.then !== 'gone' && p.then !== 'stay') return 'then must be gone or stay';
+    if (p.leaves != null && (typeof p.leaves !== 'string' || (kinds && !kinds[p.leaves]))) return 'leaves must be a catalog kind';
     return soundOk(p.sound, sounds) ? null : 'unknown sound ' + p.sound;
   },
   look: (e, p) => p.looks[clampIdx(e.props.bites || 0, p.looks.length)],

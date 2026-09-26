@@ -2,7 +2,9 @@
 // directly: node tools/art/build.mjs [--no-sheet]
 //
 // 1. Character rig data   -> assets/characters/rig.json   (live SVG at runtime)
-// 2. Room depth layers    -> assets/rooms/<room>/<layer>.webp   (rasterized)
+// 2. Room depth layers    -> assets/rooms/<room>/<layer>.webp   (rasterized; a
+//                            panning room with zones also gets column tiles
+//                            in assets/rooms/<room>/tiles/<layer>-<i>.webp)
 // 3. Starter props        -> assets/sprites/props/<prop>-<variant>.webp
 // 4. Manifest             -> assets/art-manifest.json (sizes, anchors, surfaces)
 // 5. Contact sheet        -> tools/art/contact-sheet/*.png (screenshots of
@@ -23,6 +25,8 @@ import { ROOM as BOOTH } from './rooms/booth.mjs';
 import { CAFE_PROPS, EXTEND as CAFE_EXTEND, CAFE_META } from './props/cafe.mjs';
 import { CITY } from './rooms/city.mjs';
 import { PROPS } from './props/starter.mjs';
+import { ROOM as SITE, SITE_RIGS, BUILD_GRID } from './rooms/site.mjs';
+import { SITE_PROPS, SITE_META } from './props/site.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -74,6 +78,9 @@ export async function buildRoom(page, room, written) {
       px: res.px, bytes: buf.length,
     });
   }
+  // A panning room with camera stops (the cafe strip) also ships each layer
+  // in column tiles, so the runtime decodes only what is near the camera.
+  if (room.zones) await buildRoomTiles(page, room, place, layers, room.zones.map((z) => z.camera), written);
   const out = {
     id: room.id, width: room.width, height: 1000, canvas: room.canvas, pxPerUnit: ROOM_PX, layers,
     floor: { y0: toWorld(0, room.floor.y0)[1], y1: toWorld(0, room.floor.y1)[1] },
@@ -91,6 +98,48 @@ export async function buildRoom(page, room, written) {
   if (room.spawners) out.spawners = room.spawners.map((s) => ({ ...s, ...(s.at ? { at: toWorld(s.at[0], s.at[1]) } : {}) }));
   if (room.zones) out.zones = room.zones.map((z) => ({ id: z.id, x0: toWorld(z.x0, 0)[0], x1: toWorld(z.x1, 0)[0], camera: z.camera }));
   return out;
+}
+
+// ---- column tiles for panning rooms (P2a.1; docs/perf.md "Cafe strip memory") ----
+export const TILE_MARGIN = 120;   // world units: how far past a camera stop's view a tile edge sits
+const TILE_OVERLAP_PX = 2;        // each tile reaches this far under its right neighbour (no hairline seams)
+
+/**
+ * Column edges (world x) for a room's tiles: the canvas ends plus, for each
+ * camera stop, its 1440-wide view widened by `margin` on both sides. So at a
+ * stop exactly the tiles within `margin` of the view are needed. Edges are
+ * snapped to whole output pixels. Pure.
+ */
+export function tileEdges(canvas, stops, { view = 1440, margin = TILE_MARGIN, px = ROOM_PX } = {}) {
+  const x0 = canvas.x, x1 = canvas.x + canvas.w;
+  const snap = (e) => x0 + Math.round((e - x0) * px) / px;
+  const set = new Set([x0, x1]);
+  for (const s of stops) for (const e of [s - margin, s + view + margin]) if (e > x0 + 1 && e < x1 - 1) set.add(snap(e));
+  return [...set].sort((a, b) => a - b);
+}
+
+async function buildRoomTiles(page, room, place, layers, stops, written) {
+  const k = ART_SCALE * ROOM_PX;
+  const edges = tileEdges(room.canvas, stops);
+  for (const [li, L] of room.layers.entries()) {
+    const out = layers[li];
+    out.tiles = [];
+    const lx1 = out.x + out.w;
+    for (let i = 0; i + 1 < edges.length; i++) {
+      const a = Math.max(edges[i], out.x);
+      const b = Math.min(edges[i + 1] + TILE_OVERLAP_PX / ROOM_PX, lx1);
+      if (b - a < 2) continue;
+      const box = [a, out.y, b - a, out.h];
+      const res = await rasterize(page, {
+        svg: svgFor(box, place(L.art()), k, room.defs), unit: ROOM_PX, formats: ['webp'], quality: ROOM_QUALITY,
+        crop: null, opaque: L.opaque ? P.cream : null,
+      });
+      const file = path.join(ASSETS, 'rooms', room.id, 'tiles', `${L.id}-${out.tiles.length}.webp`);
+      const buf = Buffer.from(res.data.webp, 'base64');
+      if (writeIfChanged(file, buf)) written.push(file);
+      out.tiles.push({ file: rel(file), x: round(box[0], 2), y: round(box[1], 2), w: round(box[2], 2), h: round(box[3], 2), px: res.px, bytes: buf.length });
+    }
+  }
 }
 
 /**
@@ -200,7 +249,8 @@ async function buildProps(page, written) {
   const all = Object.entries(PROPS).map(([id, p]) => {
     const ext = CAFE_EXTEND[id];
     return [id, ext ? { ...p, variants: { ...p.variants, ...ext.variants }, prep: ext.prep, set: 'starter' } : { ...p, set: 'starter' }];
-  }).concat(Object.entries(CAFE_PROPS).map(([id, p]) => [id, { ...p, set: 'cafe' }]));
+  }).concat(Object.entries(CAFE_PROPS).map(([id, p]) => [id, { ...p, set: 'cafe' }]))
+    .concat(Object.entries(SITE_PROPS).map(([id, p]) => [id, { ...p, set: 'site' }]));
   for (const [id, p] of all) {
     const variants = {};
     for (const [vname, art] of Object.entries(p.variants)) {
@@ -225,6 +275,8 @@ async function buildProps(page, written) {
       grip: w(p.grip || [0, -(Object.values(variants)[0].anchor[1] / ART_SCALE) / 2]),
       surface: p.surface ? w(p.surface) : null,
       set: p.set, prep: p.prep || null, leaves: p.leaves || null,
+      // construction site extras (props/site.mjs): snap metadata, paint map, wear piece, states, saw result
+      ...Object.fromEntries(['snap', 'paint', 'wear', 'states', 'saw'].filter((k) => p[k] != null).map((k) => [k, p[k]])),
     };
   }
   return out;
@@ -265,6 +317,7 @@ export async function build({ sheet = true } = {}) {
     const kitchen = await buildRoom(page, KITCHEN, written);
     const cafe = await buildRoom(page, CAFE, written);
     const booth = await buildRoom(page, BOOTH, written);
+    const site = { ...(await buildRoom(page, SITE, written)), grid: BUILD_GRID, rigs: SITE_RIGS };
     const city = await buildMap(page, CITY, written);
     const props = await buildProps(page, written);
     const manifest = {
@@ -281,9 +334,10 @@ export async function build({ sheet = true } = {}) {
         poses: Object.keys(rig.poses), expressions: Object.keys(rig.expressions),
         wear: Object.fromEntries(Object.entries(rig.wear).map(([id, w]) => [id, w.slot])),
       },
-      rooms: { kitchen, cafe, booth },
+      rooms: { kitchen, cafe, booth, site },
       map: city,
       props,
+      site: SITE_META,
       cafe: { ...CAFE_META, mystery: { ...CAFE_META.mystery, at: Object.fromEntries(Object.entries(CAFE_META.mystery.at).map(([k, v]) => [k, v.map((n) => round(n * ART_SCALE, 2))])) } },
     };
     const mFile = path.join(ASSETS, 'art-manifest.json');

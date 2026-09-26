@@ -10,6 +10,7 @@
 //     params: { key: 'on', ... },          defaults; also the list of allowed param names
 //     check(p, {kinds, sounds, kind}),     optional: a problem string for bad params (catalog validation)
 //     look(e, p, w),                       optional: a look (art variant) name for the entity's state, or null
+//     sprite(e, p, {catalog, look}),       optional: a whole sprite (a composite, e.g. the Mystery Dish), or null
 //     onTap(e, rx, p),                     optional: react; return true if it did something
 //     onLongPress(e, rx, p),               optional: same, for a long press
 //     accepts(target, item, p),            optional: true if `target` wants drops at all (it becomes a drop target)
@@ -34,7 +35,7 @@
 
 export const BEHAVIORS = Object.create(null);
 
-const HOOKS = ['check', 'look', 'onTap', 'onLongPress', 'accepts', 'receive', 'canDrag', 'dragOut'];
+const HOOKS = ['check', 'look', 'sprite', 'onTap', 'onLongPress', 'accepts', 'receive', 'canDrag', 'dragOut'];
 
 /** Register a behavior. Throws on a duplicate name or a malformed definition (a bug). */
 export function defineBehavior(name, def) {

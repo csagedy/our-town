@@ -168,6 +168,7 @@
       "tags": ["food", "fruit"],
       "sounds": { "tap": "plink", "drop": "thud" },
       "behaviors": [
+        { "use": "food", "cut": ["whole", "sliced"] },
         { "use": "eatable", "looks": ["whole", "bite1", "core"], "then": "stay" }
       ],
       "label": "Apple",
@@ -180,6 +181,7 @@
       "tags": ["food", "ingredient"],
       "sounds": { "tap": "tap", "drop": "squish" },
       "behaviors": [
+        { "use": "food", "crack": ["whole", "cracked"], "cook": ["cracked", "fried", "fried", "toasty"], "method": "fried" },
         { "use": "cycle", "key": "cracked", "looks": ["whole", "cracked"], "loop": false, "sound": "pop", "fx": "puff" }
       ],
       "label": "Egg",
@@ -277,6 +279,78 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Hero Cape",
+      "home": { "room": "theater/closet" }
+    },
+    "hard-hat": {
+      "ph": { "shape": "blob", "fill": "#DFB050" },
+      "size": [70, 50],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Hard Hat",
+      "home": { "room": "construction/yard" }
+    },
+    "cap": {
+      "ph": { "shape": "blob", "fill": "#DC6B6E" },
+      "size": [70, 45],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Cap",
+      "home": { "room": "booth" }
+    },
+    "bow": {
+      "ph": { "shape": "blob", "fill": "#E9AFAE" },
+      "size": [60, 40],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Bow",
+      "home": { "room": "booth" }
+    },
+    "hijab": {
+      "ph": { "shape": "blob", "fill": "#8CBDB8" },
+      "size": [80, 90],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Headscarf",
+      "home": { "room": "booth" }
+    },
+    "square-glasses": {
+      "ph": { "shape": "flat", "fill": "#57515A" },
+      "size": [70, 30],
+      "tags": ["wear", "wearable:face"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Square Glasses",
+      "home": { "room": "booth" }
+    },
+    "sunglasses": {
+      "ph": { "shape": "flat", "fill": "#433E46" },
+      "size": [70, 30],
+      "tags": ["wear", "wearable:face"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Sunglasses",
+      "home": { "room": "booth" }
+    },
+    "safety-vest": {
+      "ph": { "shape": "box", "fill": "#EE9A55" },
+      "size": [70, 90],
+      "tags": ["wear", "wearable:over"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Safety Vest",
+      "home": { "room": "construction/yard" }
+    },
+    "wings": {
+      "ph": { "shape": "blob", "fill": "#D5C8E3" },
+      "size": [110, 90],
+      "tags": ["wear", "wearable:back"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Fairy Wings",
       "home": { "room": "theater/closet" }
     },
     "tray": {
@@ -413,6 +487,1104 @@
       ],
       "label": "Car",
       "home": { "room": "city" }
+    },
+    "tomato": {
+      "art": { "sprite": "tomato" },
+      "ph": { "shape": "round", "fill": "#DC6B6E" },
+      "size": [58, 58],
+      "tags": ["food", "ingredient", "veg", "red"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "sliced"] }
+      ],
+      "label": "Tomato",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "bread": {
+      "art": { "sprite": "bread" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [80, 44],
+      "tags": ["food", "ingredient", "bread"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cut": ["loaf", "sliced", "slice"], "cook": ["slice", "toast", "toast", "toasty"], "method": "toasted" }
+      ],
+      "label": "Bread",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cheese": {
+      "art": { "sprite": "cheese" },
+      "ph": { "shape": "box", "fill": "#F3D46A" },
+      "size": [73, 48],
+      "tags": ["food", "ingredient", "dairy", "yellow"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cut": ["block", "slice"] }
+      ],
+      "label": "Cheese",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "lettuce": {
+      "art": { "sprite": "lettuce" },
+      "ph": { "shape": "round", "fill": "#A3C98F" },
+      "size": [65, 56],
+      "tags": ["food", "ingredient", "veg", "green"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "chopped"] }
+      ],
+      "label": "Lettuce",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "carrot": {
+      "art": { "sprite": "carrot" },
+      "ph": { "shape": "round", "fill": "#F4C7A6" },
+      "size": [92, 52],
+      "tags": ["food", "ingredient", "veg", "orange"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "chopped"] }
+      ],
+      "label": "Carrot",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "onion": {
+      "art": { "sprite": "onion" },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [60, 67],
+      "tags": ["food", "ingredient", "veg"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "chopped"] }
+      ],
+      "label": "Onion",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "potato": {
+      "art": { "sprite": "potato" },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [64, 40],
+      "tags": ["food", "ingredient", "veg"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "sticks"], "cook": ["sticks", "fries", "fries", "toasty"] }
+      ],
+      "label": "Potato",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "banana": {
+      "art": { "sprite": "banana" },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [92, 46],
+      "tags": ["food", "ingredient", "fruit"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["peeled", "sliced"] },
+        { "use": "cycle", "key": "peel", "looks": ["whole", "peeled"], "loop": false, "sound": "squish", "fx": "sparkle" }
+      ],
+      "label": "Banana",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "strawberry": {
+      "art": { "sprite": "strawberry" },
+      "ph": { "shape": "round", "fill": "#DC6B6E" },
+      "size": [49, 50],
+      "tags": ["food", "ingredient", "fruit", "red", "sweet"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "sliced"] },
+        { "use": "eatable", "looks": ["whole"], "then": "gone" }
+      ],
+      "label": "Strawberry",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "blueberries": {
+      "art": { "sprite": "blueberries" },
+      "ph": { "shape": "round", "fill": "#A3BEDC" },
+      "size": [59, 51],
+      "tags": ["food", "ingredient", "fruit", "blue", "sweet"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food" },
+        { "use": "eatable", "looks": ["whole"], "then": "gone" }
+      ],
+      "label": "Blueberries",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "lemon": {
+      "art": { "sprite": "lemon" },
+      "ph": { "shape": "round", "fill": "#F3D46A" },
+      "size": [73, 50],
+      "tags": ["food", "ingredient", "fruit", "yellow", "sour"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cut": ["whole", "sliced"] }
+      ],
+      "label": "Lemon",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "flour": {
+      "art": { "sprite": "flour" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [59, 73],
+      "tags": ["food", "ingredient", "baking"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Flour",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sugar": {
+      "art": { "sprite": "sugar" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [59, 69],
+      "tags": ["food", "ingredient", "baking", "sweet"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Sugar",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "butter": {
+      "art": { "sprite": "butter" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [72, 28],
+      "tags": ["food", "ingredient", "dairy"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cut": ["stick", "pat"] }
+      ],
+      "label": "Butter",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "milk": {
+      "art": { "sprite": "milk" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [44, 83],
+      "tags": ["food", "ingredient", "dairy", "drink"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Milk",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "chocolate": {
+      "art": { "sprite": "chocolate" },
+      "ph": { "shape": "box", "fill": "#8A5B45" },
+      "size": [66, 31],
+      "tags": ["food", "ingredient", "sweet", "brown"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cut": ["bar", "chunks"] }
+      ],
+      "label": "Chocolate",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sprinkles": {
+      "art": { "sprite": "sprinkles" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [44, 64],
+      "tags": ["food", "ingredient", "sweet", "topping"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Sprinkles",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "honey": {
+      "art": { "sprite": "honey" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [60, 85],
+      "tags": ["food", "ingredient", "sweet", "topping"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Honey",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pasta": {
+      "art": { "sprite": "pasta" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [38, 74],
+      "tags": ["food", "ingredient", "grain"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cook": ["dry", "cooked", "cooked", "cooked"], "method": "boiled" }
+      ],
+      "label": "Pasta",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "rice": {
+      "art": { "sprite": "rice" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [59, 66],
+      "tags": ["food", "ingredient", "grain"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cook": ["dry", "cooked", "cooked", "cooked"], "method": "boiled" }
+      ],
+      "label": "Rice",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sausage": {
+      "art": { "sprite": "sausage" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [91, 28],
+      "tags": ["food", "ingredient", "meat"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cook": ["raw", "cooked", "cooked", "toasty"] }
+      ],
+      "label": "Sausage",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fish": {
+      "art": { "sprite": "fish" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [70, 41],
+      "tags": ["food", "ingredient", "fish"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cook": ["raw", "cooked", "cooked", "toasty"] }
+      ],
+      "label": "Fish",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "chicken": {
+      "art": { "sprite": "chicken" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [84, 42],
+      "tags": ["food", "ingredient", "meat"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cook": ["raw", "cooked", "cooked", "toasty"] }
+      ],
+      "label": "Chicken",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "tofu": {
+      "art": { "sprite": "tofu" },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [44, 41],
+      "tags": ["food", "ingredient", "veg"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food", "cook": ["raw", "cooked", "cooked", "toasty"] }
+      ],
+      "label": "Tofu",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "seaweed": {
+      "art": { "sprite": "seaweed" },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [61, 44],
+      "tags": ["food", "ingredient", "veg"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Seaweed",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pancake": {
+      "art": { "sprite": "pancake" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [70, 24],
+      "tags": ["food", "ingredient", "baking", "sweet"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food", "cook": ["batter", "cooked", "cooked", "toasty"], "method": "fried" }
+      ],
+      "label": "Pancake",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "scoop": {
+      "art": { "sprite": "scoop" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [55, 52],
+      "tags": ["food", "ingredient", "sweet", "cold", "dessert"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "variant", "key": "flavor" },
+        { "use": "eatable", "looks": ["whole"], "then": "gone" }
+      ],
+      "label": "Ice Cream Scoop",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cone": {
+      "art": { "sprite": "cone" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [49, 54],
+      "tags": ["food", "ingredient", "sweet", "container"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Ice Cream Cone",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "coffee-beans": {
+      "art": { "sprite": "coffee-beans" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [59, 69],
+      "tags": ["food", "ingredient", "drink"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "food" }
+      ],
+      "label": "Coffee Beans",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cafe-cup": {
+      "art": { "sprite": "cafe-cup" },
+      "ph": { "shape": "cup", "fill": "#FBF3E8" },
+      "size": [63, 44],
+      "tags": ["dish", "cup", "drink"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "variant", "key": "fill" },
+        { "use": "sound", "name": "clink", "pitches": [1, 1.12, 1.26] }
+      ],
+      "label": "Cup",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pot": {
+      "art": { "sprite": "pot" },
+      "ph": { "shape": "cup", "fill": "#D8DADC" },
+      "size": [100, 73],
+      "tags": ["cookware", "container", "pot"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["clink", "plink"] },
+        { "use": "container", "accepts": ["food"], "capacity": 4, "layout": "heap", "area": [0.12, 0.3, 0.88, 1], "scale": 0.8, "peek": 0.5 }
+      ],
+      "label": "Soup Pot",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "saucepan": {
+      "art": { "sprite": "saucepan" },
+      "ph": { "shape": "cup", "fill": "#D8DADC" },
+      "size": [138, 55],
+      "tags": ["cookware", "container", "pot"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "heap", "area": [0.08, 0.2, 0.6, 1], "scale": 0.75, "peek": 0.5 },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Saucepan",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "mixing-bowl": {
+      "art": { "sprite": "mixing-bowl" },
+      "ph": { "shape": "cup", "fill": "#D8DADC" },
+      "size": [105, 55],
+      "tags": ["cookware", "container", "bowl"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food"], "capacity": 5, "layout": "heap", "area": [0.1, 0.25, 0.9, 1], "scale": 0.8, "peek": 0.55 },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Mixing Bowl",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "baking-tray": {
+      "art": { "sprite": "baking-tray" },
+      "ph": { "shape": "cup", "fill": "#D8DADC" },
+      "size": [133, 17],
+      "tags": ["cookware", "container", "oven"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food"], "capacity": 4, "layout": "row", "area": [0.08, 0.2, 0.92, 0.6], "scale": 0.8 },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Baking Tray",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "whisk": {
+      "art": { "sprite": "whisk" },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [81, 26],
+      "tags": ["tool", "cookware"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "clink", "pitches": [1.2, 1.4] },
+        { "use": "wobble", "amount": 0.6 }
+      ],
+      "label": "Whisk",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "knife": {
+      "art": { "sprite": "knife" },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [102, 24],
+      "tags": ["tool", "chop"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "tap", "pitches": [1, 1.2] }
+      ],
+      "label": "Knife",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "spatula": {
+      "art": { "sprite": "spatula" },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [107, 23],
+      "tags": ["tool", "flip"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "tap", "pitches": [0.9, 1.1] },
+        { "use": "wobble", "amount": 0.5 }
+      ],
+      "label": "Spatula",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "ladle": {
+      "art": { "sprite": "ladle" },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [92, 62],
+      "tags": ["tool", "scoop"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "variant", "key": "fill" },
+        { "use": "sound", "name": "clink", "pitches": [0.9, 1] }
+      ],
+      "label": "Ladle",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "glass": {
+      "art": { "sprite": "glass" },
+      "ph": { "shape": "cup", "fill": "#D8DADC" },
+      "size": [41, 74],
+      "tags": ["dish", "cup", "drink"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "clink", "pitches": [1.3, 1.5] }
+      ],
+      "label": "Glass",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "garnish-shaker": {
+      "art": { "sprite": "garnish-shaker" },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [38, 63],
+      "tags": ["tool", "topping", "shake"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "variant", "key": "flavor" },
+        { "use": "wobble", "amount": 0.8, "sound": "plink" }
+      ],
+      "label": "Garnish Shaker",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sauce-bottle": {
+      "art": { "sprite": "sauce-bottle" },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [41, 80],
+      "tags": ["tool", "topping", "shake"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "variant", "key": "flavor" },
+        { "use": "squeak", "hearts": false }
+      ],
+      "label": "Sauce Bottle",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pancakes": {
+      "art": { "sprite": "pancakes" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 66],
+      "tags": ["food", "dish", "sweet", "breakfast"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Pancake Stack",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "burger": {
+      "art": { "sprite": "burger" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 72],
+      "tags": ["food", "dish", "savory"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Burger",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pizza": {
+      "art": { "sprite": "pizza" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [105, 42],
+      "tags": ["food", "dish", "savory", "baked"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Pizza",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "salad": {
+      "art": { "sprite": "salad" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [86, 59],
+      "tags": ["food", "dish", "veg", "healthy"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "bowl" }
+      ],
+      "label": "Salad",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "spaghetti": {
+      "art": { "sprite": "spaghetti" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 54],
+      "tags": ["food", "dish", "savory"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Spaghetti",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sandwich": {
+      "art": { "sprite": "sandwich" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 78],
+      "tags": ["food", "dish", "savory"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Sandwich",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sushi": {
+      "art": { "sprite": "sushi" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [108, 43],
+      "tags": ["food", "dish", "fish", "savory"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "tray" }
+      ],
+      "label": "Sushi Roll",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "soup": {
+      "art": { "sprite": "soup" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [91, 83],
+      "tags": ["food", "dish", "savory", "warm"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Soup Bowl",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fruit-bowl": {
+      "art": { "sprite": "fruit-bowl" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [80, 58],
+      "tags": ["food", "dish", "fruit", "sweet", "healthy"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "bowl" }
+      ],
+      "label": "Fruit Bowl",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "sundae": {
+      "art": { "sprite": "sundae" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [63, 102],
+      "tags": ["food", "dish", "sweet", "cold", "dessert"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "glass" }
+      ],
+      "label": "Ice Cream Sundae",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cookies": {
+      "art": { "sprite": "cookies" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 35],
+      "tags": ["food", "dish", "sweet", "baked"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Cookies",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "grilled-cheese": {
+      "art": { "sprite": "grilled-cheese" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 62],
+      "tags": ["food", "dish", "savory", "toasty"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Grilled Cheese",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "egg-toast": {
+      "art": { "sprite": "egg-toast" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [100, 56],
+      "tags": ["food", "dish", "breakfast", "savory"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Egg On Toast",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "smoothie": {
+      "art": { "sprite": "smoothie" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [51, 97],
+      "tags": ["food", "dish", "drink", "sweet", "cold"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "drink", "key": "color" }
+      ],
+      "label": "Smoothie",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cake-slice": {
+      "art": { "sprite": "cake-slice" },
+      "ph": { "shape": "blob", "fill": "#F4C7A6" },
+      "size": [63, 49],
+      "tags": ["food", "sweet"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1"], "then": "gone" }
+      ],
+      "label": "Cake Slice",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "mystery-dish": {
+      "art": { "sprite": "mystery-dish" },
+      "ph": { "shape": "blob", "fill": "#E9AFAE" },
+      "size": [100, 74],
+      "tags": ["food", "dish", "mystery"],
+      "sounds": { "tap": "squish", "drop": "clink" },
+      "behaviors": [
+        { "use": "mystery" },
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone", "leaves": "plate" }
+      ],
+      "label": "Mystery Dish",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-egg": {
+      "art": { "sprite": "egg", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [35, 36],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["egg"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-milk": {
+      "art": { "sprite": "milk", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [31, 58],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["milk"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-butter": {
+      "art": { "sprite": "butter", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [50, 20],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["butter"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-cheese": {
+      "art": { "sprite": "cheese", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [51, 34],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["cheese"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-tomato": {
+      "art": { "sprite": "tomato", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [41, 40],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["tomato"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-lettuce": {
+      "art": { "sprite": "lettuce", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [46, 39],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lettuce"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-carrot": {
+      "art": { "sprite": "carrot", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [64, 36],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["carrot"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-strawberry": {
+      "art": { "sprite": "strawberry", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [34, 35],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["strawberry"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-blueberries": {
+      "art": { "sprite": "blueberries", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [41, 36],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["blueberries"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-lemon": {
+      "art": { "sprite": "lemon", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [51, 35],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lemon"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-sausage": {
+      "art": { "sprite": "sausage", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [64, 20],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["sausage"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-fish": {
+      "art": { "sprite": "fish", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [49, 29],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["fish"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-chicken": {
+      "art": { "sprite": "chicken", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [59, 30],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["chicken"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge-tofu": {
+      "art": { "sprite": "tofu", "scale": 0.7 },
+      "ph": { "shape": "round", "fill": "#F1D19B" },
+      "size": [31, 29],
+      "tags": ["spawner", "stock", "fridge"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["tofu"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-rice": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [44, 64],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["rice"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-seaweed": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [38, 59],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["seaweed"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-pasta": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [36, 67],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["pasta"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-honey": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [38, 49],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["honey"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-coffee-beans": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [39, 49],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["coffee-beans"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-flour": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [62, 70],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["flour"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-sugar": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [42, 52],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["sugar"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-chocolate": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [42, 26],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["chocolate"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-sprinkles": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [34, 50],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["sprinkles"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-bread": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [77, 66],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["bread"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-egg": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [76, 30],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["egg"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-lemon": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [70, 50],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lemon"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-banana": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [70, 56],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["banana"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-potato": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [77, 56],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["potato"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pantry-onion": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [77, 60],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["onion"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "bowl-apple": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [70, 50],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["apple"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cup-stack": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [40, 46],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["cafe-cup"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "plate-stack": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [56, 40],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["plate"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "tub-vanilla": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [46, 48],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["scoop"], "sound": "pop", "vary": { "flavor": ["vanilla"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "tub-strawberry": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [46, 48],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["scoop"], "sound": "pop", "vary": { "flavor": ["strawberry"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "tub-chocolate": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [46, 48],
+      "tags": ["spawner", "stock", "hotspot"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["scoop"], "sound": "pop", "vary": { "flavor": ["chocolate"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
     }
   }
 }

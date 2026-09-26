@@ -64,8 +64,8 @@ Muted, warm and earthy. Never use pure saturated primaries in the world; saturat
 | nori / noriDeep | `#4F6A58` / `#3F5748` | seaweed (sushi) |
 | nightSky / nightSkyDeep | `#3A4170` / `#2E3460` | the city map's night sky (everything else at night is the day art through the NIGHT filter) |
 
-**Skin tones** (`SKINS`, `--skin` / `--skin-sh`): `#F3D0B5/#E2AB8E`, `#EDC3A2/#D9A07F`, `#D39A6E/#B97E55`, `#A8714D/#8C5A3B`, `#7E5236/#65402A`.
-**Hair** (`HAIRS`, `--hair` / `--hair-sh`): near-black `#3A2A2C`, brown `#6A4A3A`, copper `#C9713F`, honey `#E0B872`, grey `#B8B0AA`.
+**Skin tones** (`SKINS`, `--skin` / `--skin-sh`), light to dark (`SKIN_ORDER`): `#FAE3D2/#EBC0A5`, `#F3D0B5/#E2AB8E`, `#EDC3A2/#D9A07F`, `#E5B98F/#CC9A70`, `#D39A6E/#B97E55`, `#C68A5E/#A96F47`, `#A8714D/#8C5A3B`, `#93603F/#7A4C30`, `#7E5236/#65402A`, `#5E3B29/#4A2D1F`.
+**Hair** (`HAIRS`, `--hair` / `--hair-sh`): near-black `#3A2A2C`, brown `#6A4A3A`, auburn `#8E3F2C`, copper `#C9713F`, honey `#E0B872`, blonde `#F0D597`, grey `#B8B0AA`, white `#EEE9E3`, and three play colours from the palette (rose, teal, lavender).
 **UI only**: tangerine `#F79A4B`, grass `#62B96B`, sky `#4AA6E0`, sun `#FFD552`, grape `#A77BD6`.
 
 Each room keeps one dark anchor (a charcoal fridge or oven). Everything else stays mid-to-light so characters pop.
@@ -80,7 +80,9 @@ Characters are a **parts rig drawn as live SVG** at runtime; the contract (parts
 |---|---|---|---|---|---|---|
 | `kid5` (~5) | 328 | 80 × 76 | -252 | ±42, -168 | 36 + 36 | 28 + 28 |
 | `kid9` (~9) | 380 | 82 × 80 | -300 | ±46, -206 | 42 + 42 | 54 + 50 |
+| `teen` | 468 | 78 × 78 | -390 | ±50, -290 | 56 + 58 | 76 + 72 |
 | `adult` | 530 | 74 × 78 | -452 | ±56, -352 | 68 + 70 | 96 + 92 |
+| `elder` | 504 | 76 × 78 | -426 | ±56, -330 | 64 + 66 | 88 + 84 |
 
 - The **head is huge**, 40–50% of a child's height and about 30% of an adult's, always wider than the shoulders (`headShape(rx, ry)`, a soft squircle). Ears are small ellipses behind the head.
 - **The body is a simple rounded trapezoid**; feet are small rounded shoes pointing slightly outward. No necks to speak of.

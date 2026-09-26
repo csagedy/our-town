@@ -326,13 +326,41 @@ describe('characters: 8 on screen stay idle-cheap (ipad-pro-9.7)', () => {
     assert.ok(r.blinks >= 2, 'they blink');
     assert.equal(r.rafs, 0, 'no frame loop: blinks are a class, glances and tilts WAAPI');
     assert.deepEqual(r.other, [], 'no animations but idle life');
-    // Blinks are 2 recalcs each; a glance or a tilt (WAAPI on an SVG group, not
-    // composited) recalcs every frame for ~1.5 s. Budget: well under 1% of the time.
-    const budget = 12 + r.blinks * 3 + (r.glances + r.tilts) * 130;
+    // Idle life is composited WAAPI on HTML layer boxes (bead lm8): a few
+    // recalcs when one starts and ends, never one per frame, and no layout.
+    const events = r.blinks + r.glances + r.tilts;
+    const budget = 6 + events * 10;
     assert.ok(recalcs <= budget, `style recalcs in 4s idle: ${recalcs} (budget ${budget} for ${r.blinks} blinks, ${r.glances + r.tilts} glances/tilts)`);
+    assert.ok(layouts <= 2, `layouts in 4s idle: ${layouts} (${events} blinks/glances/tilts)`);
     assert.ok(styleMs + layoutMs + scriptMs < 120, `main-thread work in 4s idle: ${styleMs + layoutMs + scriptMs}ms`);
     assert.ok(scriptMs < 150, `script time in 4s idle: ${scriptMs}ms`);
     await page.screenshot('chars-8-idle');
+  });
+
+  it('every kind of idle life costs no layout (lm8 regression): blinks, glances, tilts on all 8', async () => {
+    await page.waitFor(idleChars);
+    await page.send('Performance.enable', {});
+    const metric = async () => Object.fromEntries((await page.send('Performance.getMetrics', {})).metrics.map((m) => [m.name, m.value]));
+    const m0 = await metric();
+    const r = await page.eval(() => {
+      const ids = Object.values(window.__store.state.entities).filter((e) => e.kind === 'char' && !e.deleted && e.room === 'test/cast').map((e) => e.id);
+      let n = 0;
+      for (const id of ids) for (const what of ['blink', 'glance', 'tilt']) if (window.__scene.chars.idle(id, what)) n++;
+      return { n, running: document.getAnimations().filter((a) => a.id === 'char-idle').length };
+    });
+    assert.equal(r.n, 24, 'blink + glance + tilt on each of the 8');
+    assert.ok(r.running >= 8 * 4, `idle animations running: ${r.running}`);
+    // A fixed window (not a poll: getAnimations() itself recalcs style) long
+    // enough for the longest (a 1.7 s tilt) to play out.
+    await sleep(2200);
+    const m1 = await metric();
+    const layouts = m1.LayoutCount - m0.LayoutCount;
+    const recalcs = m1.RecalcStyleCount - m0.RecalcStyleCount;
+    console.log(`  24 idle events on 8 characters: layouts ${layouts}, style recalcs ${recalcs}`);
+    // Before lm8 (SVG class toggles + WAAPI on SVG groups): ~2 layouts per blink
+    // and one per frame of a glance/tilt, hundreds here.
+    assert.ok(layouts <= 2, `layouts: ${layouts}`);
+    assert.ok(recalcs <= 60, `style recalcs: ${recalcs}`);
   });
 
   it('pauses when the page is hidden: no idle timer, breathing paused', async () => {

@@ -33,6 +33,7 @@ async function center(page, sel) {
 
 /** Drag a floor character (grabbed at its chest) so its feet (or seat point) land at world (tx, ty). */
 async function carry(page, id, tx, ty, anchor = 'feet') {
+  await page.waitFor(`(() => { const l = window.__town.scene.chars.inspect(${JSON.stringify(id)}); const v = window.__town.scene.view.viewOf(${JSON.stringify(id)}); return l && !l.dragging && v && v.el.getAnimations().length === 0; })()`);
   const c = await page.eval((i) => {
     const e = window.__store.state.entities[i];
     return { rev: e.rev, look: window.__town.scene.chars.inspect(i) };
@@ -43,7 +44,13 @@ async function carry(page, id, tx, ty, anchor = 'feet') {
   const from = await toS(grab.x, grab.y);
   const to = await toS(grab.x + (tx - a[anchor].x), grab.y + (ty - a[anchor].y));
   await page.drag(from, to, { steps: 16, durationMs: 420 });
-  await page.waitFor(`window.__store.state.entities[${JSON.stringify(id)}].rev > ${c.rev}`);
+  try {
+    await page.waitFor(`window.__store.state.entities[${JSON.stringify(id)}].rev > ${c.rev}`);
+  } catch (err) {
+    await page.screenshot('booth-carry-failed');
+    console.log('carry failed', JSON.stringify({ id, from, to, look: c.look }));
+    throw err;
+  }
 }
 
 describe('character maker booth (ipad-air, landscape, touch)', () => {
@@ -163,8 +170,10 @@ describe('character maker booth (ipad-air, landscape, touch)', () => {
     const rug = seats.find((s) => s.id === 'rug-1');
     // Free both seats first (the starter pair stands up on the floor).
     const sitters = await page.eval(() => Object.values(window.__store.state.entities).filter((e) => e.kind === 'char' && e.room === 'booth' && e.props.seat).map((e) => e.id));
-    let x = 120;
-    for (const id of sitters) { await carry(page, id, x, 950); x += 520; }
+    await page.waitFor(`window.__town.scene.view.viewOf(${JSON.stringify(made.id)}).el.getAnimations().length === 0`);
+    await carry(page, made.id, 240, 722);
+    let x = 60;
+    for (const id of sitters) { await carry(page, id, x, 722); x += 660; }
     await page.waitFor(() => Object.values(window.__store.state.entities).every((e) => e.kind !== 'char' || e.room !== 'booth' || !e.props.seat));
     await carry(page, made.id, pouf.x, pouf.y, 'seat');
     await page.waitFor(`window.__store.state.entities[${JSON.stringify(made.id)}].props.pose === 'sit'`);

@@ -41,7 +41,12 @@
 // (transform on an HTML wrapper, composited, random negative delay); blinks,
 // glances and head tilts come from ONE shared timer for all characters (a
 // few ms of work every half second or so, never a frame loop). Offscreen
-// characters (IntersectionObserver) and hidden pages pause both. Pose
+// characters (IntersectionObserver) and hidden pages pause both. None of it
+// touches the SVG: a character is a stack of <svg> layers (rig-svg.js
+// `layers`), and a blink (opacity of the open/closed eyes layers), a glance
+// (the eyes wrapper) and a head tilt (the two head wrappers) are WAAPI
+// transform/opacity animations on those HTML boxes, so the compositor runs
+// them with no style recalc or layout per frame (bead lm8). Pose
 // changes (a wave, a tilt, the dangle) are short rAF tweens of the joint
 // angles that stop when done.
 
@@ -61,6 +66,17 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 const SLOTS = ['eyes', 'brows', 'mouth', 'extras'];
 /** The id of idle-life WAAPI animations (glances, tilts); breathing is the CSS animation 'char-breathe'. */
 export const IDLE_ANIM = 'char-idle';
+// The layers of a character, bottom to top (rig-svg.js renderCharacter `layers`).
+// The head pieces sit in .char-tilt wrappers (a head tilt rotates them about
+// the chin), the eyes in .char-eyes (a glance slides it); all HTML boxes, so
+// those animations are composited.
+const LAYERS = ['base', 'hairBack', 'body', 'headUnder', 'eyes', 'blink', 'headOver', 'front'];
+const lsvg = (name, cls) => `<svg class="${cls || 'char-layer'}" data-l="${name}" xmlns="${SVGNS}" overflow="visible"></svg>`;
+const BOB_HTML = '<div class="char-bob">' + lsvg('base')
+  + '<div class="char-tilt">' + lsvg('hairBack') + '</div>'
+  + lsvg('body', 'char-svg')
+  + '<div class="char-tilt">' + lsvg('headUnder') + '<div class="char-eyes">' + lsvg('eyes') + lsvg('blink', 'char-layer char-blink') + '</div>' + lsvg('headOver') + '</div>'
+  + lsvg('front') + '</div>';
 const r1 = (v) => Math.round(v * 10) / 10;
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 
@@ -214,11 +230,16 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     if (rec.body && rec.body !== body) dropRegs(rec);
     rec.body = body;
     body.__char = id;
-    body.innerHTML = `<div class="char-bob"><svg class="char-svg" xmlns="${SVGNS}" overflow="visible"></svg></div>`;
+    stopIdle(rec);
+    body.innerHTML = BOB_HTML;
     if (rec.bob && io) io.unobserve(rec.bob);
     rec.bob = body.firstChild;
     rec.bob.__rec = rec;
-    rec.svg = rec.bob.firstChild;
+    rec.layers = {};
+    for (const el of rec.bob.querySelectorAll('svg[data-l]')) rec.layers[el.getAttribute('data-l')] = el;
+    rec.svg = rec.layers.body;
+    rec.tiltEls = Array.prototype.slice.call(rec.bob.querySelectorAll('.char-tilt'));
+    rec.eyesEl = rec.bob.querySelector('.char-eyes');
     rec.bob.style.animationDelay = `${-(random() * 3.6).toFixed(2)}s`;
     rec.sig = null;
     if (io) io.observe(rec.bob);
@@ -244,43 +265,35 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     rec.anchorName = rec.basePose.anchor || 'feet';
     const pose = rec.dragging ? danglePose(rig, held, e.props.raise) : rec.tPose || rec.basePose;
     const expr = rec.tFace || spec.expr;
+    stopIdle(rec);
     const res = renderCharacter(rig, spec, {
-      pose, expr, marks: true, shadow: !rec.dragging,
+      pose, expr, marks: true, shadow: !rec.dragging, layers: true,
       held: { L: held.L ? heldSvg(held.L) : '', R: held.R ? heldSvg(held.R) : '' },
     });
     const vb = bodyBox(rig, spec.body);
     const b = boxFor(spec.body, rec.baseName);
     const a = res.anchors[rec.anchorName];
-    const svg = rec.svg;
-    svg.setAttribute('viewBox', vb.join(' '));
-    svg.setAttribute('width', String(Math.round(vb[2] * K)));
-    svg.setAttribute('height', String(Math.round(vb[3] * K)));
+    const w = String(Math.round(vb[2] * K)), h = String(Math.round(vb[3] * K));
+    // One viewBox for every layer: they stack exactly (docs/rig.md section 10).
+    for (const name of LAYERS) {
+      const svg = rec.layers[name];
+      svg.setAttribute('viewBox', vb.join(' '));
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+      svg.innerHTML = res.layers[name];
+    }
+    rec.vb = vb;
     const ox = (a[0] - vb[0]) * K, oy = (a[1] - vb[1]) * K;
     const st = rec.bob.style;
     st.left = `${r1(b.w / 2 - ox)}px`;
     st.top = `${r1(b.h - oy)}px`;
+    st.width = `${w}px`;
+    st.height = `${h}px`;
     st.transformOrigin = `${r1(ox)}px ${r1(oy)}px`;
-    svg.innerHTML = res.svg;
-    rec.frameEls = Array.prototype.slice.call(svg.querySelectorAll('[data-f]'));
+    rec.frameEls = Array.prototype.slice.call(rec.bob.querySelectorAll('[data-f]'));
     rec.names = rec.frameEls.map((el) => el.getAttribute('data-f'));
     rec.slotEls = {};
-    for (const slot of SLOTS) rec.slotEls[slot] = svg.querySelector(`[data-slot="${slot}"]`);
-    // Blink: the closed eyes drawn once, shown by a class for ~130 ms.
-    if (rec.slotEls.eyes) {
-      const bl = document.createElementNS(SVGNS, 'g');
-      bl.setAttribute('data-slot', 'blink');
-      bl.innerHTML = faceSlot(rig, spec, 'eyes', rig.blink);
-      rec.slotEls.eyes.parentNode.insertBefore(bl, rec.slotEls.eyes.nextSibling);
-    }
-    // Head tilt (idle life): the head's content in an inner group with no
-    // transform of its own, so a WAAPI rotate composes with the frame matrix.
-    rec.tiltEls = [];
-    for (const g of svg.querySelectorAll('[data-p="head"], [data-p="hair-back"]')) {
-      const t = document.createElementNS(SVGNS, 'g');
-      while (g.firstChild) t.appendChild(g.firstChild);
-      g.appendChild(t);
-      rec.tiltEls.push(t);
-    }
+    for (const slot of SLOTS) rec.slotEls[slot] = rec.bob.querySelector(`[data-slot="${slot}"]`);
     rec.atoms = resolveExpr(rig, expr);
     rec.spec = spec;
     rec.pose = pose;
@@ -313,6 +326,35 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     rec.pose = pose;
   }
 
+  /** Cancel a running blink/glance/tilt at once (the layers are about to be redrawn). */
+  function stopIdle(rec) {
+    if (!rec.idleAnims) return;
+    for (const a of rec.idleAnims) a.cancel();
+    rec.idleAnims = null;
+  }
+  /** A pose change starts: a glance or tilt still running glides back to rest (150 ms) instead of drifting off the moving head. */
+  function easeOutIdle(rec) {
+    if (!rec.idleAnims) return;
+    const list = rec.idleAnims;
+    rec.idleAnims = null;
+    for (const a of list) {
+      const el = a.effect && a.effect.target;
+      if (a.playState !== 'running' || !el || !a.__move) { a.cancel(); continue; }
+      const now = getComputedStyle(el).transform;
+      a.cancel();
+      if (now && now !== 'none') idleAnim(rec, el, [{ transform: now }, { transform: 'none' }], { duration: 150, easing: 'ease-out' });
+    }
+  }
+  /** One idle-life animation (transform/opacity on an HTML layer box: composited). */
+  function idleAnim(rec, el, keyframes, opts, move = false) {
+    tween.checkKeyframes(keyframes);
+    const a = el.animate(keyframes, Object.assign({ id: IDLE_ANIM }, opts));
+    a.__move = move;
+    (rec.idleAnims || (rec.idleAnims = [])).push(a);
+    a.onfinish = () => { if (rec.idleAnims) { const i = rec.idleAnims.indexOf(a); if (i >= 0) rec.idleAnims.splice(i, 1); } };
+    return a;
+  }
+
   function stopTween(rec) {
     if (rec.raf) cancelAnimationFrame(rec.raf);
     rec.raf = 0;
@@ -330,6 +372,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       if (done) done();
       return;
     }
+    easeOutIdle(rec);
     stats.tweens++;
     const from = rec.pose;
     const t0 = performance.now();
@@ -406,11 +449,11 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     const add = (el, type, key) => { if (!el) return; input.register(el, partHandlers(rec, type, key, el)); rec.regs.push(el); };
     for (const s of ['L', 'R']) {
       if (!rec.held[s]) continue;
-      add(rec.svg.querySelector(`[data-f="held${s}"]`), 'held', s);
-      add(rec.svg.querySelector(`[data-f="hand${s}"]`), 'held', s);   // the mitten over it grabs it too
+      add(rec.bob.querySelector(`[data-f="held${s}"]`), 'held', s);
+      add(rec.bob.querySelector(`[data-f="hand${s}"]`), 'held', s);   // the mitten over it grabs it too
     }
     for (const slot of Object.keys(rec.worn)) {
-      for (const el of rec.svg.querySelectorAll(`[data-w="${slot}"]`)) add(el, 'wear', slot);
+      for (const el of rec.bob.querySelectorAll(`[data-w="${slot}"]`)) add(el, 'wear', slot);
     }
   }
 
@@ -793,6 +836,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     for (const t of rec.timers) clearTimeout(t);
     for (const t of rec.faceTimers) clearTimeout(t);
     stopTween(rec);
+    stopIdle(rec);
     if (rec.bob && io) io.unobserve(rec.bob);
     recs.delete(rec.id);
   }
@@ -849,33 +893,55 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     idleTimer = setTimeout(idleTick, ms);
   }
 
+  /**
+   * One bit of idle life on a character: 'blink' (~130 ms), 'glance' (1.3 s)
+   * or 'tilt' (1.7 s). Only WAAPI on the HTML layer boxes, no SVG change:
+   * no layout, and no style recalc per frame (composited).
+   */
+  function idleLife(rec, what) {
+    if (!alive(rec) || !rec.spec) return false;
+    if (what === 'blink') {
+      stats.blinks++;
+      const hold = { duration: 130, easing: 'steps(1, end)' };
+      idleAnim(rec, rec.layers.eyes, [{ opacity: 0 }, { opacity: 0 }], hold);
+      idleAnim(rec, rec.layers.blink, [{ opacity: 1 }, { opacity: 1 }], hold);
+      return true;
+    }
+    // The head frame (rotation + translation) of the pose on screen, in layer px.
+    const m = poseFrames(rig.bodies[rec.spec.body].skeleton, rec.pose).frames.head;
+    if (what === 'glance') {
+      stats.glances++;
+      // 5 art units along the head's own x axis (it may be tilted by the pose).
+      const d = (random() < 0.5 ? -1 : 1) * 5 * K;
+      const at = (f) => ({ transform: `translate(${r1(m[0] * d * f)}px, ${r1(m[1] * d * f)}px)` });
+      idleAnim(rec, rec.eyesEl, [at(0), Object.assign(at(1), { offset: 0.15 }), Object.assign(at(1), { offset: 0.85 }), at(0)], { duration: 1300, easing: 'ease-in-out' }, true);
+      return true;
+    }
+    if (what === 'tilt') {
+      // A head tilt around the chin (the head frame's origin is the head centre).
+      stats.tilts++;
+      const ry = rig.bodies[rec.spec.body].skeleton.headRy;
+      const vb = rec.vb;
+      const cx = r1((m[2] * ry + m[4] - vb[0]) * K), cy = r1((m[3] * ry + m[5] - vb[1]) * K);
+      const d = random() < 0.5 ? -7 : 7;
+      const at = (deg) => ({ transform: `translate(${cx}px, ${cy}px) rotate(${deg}deg) translate(${-cx}px, ${-cy}px)` });
+      for (const t of rec.tiltEls) {
+        idleAnim(rec, t, [at(0), Object.assign(at(d), { offset: 0.25 }), Object.assign(at(d), { offset: 0.7 }), at(0)], { duration: 1700, easing: 'ease-in-out' }, true);
+      }
+      return true;
+    }
+    return false;
+  }
+
   function idleTick() {
     idleTimer = 0;
     if (destroyed || document.hidden) return;
     stats.idleTicks++;
-    const list = idleRecs().filter((r) => !r.tFace && r.pose === r.basePose);
+    const list = idleRecs().filter((r) => !r.tFace && r.pose === r.basePose && !(r.idleAnims && r.idleAnims.length));
     if (list.length) {
       const rec = pick(list);
       const roll = random();
-      if (roll < 0.8 || rec.baseName === 'lie') {
-        stats.blinks++;
-        rec.svg.classList.add('blink');
-        setTimeout(() => rec.svg.classList.remove('blink'), 130);
-      } else if (roll < 0.9) {
-        stats.glances++;
-        const g = rec.slotEls.eyes;
-        const d = (random() < 0.5 ? -1 : 1) * 5;
-        if (g) tween.animate(g, [{ transform: 'translate(0px, 0px)' }, { transform: `translate(${d}px, 0px)`, offset: 0.15 }, { transform: `translate(${d}px, 0px)`, offset: 0.85 }, { transform: 'translate(0px, 0px)' }], { duration: 1300, easing: 'ease-in-out', id: IDLE_ANIM });
-      } else {
-        // A head tilt around the chin (the head frame's origin is the head centre).
-        stats.tilts++;
-        const ry = rig.bodies[rec.spec.body].skeleton.headRy;
-        const d = random() < 0.5 ? -7 : 7;
-        const at = (deg) => ({ transform: `translate(0px, ${ry}px) rotate(${deg}deg) translate(0px, ${-ry}px)` });
-        for (const t of rec.tiltEls) {
-          tween.animate(t, [at(0), Object.assign(at(d), { offset: 0.25 }), Object.assign(at(d), { offset: 0.7 }), at(0)], { duration: 1700, easing: 'ease-in-out', id: IDLE_ANIM });
-        }
-      }
+      idleLife(rec, roll < 0.8 || rec.baseName === 'lie' ? 'blink' : roll < 0.9 ? 'glance' : 'tilt');
     }
     scheduleIdle();
   }
@@ -936,6 +1002,8 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
 
   return {
     rig, seats, hooks, stats: () => Object.assign({}, stats, { chars: [...recs.values()].filter(alive).length, idleTimer: !!idleTimer }),
+    /** Play one bit of idle life now ('blink' | 'glance' | 'tilt') on a character (tests, dev). */
+    idle(id, what) { const rec = recs.get(id); return rec ? idleLife(rec, what) : false; },
     /** Use this view and fx (after createRoomView). */
     bind(v, f = null) { view = v; fx = f; scheduleIdle(); },
     /** What a character looks like right now (tests, debugging). */

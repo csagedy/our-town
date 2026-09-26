@@ -1,4 +1,7 @@
-// The cafe kitchen (P1.13 routes the cafe here): the kitchen's art layers
+// The old one-screen cafe kitchen (P1.13). Since P2a.1 the city's cafe door
+// leads to the cafe STRIP (cafe.js, which keeps the location id
+// 'cafe/kitchen'); this room lives on at the dev route ?room=kitchen (room
+// id 'dev/kitchen', so its things never mix with the cafe's). The kitchen's art layers
 // from the art pipeline (assets/rooms/kitchen/*.webp) with its surfaces from
 // the manifest, and the same behaviors as the test room (P1.8 catalog +
 // behavior runtime): drag anything onto a shelf, counter or table (or drop
@@ -22,6 +25,7 @@ import { speech } from '../audio/index.js';
 import * as tween from '../engine/tween.js';
 
 export const KITCHEN_ID = 'cafe/kitchen';
+export const DEV_KITCHEN_ID = 'dev/kitchen';
 
 /** The view-layer room definition for the kitchen, from its manifest entry. Pure. */
 export function kitchenRoom(m, id = KITCHEN_ID) {
@@ -92,12 +96,12 @@ export function textLabels(catalog, manifest) {
   };
 }
 
-/** Mount the kitchen. opts: { input, store, manifest, carry (P1.14 pocket + travel hooks) }. Resolves once it is up. */
-export async function mountKitchen(stage, { input, store, manifest, carry = null }) {
+/** Mount the kitchen. opts: { input, store, manifest, carry (P1.14 pocket + travel hooks), id (room id) }. Resolves once it is up. */
+export async function mountKitchen(stage, { input, store, manifest, carry = null, id = KITCHEN_ID }) {
   useArtSprites(manifest);                 // art-only kinds (croissant, bread...)
   const catalog = await loadCatalog();     // never rejects
   const removeSource = addSpriteSource((kind) => (catalog.has(kind) ? catalog.sprite(kind) : null));
-  const room = mountRoom(stage, kitchenRoom(manifest.rooms.kitchen));
+  const room = mountRoom(stage, kitchenRoom(manifest.rooms.kitchen, id));
   const fx = createFx(room.fxLayer);
   const behaviors = createBehaviors({ catalog, store });
   const chars = await mountCharacters({ store, input, behaviors, room, sfx, speech });   // null without the rig

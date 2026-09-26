@@ -507,8 +507,10 @@ export function createCarry({ stage, input, store, manifest, town, storage = saf
       if (!r || r.parent !== p.car) continue;       // somebody took it out meanwhile
       if (isChar(r) && r.props.pose && r.props.pose !== 'stand') store.dispatch('set', { id, path: 'props.pose', value: 'stand' });
       if (isChar(r) && r.props.seat) store.dispatch('set', { id, path: 'props.seat', value: null });
-      const x = f.x0 + 420 + i * 170;
-      const y = Math.round(f.bottom - 30 - (i % 2) * 40);
+      // A place can say where arrivals stand (the cafe strip: inside its front door).
+      const spot = sc.arrivalSpot ? sc.arrivalSpot(i) : null;
+      const x = spot ? spot.x : f.x0 + 420 + i * 170;
+      const y = spot ? spot.y : Math.round(f.bottom - 30 - (i % 2) * 40);
       if (store.dispatch('move', { id, room: sc.id, x, y, z: 0 })) sc.view.animateFrom(id, x - 60, y - 160);
       i++;
     }

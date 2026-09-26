@@ -46,10 +46,14 @@ async function boot() {
   // ?room=test (P1.7 views), ?room=catalog (P1.8 behaviors), ?room=containers
   // and ?room=porch (P1.9 containers, spawners, carrying), ?room=wide (P1.5
   // camera + P1.6 input demo), ?room=buddy (the retired boot buddy; its squish
-  // count proves persistence).
+  // count proves persistence), ?room=kitchen (the old one-screen kitchen).
   let scene;
   if (TEST_SETS.includes(room)) scene = await mountTestRoom(stage, { input, store, set: room });
-  else if (room === 'buddy' || room === 'wide') {
+  else if (room === 'kitchen') {
+    // The old one-screen kitchen (P1.13), retired from the town by the cafe strip (P2a.1).
+    const [{ mountKitchen, DEV_KITCHEN_ID }, { loadArt }] = await Promise.all([import('./scenes/kitchen.js'), import('./scenes/art.js')]);
+    scene = await mountKitchen(stage, { input, store, manifest: await loadArt(), id: DEV_KITCHEN_ID });
+  } else if (room === 'buddy' || room === 'wide') {
     const buddyId = buddyEntity(store).id;
     scene = mountBoot(stage, {
       room, input,

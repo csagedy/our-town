@@ -124,13 +124,14 @@ export function createStage(host) {
    * stage.world. backdrop = {top, bottom, horizon}: CSS colors above and below
    * world y = horizon, extended to cover any letterbox.
    */
-  stage.setRoom = ({ width = STAGE_W, backdrop: b = DEFAULT_BACKDROP, cameraX = 0 } = {}) => {
+  stage.setRoom = ({ width = STAGE_W, backdrop: b = DEFAULT_BACKDROP, cameraX = 0, stops = [] } = {}) => {
     for (const child of [...world.children]) if (child !== backdrop) child.remove();
     stage.room = { width: Math.max(STAGE_W, width), backdrop: { ...DEFAULT_BACKDROP, ...b } };
     world.style.width = `${stage.room.width}px`;
     camera.stop();
     camera.cancelDrag();
     camera.setRange(stage.room.width - STAGE_W);
+    camera.setStops(stops);
     camera.panTo(cameraX);
     world.style.transform = `translate3d(${-camera.x}px, 0, 0)`;
     sizeBackdrop();
@@ -212,7 +213,8 @@ export function createStage(host) {
 
 // API summary (for P1.6 input and P1.7 views):
 //   const stage = createStage(host)
-//   stage.setRoom({width, backdrop: {top, bottom, horizon}, cameraX})  new room; then append into stage.world
+//   stage.setRoom({width, backdrop: {top, bottom, horizon}, cameraX, stops})  new room; then append into stage.world
+//                 (stops: camera x values a fling snaps to, camera.js)
 //   stage.screenToWorld(clientX, clientY) -> {x, y}   stage.worldToScreen(x, y) -> {x, y}
 //   stage.visibleWorld() -> {left, top, right, bottom}   stage.s (px per unit), stage.bleed {x, y}
 //   stage.onChange(fn(stage, why)) -> unsubscribe        why: 'resize' | 'room' | 'camera' | 'settle'

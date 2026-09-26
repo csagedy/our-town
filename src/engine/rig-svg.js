@@ -116,8 +116,17 @@ export function faceSlot(rig, spec, slot, atom) {
  * Assemble a character. opts: pose (name or pose object), expr (name or slot
  * object), blink, held: {L, R} SVG drawn upright at that hand (under the
  * mitten), shadow (default true), id (for data-char), marks (tag the removable
- * wear fragments with data-w="<slot>" so the runtime can hit-test them).
- * Returns { svg: '<g class="o rig" ...>', anchors, frames, body }.
+ * wear fragments with data-w="<slot>" so the runtime can hit-test them),
+ * layers (also split the drawing into LAYERS, below).
+ * Returns { svg: '<g class="o rig" ...>', anchors, frames, body, layers? }.
+ *
+ * With opts.layers, `layers` is the same drawing cut into stacked pieces, in
+ * paint order, each a '<g class="o rig" ...>' for its own <svg> (same viewBox):
+ * base (shadow, cape back), hairBack, body (legs, torso, back arms), headUnder
+ * (ears, head, nose), eyes, blink (the closed eyes, for a blink), headOver
+ * (brows, mouth, extras, facial hair, hair front, glasses, hat), front (front
+ * arms). The runtime (characters.js) animates idle life on the HTML wrappers
+ * of these pieces (composited, no SVG layout), docs/rig.md section 10.
  */
 export function renderCharacter(rig, spec, opts) {
   opts = opts || {};
@@ -135,15 +144,21 @@ export function renderCharacter(rig, spec, opts) {
   const held = opts.held || {};
 
   const out = [];
-  const put = (frame, svg, extra) => { if (svg) out.push(`<g data-f="${frame}"${extra || ''} transform="${matrixAttr(frames[frame])}">${svg}</g>`); };
+  const layered = !!opts.layers;
+  const parts = { base: [], hairBack: [], body: [], headUnder: [], eyes: [], blink: [], headOver: [], front: [] };
+  let cur = 'base';
+  const push = (s) => { out.push(s); parts[cur].push(s); };
+  const put = (frame, svg, extra) => { if (svg) push(`<g data-f="${frame}"${extra || ''} transform="${matrixAttr(frames[frame])}">${svg}</g>`); };
   const mk = (slot) => (opts.marks ? ` data-w="${slot}"` : '');
   const wrapW = (slot, svg) => (svg && opts.marks ? `<g data-w="${slot}">${svg}</g>` : svg || '');
   const limb = (layer, fu, fl) => { if (!layer) return; put(fu, layer.upper); put(fl, layer.lower); put(fu, layer.patch); };
 
-  if (opts.shadow !== false && pose.anchor !== 'back') out.push(`<ellipse class="n" data-f="shadow" fill="#3D2C29" opacity=".12" cx="${anchors.feet[0]}" cy="${pose.ground === false && pose.anchor === 'seat' ? anchors.seat[1] : 0}" rx="${sk.shadow}" ry="13"/>`);
+  if (opts.shadow !== false && pose.anchor !== 'back') push(`<ellipse class="n" data-f="shadow" fill="#3D2C29" opacity=".12" cx="${anchors.feet[0]}" cy="${pose.ground === false && pose.anchor === 'seat' ? anchors.seat[1] : 0}" rx="${sk.shadow}" ry="13"/>`);
   const back = piece('back');
   if (back) put('torso', back.back, mk('back'));
+  cur = 'hairBack';
   if (hair.back && !(hair.backKind === 'top' && hides.top)) put('head', hair.back, ' data-p="hair-back"');
+  cur = 'body';
   const bottom = piece('bottom');
   // Sitting (legsFront): the thigh points at the viewer, so the shin's top
   // shows as a round knee cap (layer.knee) instead of the joint patch.
@@ -175,22 +190,31 @@ export function renderCharacter(rig, spec, opts) {
   const arm = (s) => {
     limb(body.parts.arm, 'armU' + s, 'armL' + s);
     if (top) limb(top.arm, 'armU' + s, 'armL' + s);
-    if (held[s]) out.push(`<g data-f="held${s}" transform="translate(${anchors['hand' + s].join(' ')})">${held[s]}</g>`);
+    if (held[s]) push(`<g data-f="held${s}" transform="translate(${anchors['hand' + s].join(' ')})">${held[s]}</g>`);
     put('hand' + s, body.parts.hand);
   };
   SIDES.forEach(([s]) => { if (front.indexOf(s) < 0) arm(s); });
 
-  const face = ['eyes', 'brows', 'mouth', 'extras'].map((slot) => `<g data-slot="${slot}">${faceSlot(rig, spec, slot, expr[slot])}</g>`).join('');
+  const slotG = (slot, atom) => `<g data-slot="${slot}">${faceSlot(rig, spec, slot, atom)}</g>`;
   const faceAcc = piece('face'), hat = piece('hat');
-  put('head', body.parts.ears + body.parts.head + body.face.nose + face
+  const headU = body.parts.ears + body.parts.head + body.face.nose;
+  const eyes = slotG('eyes', expr.eyes);
+  const headO = ['brows', 'mouth', 'extras'].map((slot) => slotG(slot, expr[slot])).join('')
     + (spec.facialHair ? body.facialHair[spec.facialHair] || '' : '')
-    + hair.front + (faceAcc ? wrapW('face', faceAcc.head) : '') + (hat ? wrapW('hat', hat.head) : ''), ' data-p="head"');
+    + hair.front + (faceAcc ? wrapW('face', faceAcc.head) : '') + (hat ? wrapW('hat', hat.head) : '');
+  if (layered) {
+    cur = 'headUnder'; put('head', headU, ' data-p="head"');
+    cur = 'eyes'; put('head', eyes, ' data-p="head"');
+    cur = 'blink'; put('head', `<g data-slot="blink">${faceSlot(rig, spec, 'eyes', rig.blink)}</g>`, ' data-p="head"');
+    cur = 'headOver'; put('head', headO, ' data-p="head"');
+  } else put('head', headU + eyes + headO, ' data-p="head"');
+  cur = 'front';
   SIDES.forEach(([s]) => { if (front.indexOf(s) >= 0) arm(s); });
 
-  return {
-    svg: `<g class="o rig"${opts.id ? ` data-char="${opts.id}"` : ''} style="${charVars(rig, spec)}">${out.join('')}</g>`,
-    anchors, frames, body: spec.body,
-  };
+  const wrap = (list) => `<g class="o rig"${opts.id ? ` data-char="${opts.id}"` : ''} style="${charVars(rig, spec)}">${list.join('')}</g>`;
+  const res = { svg: wrap(out), anchors, frames, body: spec.body };
+  if (layered) { res.layers = {}; for (const k of Object.keys(parts)) res.layers[k] = parts[k].length ? wrap(parts[k]) : ''; }
+  return res;
 }
 
 /** viewBox [x, y, w, h] (art units) that fits every standing pose of a body. */

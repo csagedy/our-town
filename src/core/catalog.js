@@ -147,12 +147,19 @@ export function createCatalog(json, manifest = null) {
   /** The manifest prop for a kind, if its art exists. */
   const artOf = (k) => (k && k.art && artProps[k.art.sprite]) || null;
 
+  // Cafe doneness (P2a.1): a look '<variant>@<n>' is that variant (or the
+  // default for '@n') drawn with the manifest's doneness tint n (a CSS filter).
+  const tints = (manifest && manifest.cafe && manifest.cafe.doneness && Array.isArray(manifest.cafe.doneness.tint)) ? manifest.cafe.doneness.tint : [];
+
   function makeSprite(kind, look) {
     const k = kinds.get(kind) || normalizeKind(kind, null);
     const sound = k.sounds.tap || 'pop';
     const a = artOf(k);
     if (a && isObj(a.variants)) {
-      const name = look && a.variants[look] ? look : a.default;
+      const at = typeof look === 'string' ? look.lastIndexOf('@') : -1;
+      const tint = at >= 0 ? tints[Number(look.slice(at + 1))] || null : null;
+      const want = at >= 0 ? look.slice(0, at) : look;
+      const name = want && a.variants[want] ? want : a.default;
       const v = a.variants[name];
       if (v && typeof v.file === 'string' && isPt(v.size) && isPt(v.anchor)) {
         const s = k.art.scale;
@@ -160,11 +167,13 @@ export function createCatalog(json, manifest = null) {
         // A box whose bottom center is the anchor (the view's feet point);
         // the image sits inside it and may hang below (a shadow, a base).
         const bw = 2 * Math.max(ax, W - ax);
-        return {
-          key: 'art:' + kind + ':' + name, draw: 'img', src: v.file, sound, look: name,
+        const sprite = {
+          key: 'art:' + kind + ':' + name + (tint ? look.slice(at) : ''), draw: 'img', src: v.file, sound, look: tint ? name + look.slice(at) : name,
           w: r1(bw), h: r1(ay),
           img: { left: r1(bw / 2 - ax), top: 0, w: r1(W), h: r1(H) },
         };
+        if (tint) sprite.filter = tint;
+        return sprite;
       }
     }
     const o = (look && isObj(k.ph.looks[look])) ? k.ph.looks[look] : {};

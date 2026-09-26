@@ -27,7 +27,7 @@
 import { mountRoom } from '../engine/room.js';
 import { createRoomView } from '../engine/view.js';
 import { createFx } from '../engine/fx.js';
-import { inRoom, childrenOf } from '../engine/world.js';
+import { inRoom, childrenOf, getEntity } from '../engine/world.js';
 import { sfx, speech } from '../audio/index.js';
 import { addSpriteSource } from '../engine/sprites.js';
 import { loadCatalog } from '../core/catalog.js';
@@ -41,15 +41,16 @@ import {
 } from '../engine/char-maker.js';
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
+import { zIndexFor } from '../engine/surfaces.js';
 
 export const BOOTH_ID = 'booth';
 export { MIRROR_ROOM };
 const SVGNS = 'http://www.w3.org/2000/svg';
 const PANEL_X = 880;                                  // world x where the maker panel starts
 export const PREVIEW = { x: 444, y: 872, h: 560 };    // the stage: preview feet point and target height (world)
-const ZONE = { x0: 250, x1: 640, y0: 700, y1: 1000 }; // drop a character here to restyle it
+const ZONE = { x0: 250, x1: 640, y0: 790, y1: 1000 }; // drop a character here to restyle it
 const TAB = { x: [945, 1047], y0: 112, dy: 108, d: 92 };
-const OPT = { x: [1172, 1284, 1396], y0: 150, dy: 114, d: 104 };
+const OPT = { x: [1152, 1261, 1370], y0: 150, dy: 112, d: 100 };
 const DICE = { x: 1200, y: 880, d: 132 };
 const DONE = { x: 1360, y: 880, d: 132 };
 const TAB_COLORS = ['#F79A4B', '#62B96B', '#4AA6E0', '#FFD552', '#A77BD6'];
@@ -121,7 +122,9 @@ const CSS = `
 .mk-opt.is-on .mk-face{border-color:#FFD552;border-width:8px}
 .mk-opt .mk-face::after{display:none}
 .mk-opt svg.mk-thumb{position:absolute;left:0;top:0;width:100%;height:100%}
-.mk-preview{position:absolute;left:0;top:0;pointer-events:auto;touch-action:none}
+.mk-stage{position:absolute;left:0;top:0;width:1440px;height:1000px;pointer-events:none}
+.mk-preview{position:absolute;left:0;top:0;pointer-events:none;touch-action:none}
+.mk-preview svg *{pointer-events:auto}
 .mk-pv-scale{position:absolute;left:0;top:0}
 .mk-pv-scale svg{display:block;overflow:visible;animation:char-breathe 1.8s ease-in-out infinite alternate;transform-origin:50% 94%}
 .mk-flash{position:absolute;left:${ZONE.x0 - 80}px;top:40px;width:${ZONE.x1 - ZONE.x0 + 160}px;height:900px;border-radius:60px;background:#fff;opacity:0;pointer-events:none}
@@ -157,7 +160,12 @@ export async function mountBooth(stage, { input, store, manifest, carry = null, 
     },
     onDrop(e, ctx) {
       const v = ctx.view.viewOf(e.id);
-      if (isChar(e) && maker && v && inZone(v.x, v.y)) { maker.restyle(e); return true; }
+      if (isChar(e) && maker && v && inZone(v.x, v.y)) {
+        // Land it first (the character runtime ends its dangle), then up it goes.
+        if (base.onDrop) base.onDrop(e, ctx);
+        maker.restyle(getEntity(store.state, e.id) || e);
+        return true;
+      }
       return base.onDrop ? base.onDrop(e, ctx) : false;
     },
   });
@@ -216,11 +224,18 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
   ui.dataset.noPan = '';
   ui.dataset.maker = '';
   ui.style.zIndex = '15000000';        // above room art and resting things, below a dragged one
-  ui.innerHTML = `<div class="mk-panel"></div><div class="mk-flash"></div>
-    <div class="mk-preview" data-mk="preview"><div class="mk-pv-scale"></div></div>`;
+  ui.innerHTML = '<div class="mk-panel"></div>';
   room.depth.appendChild(ui);
-  const flash = ui.querySelector('.mk-flash');
-  const pv = ui.querySelector('.mk-preview');
+  // The stage character sorts like a thing standing on the stage (people in
+  // front of it draw over it); the panel stays above everything.
+  const stageEl = document.createElement('div');
+  stageEl.className = 'mk-stage';
+  stageEl.dataset.noPan = '';
+  stageEl.style.zIndex = String(zIndexFor(PREVIEW.y));
+  stageEl.innerHTML = '<div class="mk-flash"></div><div class="mk-preview" data-mk="preview"><div class="mk-pv-scale"></div></div>';
+  room.depth.appendChild(stageEl);
+  const flash = stageEl.querySelector('.mk-flash');
+  const pv = stageEl.querySelector('.mk-preview');
   const pvScale = pv.firstChild;
 
   function button(cls, x, y, d, color, inner, data, onTap) {
@@ -418,7 +433,7 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
   }
   function floorSpot() {
     const here = inRoom(store.state, BOOTH_ID).filter((e) => e.kind === CHAR_KIND && !e.props.seat);
-    const xs = [690, 170, 800, 80, 610, 280];
+    const xs = [690, 180, 790, 125, 740, 235];
     const x = xs[here.length % xs.length] + (Math.floor(here.length / xs.length) % 3) * 24;
     return { x, y: 930 - (here.length % 3) * 22 };
   }
@@ -497,6 +512,7 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
       for (const t of timers) clearTimeout(t);
       for (const el of regs) input.unregister(el);
       ui.remove();
+      stageEl.remove();
     },
   };
 }

@@ -44,6 +44,7 @@
 
 import { resolveBehaviors } from './registry.js';
 import './builtin.js';
+import './cafe.js';
 import { childrenOf, getEntity, inRoom } from '../../engine/world.js';
 import { settle, stackZ, DEPTH_SCALE } from '../../engine/surfaces.js';
 import * as tween from '../../engine/tween.js';
@@ -303,7 +304,16 @@ export function createBehaviors({ catalog, store, random = Math.random }) {
   const hooks = {
     // Kinds not in the catalog: null, so the view asks sprites.spriteFor()
     // (the engine's own placeholders and any other sprite source).
-    spriteOf: (e) => (catalog.has(e.kind) ? catalog.sprite(e.kind, lookOf(e)) : null),
+    // A behavior with a `sprite` hook (the Mystery Dish's composite) draws it whole.
+    spriteOf(e) {
+      if (!catalog.has(e.kind)) return null;
+      for (const b of listOf(e.kind)) {
+        if (!b.def.sprite) continue;
+        const s = b.def.sprite(e, b.p, { catalog, look: lookOf(e) });
+        if (s) return s;
+      }
+      return catalog.sprite(e.kind, lookOf(e));
+    },
 
     canDrag(e) {
       const k = catalog.get(e.kind);
