@@ -14,6 +14,7 @@
 // | attach  | {id, parent, slot?}                                              |
 // | detach  | {id, room, x, y, z?}         = a move out of a parent            |
 // | set     | {id, path: "props.<key>" | "rot" | "flip", value}                |
+// | inc     | {id, path: "props.<key>", by, value?}  a counter intent (below)  |
 // | combine | {ids, resultId, resultKind, room | parent+slot?, x?, y?, z?, props?}|
 // | remove  | {id, hard?}                  to Lost & Found; hard = true delete  |
 // | travel  | {ids, to}                    top-level things change room        |
@@ -22,6 +23,17 @@
 // Everything an op needs is in its args: placement of a combine result, the
 // picked random result, the new id. The reducer never looks anything up that
 // could differ between devices.
+//
+// Counters and aggregates (squish counts, coins, applause, stack heights)
+// use the `inc` intent, never an absolute `set` computed from what one
+// device saw: two kids tapping at once would each write n+1 and one tap
+// would be lost to last-writer-wins. `inc` says "add `by`". Whoever
+// sequences the op resolves it (`resolveIntent`): solo play resolves it in
+// the local store, host-authoritative play on the host (a guest sends the
+// bare intent). Resolving writes the result into `args.value`, so the logged,
+// broadcast and replayed op is a plain LWW write of that value: replay and
+// merge stay idempotent and order-independent, and because the host
+// resolves ops one at a time in its single order, no increment is lost.
 //
 // Two levels of checking:
 // - `checkArgs` (shape) throws on a malformed op. That is a programming bug.
@@ -43,6 +55,7 @@ const T = {
   bool: (v) => typeof v === 'boolean',
   obj: (v) => !!v && typeof v === 'object' && !Array.isArray(v),
   lot: (v) => Number.isInteger(v) && v >= 0 && v < LOT_COUNT,
+  ppath: (v) => typeof v === 'string' && /^props\.[A-Za-z0-9_-]+$/.test(v),
   path: (v) => v === 'rot' || v === 'flip' || (typeof v === 'string' && /^props\.[A-Za-z0-9_-]+$/.test(v)),
   any: (v) => v !== undefined,
 };
@@ -53,6 +66,7 @@ const SPEC = {
   attach: { id: 'id', parent: 'id', slot: 'str?' },
   detach: { id: 'id', room: 'str', x: 'num', y: 'num', z: 'num?' },
   set: { id: 'id', path: 'path', value: 'any' },
+  inc: { id: 'id', path: 'ppath', by: 'num', value: 'num?' },
   combine: { ids: 'ids', resultId: 'id', resultKind: 'str', room: 'str?', parent: 'id?', slot: 'str?', x: 'num?', y: 'num?', z: 'num?', props: 'obj?' },
   remove: { id: 'id', hard: 'bool?' },
   travel: { ids: 'ids', to: 'str' },
@@ -122,4 +136,24 @@ export function validate(state, env) {
   if (env.op === 'attach' && isWithin(state, a.parent, a.id)) return 'loop';
   if (env.op === 'combine' && a.parent && a.ids.some((id) => isWithin(state, a.parent, id))) return 'loop';
   return null;
+}
+
+/** The number an `inc` adds to (a missing or non-number prop counts as 0). Pure. */
+export function counterValue(state, id, path) {
+  const e = getEntity(state, id);
+  const v = e && e.props[path.slice(6)];
+  return typeof v === 'number' && isFinite(v) ? v : 0;
+}
+
+/**
+ * Resolve an intent op against the sequencer's world (the solo store, or the
+ * host): `inc` gets `args.value` = current + by. Any `value` a sender filled
+ * in is ignored: only the sequencer's world counts. Other ops come back
+ * unchanged. Pure: returns a new envelope, never edits `env`.
+ */
+export function resolveIntent(state, env) {
+  if (env.op !== 'inc') return env;
+  const a = env.args;
+  const value = counterValue(state, a.id, a.path) + a.by;
+  return Object.assign({}, env, { args: Object.assign({}, a, { value }) });
 }

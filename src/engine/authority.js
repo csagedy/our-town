@@ -8,7 +8,7 @@
 //   host kid drags ─► host store.dispatch ─────────► host.submit(env)
 //                                                     1. validate against the host's world
 //                                                     2. refuse if another device holds it
-//                                                     3. re-stamp with the host's clock
+//                                                     3. resolve intents (inc), re-stamp with the host's clock
 //                                                     4. apply, then broadcast
 //                                                           │
 //   both stores ◄───────────── store.receive(env) ◄─────────┘
@@ -29,7 +29,7 @@
 // Transport (WebRTC data channel, QR pairing) is not here: `broadcast` and
 // the guest's `send` are plain callbacks, so tests wire devices in-process.
 
-import { touchedIds, validate } from './ops.js';
+import { resolveIntent, touchedIds, validate } from './ops.js';
 import { getEntity, isWithin } from './world.js';
 
 const RELEASING = new Set(['move', 'detach', 'attach', 'remove', 'travel', 'combine']);
@@ -88,7 +88,9 @@ export function createHost(store, { broadcast = () => {}, now = () => Date.now()
       const reason = validate(store.state, env) ||
         (touchedIds(env).some((id) => heldByOther(id, env.device)) ? 'busy' : null);
       if (reason) return { ok: false, reason, env };
-      const seq = Object.assign({}, env, { lamport: store.stampAfter(env.lamport) });
+      // Resolve intents (inc) against the host's world, in the host's order:
+      // concurrent increments from both kids each add to the latest total.
+      const seq = Object.assign({}, resolveIntent(store.state, env), { lamport: store.stampAfter(env.lamport) });
       if (!store.receive(seq)) return { ok: false, reason: 'duplicate', env };
       if (RELEASING.has(env.op)) for (const id of touchedIds(env)) host.release(id, env.device);
       broadcast(seq);

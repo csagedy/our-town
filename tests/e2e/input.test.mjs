@@ -38,6 +38,9 @@ const moves = (page) => page.eval(() => window.__scene.demo.moves.length);
 
 /** Assert blob i sits so that the world point grabbed at `grabW` (blob-relative offset) is under screen point p. */
 async function assertUnderFinger(page, i, grab, p, msg) {
+  // Chrome delivers pointermove aligned to animation frames: let the last
+  // queued move reach the page before measuring (it may lag on a busy machine).
+  await page.frames(2);
   const w = await toWorld(page, p);
   const b = await blob(page, i);
   const err = Math.hypot(b.x + grab.x - w.x, b.y + grab.y - w.y);
@@ -61,6 +64,7 @@ async function touchPath(page, from, to, { steps = 10, stepMs = 16, holdStartMs 
   }
   if (holdEndMs) await sleep(holdEndMs);
   if (end) await page.touch(end, []);
+  else await page.frames(2);   // finger still down: let the frame-aligned moves arrive
 }
 
 async function assertNothingStuck(page) {
@@ -258,6 +262,7 @@ for (const name of ['ipad-pro-9.7', 'ipad-air', 'ipad-pro-12.9']) {
         await page.touch('touchMove', [pt(pa.x, pa.y, 0), pt(pb.x, pb.y, 1)]);
         await sleep(16);
       }
+      await page.frames(2);   // frame-aligned moves delivered
       const ea = at(fa, va, 1);
       const eb = at(fb, vb, 1);
       assert.equal((await debug(page)).pointers.filter((p) => p.state === 'drag').length, 2);

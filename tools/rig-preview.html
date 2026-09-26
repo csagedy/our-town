@@ -1,0 +1,217 @@
+<!doctype html>
+<!-- Character rig dev preview (P1.12). Serve the repo (python3 tools/serve.py)
+     and open http://127.0.0.1:8124/tools/rig-preview.html
+     Flip through every pose x expression x outfit; recolour skin, hair and
+     outfit slots; hold props; tween between poses by joint angles (the way the
+     runtime rig, P1.10, should animate: transforms only). Contract: docs/rig.md.
+     Keys: left/right = pose, up/down = expression, B = blink, G = grid. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rig preview</title>
+<style>
+  body { margin: 0; background: #FBF3E8; color: #3D2C29; font: 500 14px/1.3 "Avenir Next", Helvetica, sans-serif; display: flex; min-height: 100vh; }
+  #side { width: 340px; padding: 12px 14px; background: #EFE4D6; overflow-y: auto; max-height: 100vh; box-sizing: border-box; }
+  #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: auto; }
+  h3 { margin: 12px 0 5px; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
+  .btns { display: flex; flex-wrap: wrap; gap: 4px; }
+  button, select { font: inherit; border: 2px solid #3D2C29; border-radius: 8px; background: #FBF3E8; padding: 3px 8px; cursor: pointer; }
+  button.on { background: #3D2C29; color: #FBF3E8; }
+  .sw { width: 26px; height: 26px; padding: 0; border-radius: 13px; }
+  label { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin: 3px 0; }
+  label select { width: 190px; }
+  #view { position: relative; }
+  #view svg { display: block; }
+  #floor { width: 520px; border-top: 3px solid #D2A184; margin-top: -2px; }
+  #info { margin-top: 10px; font-size: 12px; opacity: .75; max-width: 700px; text-align: center; }
+  #grid { display: none; flex-wrap: wrap; gap: 4px; padding: 10px; align-items: flex-end; }
+  #grid .cell { text-align: center; font-size: 11px; }
+  .dot { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 4px; background: #DC6B6E; pointer-events: none; }
+</style>
+<body>
+<div id="side">
+  <h3>Character</h3><div class="btns" id="cast"></div>
+  <h3>Pose (← →)</h3><div class="btns" id="poses"></div>
+  <h3>Expression (↑ ↓)</h3><div class="btns" id="exprs"></div>
+  <h3>Wear</h3><div id="wear"></div>
+  <h3>Skin</h3><div class="btns" id="skins"></div>
+  <h3>Hair</h3><label>style <select id="hairStyle"></select></label><div class="btns" id="hairs"></div>
+  <h3>Held items</h3>
+  <label>left hand <select id="heldL"></select></label>
+  <label>right hand <select id="heldR"></select></label>
+  <h3>Animate</h3>
+  <div class="btns">
+    <button id="tween" class="on">tween poses</button><button id="blink">blink (B)</button>
+    <button id="autoblink">idle blink</button><button id="waveloop">wave loop</button><button id="walkloop">walk loop</button>
+    <button id="anchors">anchors</button><button id="gridbtn">grid (G)</button>
+  </div>
+  <label style="margin-top:10px">zoom <input id="zoom" type="range" min="0.6" max="3" step="0.1" value="1.6"></label>
+</div>
+<div id="main">
+  <div id="view"></div><div id="floor"></div>
+  <div id="info"></div>
+  <div id="grid"></div>
+</div>
+<script type="module">
+  import { renderCharacter, svgWrap, bodyBox, poseFrames, matrixAttr, faceSlot, resolveExpr } from '../src/engine/rig-svg.js';
+  const manifest = await (await fetch('../assets/art-manifest.json')).json();
+  const rig = await (await fetch('../' + manifest.characters.rig)).json();
+  document.head.insertAdjacentHTML('beforeend', `<style>${rig.css}</style>`);
+  const K = rig.artScale;
+  const SKINS = [['#F3D0B5', '#E2AB8E'], ['#EDC3A2', '#D9A07F'], ['#D39A6E', '#B97E55'], ['#A8714D', '#8C5A3B'], ['#7E5236', '#65402A']];
+  const HAIRS = [['#3A2A2C', '#55403F'], ['#6A4A3A', '#523729'], ['#C9713F', '#A95A31'], ['#E0B872', '#C49A55'], ['#B8B0AA', '#9A918B']];
+  const $ = (id) => document.getElementById(id);
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  const poseNames = Object.keys(rig.poses), exprNames = Object.keys(rig.expressions);
+  const st = { spec: clone(rig.characters[0]), pose: 'stand', expr: rig.characters[0].expr, held: { L: '', R: '' }, zoom: 1.6, anchors: false, tween: true };
+  let cur = null;          // current pose object (angles) shown
+  let loop = null;
+
+  function heldSvg(id) {
+    if (!id) return '';
+    const [pid, vn] = id.split(':'), p = manifest.props[pid], v = p.variants[vn];
+    return `<image href="../${v.file}" x="${-(v.anchor[0] + p.grip[0]) / K}" y="${-(v.anchor[1] + p.grip[1]) / K}" width="${v.size[0] / K}" height="${v.size[1] / K}"/>`;
+  }
+  function render() {
+    const res = renderCharacter(rig, st.spec, { pose: cur || st.pose, expr: st.expr, held: { L: heldSvg(st.held.L), R: heldSvg(st.held.R) } });
+    const vb = bodyBox(rig, st.spec.body);
+    $('view').style.zoom = st.zoom;
+    $('floor').style.width = (vb[2] * K * st.zoom) + 'px';
+    let dots = '';
+    if (st.anchors) {
+      for (const [k, a] of Object.entries(res.anchors)) {
+        dots += `<div class="dot" title="${k}" style="left:${(a[0] - vb[0]) * K}px;top:${(a[1] - vb[1]) * K}px"></div>`;
+      }
+    }
+    $('view').innerHTML = svgWrap(rig, res, { css: false }) + dots;
+    const nodes = $('view').querySelectorAll('svg *').length;
+    $('info').textContent = `${st.spec.id || 'custom'} · ${st.spec.body} · pose ${st.pose} · ${typeof st.expr === 'string' ? st.expr : 'blink'} · ${nodes} SVG nodes · wear ${Object.entries(st.spec.wear).map(([s, w]) => s + '=' + w).join(', ')}`;
+    buttons();
+  }
+  // Apply a pose object to the mounted SVG by transforms only (what the runtime does per tween step).
+  function applyPose(pose) {
+    const { frames, anchors } = poseFrames(rig.bodies[st.spec.body].skeleton, pose);
+    for (const g of $('view').querySelectorAll('[data-f]')) {
+      const f = g.getAttribute('data-f');
+      if (frames[f]) g.setAttribute('transform', matrixAttr(frames[f]));
+      else if (f.startsWith('held')) g.setAttribute('transform', `translate(${anchors['hand' + f.slice(4)].join(' ')})`);
+      else if (f === 'shadow') g.setAttribute('cx', anchors.feet[0]);
+    }
+  }
+  const lerp = (a, b, t) => (Array.isArray(a) ? a.map((v, i) => lerp(v, b[i] == null ? v : b[i], t)) : (typeof a === 'number' ? a + (b - a) * t : (t < .5 ? a : b)));
+  function lerpPose(a, b, t) {
+    const o = {};
+    for (const k of new Set(Object.keys(a).concat(Object.keys(b)))) {
+      const va = a[k] == null ? b[k] : a[k], vb = b[k] == null ? a[k] : b[k];
+      if (k === 'legL' || k === 'legR' || k === 'armL' || k === 'armR') o[k] = lerp(va.concat(va.length < 4 ? [1] : []), vb.concat(vb.length < 4 ? [1] : []), t);
+      else o[k] = lerp(va, vb, t);
+    }
+    return o;
+  }
+  function setPose(name) {
+    const from = cur || rig.poses[st.pose], to = rig.poses[name];
+    st.pose = name;
+    // Draw order (front arms, legsFront) can change between poses: re-render at the target order, then tween transforms.
+    if (!st.tween || !from) { cur = null; render(); return; }
+    cur = Object.assign({}, from, { front: to.front, legsFront: to.legsFront, anchor: to.anchor }); render();
+    const t0 = performance.now(), D = 240;
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / D), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      applyPose(lerpPose(from, to, e));
+      if (t < 1) requestAnimationFrame(step); else { cur = null; }
+    };
+    requestAnimationFrame(step);
+  }
+  function setExpr(e) { st.expr = e; render(); }
+  function blink() {
+    const svg = $('view').querySelector('[data-slot="eyes"]');
+    if (!svg) return;
+    const e = resolveExpr(rig, st.expr);
+    svg.innerHTML = faceSlot(rig, st.spec, 'eyes', rig.blink);
+    setTimeout(() => { svg.innerHTML = faceSlot(rig, st.spec, 'eyes', e.eyes); }, 130);
+  }
+
+  function btn(parent, label, on, fn, style) {
+    const b = document.createElement('button');
+    b.textContent = label; if (on) b.className = 'on'; if (style) b.style.cssText = style;
+    b.onclick = fn; parent.appendChild(b); return b;
+  }
+  function buttons() {
+    $('cast').innerHTML = ''; $('poses').innerHTML = ''; $('exprs').innerHTML = ''; $('skins').innerHTML = ''; $('hairs').innerHTML = '';
+    rig.characters.forEach((c) => btn($('cast'), c.id, st.spec.id === c.id, () => { st.spec = clone(c); st.expr = c.expr; setup(); render(); }));
+    poseNames.forEach((p) => btn($('poses'), p, st.pose === p, () => setPose(p)));
+    exprNames.forEach((e) => btn($('exprs'), e, st.expr === e, () => setExpr(e)));
+    SKINS.forEach((s) => btn($('skins'), '', st.spec.skin[0] === s[0], () => { st.spec.skin = s; st.spec.id = null; render(); }, `background:${s[0]}`).classList.add('sw'));
+    HAIRS.forEach((h) => btn($('hairs'), '', st.spec.hair.color[0] === h[0], () => { st.spec.hair.color = h; st.spec.id = null; render(); }, `background:${h[0]}`).classList.add('sw'));
+    $('tween').className = st.tween ? 'on' : ''; $('anchors').className = st.anchors ? 'on' : '';
+  }
+  function setup() {
+    const w = $('wear'); w.innerHTML = '';
+    for (const slot of rig.slots) {
+      const l = document.createElement('label');
+      l.textContent = slot;
+      const s = document.createElement('select');
+      s.innerHTML = '<option value="">(none)</option>' + Object.entries(rig.wear).filter(([, v]) => v.slot === slot).map(([id, v]) => `<option value="${id}">${v.label}</option>`).join('');
+      s.value = st.spec.wear[slot] || '';
+      s.onchange = () => { if (s.value) st.spec.wear[slot] = s.value; else delete st.spec.wear[slot]; st.spec.id = null; setup(); render(); };
+      const c = document.createElement('input');
+      c.type = 'color'; c.title = 'recolour --' + slotVar(slot);
+      c.style.cssText = 'width:30px;height:24px;border:0;padding:0;background:none';
+      const item = rig.wear[st.spec.wear[slot]];
+      const cv = (st.spec.colors && st.spec.colors[slotVar(slot)]) || (item && item.colors[slotVar(slot)]);
+      if (cv && /^#[0-9a-f]{6}$/i.test(cv)) c.value = cv;
+      c.oninput = () => { st.spec.colors = Object.assign({}, st.spec.colors, { [slotVar(slot)]: c.value }); render(); };
+      l.appendChild(s); l.appendChild(c); w.appendChild(l);
+    }
+    $('hairStyle').innerHTML = Object.entries(rig.hairStyles).map(([id, h]) => `<option value="${id}">${h.label}</option>`).join('');
+    $('hairStyle').value = st.spec.hair.style;
+    const opts = '<option value="">(nothing)</option>' + Object.entries(manifest.props).flatMap(([id, p]) => Object.keys(p.variants).map((v) => `<option value="${id}:${v}">${id} ${v === 'default' ? '' : v}</option>`)).join('');
+    $('heldL').innerHTML = opts; $('heldR').innerHTML = opts; $('heldL').value = st.held.L; $('heldR').value = st.held.R;
+  }
+  const slotVar = (slot) => ({ top: 'top', bottom: 'bot', over: 'over', back: 'back', hat: 'hat', shoes: 'shoe', face: 'face' })[slot];
+  $('hairStyle').onchange = (e) => { st.spec.hair.style = e.target.value; render(); };
+  $('heldL').onchange = (e) => { st.held.L = e.target.value; render(); };
+  $('heldR').onchange = (e) => { st.held.R = e.target.value; render(); };
+  $('zoom').oninput = (e) => { st.zoom = +e.target.value; render(); };
+  $('tween').onclick = () => { st.tween = !st.tween; buttons(); };
+  $('anchors').onclick = () => { st.anchors = !st.anchors; render(); };
+  $('blink').onclick = blink;
+  let blinkTimer = null;
+  $('autoblink').onclick = (e) => {
+    if (blinkTimer) { clearTimeout(blinkTimer); blinkTimer = null; e.target.className = ''; return; }
+    e.target.className = 'on';
+    const next = () => { blinkTimer = setTimeout(() => { blink(); next(); }, 3000 + Math.random() * 3000); };
+    next();
+  };
+  const toggleLoop = (el, a, b, ms) => {
+    if (loop) { clearInterval(loop); loop = null; document.querySelectorAll('#waveloop,#walkloop').forEach((x) => { x.className = ''; }); return; }
+    el.className = 'on'; let i = 0; loop = setInterval(() => setPose(i++ % 2 ? b : a), ms);
+  };
+  $('waveloop').onclick = (e) => toggleLoop(e.target, 'wave', 'wave2', 300);
+  $('walkloop').onclick = (e) => toggleLoop(e.target, 'walk-a', 'walk-b', 320);
+  $('gridbtn').onclick = grid;
+  function grid() {
+    const g = $('grid');
+    if (g.style.display === 'flex') { g.style.display = 'none'; $('view').style.display = ''; $('floor').style.display = ''; return; }
+    g.style.display = 'flex'; $('view').style.display = 'none'; $('floor').style.display = 'none';
+    let h = '';
+    for (const p of poseNames) for (const e of exprNames) {
+      h += `<div class="cell">${svgWrap(rig, renderCharacter(rig, st.spec, { pose: p, expr: e }), { css: false })}${p} · ${e}</div>`;
+    }
+    g.innerHTML = h;
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+    const pi = poseNames.indexOf(st.pose), ei = exprNames.indexOf(typeof st.expr === 'string' ? st.expr : 'neutral');
+    if (e.key === 'ArrowRight') setPose(poseNames[(pi + 1) % poseNames.length]);
+    else if (e.key === 'ArrowLeft') setPose(poseNames[(pi + poseNames.length - 1) % poseNames.length]);
+    else if (e.key === 'ArrowDown') setExpr(exprNames[(ei + 1) % exprNames.length]);
+    else if (e.key === 'ArrowUp') setExpr(exprNames[(ei + exprNames.length - 1) % exprNames.length]);
+    else if (e.key === 'b' || e.key === 'B') blink();
+    else if (e.key === 'g' || e.key === 'G') grid();
+    else return;
+    e.preventDefault();
+  });
+  setup();
+  render();
+  document.body.dataset.boot = 'ready';
+</script>

@@ -9,6 +9,8 @@
 //   (tick the Lamport clock, next op id), check meaning with `validate`
 //   (returns null if the op makes no sense, e.g. the egg is already eaten),
 //   then hand the envelope to `submit`. Returns the envelope, or null.
+//   Intent ops (`inc`) are resolved by whoever sequences them: here in solo
+//   play, on the host in two-iPad play (ops.js resolveIntent).
 //
 // submit(env) decides where a local op goes. It returns true if accepted:
 //   - solo (default): apply it right here.
@@ -29,7 +31,7 @@
 //   joining the host's town). clockState() gives what to save alongside.
 
 import { createClock, createIds } from './ids.js';
-import { makeEnvelope, validate } from './ops.js';
+import { makeEnvelope, resolveIntent, validate } from './ops.js';
 import { apply, createWorld } from './world.js';
 
 export function createStore({ device, state = createWorld(), lamport = 0, counter = 0, now = () => Date.now() } = {}) {
@@ -38,17 +40,20 @@ export function createStore({ device, state = createWorld(), lamport = 0, counte
   const listeners = new Set();
   let seen = new Set();
   let submit = localApply;
+  let last = null;            // the envelope most recently committed
 
   function commit(env) {
     if (seen.has(env.id)) return false;
     seen.add(env.id);
+    last = env;
     clock.observe(env.lamport);
     state = apply(state, env);
     for (const fn of Array.from(listeners)) fn(state, env);
     return true;
   }
 
-  function localApply(env) { return commit(env); }
+  // Solo play sequences its own ops: resolve intents (inc) here.
+  function localApply(env) { return commit(resolveIntent(state, env)); }
 
   const store = {
     device,
@@ -63,10 +68,13 @@ export function createStore({ device, state = createWorld(), lamport = 0, counte
       return makeEnvelope(op, args, { id: ids.next(), device, lamport: clock.tick(), t: now() });
     },
 
+    /** Returns the committed envelope (resolved, and re-stamped on a host), the sent intent (guest), or null. */
     dispatch(op, args) {
       const env = store.makeOp(op, args);
       if (validate(state, env)) return null;
-      return submit(env) ? env : null;
+      last = null;
+      if (!submit(env)) return null;
+      return last && last.id === env.id ? last : env;
     },
 
     receive(env) { return commit(env); },

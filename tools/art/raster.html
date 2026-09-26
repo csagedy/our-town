@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Build-time rasterizer page, driven by tools/art/build.mjs over the
+     DevTools protocol (tools/harness.mjs). Not shipped. -->
+<meta charset="utf-8">
+<title>art raster</title>
+<body style="margin:0;background:#fff">
+<div id="work" style="position:absolute;left:-99999px;top:0"></div>
+<script>
+  // job: { svg, unit: px per SVG user unit, crop: {pad, clamp:[x,y,w,h]} | null,
+  //        formats: ['webp', 'png'], quality, opaque }
+  // Returns { box: [x, y, w, h] in SVG units, px: [W, H], data: {fmt: base64} }.
+  window.rasterize = async function (job) {
+    const work = document.getElementById('work');
+    work.innerHTML = job.svg;
+    const svg = work.querySelector('svg');
+    let vb = svg.getAttribute('viewBox').split(/[\s,]+/).map(Number);
+    if (job.crop) {
+      const b = svg.querySelector('#art').getBBox();
+      const p = job.crop.pad;
+      let x0 = b.x - p, y0 = b.y - p, x1 = b.x + b.width + p, y1 = b.y + b.height + p;
+      if (job.crop.clamp) {
+        const [cx, cy, cw, ch] = job.crop.clamp;
+        x0 = Math.max(x0, cx); y0 = Math.max(y0, cy); x1 = Math.min(x1, cx + cw); y1 = Math.min(y1, cy + ch);
+      }
+      // snap to whole output pixels so placement is exact
+      const u = job.unit;
+      x0 = Math.floor(x0 * u) / u; y0 = Math.floor(y0 * u) / u; x1 = Math.ceil(x1 * u) / u; y1 = Math.ceil(y1 * u) / u;
+      vb = [x0, y0, x1 - x0, y1 - y0];
+    }
+    const W = Math.round(vb[2] * job.unit), H = Math.round(vb[3] * job.unit);
+    svg.setAttribute('viewBox', vb.join(' '));
+    svg.setAttribute('width', W);
+    svg.setAttribute('height', H);
+    const text = new XMLSerializer().serializeToString(svg);
+    work.innerHTML = '';
+    const url = URL.createObjectURL(new Blob([text], { type: 'image/svg+xml' }));
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    if (job.opaque) { g.fillStyle = job.opaque; g.fillRect(0, 0, W, H); }
+    g.drawImage(img, 0, 0, W, H);
+    URL.revokeObjectURL(url);
+    const data = {};
+    for (const fmt of job.formats) {
+      const q = fmt === 'webp' ? job.quality : undefined;
+      data[fmt] = c.toDataURL('image/' + fmt, q).split(',')[1];
+    }
+    return { box: vb, px: [W, H], data };
+  };
+  document.body.dataset.boot = 'ready';
+</script>

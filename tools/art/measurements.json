@@ -1,0 +1,95 @@
+{
+ "throttle": 5,
+ "runs": 5,
+ "rooms": {
+  "kitchen": [
+   {
+    "layer": "back",
+    "svgKB": 54.4,
+    "svgElements": 637,
+    "webp1.5KB": 211.2,
+    "png1.5KB": 468.7,
+    "px1.5": "2460x1800",
+    "decodedMB1.5": 16.9,
+    "webp2KB": 283.8,
+    "png2KB": 665.9,
+    "px2": "3280x2400",
+    "decodedMB2": 30,
+    "svgRasterMs": 214.5,
+    "webp1.5DecodeMs": 108.8,
+    "webp2DecodeMs": 158
+   },
+   {
+    "layer": "counter",
+    "svgKB": 18.7,
+    "svgElements": 216,
+    "webp1.5KB": 55.8,
+    "png1.5KB": 115.5,
+    "px1.5": "1546x816",
+    "decodedMB1.5": 4.8,
+    "webp2KB": 75.5,
+    "png2KB": 164.1,
+    "px2": "2061x1087",
+    "decodedMB2": 8.5,
+    "svgRasterMs": 37.7,
+    "webp1.5DecodeMs": 44.2,
+    "webp2DecodeMs": 60.2
+   },
+   {
+    "layer": "mid",
+    "svgKB": 10.5,
+    "svgElements": 115,
+    "webp1.5KB": 26.5,
+    "png1.5KB": 49,
+    "px1.5": "1281x523",
+    "decodedMB1.5": 2.6,
+    "webp2KB": 34.9,
+    "png2KB": 71.1,
+    "px2": "1708x696",
+    "decodedMB2": 4.5,
+    "svgRasterMs": 18.7,
+    "webp1.5DecodeMs": 27,
+    "webp2DecodeMs": 39
+   },
+   {
+    "layer": "front",
+    "svgKB": 7.4,
+    "svgElements": 82,
+    "webp1.5KB": 26.8,
+    "png1.5KB": 63.4,
+    "px1.5": "2048x578",
+    "decodedMB1.5": 4.5,
+    "webp2KB": 35.2,
+    "png2KB": 92.2,
+    "px2": "2731x770",
+    "decodedMB2": 8,
+    "svgRasterMs": 16.5,
+    "webp1.5DecodeMs": 47.6,
+    "webp2DecodeMs": 81.8
+   }
+  ]
+ },
+ "props": {
+  "sprites": 41,
+  "svgKB": 64.8,
+  "webpKB": 142.1,
+  "avgSvgElements": 7,
+  "svgRasterMsTotal": 247.3,
+  "webpDecodeMsTotal": 175.1
+ },
+ "characters": {
+  "charactersMounted": 8,
+  "mountAndPaintMs": 29.9,
+  "domNodesPerCharacter": 120,
+  "domNodesAll8": 916,
+  "posing8FrameMs": 16.9,
+  "posing8JsMsPerFrame": 1.23,
+  "expr8FrameMs": 16.9,
+  "svgBytesPerCharacter": 9597,
+  "combos": {
+   "poses": 11,
+   "expressions": 13,
+   "outfitPieces": 18
+  }
+ }
+}

@@ -5,9 +5,10 @@
     python3 tools/build.py icons      # just the home-screen icons
     python3 tools/build.py precache --check   # exit 1 if sw.js's precache block is stale
 
-Steps (`art` is still a stub owned by a later bead):
+Steps:
   icons     assets/icons/icon-{180,192,512}.png          (placeholder, P1.1)
-  art       palette-driven SVG rooms and sprites          (P1.12)
+  art       rig.json, room layer + prop WebPs, art-manifest.json, contact sheet
+            (node tools/art/build.mjs, headless Chrome; P1.12)
   precache  the VERSION + FILES block in sw.js (content hash) (P1.2)
 
 Each step is a function taking ROOT and returning a list of files it wrote, so
@@ -26,8 +27,22 @@ def step_icons(root):
 
 
 def step_art(root):
-    print('  art: not implemented yet (P1.12)')
-    return []
+    """Rig data, room layer and prop WebPs, art-manifest.json and the contact
+    sheet, from the Node sources in tools/art/ (needs node 22+ and Chrome)."""
+    import subprocess
+    proc = subprocess.run(['node', os.path.join(root, 'tools', 'art', 'build.mjs')],
+                          cwd=root, capture_output=True, text=True)
+    if proc.returncode != 0:
+        sys.stderr.write(proc.stdout + proc.stderr)
+        raise SystemExit('art step failed')
+    wrote = []
+    for line in proc.stdout.splitlines():
+        line = line.strip()
+        if line.startswith('wrote '):
+            wrote.append(os.path.join(root, line[len('wrote '):]))
+        elif line:
+            print('  ' + line)
+    return wrote
 
 
 # What ships to the iPad. Everything else in the repo (archive/, art-bakeoff/,

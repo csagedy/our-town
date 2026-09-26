@@ -179,7 +179,7 @@ export function renderCharacter(rig, spec, opts) {
 /** viewBox [x, y, w, h] (art units) that fits every standing pose of a body. */
 export function bodyBox(rig, bodyId) {
   const h = rig.bodies[bodyId].skeleton.height;
-  return [-Math.round(h * 0.62), -Math.round(h * 1.12), Math.round(h * 1.24), Math.round(h * 1.2)];
+  return [-Math.round(h * 0.62), -Math.round(h * 1.2), Math.round(h * 1.24), Math.round(h * 1.28)];
 }
 
 /** Standalone <svg> for a render result: sized so 1 art unit = artScale CSS px.

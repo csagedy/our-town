@@ -92,6 +92,19 @@ const REDUCERS = {
 
   set(d, a, s) { write(d.edit(a.id, s), a.path, a.value, s); },
 
+  // A counter intent (ops.js). Resolved (args.value set by the store or the
+  // host), it is an LWW write of that value. An unresolved one (a merged
+  // peer log from a build that never sequenced it) adds to what is here.
+  inc(d, a, s) {
+    const e = d.edit(a.id, s);
+    let value = a.value;
+    if (typeof value !== 'number') {
+      const cur = e.props[a.path.slice(6)];
+      value = (typeof cur === 'number' && isFinite(cur) ? cur : 0) + a.by;
+    }
+    write(e, a.path, value, s);
+  },
+
   combine(d, a, s) {
     for (const id of a.ids) write(d.edit(id, s), 'deleted', true, s);
     spawnInto(d, a.resultId, a.resultKind, a, a.props, s);

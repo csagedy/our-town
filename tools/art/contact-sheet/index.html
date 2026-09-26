@@ -1,0 +1,159 @@
+<!doctype html>
+<!-- Contact sheet of the whole starter art set. It renders from the SHIPPED
+     assets (assets/art-manifest.json, the room/prop WebPs, rig.json) through
+     the runtime assembler src/engine/rig-svg.js, so it doubles as a check that
+     the delivery format composes. tools/art/build.mjs screenshots each
+     <section> into tools/art/contact-sheet/<id>.png. Serve the repo
+     (python3 tools/serve.py) and open /tools/art/contact-sheet/ to view it. -->
+<meta charset="utf-8">
+<title>art contact sheet</title>
+<style>
+  body { margin: 0; background: #FBF3E8; font: 600 15px/1.2 "Avenir Next", Helvetica, sans-serif; color: #3D2C29; }
+  section { padding: 18px 24px 26px; border-bottom: 3px solid #EFE4D6; }
+  h2 { margin: 0 0 10px; font-size: 20px; }
+  .row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 10px; }
+  .cell { text-align: center; font-size: 12px; font-weight: 500; }
+  .cell svg, .cell img { display: block; margin: 0 auto 2px; }
+  .room { position: relative; overflow: hidden; }
+  .room > * { position: absolute; }
+  .prop { position: relative; display: inline-block; }
+  .prop .dot { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 3px; background: #DC6B6E; }
+  .base { border-bottom: 2px dashed #C9BDB3; }
+  .sw { width: 44px; height: 30px; border-radius: 6px; border: 2px solid #3D2C29; }
+</style>
+<body>
+<section id="room"><h2>Room depth layers (kitchen: back, counter, mid, front) with the cast between them</h2><div id="room-view"></div></section>
+<section id="poses"><h2>Poses (2-segment limbs) × cast</h2><div id="pose-rows"></div></section>
+<section id="faces"><h2>Expressions × cast</h2><div id="face-rows"></div></section>
+<section id="outfits"><h2>Outfit pieces (wear slots) on each body</h2><div id="outfit-rows"></div></section>
+<section id="props"><h2>Starter props and tap/bite variants (red dot = anchor, the resting point)</h2><div class="row" id="prop-row"></div></section>
+<section id="layers"><h2>Room layers, separately</h2><div class="row" id="layer-row"></div></section>
+<script type="module">
+  import { renderCharacter, svgWrap, bodyBox } from '../../../src/engine/rig-svg.js';
+  const A = '../../../';
+  const manifest = await (await fetch(A + 'assets/art-manifest.json')).json();
+  const rig = await (await fetch(A + manifest.characters.rig)).json();
+  const K = rig.artScale;
+  const cast = Object.fromEntries(rig.characters.map((c) => [c.id, c]));
+  const P = manifest.props;
+  document.head.insertAdjacentHTML('beforeend', `<style>${rig.css}</style>`);
+
+  /** SVG <image> of a prop variant, placed so its grip sits at the hand (art units). */
+  function held(id, variant) {
+    const p = P[id], v = p.variants[variant || p.default];
+    const x = -(v.anchor[0] + p.grip[0]) / K, y = -(v.anchor[1] + p.grip[1]) / K;
+    return `<image href="${A + v.file}" x="${x}" y="${y}" width="${v.size[0] / K}" height="${v.size[1] / K}"/>`;
+  }
+  /** Character <svg> positioned in a world-unit container so local point `at` (an anchor name) lands on [wx, wy]. */
+  function placed(spec, opts, wx, wy, origin) {
+    const res = renderCharacter(rig, spec, opts);
+    const vb = bodyBox(rig, spec.body);
+    const a = opts.anchor ? res.anchors[opts.anchor] : [0, 0];
+    const left = wx - (a[0] - vb[0]) * K - origin[0], top = wy - (a[1] - vb[1]) * K - origin[1];
+    return `<div style="left:${left}px;top:${top}px">${svgWrap(rig, res, { css: false })}</div>`;
+  }
+  const propImg = (id, variant, wx, wy, origin) => {
+    const v = P[id].variants[variant || P[id].default];
+    return `<img src="${A + v.file}" style="left:${wx - v.anchor[0] - origin[0]}px;top:${wy - v.anchor[1] - origin[1]}px;width:${v.size[0]}px;height:${v.size[1]}px">`;
+  };
+
+  // ---- room mockup ----
+  {
+    const room = manifest.rooms.kitchen, c = room.canvas, o = [c.x, c.y];
+    const surf = Object.fromEntries(room.surfaces.map((s) => [s.id, s]));
+    const seat = Object.fromEntries(room.seats.map((s) => [s.id, s]));
+    const layerImg = (L) => `<img src="${A + L.file}" style="left:${L.x - c.x}px;top:${L.y - c.y}px;width:${L.w}px;height:${L.h}px">`;
+    // things drawn after each layer: [layer id, html]
+    const after = { back: '', counter: '', mid: '', front: '' };
+    after.counter += placed(cast.grownup, { pose: 'wave', expr: 'happy' }, 820, 800, o);          // behind the island
+    after.mid += propImg('cupcake', 'whole', 880, surf['island-top'].y, o) + propImg('mug', 'full', 960, surf['island-top'].y, o);
+    after.counter += propImg('cookie-jar', 'closed', 1040, surf['back-counter'].y, o);
+    after.mid += placed(cast.grandpa, { pose: Object.assign({}, rig.poses.sit, { armR: [20, -96, 0] }), expr: 'yum', anchor: 'seat', held: { R: held('mug', 'full') } }, seat['chair-2'].at[0], seat['chair-2'].at[1], o);
+    after.mid += placed(cast.girl9, { pose: 'hold', expr: 'laughing', held: { R: held('cake-slice'), L: '' } }, 760, 930, o);
+    after.mid += placed(cast.boy5, { pose: 'cheer', expr: 'wheee' }, 1010, 948, o);
+    after.back += propImg('teddy', null, 330, surf['shelf-l3'].y, o);
+    after.front += propImg('ball', null, 1180, 975, o);
+    const html = room.layers.map((L) => layerImg(L) + (after[L.id] || '')).join('');
+    const scale = 1100 / c.w;
+    document.getElementById('room-view').innerHTML = `<div class="room" style="width:${c.w}px;height:${c.h}px;zoom:${scale}">${html}
+      <div style="left:${-c.x}px;top:${-c.y}px;width:1440px;height:1000px;outline:3px dashed rgba(61,44,41,.35)"></div></div>`;
+  }
+
+  // ---- poses ----
+  {
+    const exprFor = { stand: 'happy', wave: 'happy', wave2: 'laughing', hold: 'surprised', 'hold-up': 'wheee', cheer: 'laughing', sing: 'singing', sit: 'yum', 'walk-a': 'happy', 'walk-b': 'happy', lie: 'sleepy' };
+    let h = '';
+    for (const c of rig.characters) {
+      h += '<div class="row base">';
+      for (const pose of Object.keys(rig.poses)) {
+        const opts = { pose, expr: exprFor[pose] || 'neutral' };
+        if (pose === 'hold') opts.held = { R: held('cupcake') };
+        if (pose === 'hold-up') opts.held = { L: held('gift', 'closed') };
+        const res = renderCharacter(rig, c, opts);
+        const vb = bodyBox(rig, c.body);
+        const box = pose === 'lie' ? [vb[0] - vb[3] * .3, vb[1], vb[2] + vb[3] * .6, vb[3]] : vb;
+        h += `<div class="cell">${svgWrap(rig, res, { css: false, viewBox: box })}${pose}</div>`;
+      }
+      h += '</div>';
+    }
+    document.getElementById('pose-rows').innerHTML = `<div style="zoom:.62">${h}</div>`;
+  }
+
+  // ---- faces (head crops) ----
+  {
+    let h = '';
+    for (const c of rig.characters) {
+      const sk = rig.bodies[c.body].skeleton, hd = rig.bodies[c.body].head;
+      h += '<div class="row">';
+      for (const e of Object.keys(rig.expressions)) {
+        const res = renderCharacter(rig, c, { pose: 'stand', expr: e, shadow: false });
+        const cy = res.anchors.head[1];
+        const box = [-hd.rx - 40, cy - hd.ry - 70, hd.rx * 2 + 80, hd.ry * 2 + 110];
+        h += `<div class="cell">${svgWrap(rig, res, { css: false, viewBox: box, clip: true })}${e}</div>`;
+      }
+      h += '</div>';
+    }
+    document.getElementById('face-rows').innerHTML = `<div style="zoom:.9">${h}</div>`;
+  }
+
+  // ---- outfits ----
+  {
+    const base = (body) => ({ body, skin: ['#D39A6E', '#B97E55'], hair: { style: 'short', color: ['#6A4A3A', '#523729'] }, sock: '#FBF3E8', wear: {} });
+    let h = '';
+    for (const body of Object.keys(rig.bodies)) {
+      h += '<div class="row base">';
+      const sets = [['bare', {}]].concat(Object.keys(rig.wear).map((w) => [w, { [rig.wear[w].slot]: w }]));
+      for (const [name, wear] of sets) {
+        const spec = Object.assign(base(body), { wear });
+        if (!wear.top) spec.wear.top = name === 'bare' ? undefined : 'tee-star';
+        if (!spec.wear.top) delete spec.wear.top;
+        const res = renderCharacter(rig, spec, { pose: name.includes('cape') ? 'walk-a' : 'stand', expr: 'happy' });
+        h += `<div class="cell">${svgWrap(rig, res, { css: false, clip: true })}${name}</div>`;
+      }
+      h += '</div>';
+    }
+    document.getElementById('outfit-rows').innerHTML = `<div style="zoom:.48">${h}</div>`;
+  }
+
+  // ---- props ----
+  {
+    let h = '';
+    const S = 1.4;
+    for (const [id, p] of Object.entries(P)) {
+      for (const [vn, v] of Object.entries(p.variants)) {
+        h += `<div class="cell"><div class="prop" style="width:${v.size[0] * S}px;height:${v.size[1] * S}px"><img src="${A + v.file}" style="width:100%;height:100%">`
+          + `<div class="dot" style="left:${v.anchor[0] * S}px;top:${v.anchor[1] * S}px"></div></div>${id}${vn === 'default' ? '' : ' · ' + vn}</div>`;
+      }
+    }
+    document.getElementById('prop-row').innerHTML = h;
+  }
+
+  // ---- layers ----
+  {
+    const room = manifest.rooms.kitchen;
+    document.getElementById('layer-row').innerHTML = room.layers.map((L) =>
+      `<div class="cell"><img src="${A + L.file}" style="width:${L.w * .36}px;height:${L.h * .36}px;background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 0 0/16px 16px">${L.id} · ${L.px.join('x')} px · ${(L.bytes / 1024).toFixed(0)} KB · baseline y ${L.baseline}</div>`).join('');
+  }
+  await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
+  document.body.dataset.boot = 'ready';
+</script>
