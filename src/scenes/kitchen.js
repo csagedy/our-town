@@ -80,8 +80,11 @@ export function spawnKitchenItems(store, room) {
  */
 export function textLabels(catalog, manifest) {
   return {
-    of: (e) => (e.props && typeof e.props.name === 'string' && e.props.name) || catalog.labelOf(e.kind)
-      || (manifest.props && manifest.props[e.kind] && manifest.props[e.kind].label) || null,
+    of: (e) => {
+      const t = (e.props && typeof e.props.name === 'string' && e.props.name) || catalog.labelOf(e.kind)
+        || (manifest.props && manifest.props[e.kind] && manifest.props[e.kind].label) || '';
+      return t ? t.charAt(0).toUpperCase() + t.slice(1) : null;
+    },
     say(text, el) {
       tween.squish(el, { amount: 0.5, duration: 260 });
       speech.say(text, { interrupt: true }).then((ok) => { if (!ok) sfx.play('chime', { gain: 0.6 }); });
@@ -89,8 +92,8 @@ export function textLabels(catalog, manifest) {
   };
 }
 
-/** Mount the kitchen. opts: { input, store, manifest }. Resolves once it is up. */
-export async function mountKitchen(stage, { input, store, manifest }) {
+/** Mount the kitchen. opts: { input, store, manifest, carry (P1.14 pocket + travel hooks) }. Resolves once it is up. */
+export async function mountKitchen(stage, { input, store, manifest, carry = null }) {
   useArtSprites(manifest);                 // art-only kinds (croissant, bread...)
   const catalog = await loadCatalog();     // never rejects
   const removeSource = addSpriteSource((kind) => (catalog.has(kind) ? catalog.sprite(kind) : null));
@@ -98,7 +101,7 @@ export async function mountKitchen(stage, { input, store, manifest }) {
   const fx = createFx(room.fxLayer);
   const behaviors = createBehaviors({ catalog, store });
   const chars = await mountCharacters({ store, input, behaviors, room, sfx, speech });   // null without the rig
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: chars ? chars.hooks : behaviors, labels: textLabels(catalog, manifest) });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: carry ? carry.hooks(chars ? chars.hooks : behaviors, room) : (chars ? chars.hooks : behaviors), labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
   if (!inRoom(store.state, room.id).length) {

@@ -5,11 +5,12 @@
 // A character is an entity of kind 'char':
 //
 //   props: { cast: 'girl9', body: 'kid9', skin: [c, shade], hair: {style, color: [c, shade]},
-//            facialHair, lashes, blush, sock,
+//            facialHair, lashes, blush, sock, freckles, eyes, brows,   // (P1.15 maker options)
+//            name: 'Maya',                     // optional, Zoe's text layer only
 //            wear: { top, bottom, shoes },     // the clothes it is drawn in (not entities)
 //            colors: { shoe: '#..' },          // slot colour overrides (docs/rig.md section 4)
 //            expr: 'happy',                    // its current expression (set op)
-//            pose: 'stand' | 'sit' | 'lie',    // set op; a drop on a seat or bed sets it
+//            pose: 'stand' | 'sit' | 'sit-cross' | 'lie',   // set op; a drop on a seat, rug or bed sets it
 //            seat: 'stool-1' | null,           // the seat it is on (draw order, one per seat)
 //            raise: 'L' | 'R' | null,          // a held item is shown off (hold-up), set op
 //            taps: n }                         // inc op: each tap plays the next reaction on every iPad
@@ -33,7 +34,7 @@ export const wearSlotName = (slot) => 'wear-' + slot;
 export const REACTIONS = ['giggle', 'wave', 'jump', 'happy'];
 export const PHRASES = ['Hi!', 'Yay!', 'Hello, friend!', 'Let’s play!', 'I’m hungry!', 'Wheee!', 'Yummy!', 'I love you!'];
 
-const APPEARANCE = ['body', 'skin', 'hair', 'facialHair', 'lashes', 'blush', 'sock', 'wear', 'colors'];
+const APPEARANCE = ['body', 'skin', 'hair', 'facialHair', 'lashes', 'blush', 'freckles', 'eyes', 'brows', 'sock', 'wear', 'colors'];
 const r1 = (v) => Math.round(v * 10) / 10;
 
 /** Is this a wearable piece kind (a rig wear piece in a removable slot)? Returns its slot or null. */
@@ -65,6 +66,10 @@ export function castProps(rig, castId) {
     expr: c.expr || 'happy', pose: 'stand', seat: null, raise: null, taps: 0,
   };
   if (c.facialHair) props.facialHair = c.facialHair;
+  if (c.freckles) props.freckles = true;
+  if (c.eyes) props.eyes = c.eyes;
+  if (c.brows) props.brows = c.brows;
+  if (c.name) props.name = c.name;          // Zoe's text layer (name tag) only
   return { props, pieces };
 }
 
@@ -94,6 +99,7 @@ export function specOf(props, worn = {}) {
     body: props.body || 'kid9', skin: props.skin || ['#EDC3A2', '#D9A07F'],
     hair: props.hair || { style: 'short', color: ['#6A4A3A', '#55403F'] },
     facialHair: props.facialHair, lashes: !!props.lashes, blush: !!props.blush, sock: props.sock,
+    freckles: !!props.freckles, eyes: props.eyes || null, brows: props.brows || null,
     wear, colors, expr: props.expr || 'neutral',
   };
 }
@@ -200,16 +206,19 @@ export function anchorOffset(rig, bodyId, pose, name) {
 }
 
 /**
- * Seats in a room definition, normalized: [{id, x, y, depth, lie, x0, x1}].
- * A seat whose id starts with bed/sofa/couch/mat is for lying down. Pure.
+ * Seats in a room definition, normalized: [{id, x, y, depth, lie, pose, x0, x1}].
+ * A seat whose id starts with bed/sofa/couch/mat/nap is for lying down; one
+ * starting with rug/carpet/circle is for sitting criss-cross on the floor
+ * (circle time). `pose` is the pose a character takes there. Pure.
  */
 export function normalizeSeats(list = []) {
   return list.map((s, i) => {
     const at = s.at || [s.x, s.y];
     const id = s.id || 'seat' + i;
     const lie = s.lie != null ? !!s.lie : /^(bed|sofa|couch|mat|nap)/.test(id);
+    const pose = s.pose || (lie ? 'lie' : /^(rug|carpet|circle)/.test(id) ? 'sit-cross' : 'sit');
     const half = s.half != null ? s.half : lie ? 110 : 44;
-    return { id, x: at[0], y: at[1], depth: s.depth != null ? s.depth : at[1], lie, x0: s.x0 != null ? s.x0 : at[0] - half, x1: s.x1 != null ? s.x1 : at[0] + half };
+    return { id, x: at[0], y: at[1], depth: s.depth != null ? s.depth : at[1], lie, pose, x0: s.x0 != null ? s.x0 : at[0] - half, x1: s.x1 != null ? s.x1 : at[0] + half };
   });
 }
 
@@ -242,7 +251,7 @@ export function tasteOf(tags = []) {
 /** Which reactions a tap cycles through in a pose. Pure. */
 export function reactionsFor(pose) {
   if (pose === 'lie') return ['sleepy'];
-  if (pose === 'sit') return ['giggle', 'wave', 'happy'];
+  if (pose && pose.indexOf('sit') === 0) return ['giggle', 'wave', 'happy'];
   return REACTIONS;
 }
 
@@ -256,7 +265,7 @@ export function spawnCharacter(store, rig, castId, where) {
   const id = store.newId();
   let x = where.x, y = where.y;
   if (where.seat) {
-    props.pose = where.seat.lie ? 'lie' : 'sit';
+    props.pose = where.seat.pose || (where.seat.lie ? 'lie' : 'sit');
     props.seat = where.seat.id;
     x = where.seat.x; y = where.seat.y;
     if (where.seat.lie) props.expr = 'sleepy';

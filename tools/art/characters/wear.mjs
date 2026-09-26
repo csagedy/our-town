@@ -235,4 +235,195 @@ export const WEAR = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// P1.15: more pieces for the Character Maker and the 12-character cast
+// (construction worker, chef, performer, grandparents, a headscarf).
+// ---------------------------------------------------------------------------
+const tee = (b) => { const T = b.torso; return { t: rel(b, T.top), h: rel(b, T.hem), T }; };
+Object.assign(WEAR, {
+  'tee-dots': {
+    slot: 'top', label: 'polka-dot tee', colors: { top: P.rose, 'top-sh': P.roseDeep, 'top-2': P.cream },
+    gen: (b) => {
+      const { t, h, T } = tee(b);
+      const dots = [[-.55, .3], [.2, .22], [.6, .5], [-.2, .55], [-.62, .8], [.3, .8], [0, .38]]
+        .map(([x, y]) => `<circle cx="${f(x * T.bw)}" cy="${f(t + (h - t) * y)}" r="${f(Math.max(4, T.tw * .12))}"/>`).join('');
+      return {
+        torso: `<path class="top" d="${torsoPath(t, h, T.tw, T.bw)}"/><g class="n" style="fill:var(--top-2)">${dots}</g><path class="d" d="M-16 ${t} Q0 ${t + 14} 16 ${t}"/>`,
+        arm: sleeveShort(b, 'top'),
+      };
+    },
+  },
+  hoodie: {
+    slot: 'top', label: 'hoodie', colors: { top: P.teal, 'top-sh': P.tealDeep, 'top-2': P.cream },
+    gen: (b) => {
+      const { t, h, T } = tee(b);
+      const pw = T.bw * .55, py = h - (h - t) * .38;
+      return {
+        torso: `<path class="top-sh" d="M${-T.tw - 10} ${t + 14} Q${-T.tw} ${t - 20} 0 ${t - 18} Q${T.tw} ${t - 20} ${T.tw + 10} ${t + 14}Z"/>`
+          + `<path class="top" d="${torsoPath(t, h + 4, T.tw, T.bw + 3)}"/>`
+          + `<path class="top-sh" d="M${f(-pw)} ${f(py)} L${f(pw)} ${f(py)} L${f(pw + 8)} ${f(h - 4)} L${f(-pw - 8)} ${f(h - 4)}Z"/>`
+          + `<path class="d" d="M-10 ${t + 6} L-12 ${t + 36} M10 ${t + 6} L12 ${t + 36}"/><circle class="top-2 thin" cx="-12" cy="${t + 38}" r="4"/><circle class="top-2 thin" cx="12" cy="${t + 38}" r="4"/>`
+          + `<rect class="top-sh" x="${-T.bw - 3}" y="${h - 8}" width="${2 * T.bw + 6}" height="12" rx="5"/>`,
+        arm: sleeveLong(b, 'top', 'top-sh'),
+      };
+    },
+  },
+  'chef-coat': {
+    slot: 'top', label: 'chef coat', colors: { top: P.white, 'top-sh': P.oat, 'top-2': P.ink },
+    gen: (b) => {
+      const { t, h, T } = tee(b);
+      const btn = (x) => [0.3, 0.52, 0.74].map((k) => `<circle class="n" style="fill:var(--top-2)" cx="${f(x)}" cy="${f(t + (h - t) * k)}" r="3.6"/>`).join('');
+      return {
+        torso: `<path class="top" d="${torsoPath(t, h + 8, T.tw, T.bw + 4)}"/>`
+          + `<path class="d" d="M${f(-T.tw * .5)} ${t + 2} Q${f(T.tw * .1)} ${f(t + (h - t) * .3)} ${f(T.tw * .35)} ${h + 6}"/>`
+          + btn(-T.tw * .42) + btn(T.tw * .42)
+          + `<rect class="top-sh" x="${-b.neck[0] - 6}" y="${t - 8}" width="${2 * b.neck[0] + 12}" height="14" rx="6"/>`,
+        arm: sleeveLong(b, 'top', 'top-sh'),
+      };
+    },
+  },
+  'sparkle-top': {
+    slot: 'top', label: 'sparkly show top', colors: { top: P.plum, 'top-sh': P.plumDeep, 'top-2': P.butter },
+    gen: (b) => {
+      const { t, h, T } = tee(b);
+      const stars = [[-.5, .3, 9], [.35, .24, 7], [.1, .6, 11], [-.3, .75, 6], [.6, .7, 8]]
+        .map(([x, y, r]) => `<path class="top-2 thin" d="${star(f(x * T.bw), f(t + (h - t) * y), r * (T.tw / 44), r * .45 * (T.tw / 44))}"/>`).join('');
+      const sl = sleeveShort(b, 'top', 0.45);
+      const r = b.armR + 10;
+      sl.upper = `<path class="top" d="${scallop(0, 0, r, r * .8, 8, 4)}"/>`;
+      return {
+        torso: `<path class="top" d="${torsoPath(t, h, T.tw, T.bw)}"/>${stars}<path class="d" d="M-18 ${t} Q0 ${t + 18} 18 ${t}"/>`,
+        arm: sl,
+      };
+    },
+  },
+  'safety-vest': {
+    slot: 'over', label: 'safety vest', colors: { over: '#EE9A55', 'over-sh': P.terraDeep, 'over-2': P.cream },
+    gen: (b) => {
+      const { t, h, T } = tee(b);
+      const sw = T.bw + 4, gap = T.tw * .34, y1 = f(t + (h - t) * .5), y2 = f(t + (h - t) * .72);
+      const side = (s) => `<path class="over" d="M${s * gap} ${t - 2} L${s * (T.tw + 6)} ${t + 4} Q${s * (sw + 8)} ${t + 30} ${s * sw} ${h - 8} Q${s * sw} ${h + 4} ${s * (sw - 10)} ${h + 4} L${s * (gap - 2)} ${h + 4}Z"/>`;
+      const band = (y) => [-1, 1].map((s) => `<rect class="over-2 thin" x="${s < 0 ? -sw + 1 : gap - 1}" y="${y}" width="${f(sw - gap)}" height="10" rx="3"/>`).join('');
+      return { torso: side(-1) + side(1) + band(y1) + band(y2) };
+    },
+  },
+  tutu: {
+    slot: 'bottom', label: 'tutu', colors: { bot: P.blush, 'bot-sh': P.rose },
+    gen: (b) => {
+      const w = b.hipX + b.legR + 4, top = -b.legR * 1.5, fw = w + b.thigh * .5 + 14, bot = f(b.thigh * .38 + 8);
+      return {
+        pelvis: `<path class="bot-sh" d="${scallop(0, f(bot * .3), fw, bot * .9, 14, 7, 0, 180, false)}Z"/>`
+          + `<path class="bot" d="${scallop(0, f(bot * .12), fw - 6, bot * .8, 12, 7, 0, 180, false)}Z"/>`
+          + `<rect class="bot-sh" x="${-w}" y="${top}" width="${w * 2}" height="${f(-top + 6)}" rx="6"/>`,
+      };
+    },
+  },
+  sandals: {
+    slot: 'shoes', label: 'sandals', colors: { shoe: P.woodDeep, 'shoe-sh': P.woodDark },
+    gen: (b) => {
+      const r = b.legR, L = b.foot.len + 2, H = b.foot.h;
+      return { foot: `<path class="skin" d="M${-r} ${-4} L${-r} ${H - 10} Q${-r} ${H - 4} ${-r + 8} ${H - 4} L${L - 6} ${H - 4} Q${L} ${H - 4} ${L} ${H - 12} Q${L} ${-2} ${r} ${-4}Z"/>`
+        + `<rect class="shoe" x="${-r - 3}" y="${H - 6}" width="${L + r + 5}" height="8" rx="4"/>`
+        + `<path class="shoe fo" d="M${f(L * .15)} ${H - 6} L${f(L * .35)} ${f(H * .15)} L${f(L * .55)} ${H - 6}Z"/><path fill="none" style="stroke:var(--shoe-sh);stroke-width:6" d="M${-r + 2} ${f(H * .3)} L${r + 4} ${f(H * .3)}"/>` };
+    },
+  },
+  wings: {
+    slot: 'back', label: 'fairy wings', colors: { back: P.lav, 'back-sh': P.sky, 'back-2': P.white },
+    gen: (b) => {
+      const t = rel(b, b.torso.top), k = b.torso.tw / 44, cy = t + 36 * k;
+      const wing = (s) => `<path class="back" d="M${s * 8} ${f(cy)} C${f(s * 70 * k)} ${f(cy - 110 * k)} ${f(s * 150 * k)} ${f(cy - 60 * k)} ${f(s * 118 * k)} ${f(cy + 4 * k)} C${f(s * 140 * k)} ${f(cy + 40 * k)} ${f(s * 96 * k)} ${f(cy + 96 * k)} ${s * 8} ${f(cy + 16 * k)}Z"/>`
+        + `<ellipse class="n" style="fill:var(--back-sh)" cx="${f(s * 84 * k)}" cy="${f(cy - 34 * k)}" rx="${f(18 * k)}" ry="${f(13 * k)}"/><circle class="n" style="fill:var(--back-2)" cx="${f(s * 76 * k)}" cy="${f(cy + 36 * k)}" r="${f(8 * k)}"/>`;
+      return { back: wing(-1) + wing(1), torso: '' };
+    },
+  },
+  // ---- hats ----
+  'hard-hat': {
+    slot: 'hat', label: 'hard hat', hides: ['top'], colors: { hat: P.mustard, 'hat-sh': P.mustardDeep, 'hat-2': P.butter },
+    gen: (b) => {
+      const { rx, ry } = b.head, by = f(-ry * .42), bw = rx + 16;
+      return {
+        head: `<path class="hat" d="M${-rx - 2} ${by} C${-rx - 4} ${f(-ry * 1.3)} ${f(-rx * .5)} ${f(-ry * 1.46)} 0 ${f(-ry * 1.46)} C${f(rx * .5)} ${f(-ry * 1.46)} ${rx + 4} ${f(-ry * 1.3)} ${rx + 2} ${by}Z"/>`
+          + `<path class="hat-2" d="M-12 ${f(-ry * 1.44)} L12 ${f(-ry * 1.44)} L10 ${by} L-10 ${by}Z"/>`
+          + `<rect class="hat-sh" x="${-bw}" y="${f(by - 6)}" width="${bw * 2}" height="16" rx="8"/>`
+          + `<path class="d" d="M${f(-rx * .55)} ${f(-ry * 1.05)} Q${f(-rx * .45)} ${f(-ry * 1.25)} ${f(-rx * .25)} ${f(-ry * 1.32)}"/>`,
+      };
+    },
+  },
+  cap: {
+    slot: 'hat', label: 'baseball cap', hides: ['top'], colors: { hat: P.berry, 'hat-sh': '#B9575B', 'hat-2': P.cream },
+    gen: (b) => {
+      const { rx, ry } = b.head, by = f(-ry * .5);
+      return {
+        head: `<path class="hat" d="M${-rx - 3} ${by} C${-rx - 5} ${f(-ry * 1.22)} ${f(-rx * .5)} ${f(-ry * 1.34)} 0 ${f(-ry * 1.34)} C${f(rx * .5)} ${f(-ry * 1.34)} ${rx + 5} ${f(-ry * 1.22)} ${rx + 3} ${by}Z"/>`
+          + `<circle class="hat-2 thin" cx="0" cy="${f(-ry * 1.3)}" r="7"/><path class="d" d="M0 ${f(-ry * 1.24)} L0 ${f(by - 8)}"/>`
+          + `<path class="hat-sh" d="M${f(-rx * .95)} ${f(by - 4)} Q0 ${f(by - 14)} ${f(rx * .95)} ${f(by - 4)} Q${f(rx * .8)} ${f(by + 22)} 0 ${f(by + 24)} Q${f(-rx * .8)} ${f(by + 22)} ${f(-rx * .95)} ${f(by - 4)}Z"/>`,
+      };
+    },
+  },
+  bow: {
+    slot: 'hat', label: 'big bow', colors: { hat: P.rose, 'hat-sh': P.roseDeep, 'hat-2': P.cream },
+    gen: (b) => {
+      const { rx, ry } = b.head, x = f(rx * .5), y = f(-ry * .86);
+      return {
+        head: `<g transform="translate(${x} ${y}) rotate(18)"><path class="hat" d="M0 0 C-14 -26 -44 -26 -40 0 C-44 26 -14 26 0 0Z"/><path class="hat" d="M0 0 C14 -26 44 -26 40 0 C44 26 14 26 0 0Z"/>`
+          + `<path class="d" d="M-10 -6 Q-24 -12 -30 -4 M10 -6 Q24 -12 30 -4"/><circle class="hat-sh" cx="0" cy="0" r="9"/></g>`,
+      };
+    },
+  },
+  hijab: {
+    slot: 'hat', label: 'headscarf', hides: ['top', 'hair'], colors: { hat: P.teal, 'hat-sh': P.tealDeep, 'hat-2': P.cream },
+    gen: (b) => {
+      const { rx, ry } = b.head, fx = f(rx * .84), fy = f(ry * .86), cy = 14;
+      const outer = `M${-rx - 10} 20 C${-rx - 14} ${f(-ry * .9)} ${f(-rx * .6)} ${-ry - 12} 0 ${-ry - 12} C${f(rx * .6)} ${-ry - 12} ${rx + 14} ${f(-ry * .9)} ${rx + 10} 20 C${rx + 8} ${ry - 4} ${rx + 26} ${ry + 18} ${rx + 30} ${ry + 30} Q0 ${ry + 50} ${-rx - 30} ${ry + 30} C${-rx - 26} ${ry + 18} ${-rx - 8} ${ry - 4} ${-rx - 10} 20Z`;
+      const hole = `M${-fx} ${cy} C${-fx} ${f(cy - fy * 1.1)} ${fx} ${f(cy - fy * 1.1)} ${fx} ${cy} C${fx} ${f(cy + fy * 1.02)} ${-fx} ${f(cy + fy * 1.02)} ${-fx} ${cy}Z`;
+      return {
+        head: `<path class="hat" fill-rule="evenodd" d="${outer} ${hole}"/>`
+          + `<path class="d" d="M${f(-rx * .7)} ${ry + 24} Q${f(-rx * .1)} ${ry + 34} ${f(rx * .5)} ${ry + 24}"/><path class="d" d="M${f(-rx * .5)} ${f(-ry * .96)} Q${f(-rx * .1)} ${f(-ry * 1.04)} ${f(rx * .3)} ${f(-ry * .98)}"/>`,
+      };
+    },
+  },
+  // ---- face ----
+  'square-glasses': {
+    slot: 'face', label: 'square glasses', colors: { face: 'none', 'face-sh': P.ink },
+    gen: (b) => {
+      const { ex, ey } = b.face, w = Math.round(ex * .78), hh = Math.round(ex * .6);
+      const box = (x) => `<rect class="thin" fill="none" x="${x - w}" y="${ey - hh}" width="${w * 2}" height="${hh * 2 - 2}" rx="6"/>`;
+      return { head: box(-ex) + box(ex) + `<path class="d" d="M${-ex + w} ${ey - 4} L${ex - w} ${ey - 4} M${-ex - w} ${ey - 6} L${-b.head.rx + 4} ${ey - 10} M${ex + w} ${ey - 6} L${b.head.rx - 4} ${ey - 10}"/>` };
+    },
+  },
+  sunglasses: {
+    slot: 'face', label: 'sunglasses', colors: { face: P.charDeep, 'face-sh': P.char },
+    gen: (b) => {
+      const { ex, ey } = b.face, w = Math.round(ex * .8);
+      const lens = (x) => `<path class="face thin" d="M${x - w} ${ey - 10} L${x + w} ${ey - 10} Q${x + w} ${ey + 14} ${x} ${ey + 14} Q${x - w} ${ey + 14} ${x - w} ${ey - 10}Z"/><path class="n" fill="#FFFFFF" opacity=".7" d="M${x - w + 6} ${ey - 5} l8 0 l-6 8Z"/>`;
+      return { head: lens(-ex) + lens(ex) + `<path class="d" d="M${-ex + w} ${ey - 8} L${ex - w} ${ey - 8} M${-ex - w} ${ey - 8} L${-b.head.rx + 4} ${ey - 12} M${ex + w} ${ey - 8} L${b.head.rx - 4} ${ey - 12}"/>` };
+    },
+  },
+});
+
 export const SLOTS = ['back', 'bottom', 'top', 'over', 'shoes', 'face', 'hat'];
+/** Pieces per slot in the Character Maker's order. */
+export const WEAR_ORDER = {
+  top: ['tee-star', 'tee-stripe', 'tee-dots', 'hoodie', 'cardigan', 'chef-coat', 'sparkle-top'],
+  bottom: ['pants', 'leggings', 'shorts', 'skirt', 'tutu'],
+  shoes: ['sneakers', 'boots', 'sandals'],
+  hat: [null, 'headband', 'bow', 'beanie', 'cap', 'hijab', 'crown', 'chef-hat', 'hard-hat'],
+  face: [null, 'glasses', 'square-glasses', 'sunglasses', 'hero-mask'],
+  over: [null, 'apron', 'safety-vest'],
+  back: [null, 'towel-cape', 'hero-cape', 'wings'],
+};
+
+// Colour choices per slot variable prefix: tapping the chosen piece again in
+// the Character Maker steps through these ([base, shade, second]).
+const C3 = (a, b, c) => [P[a] || a, P[b] || b, P[c] || c];
+export const OUTFIT_COLORS = {
+  top: [C3('blue', 'blueDeep', 'butter'), C3('sage', 'sageDeep', 'cream'), C3('rose', 'roseDeep', 'cream'), C3('mustard', 'mustardDeep', 'cream'),
+    C3('teal', 'tealDeep', 'cream'), C3('lav', 'plum', 'white'), C3('terra', 'terraDeep', 'butter'), C3('white', 'oat', 'berry'), C3('charHi', 'char', 'butter')],
+  bot: [C3('denim', 'denimDeep', 'white'), C3('plum', 'plumDeep', 'white'), C3('mustard', 'mustardDeep', 'white'), C3('rose', 'roseDeep', 'white'),
+    C3('brown', 'brownDeep', 'white'), C3('sage', 'sageDeep', 'white'), C3('charDeep', 'char', 'white'), C3('blush', 'rose', 'white')],
+  shoe: [C3('white', 'rose', 'white'), C3('woodDark', 'woodDeep', 'white'), C3('charDeep', 'char', 'white'), C3('berry', '#B9575B', 'white'), C3('teal', 'tealDeep', 'white'), C3('butter', 'mustard', 'white')],
+  hat: [C3('teal', 'tealDeep', 'cream'), C3('rose', 'roseDeep', 'cream'), C3('mustard', 'mustardDeep', 'butter'), C3('berry', '#B9575B', 'cream'), C3('lav', 'plum', 'white'), C3('sage', 'sageDeep', 'cream'), C3('white', 'oat', 'cream'), C3('charHi', 'char', 'cream')],
+  face: [C3('charDeep', 'char', 'white'), C3('plum', 'plumDeep', 'white'), C3('berry', '#B9575B', 'white'), C3('teal', 'tealDeep', 'white')],
+  over: [C3('rose', 'roseDeep', 'cream'), C3('butter', 'mustard', 'white'), C3('sage', 'sageDeep', 'cream'), C3('#EE9A55', 'terraDeep', 'cream'), C3('blue', 'blueDeep', 'cream')],
+  back: [C3('terra', 'terraDeep', 'cream'), C3('berry', '#B9575B', 'butter'), C3('lav', 'sky', 'white'), C3('teal', 'tealDeep', 'butter'), C3('mustard', 'mustardDeep', 'cream')],
+};

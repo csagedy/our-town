@@ -27,6 +27,10 @@
 <section id="poses"><h2>Poses (2-segment limbs) × cast</h2><div id="pose-rows"></div></section>
 <section id="faces"><h2>Expressions × cast</h2><div id="face-rows"></div></section>
 <section id="outfits"><h2>Outfit pieces (wear slots) on each body</h2><div id="outfit-rows"></div></section>
+<section id="cafe"><h2>Cafe strip (2880 wide; dashed = the three camera stops). Top: default piece states. Bottom: alternate states (fridge, oven, door and drawer open; burners, toaster, tap, blender and coffee on) with ingredients in the fridge and the cast</h2><div id="cafe-view"></div></section>
+<section id="cafe-zones"><h2>Cafe zones, one 1440-wide screen each (kitchen, counter, dining; alternate states)</h2><div id="cafe-zone-view"></div></section>
+<section id="ingredients"><h2>Cafe ingredients (prep and doneness variants), cookware and tools. Last row: every default at real iPad Air size</h2><div class="row" id="ing-row"></div><div class="row" id="ing-small" style="margin-top:14px"></div></section>
+<section id="dishes"><h2>Dishes (whole, bite1, bite2) and the Mystery Dish kit (bases, face parts, and random combos)</h2><div class="row" id="dish-row"></div><div class="row" id="mystery-row" style="margin-top:14px"></div></section>
 <section id="props"><h2>Starter props and tap/bite variants (red dot = anchor, the resting point)</h2><div class="row" id="prop-row"></div></section>
 <section id="layers"><h2>Room layers, separately</h2><div class="row" id="layer-row"></div></section>
 <script type="module">
@@ -103,7 +107,7 @@
 
   // ---- poses ----
   {
-    const exprFor = { stand: 'happy', wave: 'happy', wave2: 'laughing', hold: 'surprised', 'hold-up': 'wheee', cheer: 'laughing', sing: 'singing', sit: 'yum', 'walk-a': 'happy', 'walk-b': 'happy', lie: 'sleepy' };
+    const exprFor = { stand: 'happy', wave: 'happy', wave2: 'laughing', hold: 'surprised', 'hold-up': 'wheee', cheer: 'laughing', sing: 'singing', sit: 'yum', 'sit-eat': 'yum', 'sit-cross': 'happy', 'walk-a': 'happy', 'walk-b': 'happy', lie: 'sleepy' };
     let h = '';
     for (const c of rig.characters) {
       h += '<div class="row base">';
@@ -118,7 +122,7 @@
       }
       h += '</div>';
     }
-    document.getElementById('pose-rows').innerHTML = `<div style="zoom:.62">${h}</div>`;
+    document.getElementById('pose-rows').innerHTML = `<div style="zoom:.44">${h}</div>`;
   }
 
   // ---- faces (head crops) ----
@@ -135,7 +139,7 @@
       }
       h += '</div>';
     }
-    document.getElementById('face-rows').innerHTML = `<div style="zoom:.9">${h}</div>`;
+    document.getElementById('face-rows').innerHTML = `<div style="zoom:.62">${h}</div>`;
   }
 
   // ---- outfits ----
@@ -154,7 +158,82 @@
       }
       h += '</div>';
     }
-    document.getElementById('outfit-rows').innerHTML = `<div style="zoom:.48">${h}</div>`;
+    document.getElementById('outfit-rows').innerHTML = `<div style="zoom:.36">${h}</div>`;
+  }
+
+  // ---- cafe strip ----
+  const cafeScene = (alt, zoom, clip = null) => {
+    const room = manifest.rooms.cafe, c = room.canvas, o = [c.x, c.y];
+    const surf = Object.fromEntries(room.surfaces.map((s) => [s.id, s]));
+    const seat = Object.fromEntries(room.seats.map((s) => [s.id, s]));
+    const slot = Object.fromEntries(room.slots.map((s) => [s.id, s]));
+    const img = (file, x, y, w, h) => `<img src="${A + file}" style="left:${x - c.x}px;top:${y - c.y}px;width:${w}px;height:${h}px">`;
+    const ALT = { 'fridge-door': 'open', 'oven-door': 'open', 'burner-1': 'on', 'burner-2': 'on', 'knob-1': 'on', 'knob-2': 'on', 'sink-tap': 'on', toaster: 'down',
+      blender: 'pink', 'coffee-machine': 'coffee', register: 'open', 'counter-bell': 'down', 'menu-board': 'pictures', 'front-door': 'open', 'door-bell': 'ring' };
+    const after = { back: '', counter: '', mid: '', front: '' };
+    for (const [id, pc] of Object.entries(room.pieces)) {
+      const v = pc.variants[alt ? (ALT[id] || pc.default) : pc.default];
+      after[pc.layer] += img(v.file, pc.x, pc.y, pc.w, pc.h);
+    }
+    const on = (id, variant, sid, dx = 0) => { const s = surf[sid]; return propImg(id, variant, (s.x0 + s.x1) / 2 + dx, s.y, o); };
+    const at = (id, variant, sl, dx = 0, dy = 0) => propImg(id, variant, slot[sl].at[0] + dx, slot[sl].at[1] + dy, o);
+    // props that are always out on the counters
+    after.counter += at('pan', 'empty', 'burner-1', 30) + at('saucepan', alt ? 'boiling' : 'water', 'burner-2') + on('knife', null, 'cutting-board', -30)
+      + (alt ? on('carrot', 'chopped', 'cutting-board', 30) : on('carrot', 'whole', 'cutting-board', 30)) + at('cafe-cup', alt ? 'coffee' : 'empty', 'coffee-cup');
+    after.mid += at('tip-jar', 'coins', 'tip-jar') + on('pancakes', 'whole', 'island-top', -90) + on('mixing-bowl', alt ? 'batter' : 'empty', 'island-top', 50);
+    after.front += on('burger', 'whole', 'table-1', -60) + on('sundae', 'whole', 'table-2', -40) + on('mystery-dish', 'green', 'table-3', -60);
+    // mystery face on the table-3 dish
+    { const s = surf['table-3'], m = manifest.cafe.mystery, bx = (s.x0 + s.x1) / 2 - 60, by = s.y;
+      after.front += propImg('mystery-eyes', 'googly', bx + m.at.eyes[0], by + m.at.eyes[1], o) + propImg('mystery-mouth', 'grin', bx + m.at.mouth[0], by + m.at.mouth[1], o) + propImg('mystery-topper', 'sprout', bx + m.at.topper[0], by + m.at.topper[1], o); }
+    if (alt) {
+      const fr = [['egg', 'whole', 'fridge-1', -60], ['milk', null, 'fridge-1', 0], ['cheese', 'block', 'fridge-1', 60], ['tomato', 'whole', 'fridge-2', -60], ['lettuce', 'whole', 'fridge-2', 10], ['strawberry', 'whole', 'fridge-2', 64],
+        ['butter', 'stick', 'fridge-3', -40], ['sausage', 'raw', 'fridge-3', 40]];
+      for (const [id, v, s, dx] of fr) after.counter += on(id, v, s, dx);
+      after.counter += at('baking-tray', 'cookies', 'oven', 0, 0) + at('bread', 'toast', 'toaster', 0, -10);
+      after.counter += placed(cast.grownup, { pose: 'wave', expr: 'happy' }, slot['staff-spot'].at[0], slot['staff-spot'].at[1], o);
+      after.mid += placed(cast.girl9, { pose: 'hold', expr: 'laughing', held: { R: held('cafe-cup', 'cocoa'), L: '' } }, 1040, 940, o);
+      after.mid += placed(cast.boy5, { pose: 'sit', expr: 'yum', anchor: 'seat', held: { R: held('sandwich', 'bite1') } }, seat['table-1-chair-l'].at[0], seat['table-1-chair-l'].at[1], o);
+      after.counter += placed(cast.grandpa, { pose: 'sit', expr: 'sleepy', anchor: 'seat' }, seat['window-seat-1'].at[0], seat['window-seat-1'].at[1], o);
+    }
+    const html = room.layers.map((L) => img(L.file, L.x, L.y, L.w, L.h) + (after[L.id] || '')).join('');
+    const zones = room.zones.map((z) => `<div style="left:${z.camera - c.x}px;top:${-c.y}px;width:1440px;height:1000px;outline:4px dashed rgba(61,44,41,.3)"></div>`).join('');
+    const clipStyle = clip != null ? `width:1440px;height:1000px;` : `width:${c.w}px;height:${c.h}px;`;
+    const inner = `<div class="room" style="width:${c.w}px;height:${c.h}px;${clip != null ? `margin-left:${-(clip - c.x)}px;margin-top:${c.y}px;` : ''}">${html}${clip != null ? '' : zones}</div>`;
+    return `<div class="room" style="${clipStyle}zoom:${zoom};margin:0 8px 8px 0;display:${clip != null ? 'block' : 'inline-block'};position:relative;contain:paint">${inner}</div>`;
+  };
+  if (manifest.rooms.cafe) {
+    const c = manifest.rooms.cafe.canvas;
+    document.getElementById('cafe-view').innerHTML = cafeScene(false, 1550 / c.w) + cafeScene(true, 1550 / c.w);
+    document.getElementById('cafe-zone-view').innerHTML = manifest.rooms.cafe.zones.map((z) => cafeScene(true, 1, z.camera)).join('');
+  }
+
+  // ---- cafe ingredients / cookware ----
+  const cell = (id, vn, S) => { const v = P[id].variants[vn];
+    return `<div class="cell"><div class="prop" style="width:${v.size[0] * S}px;height:${v.size[1] * S}px"><img src="${A + v.file}" style="width:100%;height:100%"><div class="dot" style="left:${v.anchor[0] * S}px;top:${v.anchor[1] * S}px"></div></div>${id}${vn === 'default' ? '' : ' · ' + vn}</div>`; };
+  if (manifest.cafe) {
+    const ing = manifest.cafe.ingredients, cw = [...new Set(Object.values(manifest.cafe.cookware))].filter((id) => P[id] && P[id].set === 'cafe' && !ing.includes(id)).concat(['tip-jar', 'coin']);
+    let h = '';
+    for (const id of ing.concat(cw)) for (const vn of Object.keys(P[id].variants)) {
+      if (P[id].set === 'starter' && !(P[id].prep)) continue;
+      h += cell(id, vn, 1.3);
+    }
+    document.getElementById('ing-row').innerHTML = h;
+    document.getElementById('ing-small').innerHTML = ing.concat(cw).map((id) => cell(id, P[id].default, 0.82).replace(/>[^<>]*<\/div>$/, '></div>')).join('');
+    let d = '';
+    for (const id of manifest.cafe.dishes) { if (!P[id] || P[id].set !== 'cafe') continue; for (const vn of Object.keys(P[id].variants)) d += cell(id, vn, 1.2); }
+    document.getElementById('dish-row').innerHTML = d;
+    const m = manifest.cafe.mystery, base = P[m.base];
+    let mh = Object.keys(base.variants).filter((v) => !v.includes('bite')).map((v) => cell(m.base, v, 1)).join('');
+    for (const part of Object.values(m.parts)) mh += Object.keys(P[part].variants).map((v) => cell(part, v, 1.6)).join('');
+    // combos
+    const E = Object.keys(P[m.parts.eyes].variants), M = Object.keys(P[m.parts.mouth].variants), T = Object.keys(P[m.parts.topper].variants), C = m.colors;
+    for (let i = 0; i < 8; i++) {
+      const S = 1.5, bv = base.variants[C[i % C.length] + (i === 6 ? '-bite1' : '')];
+      const put = (id, vn, ax, ay) => { const v = P[id].variants[vn]; return `<img src="${A + v.file}" style="position:absolute;left:${(ax - v.anchor[0]) * S}px;top:${(ay - v.anchor[1]) * S}px;width:${v.size[0] * S}px;height:${v.size[1] * S}px">`; };
+      const ox = bv.anchor[0], oy = bv.anchor[1];
+      mh += `<div class="cell"><div class="prop" style="width:${bv.size[0] * S}px;height:${(bv.size[1] + 30) * S}px"><div style="position:absolute;left:0;top:${30 * S}px">${put(m.base, C[i % C.length] + (i === 6 ? '-bite1' : ''), ox, oy)}${put(m.parts.eyes, E[i % E.length], ox + m.at.eyes[0], oy + m.at.eyes[1])}${put(m.parts.mouth, M[(i * 5) % M.length], ox + m.at.mouth[0], oy + m.at.mouth[1])}${i % 3 !== 2 ? put(m.parts.topper, T[i % T.length], ox + m.at.topper[0], oy + m.at.topper[1]) : ''}</div></div>combo ${i + 1}</div>`;
+    }
+    document.getElementById('mystery-row').innerHTML = mh;
   }
 
   // ---- props ----
@@ -162,6 +241,7 @@
     let h = '';
     const S = 1.4;
     for (const [id, p] of Object.entries(P)) {
+      if (p.set && p.set !== 'starter') continue;
       for (const [vn, v] of Object.entries(p.variants)) {
         h += `<div class="cell"><div class="prop" style="width:${v.size[0] * S}px;height:${v.size[1] * S}px"><img src="${A + v.file}" style="width:100%;height:100%">`
           + `<div class="dot" style="left:${v.anchor[0] * S}px;top:${v.anchor[1] * S}px"></div></div>${id}${vn === 'default' ? '' : ' · ' + vn}</div>`;

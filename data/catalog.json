@@ -387,6 +387,32 @@
       ],
       "label": "Pallet",
       "home": { "room": "construction/yard" }
+    },
+    "backpack": {
+      "art": { "sprite": "backpack" },
+      "ph": { "shape": "box", "fill": "#DFB050" },
+      "size": [66, 78],
+      "tags": ["container", "bag", "school"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food", "toy", "dish", "cup", "drink", "book", "wear", "school", "plant", "crayon", "ingredient"], "capacity": 4, "layout": "interior", "area": [0.14, 0.1, 0.86, 1], "peek": 0.45, "scale": 0.7 },
+        { "use": "peek" },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Backpack",
+      "home": { "room": "school/classroom" }
+    },
+    "car": {
+      "art": { "sprite": "car" },
+      "ph": { "shape": "box", "fill": "#DFB050" },
+      "size": [400, 178],
+      "tags": ["vehicle", "container"],
+      "sounds": { "tap": "honk", "drop": "thud" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food", "toy", "dish", "cup", "drink", "book", "wear", "school", "plant", "crayon", "ingredient", "bag", "basket", "tray", "plate"], "capacity": 4, "layout": "interior", "area": [0.08, 0.39, 0.72, 1], "peek": 0.6, "scale": 0.9 }
+      ],
+      "label": "Car",
+      "home": { "room": "city" }
     }
   }
 }

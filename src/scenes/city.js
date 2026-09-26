@@ -20,7 +20,13 @@
 import { mountRoom } from '../engine/room.js';
 import { createFx } from '../engine/fx.js';
 import * as tween from '../engine/tween.js';
-import { sfx } from '../audio/index.js';
+import { sfx, speech } from '../audio/index.js';
+import { createRoomView } from '../engine/view.js';
+import { addSpriteSource } from '../engine/sprites.js';
+import { loadCatalog } from '../core/catalog.js';
+import { createBehaviors } from '../core/behaviors/index.js';
+import { mountCharacters } from '../engine/characters.js';
+import { useArtSprites } from './art.js';
 
 export const CITY_ID = 'city';
 
@@ -31,10 +37,19 @@ const OWNER = {
   construction: 'construction', 'crane-jib': 'construction',
   school: 'school', 'school-bell': 'school', bus: 'bus',
   birds: 'birds', lostfound: 'lostfound', lot: 'lot', sun: 'sky', moon: 'sky',
+  booth: 'booth', 'booth-curtain': 'booth',   // P1.15: the Character Maker
 };
 // Built locations: a tap goes in. The rest react ("coming soon").
-export const DOORS = { cafe: 'cafe/kitchen' };
+export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth' };
 export const BUILDINGS = ['cafe', 'theater', 'construction', 'school'];
+// P1.14: things and characters carried onto the map rest on the street (the
+// upper sidewalk, the road, the lower sidewalk) and are drawn this much
+// smaller than in a room, so a kid stands about door high.
+export const CITY_FLOOR = { top: 655, bottom: 815 };
+export const CITY_ENTITY_SCALE = 0.45;
+// The piece whose box is each building's front door (a car parks there; a
+// dragged thing held over it goes in).
+const DOOR_PIECE = { cafe: 'cafe-door', theater: 'theater-curtains', construction: 'construction', school: 'school' };
 
 const later = (ms, fn) => setTimeout(fn, ms);
 
@@ -53,7 +68,7 @@ export function cityRoom(map, night = false) {
   }
   if (front) art.push({ id: 'front', layer: 'mid', depth: 1100, x: front.x, y: front.y, w: front.w, h: front.h, cls: 'city-static', html: img(front) });
   const b = map.backdrop[night ? 'night' : 'day'];
-  return { id: CITY_ID, width: map.width, backdrop: b, floor: { top: 700, bottom: 960 }, surfaces: [], art };
+  return { id: CITY_ID, width: map.width, backdrop: b, floor: Object.assign({ sound: 'tap' }, CITY_FLOOR), entityScale: CITY_ENTITY_SCALE, surfaces: [], art };
 }
 
 /** Every image file the map shows in one mode (for preloading). */
@@ -65,9 +80,17 @@ export function cityFiles(map, night = false) {
 
 /**
  * Mount the map. opts: { input, store, manifest, cameraX, onEnter(building,
- * location, {x, y} screen point), from: location we came back from }.
+ * location, {x, y} screen point), from: location we came back from, carry
+ * (P1.14, src/scenes/carry.js: wraps the entity view's hooks) }. Resolves
+ * once it is up, entities (things carried here, the car) included.
  */
-export function mountCity(stage, { input, store, manifest, cameraX = 0, onEnter = null, from = null }) {
+export async function mountCity(stage, opts) {
+  const city = cityScene(stage, opts);
+  await city.play(opts);
+  return city;
+}
+
+function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null, from = null }) {
   const map = manifest.map;
   let night = !!store.state.map.night;
   const room = mountRoom(stage, Object.assign(cityRoom(map, night), { cameraX }));
@@ -177,6 +200,23 @@ export function mountCity(stage, { input, store, manifest, cameraX = 0, onEnter 
         tween.done(open).then(() => onEnter('cafe', DOORS.cafe, at));
       }
     },
+    // P1.15: the Character Maker kiosk: the curtain swishes open and in we go.
+    booth() {
+      if (entering) return;
+      bounce('booth', 0.25);
+      sfx.play('whoosh', { gain: 0.7 });
+      later(120, () => sfx.play('sparkle'));
+      sparkle('booth', 0.2, 8);
+      const cur = bodyOf('booth-curtain');
+      const open = cur ? wiggle(cur, [{ transform: 'scaleX(1)' }, { transform: 'scaleX(0.12)' }], { duration: 320, easing: 'ease-out', fill: 'forwards' }) : null;
+      if (onEnter) {
+        entering = true;
+        stats.entered++;
+        const p = map.pieces['booth-curtain'];
+        const at = stage.worldToScreen(p.x + p.w / 2, p.y + p.h * 0.55);
+        tween.done(open).then(() => onEnter('booth', DOORS.booth, at));
+      }
+    },
     theater() {
       bounce('theater');
       sfx.play('whoosh');
@@ -271,18 +311,70 @@ export function mountCity(stage, { input, store, manifest, cameraX = 0, onEnter 
     later(250, () => sfx.play('doorbell', { gain: 0.6 }));
   }
 
+  if (from === DOORS.booth) {
+    const cur = bodyOf('booth-curtain');
+    if (cur) tween.animate(cur, [{ transform: 'scaleX(0.12)' }, { transform: 'scaleX(1)' }], { duration: 380, delay: 250, easing: 'ease-out', fill: 'backwards' });
+    later(250, () => sfx.play('whoosh', { gain: 0.5 }));
+  }
+
+  // ---- P1.14: things on the map (the car, whatever was carried here) ----
+  // The same entity view and behaviors as a room, on the street.
+  let play = null;
+  async function attachPlay({ carry = null } = {}) {
+    useArtSprites(manifest);
+    const catalog = await loadCatalog();
+    const removeSource = addSpriteSource((kind) => (catalog.has(kind) ? catalog.sprite(kind) : null));
+    const behaviors = createBehaviors({ catalog, store });
+    const chars = await mountCharacters({ store, input, behaviors, room, sfx, speech, talk: true });
+    const base = chars ? chars.hooks : behaviors;
+    const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: carry ? carry.hooks(base, room) : base });
+    behaviors.bind(view, fx);
+    if (chars) chars.bind(view, fx);
+    play = { catalog, behaviors, chars, view, removeSource };
+  }
+  const doorBox = (b) => { const p = map.pieces[DOOR_PIECE[b]]; return p ? { x0: p.x, x1: p.x + p.w, y0: p.y, y1: p.y + p.h } : null; };
+
   return {
     id: CITY_ID, room, fx, stats,
+    play: attachPlay,
+    get view() { return play && play.view; },
+    get chars() { return play && play.chars; },
+    get behaviors() { return play && play.behaviors; },
+    get catalog() { return play && play.catalog; },
     get night() { return night; },
+    /** Each building's front door on the street: [{building, x, location | null}] by x. */
+    doors() {
+      return BUILDINGS.map((b) => { const d = doorBox(b); return { building: b, x: Math.round((d.x0 + d.x1) / 2), location: DOORS[b] || null }; }).sort((a, b) => a.x - b.x);
+    },
+    /** The building whose door (or front, lower half) is under screen point (sx, sy), or null. */
+    doorAt(sx, sy) {
+      const w = stage.screenToWorld(sx, sy);
+      for (const b of BUILDINGS) {
+        const p = map.pieces[b];
+        if (p && w.x >= p.x && w.x <= p.x + p.w && w.y >= p.y + p.h * 0.45 && w.y <= p.y + p.h + 10) return b;
+      }
+      return null;
+    },
+    /** A building's tap reaction (the cafe's without going in). */
+    poke(building) {
+      const el = room.art.get(building);
+      if (!el) return;
+      if (building === 'cafe') { bounce('cafe', 0.22); sfx.play('doorbell'); sparkle('cafe-door', 0.4, 10); return; }
+      tap(el, null);
+    },
+    /** World point of a building's door (a car parks in front of it). */
+    doorWorld(building) { const d = doorBox(building); return d ? { x: (d.x0 + d.x1) / 2, y: d.y0 + (d.y1 - d.y0) * 0.55 } : null; },
     /** Screen point of a piece's center (tests, transitions). */
     screenPoint(id, dy = 0.5) { const el = room.art.get(id); if (!el) return null; const c = center(el, dy); return stage.worldToScreen(c.x, c.y); },
     /** World point where a location's door is (the transition zooms there). */
     doorPoint(location) {
-      if (location !== DOORS.cafe) return null;
-      const p = map.pieces['cafe-door'];
+      const piece = location === DOORS.cafe ? 'cafe-door' : location === DOORS.booth ? 'booth-curtain' : null;
+      if (!piece) return null;
+      const p = map.pieces[piece];
       return { x: p.x + p.w / 2, y: p.y + p.h * 0.55 };
     },
     destroy() {
+      if (play) { play.view.destroy(); if (play.chars) play.chars.destroy(); play.removeSource(); play = null; }
       unsubscribe();
       swapSeq++;
       for (const el of pieceEls) input.unregister(el);

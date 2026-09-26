@@ -333,6 +333,103 @@ body {
 }
 .ui-map .ui-btn-face { background: #F79A4B; }
 
+/* Hold-to-go (src/scenes/carry.js): a dragged thing held over the map
+   button fills a white ring around it; when it closes, off we go. */
+.ui-map::after {
+  content: "";
+  position: absolute;
+  left: -14%;
+  top: -14%;
+  width: 128%;
+  height: 128%;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: max(6px, 0.6vw) solid #fff;
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+}
+.ui-map.is-charging::after { animation: pocket-charge 650ms linear forwards; }
+.ui-map.is-charging .ui-btn-face { animation: pocket-grow 650ms ease-out forwards; }
+@keyframes pocket-charge { from { opacity: 0.2; transform: scale(0.75); } to { opacity: 1; transform: scale(1); } }
+@keyframes pocket-grow { from { transform: scale(1); } to { transform: scale(1.18); } }
+
+/* ---- pocket tray (P1.14, src/scenes/carry.js): a round grape button in the
+   bottom-left corner and a strip of 6 cells that slides out to its right ---- */
+.pocket {
+  --pk: max(72px, 6.45vw);
+  position: absolute;
+  z-index: 12;
+  left: calc(var(--safe-left) + max(14px, 1.2vw));
+  bottom: calc(var(--safe-bottom) + max(14px, 1.2vw));
+  width: calc(var(--pk) * 0.5 + 6 * var(--pk) * 1.02 + var(--pk) * 0.9);
+  height: var(--pk);
+  pointer-events: none;
+}
+.pocket .ui-pocket { left: 0; top: 0; pointer-events: auto; z-index: 2; }
+.ui-pocket .ui-btn-face { background: #A77BD6; }
+.pocket-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9%;
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  z-index: 1;
+}
+.pocket-dots i { width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+.pocket-tray {
+  position: absolute;
+  left: calc(var(--pk) * 0.5);
+  top: 0;
+  height: var(--pk);
+  box-sizing: border-box;
+  padding: 0 calc(var(--pk) * 0.22) 0 calc(var(--pk) * 0.62);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--pk) * 0.1);
+  border-radius: calc(var(--pk) * 0.5);
+  background: #C3A5E6;
+  border: max(5px, 0.59vw) solid #fff;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.16);
+  transform-origin: 0 50%;
+  transform: translate3d(calc(var(--pk) * -0.6), 0, 0) scale(0.4, 0.9);
+  opacity: 0;
+  transition: transform 220ms ease-out, opacity 180ms ease-out;
+  pointer-events: none;
+}
+.pocket.is-open .pocket-tray { transform: none; opacity: 1; pointer-events: auto; }
+.pocket.is-over .pocket-tray { transform: scale(1.06); }
+.pocket.is-over .ui-pocket .ui-btn-face { transform: scale(1.12); }
+.pocket-cell {
+  position: relative;
+  flex: none;
+  width: calc(var(--pk) * 0.8);
+  height: calc(var(--pk) * 0.8);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  touch-action: none;
+}
+.pocket-cell.is-full { background: #FBF3E8; }
+.pocket.is-over .pocket-cell:not(.is-full) { background: rgba(255, 255, 255, 0.7); }
+.pocket-thumb { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.pocket-thumb.is-char { overflow: hidden; }
+.pocket-char { width: 100%; height: 100%; display: block; }
+.pocket-sprite { position: absolute; left: 50%; top: 50%; transform-origin: 50% 50%; }
+.pocket-sprite img { display: block; width: 100%; height: 100%; }
+.pocket-count {
+  position: absolute;
+  right: 4%;
+  bottom: 2%;
+  display: flex;
+  gap: 2px;
+  padding: 3px 4px;
+  border-radius: 8px;
+  background: #A77BD6;
+}
+.pocket-count i { width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+
 /* ---- town transition (src/scenes/town.js): a dot that grows over the screen ---- */
 .town-iris {
   position: absolute;

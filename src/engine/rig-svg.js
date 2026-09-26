@@ -41,7 +41,8 @@ function fk(sk, pose, dy) {
     const hx = side === 'L' ? -sk.hip[0] : sk.hip[0];
     const u = chain(root, T(hx, 0), R(sg * a1));
     const lo = chain(u, T(0, sk.thigh * s), R(sg * a2));
-    fr['legU' + side] = mul(u, S(1, s));
+    // A foreshortened thigh (sitting) comes toward the viewer: a little wider too.
+    fr['legU' + side] = mul(u, S(s < 0.6 ? 1 + (0.6 - s) * 0.6 : 1, s));
     fr['legL' + side] = lo;
     fr['foot' + side] = chain(lo, T(0, sk.shin), R(sg * a3), side === 'L' ? S(-1, 1) : ID);
     const [b1, b2, b3, t = 1] = pose['arm' + side] || [0, 0, 0];
@@ -101,8 +102,13 @@ export function resolveExpr(rig, expr, blink) {
 export function faceSlot(rig, spec, slot, atom) {
   const face = rig.bodies[spec.body].face;
   let s = (face[slot] && face[slot][atom]) || '';
+  // Appearance options (P1.15): eye style, resting brows, freckles.
+  const es = spec.eyes && face.eyeStyles && face.eyeStyles[spec.eyes];
+  if (slot === 'eyes' && es && es[atom]) s = es[atom];
+  if (slot === 'brows' && atom === 'none' && spec.brows && face.browStyles) s = face.browStyles[spec.brows] || '';
   if (slot === 'eyes' && spec.lashes && face.lashes[atom]) s += face.lashes[atom];
   if (slot === 'extras' && spec.blush && atom !== 'blush') s = face.extras.blush + s;
+  if (slot === 'extras' && spec.freckles && face.freckles) s = face.freckles + s;
   return s;
 }
 
@@ -123,7 +129,8 @@ export function renderCharacter(rig, spec, opts) {
   const piece = (slot) => (wear[slot] && body.wear[wear[slot]]) || null;
   const hides = {};
   for (const slot of Object.keys(wear)) (rig.wear[wear[slot]] ? rig.wear[wear[slot]].hides : []).forEach((h) => { hides[h] = true; });
-  const hair = body.hair[spec.hair.style] || { front: '', back: '', backKind: null };
+  // A headscarf (hides: ['hair']) covers all the hair.
+  const hair = (!hides.hair && body.hair[spec.hair.style]) || { front: '', back: '', backKind: null };
   const expr = resolveExpr(rig, opts.expr || spec.expr || 'neutral', opts.blink);
   const held = opts.held || {};
 
@@ -133,15 +140,22 @@ export function renderCharacter(rig, spec, opts) {
   const wrapW = (slot, svg) => (svg && opts.marks ? `<g data-w="${slot}">${svg}</g>` : svg || '');
   const limb = (layer, fu, fl) => { if (!layer) return; put(fu, layer.upper); put(fl, layer.lower); put(fu, layer.patch); };
 
-  if (opts.shadow !== false && pose.anchor !== 'back') out.push(`<ellipse class="n" data-f="shadow" fill="#3D2C29" opacity=".12" cx="${anchors.feet[0]}" cy="0" rx="${sk.shadow}" ry="13"/>`);
+  if (opts.shadow !== false && pose.anchor !== 'back') out.push(`<ellipse class="n" data-f="shadow" fill="#3D2C29" opacity=".12" cx="${anchors.feet[0]}" cy="${pose.ground === false && pose.anchor === 'seat' ? anchors.seat[1] : 0}" rx="${sk.shadow}" ry="13"/>`);
   const back = piece('back');
   if (back) put('torso', back.back, mk('back'));
   if (hair.back && !(hair.backKind === 'top' && hides.top)) put('head', hair.back, ' data-p="hair-back"');
   const bottom = piece('bottom');
+  // Sitting (legsFront): the thigh points at the viewer, so the shin's top
+  // shows as a round knee cap (layer.knee) instead of the joint patch.
+  const leg = (layer, fu, fl) => {
+    if (!layer) return;
+    if (!pose.legsFront || !layer.knee) { limb(layer, fu, fl); return; }
+    put(fu, layer.upper); put(fl, layer.lower); put(fl, layer.knee);
+  };
   const legs = () => {
     for (const [s] of SIDES) {
-      limb(body.parts.leg, 'legU' + s, 'legL' + s);
-      if (bottom) limb(bottom.leg, 'legU' + s, 'legL' + s);
+      leg(body.parts.leg, 'legU' + s, 'legL' + s);
+      if (bottom) leg(bottom.leg, 'legU' + s, 'legL' + s);
       const shoes = piece('shoes');
       put('foot' + s, (shoes && shoes.foot) || body.parts.foot);
     }

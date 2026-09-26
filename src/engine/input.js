@@ -524,6 +524,32 @@ export function createInput(stage, opts = {}) {
       return r && typeof r === 'object' ? r.el : null;
     },
     cancelAll,
+    /**
+     * Carry on with a finger that is still down after its gesture ended (a
+     * scene change cancels every gesture): from now on it drags as if it had
+     * started on `el` with `handlers` (onDragStart / onDragMove / onDragEnd,
+     * as for register). at = {sx, sy, t (event timeStamp), type}: where the
+     * finger is now. The host kept its pointer capture, so the finger's moves
+     * and its lift keep arriving here. False if that pointer already has a
+     * gesture or the drag was refused. (P1.14: an item carried through the
+     * map button comes along into the next place.)
+     */
+    adopt(pointerId, at, el, handlers = {}) {
+      if (gestures.has(pointerId)) return false;
+      const { lift = false, ...h } = handlers;
+      const reg = { el, h, lift, pan: false, minHit: MIN_HIT, order: order++, disabled: false };
+      const g = {
+        id: pointerId, type: at.type || 'touch', kind: 'target', state: 'pending', reg,
+        x0: at.sx, y0: at.sy, sx: at.sx, sy: at.sy, t0: at.t, tLast: at.t,
+        w0: stage.screenToWorld(at.sx, at.sy), samples: [{ t: at.t, x: at.sx, y: at.sy }],
+        data: {}, longPressed: false, timer: 0, still: 0, edgeSince: 0, lift: null, tilt: null,
+      };
+      gestures.set(pointerId, g);
+      capture(pointerId);
+      startDrag(g);
+      if (g.state !== 'drag') { gestures.delete(pointerId); return false; }
+      return true;
+    },
     /** Snapshot for tests and debugging. */
     debug: () => ({
       pointers: [...gestures.values()].map((g) => ({ id: g.id, kind: g.kind, state: g.state })),

@@ -18,6 +18,9 @@ import { openPage } from '../harness.mjs';
 import { P, ART_SCALE, INK_W, css, scaleStrokes } from './palette.mjs';
 import { buildRig } from './characters/rig.mjs';
 import { ROOM as KITCHEN } from './rooms/kitchen.mjs';
+import { ROOM as CAFE } from './rooms/cafe.mjs';
+import { ROOM as BOOTH } from './rooms/booth.mjs';
+import { CAFE_PROPS, EXTEND as CAFE_EXTEND, CAFE_META } from './props/cafe.mjs';
 import { CITY } from './rooms/city.mjs';
 import { PROPS } from './props/starter.mjs';
 
@@ -71,15 +74,63 @@ export async function buildRoom(page, room, written) {
       px: res.px, bytes: buf.length,
     });
   }
-  return {
+  const out = {
     id: room.id, width: room.width, height: 1000, canvas: room.canvas, pxPerUnit: ROOM_PX, layers,
     floor: { y0: toWorld(0, room.floor.y0)[1], y1: toWorld(0, room.floor.y1)[1] },
     surfaces: room.surfaces.map((s) => {
       const [x0, y] = toWorld(s.seg[0], s.seg[2]);
-      return { id: s.id, layer: s.layer, x0, x1: toWorld(s.seg[1], 0)[0], y };
+      return { id: s.id, layer: s.layer, x0, x1: toWorld(s.seg[1], 0)[0], y, ...(s.inside ? { inside: s.inside } : {}) };
     }),
     seats: room.seats.map((s) => ({ id: s.id, layer: s.layer, at: toWorld(s.at[0], s.at[1]) })),
   };
+  const boxW = (b) => { const [x, y] = toWorld(b[0], b[1]); return [x, y, round(b[2] * ART_SCALE), round(b[3] * ART_SCALE)]; };
+  if (room.pieces) out.pieces = await buildRoomPieces(page, room, place, toWorld, boxW, written);
+  if (room.slots) {
+    out.slots = room.slots.map((s) => ({ ...s, at: s.at ? toWorld(s.at[0], s.at[1]) : null, box: s.box ? boxW(s.box) : null }));
+  }
+  if (room.spawners) out.spawners = room.spawners.map((s) => ({ ...s, ...(s.at ? { at: toWorld(s.at[0], s.at[1]) } : {}) }));
+  if (room.zones) out.zones = room.zones.map((z) => ({ id: z.id, x0: toWorld(z.x0, 0)[0], x1: toWorld(z.x1, 0)[0], camera: z.camera }));
+  return out;
+}
+
+/**
+ * A room's state pieces (rooms/cafe.mjs): every variant is rasterized in ONE
+ * shared box (the union of the variants' crops), so the runtime swaps
+ * variants in place by changing the img src. Placement: x, y, w, h (world).
+ */
+async function buildRoomPieces(page, room, place, toWorld, boxW, written) {
+  const { x: cx, y: cy, w: cw, h: ch } = room.canvas;
+  const k = ART_SCALE * ROOM_PX;
+  const job = (art, box) => ({
+    svg: svgFor(box || [cx, cy, cw, ch], place(art), k, room.defs), unit: ROOM_PX, formats: ['webp'], quality: ROOM_QUALITY,
+    crop: box ? null : { pad: 4, clamp: [cx, cy, cw, ch] }, opaque: null,
+  });
+  const out = {};
+  for (const pc of room.pieces) {
+    const names = Object.keys(pc.variants);
+    const arts = names.map((n) => pc.variants[n]());
+    let res = [];
+    for (const a of arts) res.push(await rasterize(page, job(a)));
+    const x0 = Math.min(...res.map((r) => r.box[0])), y0 = Math.min(...res.map((r) => r.box[1]));
+    const x1 = Math.max(...res.map((r) => r.box[0] + r.box[2])), y1 = Math.max(...res.map((r) => r.box[1] + r.box[3]));
+    const box = [x0, y0, x1 - x0, y1 - y0];
+    for (let i = 0; i < res.length; i++) if (res[i].box.join() !== box.join()) res[i] = await rasterize(page, job(arts[i], box));
+    const variants = {};
+    names.forEach((n, i) => {
+      const file = path.join(ASSETS, 'rooms', room.id, `${pc.id}-${n}.webp`);
+      const buf = Buffer.from(res[i].data.webp, 'base64');
+      if (writeIfChanged(file, buf)) written.push(file);
+      variants[n] = { file: rel(file), bytes: buf.length };
+    });
+    out[pc.id] = {
+      layer: pc.layer, default: names[0], variants, px: res[0].px,
+      x: round(box[0], 2), y: round(box[1], 2), w: round(box[2], 2), h: round(box[3], 2),
+      taps: pc.taps || null, pivot: pc.pivot ? toWorld(...pc.pivot) : null,
+      ...(pc.controls ? { controls: pc.controls } : {}),
+      ...(pc.textArea ? { textArea: boxW(pc.textArea) } : {}),
+    };
+  }
+  return out;
 }
 
 /**
@@ -145,7 +196,12 @@ async function buildProps(page, written) {
   const k = ART_SCALE * PROP_PX;
   const unit = ART_SCALE * PROP_PX;                     // output px per art unit
   const out = {};
-  for (const [id, p] of Object.entries(PROPS)) {
+  // Starter props (plus the cafe's extra food variants: one kind per food), then the cafe set.
+  const all = Object.entries(PROPS).map(([id, p]) => {
+    const ext = CAFE_EXTEND[id];
+    return [id, ext ? { ...p, variants: { ...p.variants, ...ext.variants }, prep: ext.prep, set: 'starter' } : { ...p, set: 'starter' }];
+  }).concat(Object.entries(CAFE_PROPS).map(([id, p]) => [id, { ...p, set: 'cafe' }]));
+  for (const [id, p] of all) {
     const variants = {};
     for (const [vname, art] of Object.entries(p.variants)) {
       const svg = svgFor([-400, -400, 800, 500], `<g id="art" class="o">${art}</g>`, k);
@@ -168,6 +224,7 @@ async function buildProps(page, written) {
       taps: p.taps || null, oneWay: !!p.oneWay, bites: p.bites || null,
       grip: w(p.grip || [0, -(Object.values(variants)[0].anchor[1] / ART_SCALE) / 2]),
       surface: p.surface ? w(p.surface) : null,
+      set: p.set, prep: p.prep || null, leaves: p.leaves || null,
     };
   }
   return out;
@@ -187,7 +244,12 @@ async function screenshotSheet(page, written) {
     const file = path.join(dir, `${name}.png`);
     if (writeIfChanged(file, Buffer.from(data, 'base64'))) written.push(file);
   };
-  await shot('contact-sheet', { x: 0, y: 0, width: full.w, height: full.h }, 0.5);
+  // The whole sheet is taller than Chrome can capture at full size, so it is
+  // shot with the page itself zoomed out (same picture as a scaled clip).
+  const Z = 0.3;
+  await page.eval((z) => { document.documentElement.style.zoom = String(z); }, Z);
+  await shot('contact-sheet', { x: 0, y: 0, width: Math.floor(full.w * Z), height: Math.floor(full.h * Z) }, 1);
+  await page.eval(() => { document.documentElement.style.zoom = ''; });
   for (const s of sections) await shot(s.id, { x: s.x, y: s.y, width: s.w, height: s.h }, 0.5);
 }
 
@@ -201,6 +263,8 @@ export async function build({ sheet = true } = {}) {
   const page = await openPage({ root: ROOT, path: 'tools/art/raster.html' });
   try {
     const kitchen = await buildRoom(page, KITCHEN, written);
+    const cafe = await buildRoom(page, CAFE, written);
+    const booth = await buildRoom(page, BOOTH, written);
     const city = await buildMap(page, CITY, written);
     const props = await buildProps(page, written);
     const manifest = {
@@ -217,9 +281,10 @@ export async function build({ sheet = true } = {}) {
         poses: Object.keys(rig.poses), expressions: Object.keys(rig.expressions),
         wear: Object.fromEntries(Object.entries(rig.wear).map(([id, w]) => [id, w.slot])),
       },
-      rooms: { kitchen },
+      rooms: { kitchen, cafe, booth },
       map: city,
       props,
+      cafe: { ...CAFE_META, mystery: { ...CAFE_META.mystery, at: Object.fromEntries(Object.entries(CAFE_META.mystery.at).map(([k, v]) => [k, v.map((n) => round(n * ART_SCALE, 2))])) } },
     };
     const mFile = path.join(ASSETS, 'art-manifest.json');
     if (writeIfChanged(mFile, Buffer.from(JSON.stringify(manifest, null, 1) + '\n'))) written.push(mFile);

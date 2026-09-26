@@ -49,6 +49,9 @@
 //   onDragMove(entity, ctx)              on every drag move
 //   dropSpot(entity, x, y)               -> {id, x0, x1, y, depth} to glow while dragging (a seat), or null
 //   onDrop(entity, ctx)                  -> true if it placed itself (dispatched its ops, runs its own tween)
+// UI over the room (P1.14 pocket tray, src/scenes/carry.js; all optional):
+//   overUi(entity, info)                 -> true while the finger is over UI that takes drops (no room target glows)
+//   dropOnUi(entity, ctx)                -> true if that UI took the drop (it dispatched the ops); checked first
 // view.repaint(id) re-renders one entity (its sprite may depend on things
 // the view does not track, e.g. what a character holds); view.handoff(id,
 // info) lets another gesture carry entity `id` (a held item pulled out of a hand).
@@ -419,6 +422,7 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
   // ---- drop targets ----
   function pickTarget(v, info) {
     const e = entityOf(v);
+    if (e && behaviors.overUi && behaviors.overUi(e, info)) return null;   // over UI (the pocket): no room target
     const spot = e && behaviors.dropSpot ? behaviors.dropSpot(e, v.x, v.y) : null;
     if (spot) return { type: 'surface', id: spot.id, surface: spot };
     if (e && behaviors.dropTarget) {
@@ -577,6 +581,11 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
     if (!e) return;
     stats.drops++;
     const fromW = { x: v.x, y: v.y, s: v.scale };   // where the finger let go (world)
+    if (behaviors.dropOnUi && behaviors.dropOnUi(e, ctx(v, info))) {
+      // Taken by UI over the room (the P1.14 pocket): gone from here, or refused: spring back.
+      if (views.get(e.id) === v && getEntity(store.state, e.id)) { restore(v); glideFrom(v, fromW, { duration: 380, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }); }
+      return;
+    }
     if (target && target.type === 'entity' && behaviors.onDropInto) {
       const te = getEntity(store.state, target.id);
       const rev0 = v.rev;

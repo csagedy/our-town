@@ -6,7 +6,8 @@ import { mountBoot } from './scenes/boot.js';
 import { mountTestRoom, TEST_SETS } from './scenes/test-room.js';
 import { mountTown } from './scenes/town.js';
 import { registerServiceWorker } from './pwa.js';
-import { initAudio } from './audio/index.js';
+import { initAudio, setMuted, setVolume, setSpeechOn, sfx } from './audio/index.js';
+import { installParentMenu } from './ui/parent-menu.js';
 import { openWorld } from './core/persist.js';
 import { getEntity } from './engine/world.js';
 
@@ -61,10 +62,21 @@ async function boot() {
     scene = await mountTown(stage, { input, store });
     window.__town = scene;
   }
-  // Two-iPad play (stretch, oxg.2), hidden behind ?together until the parent menu (P1.16).
-  if (new URLSearchParams(location.search).has('together')) {
-    window.__together = (await import('./net/together.js')).startTogether({ store, persist, scene });
-  }
+  // Two-iPad play (oxg.2): started once, from the parent menu's "Play
+  // together" (a home-screen launch can't pass a URL flag) or ?together.
+  let together = null;
+  const playTogether = async () => {
+    if (!together) together = window.__together = (await import('./net/together.js')).startTogether({ store, persist, scene });
+    return together;
+  };
+  if (new URLSearchParams(location.search).has('together')) await playTogether();
+  // P1.16: device-local settings + the parent menu (2 s press on the top-left
+  // corner), and the ?perf overlay (docs/perf.md).
+  window.__parentMenu = installParentMenu({
+    store, persist, input, town: scene, playTogether,
+    audio: { setMuted, setVolume, setSpeechOn, sfx },
+  });
+  if (new URLSearchParams(location.search).has('perf')) window.__perf = (await import('./ui/perf.js')).startPerf();
   window.__stage = stage;                   // for e2e tests and debugging
   window.__input = input;
   window.__scene = scene;

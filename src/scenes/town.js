@@ -19,11 +19,13 @@
 import { loadArt, preload } from './art.js';
 import { mountCity, cityFiles, CITY_ID } from './city.js';
 import { mountKitchen, kitchenFiles, KITCHEN_ID } from './kitchen.js';
+import { mountBooth, boothFiles, BOOTH_ID } from './booth.js';
 import * as tween from '../engine/tween.js';
 import { sfx } from '../audio/index.js';
+import { createCarry } from './carry.js';
 
 export const HERE_KEY = 'ourtown.here';
-export const LOCATIONS = [CITY_ID, KITCHEN_ID];
+export const LOCATIONS = [CITY_ID, KITCHEN_ID, BOOTH_ID];
 const ZOOM_MS = 460;
 const OPEN_MS = 420;
 
@@ -76,18 +78,22 @@ export async function mountTown(stage, { input, store, storage } = {}) {
   let scene = null;
   let busy = false;
   const stats = { transitions: 0 };
+  // P1.14: the pocket tray, hold-to-go, the car (src/scenes/carry.js).
+  const carry = createCarry({ stage, input, store, manifest, storage, town: { at: () => here.at, go: (to, o) => go(to, o), button: btn, scene: () => scene } });
 
   async function mount(at, from = null) {
     if (scene) scene.destroy();
     scene = null;
-    if (at === KITCHEN_ID) scene = await mountKitchen(stage, { input, store, manifest });
-    else scene = mountCity(stage, { input, store, manifest, cameraX: here.mapX, from, onEnter: (_, loc, pt) => go(loc, { from: pt }) });
+    if (at === KITCHEN_ID) scene = await mountKitchen(stage, { input, store, manifest, carry });
+    else if (at === BOOTH_ID) scene = await mountBooth(stage, { input, store, manifest, carry });   // P1.15
+    else scene = await mountCity(stage, { input, store, manifest, carry, cameraX: here.mapX, from, onEnter: (_, loc, pt) => go(loc, { from: pt }) });
     here.at = at;
     saveHere(here, storage);
     const home = at === CITY_ID;
     btn.style.visibility = home ? 'hidden' : '';
     input.setEnabled(btn, !home);
     document.body.dataset.location = at;
+    carry.mounted(scene);
   }
 
   // Remember how far the map is panned (on settle only: no per-frame writes).
@@ -125,6 +131,7 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     if (busy || to === here.at || !LOCATIONS.includes(to)) return false;
     busy = true;
     stats.transitions++;
+    carry.leaving();
     input.cancelAll();
     const leaving = here.at;
     if (leaving === CITY_ID) here.mapX = Math.round(stage.camera.x);
@@ -136,7 +143,7 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     roomEl.style.transformOrigin = `${w.x}px ${w.y}px`;
     const zoom = tween.animate(roomEl, [{ transform: 'scale(1)' }, { transform: 'scale(1.8)' }], { duration: ZOOM_MS, easing: 'ease-in', fill: 'forwards' });
     sfx.play('whoosh', { gain: 0.7 });
-    const files = to === KITCHEN_ID ? kitchenFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night);
+    const files = to === KITCHEN_ID ? kitchenFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night);
     await Promise.all([tween.done(irisAnim(pt, true, ZOOM_MS)), preload(files), tween.done(zoom)]);
     zoom.cancel();
     await mount(to, leaving);
@@ -174,13 +181,14 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     get scene() { return scene; },
     get busy() { return busy; },
     get mapX() { return here.mapX; },
-    manifest, stats, button: btn,
+    manifest, stats, button: btn, carry,
     go,
     destroy() {
       window.removeEventListener('pagehide', saveNow);
       document.removeEventListener('visibilitychange', onHidden);
       if (scene) scene.destroy();
       scene = null;
+      carry.destroy();
       input.unregister(btn);
       btn.remove();
       iris.remove();

@@ -60,6 +60,8 @@ Muted, warm and earthy. Never use pure saturated primaries in the world; saturat
 | steel / steelDeep, glass | `#D8DADC` / `#B2B6BA`, `#E9F4F1` | taps, rails; jars, display case |
 | food | crust `#E2A860`, toast `#F1D19B`, choc `#8A5B45`, berry `#DC6B6E`, lemon `#F3D46A`, egg `#FFFDF6`, banana `#F5DB7A` | |
 | mouth / tongue | `#9C4852` / `#EE9A9C` | open mouths only |
+| toasty / toastyDeep | `#C98A55` / `#A96F45` | "extra toasty" food (cafe doneness 3): warm caramel plus grill stripes and a steam curl, never black |
+| nori / noriDeep | `#4F6A58` / `#3F5748` | seaweed (sushi) |
 | nightSky / nightSkyDeep | `#3A4170` / `#2E3460` | the city map's night sky (everything else at night is the day art through the NIGHT filter) |
 
 **Skin tones** (`SKINS`, `--skin` / `--skin-sh`): `#F3D0B5/#E2AB8E`, `#EDC3A2/#D9A07F`, `#D39A6E/#B97E55`, `#A8714D/#8C5A3B`, `#7E5236/#65402A`.
@@ -167,6 +169,10 @@ Notes:
 
 Rules for adding to the map: buildings must read by silhouette alone (no words on signs: a cup, a star, a crane, a bell); anything tappable gets its own piece; keep it dense (trees, lamps, little distant houses in every gap).
 
+### The cafe strip (P2a.1)
+
+`tools/art/rooms/cafe.mjs` is one 2880-wide room (kitchen, order counter, dining) in the usual four depth layers, plus **pieces**: every fixture that changes state (fridge and oven doors, burner flames and knobs, sink tap, toaster lever, blender fills, coffee pours, register drawer, counter bell, menu board blank/pictures, front door, door bell) is its own WebP per variant. All variants of a piece share one box, so a state change is an in-place `src` swap; the static layers never draw a piece. The room also records `slots` (burner rests, oven interior, sink basin, cutting board, toaster, blender, coffee spout, register drawer and keys, ice-cream tubs, door, order spot), `spawners` (fridge, pantry, freezer, cups, plates) and camera `zones`. Food and cookware live in `tools/art/props/cafe.mjs`: prep states are variants and `prep.cut` / `prep.cook` name them (cook = the variant at doneness 0..3). Dish bites use `bitten()`, which masks a scalloped notch out of the food only (the plate stays) and inks the notch edge. The Mystery Dish is a plate + blob per colour, with eyes, mouth and topper as separate sprites placed at `manifest.cafe.mystery.at`.
+
 ### Files and manifest
 
 `python3 tools/build.py art` writes:
@@ -175,7 +181,9 @@ Rules for adding to the map: buildings must read by silhouette alone (no words o
 - `assets/art-manifest.json`, all in world units:
   - `rooms.<id>`: `width`, `canvas` (the bleed box), `pxPerUnit`, `layers[]` (`id, file, x, y, w, h, px, bytes, baseline, opaque`), `surfaces[]` (`id, layer, x0, x1, y`), `seats[]` (`id, layer, at`), `floor` (`y0, y1`).
   - `map`: the city map: `width`, `canvas`, `backdrop.{day,night}`, `layers[]` and `pieces.<id>` (`file, x, y, w, h, px, bytes, night: {file, bytes} | null, depth, pivot | null, copies | null`).
-  - `props.<id>`: `label, tags, default, variants.<name>` (`file, px, bytes, size, anchor`), `taps, oneWay, bites, grip, surface`. `grip` and `surface` are relative to the anchor.
+  - `props.<id>`: `label, tags, default, variants.<name>` (`file, px, bytes, size, anchor`), `taps, oneWay, bites, grip, surface`, `set` (`starter` or `cafe`), `prep`, `leaves` (what a finished dish leaves behind).
+  - `rooms.cafe` adds `pieces.<id>` (`layer, default, variants.<name>.{file, bytes}, x, y, w, h, px, taps, pivot`, and `textArea` on the menu board), `slots[]` (`id, kind, layer, at, box, piece`), `spawners[]`, `zones[]` (`id, x0, x1, camera`), and `inside` on surfaces that only exist while a door is open.
+  - `cafe`: ingredient, dish and cookware lists, doneness levels and fallback tints, and the Mystery Dish kit. `grip` and `surface` are relative to the anchor.
   - `characters`: `rig` (file), `cast`, `bodies.<id>` (`height`, `anchor` = the feet point), `poses`, `expressions`, `wear` (piece → slot).
 - `tools/art/contact-sheet/*.png`: screenshots of `tools/art/contact-sheet/index.html`, which composes the shipped files through the runtime assembler (so it also checks the format).
 

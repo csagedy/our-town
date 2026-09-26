@@ -1,0 +1,165 @@
+/* Parent menu, hot-corner ring, text layer labels and the ?perf overlay
+   (src/ui/parent-menu.js, src/engine/view.js labels, src/ui/perf.js).
+   Safari 16 floor: no nesting, no color-mix(); animate transform/opacity only. */
+
+.pm-panel[hidden], .pm-ring[hidden], .pm-confirm[hidden], .pm-btn[hidden], .ent-label[hidden] { display: none !important; }
+
+/* ---- hot corner: a faint gear on the city map (the map button marks the
+   corner everywhere else), and the ring that fills during the 2 s hold ---- */
+.pm-mark {
+  position: fixed;
+  z-index: 11;
+  left: calc(var(--safe-left) + max(14px, 1.2vw) + max(72px, 6.45vw) / 2 - 22px);
+  top: calc(var(--safe-top) + max(14px, 1.2vw) + max(72px, 6.45vw) / 2 - 22px);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  touch-action: none;
+}
+.pm-mark svg { position: absolute; left: 9px; top: 9px; width: 26px; height: 26px; fill: rgba(61, 44, 41, 0.35); }
+body[data-location]:not([data-location="city"]) .pm-mark { visibility: hidden; }
+.pm-ring {
+  position: fixed;
+  z-index: 45;
+  left: -60px;
+  top: -60px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.95);
+  background: rgba(43, 45, 66, 0.25);
+  pointer-events: none;
+}
+.pm-ring-fill {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(0.05);
+}
+
+/* ---- the menu: grown-up text, native controls ---- */
+.pm-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(43, 45, 66, 0.6);
+  padding: calc(var(--safe-top) + 12px) calc(var(--safe-right) + 12px) calc(var(--safe-bottom) + 12px) calc(var(--safe-left) + 12px);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.pm-card {
+  position: relative;
+  width: min(980px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #FBF3E8;
+  color: #3D2C29;
+  border-radius: 28px;
+  padding: 18px 26px 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 28px;
+  font-size: 17px;
+}
+.pm-head, .pm-confirm, .pm-status, .pm-foot { grid-column: 1 / -1; }
+.pm-head { display: flex; align-items: center; justify-content: space-between; }
+.pm-head h2 { margin: 0; font-size: 26px; }
+.pm-close {
+  -webkit-appearance: none; appearance: none; border: 0; background: #EFE4D6; color: #3D2C29;
+  width: 56px; height: 56px; border-radius: 50%; font-size: 34px; line-height: 1; cursor: pointer;
+}
+.pm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 72px;
+  border-bottom: 1px solid #EFE4D6;
+  padding: 6px 0;
+}
+.pm-what { min-width: 0; }
+.pm-what b { display: block; font-size: 19px; }
+.pm-what small { display: block; color: #735746; font-size: 14px; line-height: 1.25; }
+.pm-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.pm-btn {
+  -webkit-appearance: none; appearance: none; border: 0; cursor: pointer;
+  min-height: 52px; padding: 0 16px; border-radius: 16px;
+  background: #4AA6E0; color: #fff; font: inherit; font-weight: 600;
+  touch-action: manipulation;
+}
+.pm-btn:disabled { opacity: 0.4; }
+.pm-danger { background: #D98B64; }
+.pm-update { background: #62B96B; }
+.pm-switch {
+  -webkit-appearance: none; appearance: none; border: 0; cursor: pointer; flex: none;
+  position: relative; width: 84px; height: 48px; border-radius: 24px; background: #C9BDB3;
+  touch-action: manipulation;
+}
+.pm-switch::after {
+  content: ""; position: absolute; left: 4px; top: 4px; width: 40px; height: 40px; border-radius: 50%;
+  background: #fff; transition: transform 160ms ease-out;
+}
+.pm-switch[aria-checked="true"] { background: #62B96B; }
+.pm-switch[aria-checked="true"]::after { transform: translateX(36px); }
+.pm-volume { width: 52%; height: 48px; touch-action: none; }
+.pm-confirm {
+  margin-top: 10px; padding: 12px 16px; border-radius: 16px; background: #F6D3CF;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.pm-confirm p { margin: 0; font-weight: 600; }
+.pm-status { margin: 8px 0 0; min-height: 1.3em; color: #55875A; font-weight: 600; }
+.pm-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; color: #9E918A; font-size: 14px; }
+
+/* ---- Zoe's text layer (design.md 4): name tags under things, only while on ---- */
+.ent-label {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 280px;
+  margin-left: -140px;
+  margin-top: 4px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 100;
+}
+.ent-label span {
+  display: inline-block;
+  padding: 3px 12px 4px;
+  border-radius: 14px;
+  background: rgba(251, 243, 232, 0.94);
+  color: #3D2C29;
+  font: 600 26px/1.15 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+body.text-layer .ent-label { display: block; }
+[data-dragging] .ent-label { opacity: 0.4; }
+
+/* ---- ?perf overlay (src/ui/perf.js) ---- */
+.perf-hud {
+  position: fixed;
+  z-index: 70;
+  right: calc(var(--safe-right) + 8px);
+  bottom: calc(var(--safe-bottom) + 8px);
+  width: 250px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(20, 20, 28, 0.78);
+  color: #fff;
+  font: 12px/1.35 ui-monospace, Menlo, monospace;
+  pointer-events: none;
+  white-space: pre;
+}
+.perf-bars { display: flex; align-items: flex-end; gap: 3px; height: 40px; margin-top: 4px; }
+.perf-bar { flex: 1; height: 100%; background: #62B96B; transform-origin: 50% 100%; transform: scaleY(0); }
+.perf-bar:nth-child(3), .perf-bar:nth-child(4) { background: #FFD552; }
+.perf-bar:nth-child(5), .perf-bar:nth-child(6) { background: #F79A4B; }

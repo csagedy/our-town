@@ -138,11 +138,12 @@ export function zIndexFor(key, z = 0) {
   return 1000 + Math.round(clamp(key, -5, 5000) * 100) + clamp(Math.round(z) || 0, 0, 99);
 }
 
-/** Depth cue: scale for a sort key (0.92 at the floor band's back, 1.08 at its front). */
+/** Depth cue: scale for a sort key (0.92 at the floor band's back, 1.08 at its front), times room.entityScale. */
 export function depthScale(room, key) {
   const { top, bottom } = room.floor;
   const t = bottom > top ? clamp((key - top) / (bottom - top), 0, 1) : 0.5;
-  return Math.round((DEPTH_SCALE[0] + (DEPTH_SCALE[1] - DEPTH_SCALE[0]) * t) * 1000) / 1000;
+  // room.entityScale: everything in the room drawn smaller (the city map, P1.14).
+  return Math.round((DEPTH_SCALE[0] + (DEPTH_SCALE[1] - DEPTH_SCALE[0]) * t) * (room.entityScale || 1) * 1000) / 1000;
 }
 
 /**

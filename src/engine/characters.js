@@ -306,7 +306,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     for (let i = 0; i < rec.frameEls.length; i++) {
       const n = rec.names[i];
       const el = rec.frameEls[i];
-      if (n === 'shadow') el.setAttribute('cx', String(anchors.feet[0]));
+      if (n === 'shadow') { el.setAttribute('cx', String(anchors.feet[0])); if (pose.ground === false && pose.anchor === 'seat') el.setAttribute('cy', String(anchors.seat[1])); }
       else if (n === 'heldL' || n === 'heldR') el.setAttribute('transform', `translate(${anchors['hand' + n[4]].join(' ')})`);
       else if (frames[n]) el.setAttribute('transform', matrixAttr(frames[n]));
     }
@@ -722,7 +722,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     let dist = 0;
     if (seat) {
       const lie = seat.lie;
-      set('pose', lie ? 'lie' : 'sit');
+      set('pose', seat.pose || (lie ? 'lie' : 'sit'));
       set('seat', seat.id);
       if (lie) set('expr', 'sleepy');
       else if (e.props.expr === 'sleepy') set('expr', 'happy');
@@ -760,7 +760,14 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       const cur = entityOf(e.id);
       if (!cur || !alive(rec) || rec.dragging) return;
       build(rec, cur);
-      tween.squash(v.body, { amount: fell ? Math.min(1.3, 0.6 + dist / 400) : 0.7 });
+      if ((cur.props.pose || '').indexOf('sit') === 0) {
+        // Sitting down: a little bounce on the seat.
+        tween.animate(v.body, [
+          { transform: 'translate3d(0, 0, 0) scale(1, 1)' }, { transform: 'translate3d(0, 0, 0) scale(1.06, 0.9)', offset: 0.22 },
+          { transform: 'translate3d(0, -12px, 0) scale(0.97, 1.04)', offset: 0.5 }, { transform: 'translate3d(0, 0, 0) scale(1.03, 0.96)', offset: 0.78 },
+          { transform: 'translate3d(0, 0, 0) scale(1, 1)' },
+        ], { duration: 460, easing: 'ease-out' });
+      } else tween.squash(v.body, { amount: fell ? Math.min(1.3, 0.6 + dist / 400) : 0.7 });
       play(sound);
       if (cur.props.pose === 'lie') faces(rec, [['sleepy', 400]]);
       else faces(rec, [[fell ? 'surprised' : 'happy', 260], ['happy', 700]]);

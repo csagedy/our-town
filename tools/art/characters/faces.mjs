@@ -65,7 +65,28 @@ export function faceAtoms(m) {
     notes: `<g transform="translate(${ex + 50} -54)"><path class="d" d="M6 -22 L6 0 M6 -22 L16 -18"/><ellipse class="ink" cx="1" cy="1" rx="6" ry="4.5" transform="rotate(-20 1 1)"/></g>`,
   };
   const nose = `<ellipse class="skin-sh thin" cx="0" cy="${ny}" rx="7" ry="5.5"/>`;
-  return { eyes, brows, mouth, extras, nose, lashes };
+  // P1.15 appearance options (spec.eyes, spec.brows, spec.freckles): eye
+  // styles swap the solid-eye atoms; brow styles show when an expression has
+  // no brows of its own; freckles go under any extras.
+  const eyeSet = (erx, ery, dy = 0) => ({
+    dot: both((x) => dot(x, ey + dy, erx, ery)),
+    wide: both((x) => dot(x, ey - 2 + dy, erx + 1, ery + 2)),
+    sad: both((x) => dot(x, ey + 2 + dy, erx - .5, ery - 1.5)),
+    wink: arcUp(-ex, ey) + dot(ex, ey + dy, erx, ery),
+  });
+  const eyeStyles = {
+    big: eyeSet(rx + 2.5, ry + 3.5, -1),
+    small: eyeSet(rx - 2, ry - 3),
+    almond: eyeSet(rx + 1.5, ry - 4, 1),
+  };
+  const browStyles = {
+    thin: arch(-ex, by + 2) + arch(ex, by + 2),
+    soft: `<path class="d" style="stroke-width:3.5" d="M${-ex - 9} ${by + 3} L${-ex + 9} ${by + 1} M${ex - 9} ${by + 1} L${ex + 9} ${by + 3}"/>`,
+    bold: [-1, 1].map((s) => `<path class="hair thin" d="M${s * ex - 12} ${by + 4} Q${s * ex} ${by - 7} ${s * ex + 12} ${by + 4} Q${s * ex} ${by - 1} ${s * ex - 12} ${by + 4}Z"/>`).join(''),
+  };
+  const freckles = `<g class="n" fill="#9C6C4C" opacity=".55">${[[-1, -6, 0], [-1, 6, 3], [-1, 0, 8], [1, -6, 0], [1, 6, 3], [1, 0, 8]]
+    .map(([s, dx, dy]) => `<circle cx="${s * blushX + dx}" cy="${blushY - 6 + dy}" r="2.4"/>`).join('')}</g>`;
+  return { eyes, brows, mouth, extras, nose, lashes, eyeStyles, browStyles, freckles };
 }
 
 // Expressions: slot -> atom. "blush" extras are added on top for characters

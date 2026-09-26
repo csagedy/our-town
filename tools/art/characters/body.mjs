@@ -24,12 +24,27 @@ export const BODIES = {
     head: { cy: -300, rx: 82, ry: 80 }, face: { ex: 31, ey: 10, ny: 28, my: 42, eyeRx: 8.5, eyeRy: 11, blushX: 52, blushY: 30 },
     shadow: 66, foot: { len: 40, h: 30 },
   },
+  teen: {
+    label: 'teen ~14', hipY: -174, hipX: 24, thigh: 76, shin: 72, legR: 17,
+    shoulder: [50, -290], upper: 56, lower: 58, armR: 12, handR: 16,
+    torso: { top: -310, hem: -168, tw: 44, bw: 58 }, neck: [14, -332],
+    head: { cy: -390, rx: 78, ry: 78 }, face: { ex: 29, ey: 10, ny: 29, my: 44, eyeRx: 8, eyeRy: 10.5, blushX: 50, blushY: 34 },
+    shadow: 68, foot: { len: 42, h: 30 },
+  },
   adult: {
     label: 'adult', hipY: -214, hipX: 27, thigh: 96, shin: 92, legR: 20,
     shoulder: [56, -352], upper: 68, lower: 70, armR: 13, handR: 17,
     torso: { top: -374, hem: -206, tw: 48, bw: 64 }, neck: [15, -396],
     head: { cy: -452, rx: 74, ry: 78 }, face: { ex: 28, ey: 10, ny: 30, my: 46, eyeRx: 7.5, eyeRy: 10, blushX: 48, blushY: 36 },
     shadow: 72, foot: { len: 44, h: 32 },
+  },
+  // Grandparents: a little shorter and rounder than a grown-up.
+  elder: {
+    label: 'grandparent', hipY: -200, hipX: 28, thigh: 88, shin: 84, legR: 20,
+    shoulder: [56, -330], upper: 64, lower: 66, armR: 13, handR: 17,
+    torso: { top: -350, hem: -192, tw: 50, bw: 70 }, neck: [15, -372],
+    head: { cy: -426, rx: 76, ry: 78 }, face: { ex: 28, ey: 10, ny: 30, my: 46, eyeRx: 7.5, eyeRy: 10, blushX: 48, blushY: 36 },
+    shadow: 76, foot: { len: 44, h: 32 },
   },
 };
 
@@ -64,13 +79,28 @@ export function patch(len, r, cls) {
   return `<path class="${cls} fo" d="M${-rr} ${f(y0)} L${rr} ${f(y0)} L${rr} ${f(len)} A${rr} ${rr} 0 0 1 ${-rr} ${f(len)}Z"/>`;
 }
 
-/** A full limb layer: {upper, lower, patch} fragments. */
+/**
+ * Knee cap for a foreshortened thigh (sitting: the knee points at the
+ * viewer). Lower-segment frame: a dome over the knee point, a little wider
+ * than the shin (nearer = bigger), easing into the shin's sides. Outline on
+ * the dome and the sides only, so it reads as the top of the shin coming
+ * toward you, never as a crease. rig-svg draws it instead of the patch when
+ * the pose has legsFront.
+ */
+export function kneeCap(r, cls) {
+  const R = r * 1.22, y1 = r * 2;
+  const sides = `M${-r} ${f(y1)} C${-r} ${f(y1 * .55)} ${f(-R)} ${f(r * .45)} ${f(-R)} 0 A${f(R)} ${f(R)} 0 0 1 ${f(R)} 0 C${f(R)} ${f(r * .45)} ${r} ${f(y1 * .55)} ${r} ${f(y1)}`;
+  return `<path class="${cls} fo" d="${sides}Z"/><path fill="none" d="${sides}"/>`;
+}
+
+/** A full limb layer: {upper, lower, patch, knee} fragments. */
 export function limbLayer(upperLen, lowerLen, r, cls, { upperFrom = 0, lowerTo = null, lowerCap = true } = {}) {
   const lt = lowerTo == null ? lowerLen : lowerTo;
   return {
     upper: capsule(upperFrom, upperLen, r, cls, { cap0: true }),
     lower: openCapsule(lt, r, cls, { cap1: lowerCap }),
     patch: patch(upperLen, r, cls),
+    knee: kneeCap(r, cls),
   };
 }
 

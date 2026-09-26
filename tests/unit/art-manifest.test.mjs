@@ -63,9 +63,20 @@ test('character rig covers the docs/rig.md contract', () => {
   const slots = new Set(Object.values(rig.wear).map((w) => w.slot));
   for (const s of ['hat', 'top', 'bottom', 'shoes', 'back', 'face']) assert.ok(slots.has(s), `wear slot ${s}`);
   assert.ok(Object.keys(rig.wear).length >= 6 && rig.wear['towel-cape'] && rig.wear.apron, 'outfit pieces incl. a cape and an apron');
-  assert.equal(rig.characters.length, 4, 'starter cast');
-  assert.ok(new Set(rig.characters.map((c) => c.skin[0])).size === 4, 'varied skin');
-  assert.ok(new Set(rig.characters.map((c) => c.hair.style)).size === 4, 'varied hair');
+  assert.equal(rig.characters.length, 12, 'starter cast (P1.15)');
+  assert.ok(new Set(rig.characters.map((c) => c.skin[0])).size >= 8, 'varied skin');
+  assert.ok(new Set(rig.characters.map((c) => c.hair.style)).size >= 8, 'varied hair');
+  assert.ok(new Set(rig.characters.map((c) => c.body)).size >= 5, 'every body type');
+  for (const c of rig.characters) assert.ok(typeof c.name === 'string' && c.name, `${c.id}: a name (text layer data)`);
+  for (const id of ['girl9', 'boy5', 'grownup', 'grandpa']) assert.ok(rig.characters.some((c) => c.id === id), `kitchen cast ${id}`);
+  // The Character Maker's choices (P1.15).
+  const m = rig.maker;
+  assert.ok(m.skins.length >= 10 && m.hairColors.length >= 8, 'skins and hair colours');
+  assert.ok(m.hairStyles.length >= 10 && m.hairStyles.every((h) => rig.hairStyles[h]), 'at least 10 hair styles');
+  assert.ok(Object.keys(rig.wear).length >= 20, 'at least 20 outfit pieces');
+  for (const [slot, list] of Object.entries(m.wear)) for (const w of list) assert.ok(w === null || rig.wear[w].slot === slot, `maker ${slot}: ${w}`);
+  for (const b of m.bodies) assert.ok(rig.bodies[b], `body ${b}`);
+  for (const p of ['sit-cross', 'sit-eat']) assert.ok(rig.poses[p], `pose ${p}`);
   for (const [id, b] of Object.entries(manifest.characters.bodies)) assert.ok(isPt(b.anchor) && isNum(b.height), `body ${id}: anchor, height`);
 });
 
@@ -85,4 +96,53 @@ test('every character renders in every pose and expression, feet on the floor', 
       }
     }
   }
+});
+
+test('the cafe strip: pieces with in-place variants, stations, spawners and zones (P2a.1)', () => {
+  const cafe = manifest.rooms.cafe;
+  assert.ok(cafe, 'rooms.cafe');
+  assert.ok(cafe.width >= 2400 && cafe.width <= 3200, `cafe strip width ${cafe.width}`);
+  assert.deepEqual(cafe.layers.map((L) => L.id), ['back', 'counter', 'mid', 'front']);
+  const layerIds = new Set(cafe.layers.map((L) => L.id));
+  for (const id of ['fridge-door', 'oven-door', 'burner-1', 'burner-2', 'toaster', 'blender', 'coffee-machine', 'register', 'front-door', 'door-bell', 'menu-board', 'sink-tap']) {
+    const pc = cafe.pieces[id];
+    assert.ok(pc, `piece ${id}`);
+    assert.ok(layerIds.has(pc.layer), `${id}: layer`);
+    assert.ok([pc.x, pc.y, pc.w, pc.h].every(isNum), `${id}: box`);
+    assert.ok(Object.keys(pc.variants).length >= 2 && pc.variants[pc.default], `${id}: variants`);
+    for (const v of Object.values(pc.variants)) checkFile(v.file, v.bytes);
+    for (const t of pc.taps || []) assert.ok(pc.variants[t], `${id}: tap variant ${t}`);
+  }
+  assert.ok(cafe.pieces['fridge-door'].variants.open && cafe.pieces['oven-door'].variants.open && cafe.pieces['front-door'].variants.open, 'doors open');
+  assert.ok(cafe.pieces['menu-board'].textArea.every(isNum) && cafe.pieces['menu-board'].variants.blank && cafe.pieces['menu-board'].variants.pictures, 'menu board text area + picture fallback');
+  const slots = Object.fromEntries(cafe.slots.map((s) => [s.id, s]));
+  for (const id of ['burner-1', 'burner-2', 'oven', 'sink', 'cutting-board', 'toaster', 'blender', 'coffee-cup', 'register-drawer', 'tip-jar', 'counter-bell', 'door']) {
+    assert.ok(slots[id] && (isPt(slots[id].at) || (slots[id].box && slots[id].box.every(isNum))), `slot ${id}`);
+    if (slots[id].piece) assert.ok(cafe.pieces[slots[id].piece], `slot ${id}: piece ${slots[id].piece}`);
+  }
+  const surfaces = new Set(cafe.surfaces.map((s) => s.id));
+  for (const s of cafe.spawners) {
+    for (const sid of s.surfaces || []) assert.ok(surfaces.has(sid), `spawner ${s.id}: surface ${sid}`);
+    for (const item of s.items) assert.ok(manifest.props[item], `spawner ${s.id}: prop ${item}`);
+  }
+  assert.ok(cafe.seats.length >= 10, 'seats');
+  for (const s of cafe.seats) assert.ok(s.at[0] >= 0 && s.at[0] <= cafe.width && s.at[1] <= 1000, `seat ${s.id} is on the stage`);
+  assert.deepEqual(cafe.zones.map((z) => z.id), ['kitchen', 'counter', 'dining']);
+});
+
+test('cafe food: 30+ ingredients with prep variants, 12+ dishes with bites, the mystery kit', () => {
+  const c = manifest.cafe;
+  assert.ok(c.ingredients.length >= 30, `${c.ingredients.length} ingredients`);
+  for (const id of c.ingredients) assert.ok(manifest.props[id], `ingredient ${id}`);
+  for (const [id, p] of Object.entries(manifest.props)) {
+    if (!p.prep) continue;
+    for (const list of [p.prep.cut, p.prep.cook, p.prep.crack]) if (list) for (const v of list) assert.ok(p.variants[v], `${id}: prep variant ${v}`);
+    if (p.prep.cook) assert.equal(p.prep.cook.length, 4, `${id}: doneness 0..3`);
+  }
+  const dishes = c.dishes.filter((id) => manifest.props[id]);
+  assert.ok(dishes.length >= 12, `${dishes.length} dishes`);
+  for (const id of dishes) if (manifest.props[id].leaves) assert.ok(manifest.props[manifest.props[id].leaves], `${id}: leaves ${manifest.props[id].leaves}`);
+  for (const part of [c.mystery.base, ...Object.values(c.mystery.parts)]) assert.ok(manifest.props[part], `mystery ${part}`);
+  for (const col of c.mystery.colors) assert.ok(manifest.props[c.mystery.base].variants[col], `mystery colour ${col}`);
+  for (const id of Object.values(c.cookware)) assert.ok(manifest.props[id], `cookware ${id}`);
 });

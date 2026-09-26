@@ -1,11 +1,11 @@
 // Builds the character rig data (assets/characters/rig.json) that the runtime
 // assembler src/engine/rig-svg.js turns into live SVG. Contract: docs/rig.md.
-import { ART_SCALE, INK_W, css, scaleStrokes } from '../palette.mjs';
+import { ART_SCALE, INK_W, css, scaleStrokes, SKINS, SKIN_ORDER, HAIRS, HAIR_ORDER as HAIR_COLOR_ORDER } from '../palette.mjs';
 import { f } from '../ink.mjs';
 import { BODIES, baseParts, skeleton } from './body.mjs';
 import { faceAtoms, EXPRESSIONS, BLINK } from './faces.mjs';
-import { HAIR_STYLES, FACIAL_HAIR } from './hair.mjs';
-import { WEAR, SLOTS } from './wear.mjs';
+import { HAIR_STYLES, FACIAL_HAIR, HAIR_ORDER, FACIAL_ORDER } from './hair.mjs';
+import { WEAR, SLOTS, WEAR_ORDER, OUTFIT_COLORS } from './wear.mjs';
 import { POSES } from './poses.mjs';
 import { CAST } from './cast.mjs';
 
@@ -30,7 +30,7 @@ export function buildRig() {
       hair[hid] = { front: hs(h.front), back: h.back ? hs(h.back.svg) : '', backKind: h.back ? h.back.kind : null };
     }
     const facialHair = {};
-    for (const [fid, fn] of Object.entries(FACIAL_HAIR)) facialHair[fid] = typeof fn === 'function' ? fn(b.face) : fn;
+    for (const [fid, fn] of Object.entries(FACIAL_HAIR)) facialHair[fid] = typeof fn === 'function' ? fn(b.face, b.head) : fn;
     const wear = {};
     for (const [wid, w] of Object.entries(WEAR)) wear[wid] = w.gen(b);
     const { chinRel, ...parts } = base;
@@ -58,5 +58,17 @@ export function buildRig() {
     hairStyles: Object.fromEntries(Object.entries(HAIR_STYLES).map(([k, h]) => [k, { label: h.label }])),
     bodies,
     characters: CAST,
+    // The Character Maker's choices (P1.15), in button order.
+    maker: {
+      bodies: ['kid5', 'kid9', 'teen', 'adult', 'elder'],
+      skins: SKIN_ORDER.map((k) => SKINS[k]),
+      hairColors: HAIR_COLOR_ORDER.map((k) => HAIRS[k]),
+      hairStyles: HAIR_ORDER,
+      facialHair: FACIAL_ORDER,
+      eyes: [null, 'big', 'small', 'almond'],
+      brows: [null, 'thin', 'soft', 'bold'],
+      wear: WEAR_ORDER,
+      outfitColors: OUTFIT_COLORS,
+    },
   };
 }

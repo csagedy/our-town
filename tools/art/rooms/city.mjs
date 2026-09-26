@@ -194,7 +194,7 @@ function sandwichBoard(x, y) {
 }
 function backArt() {
   return `${hills()}${distantHouses()}${backTrees()}${street()}${playground()}
-    ${lampPost(790, BASE + 36)}${lampPost(1560, BASE + 36)}${lampPost(2446, BASE + 36)}${lampPost(-40, BASE + 36)}
+    ${lampPost(790, BASE + 36)}${lampPost(2446, BASE + 36)}${lampPost(-40, BASE + 36)}
     ${sandwichBoard(716, BASE + 40)}${parkedCar(1290, 1112, P.rose)}${parkedCar(420, 1100, P.teal)}`;
 }
 
@@ -534,6 +534,42 @@ function birdsArt() {
   return `<g id="birds">${bird(1570, 262, 1, P.blue)}${bird(1672, 206, 0.8, P.rose, 1, false)}${bird(1480, 196, 0.72, P.butter, -1)}</g>`;
 }
 
+// BOOTH (P1.15): the Character Maker, a narrow photo-booth kiosk between the
+// theater and the construction site. Reads by silhouette: a striped canopy, a
+// round mirror sign with a smiling face, a curtained doorway (its own piece,
+// booth-curtain) and bulbs.
+const BO = { cx: 1555, x0: 1470, x1: 1640, door: [1500, 690, 110, 224] };
+function boothArt() {
+  const { cx, x0, x1 } = BO, top = BASE - 360, w = x1 - x0;
+  const stripes = [...Array(6)].map((_, i) => `<path fill="${i % 2 ? P.cream : P.teal}" d="M${f(x0 - 16 + i * (w + 32) / 6)} ${top - 4} L${f(x0 - 16 + (i + 1) * (w + 32) / 6)} ${top - 4} L${f(x0 - 16 + (i + 1) * (w + 32) / 6)} ${top + 30} Q${f(x0 - 16 + (i + .5) * (w + 32) / 6)} ${top + 50} ${f(x0 - 16 + i * (w + 32) / 6)} ${top + 30}Z"/>`).join('');
+  const bulbsAt = [...Array(7)].map((_, i) => [f(x0 + 6 + i * (w - 12) / 6), top + 64]);
+  lit(bulbsAt.map(([x, y]) => `<ellipse class="n" fill="${GLOW}" opacity=".4" cx="${x}" cy="${y}" rx="18" ry="18"/><circle fill="${LAMP}" cx="${x}" cy="${y}" r="7"/>`).join('')
+    + `<circle class="n" fill="${GLOW}" opacity=".35" cx="${cx}" cy="${top - 70}" r="80"/>`);
+  return `<g id="booth"><ellipse class="n" fill="${P.ink}" opacity=".12" cx="${cx}" cy="${BASE + 4}" rx="110" ry="12"/>
+    <path fill="${P.lav}" d="M${x0} ${BASE} L${x0} ${top + 20} L${x1} ${top + 20} L${x1} ${BASE}Z"/>
+    <path ${tl(P.plum)} d="M${x0 + 12} ${top + 90} L${x0 + 12} ${BASE - 10} M${x1 - 12} ${top + 90} L${x1 - 12} ${BASE - 10}"/>
+    <rect fill="${P.plum}" x="${x0 - 8}" y="${BASE - 26}" width="${w + 16}" height="26" rx="6"/>
+    ${stripes}<rect fill="${P.tealDeep}" x="${x0 - 20}" y="${top - 16}" width="${w + 40}" height="16" rx="6"/>
+    ${bulbsAt.map(([x, y]) => `<circle fill="#FFF3C4" class="thin" cx="${x}" cy="${y}" r="7"/>`).join('')}
+    <rect fill="${P.plumDeep}" x="${BO.door[0] - 10}" y="${BO.door[1] - 10}" width="${BO.door[2] + 20}" height="${BO.door[3] + 10}" rx="10"/>
+    <rect fill="${P.oat}" x="${BO.door[0]}" y="${BO.door[1]}" width="${BO.door[2]}" height="${BO.door[3]}" rx="6"/>
+    <ellipse fill="${P.butter}" cx="${cx}" cy="${BASE - 60}" rx="30" ry="10"/><rect fill="${P.woodDeep}" x="${cx - 6}" y="${BASE - 58}" width="12" height="40"/>
+    <rect fill="${P.mustard}" x="${cx - 8}" y="${top - 40}" width="16" height="30"/>
+    <circle fill="${P.mustard}" cx="${cx}" cy="${top - 100}" r="74"/><circle fill="${P.glass}" cx="${cx}" cy="${top - 100}" r="58"/>
+    <path fill="${P.brown}" d="M${cx - 30} ${top - 110} Q${cx - 34} ${top - 146} ${cx} ${top - 148} Q${cx + 34} ${top - 146} ${cx + 30} ${top - 110} Q${cx + 20} ${top - 128} ${cx} ${top - 128} Q${cx - 20} ${top - 128} ${cx - 30} ${top - 110}Z"/>
+    <ellipse fill="${P.peach}" cx="${cx}" cy="${top - 100}" rx="28" ry="30"/>
+    <circle fill="${P.ink}" class="n" cx="${cx - 10}" cy="${top - 98}" r="4"/><circle fill="${P.ink}" class="n" cx="${cx + 10}" cy="${top - 98}" r="4"/>
+    <path class="d" d="M${cx - 10} ${top - 84} Q${cx} ${top - 76} ${cx + 10} ${top - 84}"/>
+    <path fill="${P.brown}" d="M${cx - 30} ${top - 110} Q${cx - 26} ${top - 136} ${cx} ${top - 136} Q${cx + 26} ${top - 136} ${cx + 30} ${top - 110} Q${cx + 12} ${top - 122} ${cx} ${top - 116} Q${cx - 12} ${top - 122} ${cx - 30} ${top - 110}Z"/>
+    <path fill="${P.butter}" class="thin" d="${star(cx + 62, top - 150, 16, 7)}"/><path fill="${P.butter}" class="thin" d="${star(cx - 66, top - 60, 11, 5)}"/>
+    ${glint(cx + 20, top - 138, 14)}</g>`;
+}
+function boothCurtainArt() {
+  const [x, y, w, h] = BO.door;
+  const half = (s) => { const e = s < 0 ? x : x + w, m = x + w / 2; return `<path fill="${P.berry}" d="M${e} ${y} L${m} ${y} Q${f(m + s * 10)} ${f(y + h * .45)} ${f(m + s * 32)} ${y + h} L${e} ${y + h}Z"/><path ${tl('#B9575B', 'stroke-width:5')} d="M${f(e - s * 16)} ${y + 10} L${f(e - s * 16)} ${y + h - 6} M${f(e - s * 34)} ${y + 10} L${f(e - s * 36)} ${y + h - 6}"/>`; };
+  return `<g id="booth-curtain">${half(-1)}${half(1)}<rect fill="${P.mustard}" x="${x - 8}" y="${y - 8}" width="${w + 16}" height="14" rx="6"/></g>`;
+}
+
 // LOT: an empty plot with a hanging "for sale" sign that shows a little house.
 // Drawn at the origin; the piece places it at the first lot and copies it.
 function lotArt() {
@@ -588,6 +624,8 @@ export const CITY = {
     { id: 'crane-jib', art: craneJibArt, depth: 641, pivot: CR.pivot },
     { id: 'school', art: schoolArt, depth: 640 },
     { id: 'school-bell', art: bellArt, depth: 641, pivot: SC.bell },
+    { id: 'booth', art: boothArt, depth: 640 },
+    { id: 'booth-curtain', art: boothCurtainArt, depth: 641, pivot: [BO.door[0] + BO.door[2] / 2, BO.door[1]] },
     { id: 'bus', art: busArt, depth: 790 },
     { id: 'lot', art: () => at(LOT_X[0], LOT_Y, 1, lotArt()), depth: 960, copies: LOT_X.map((x) => [x, LOT_Y]) },
     { id: 'lostfound', art: lostFoundArt, depth: 962 },

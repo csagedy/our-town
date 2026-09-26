@@ -5,12 +5,20 @@
  "inkWorld": 3.15,
  "characters": {
   "rig": "assets/characters/rig.json",
-  "bytes": 73952,
+  "bytes": 223448,
   "cast": [
    "girl9",
    "boy5",
    "grownup",
-   "grandpa"
+   "grandpa",
+   "girl5",
+   "boy9",
+   "performer",
+   "dad",
+   "grandma",
+   "teacher",
+   "chef",
+   "builder"
   ],
   "bodies": {
    "kid5": {
@@ -27,8 +35,22 @@
      0
     ]
    },
+   "teen": {
+    "height": 327.6,
+    "anchor": [
+     0,
+     0
+    ]
+   },
    "adult": {
     "height": 371,
+    "anchor": [
+     0,
+     0
+    ]
+   },
+   "elder": {
+    "height": 352.8,
     "anchor": [
      0,
      0
@@ -44,6 +66,8 @@
    "cheer",
    "sing",
    "sit",
+   "sit-eat",
+   "sit-cross",
    "walk-a",
    "walk-b",
    "lie"
@@ -81,7 +105,21 @@
    "glasses": "face",
    "hero-mask": "face",
    "sneakers": "shoes",
-   "boots": "shoes"
+   "boots": "shoes",
+   "tee-dots": "top",
+   "hoodie": "top",
+   "chef-coat": "top",
+   "sparkle-top": "top",
+   "safety-vest": "over",
+   "tutu": "bottom",
+   "sandals": "shoes",
+   "wings": "back",
+   "hard-hat": "hat",
+   "cap": "hat",
+   "bow": "hat",
+   "hijab": "hat",
+   "square-glasses": "face",
+   "sunglasses": "face"
   }
  },
  "rooms": {
@@ -289,6 +327,1302 @@
      ]
     }
    ]
+  },
+  "cafe": {
+   "id": "cafe",
+   "width": 2880,
+   "height": 1000,
+   "canvas": {
+    "x": -100,
+    "y": -100,
+    "w": 3080,
+    "h": 1200
+   },
+   "pxPerUnit": 1.5,
+   "layers": [
+    {
+     "id": "back",
+     "file": "assets/rooms/cafe/back.webp",
+     "baseline": 0,
+     "opaque": true,
+     "x": -100,
+     "y": -100,
+     "w": 3080,
+     "h": 1200,
+     "px": [
+      4620,
+      1800
+     ],
+     "bytes": 362750
+    },
+    {
+     "id": "counter",
+     "file": "assets/rooms/cafe/counter.webp",
+     "baseline": 724,
+     "opaque": false,
+     "x": 402,
+     "y": 181.33,
+     "w": 2153.33,
+     "h": 546.67,
+     "px": [
+      3230,
+      820
+     ],
+     "bytes": 67214
+    },
+    {
+     "id": "mid",
+     "file": "assets/rooms/cafe/mid.webp",
+     "baseline": 820,
+     "opaque": false,
+     "x": 524.67,
+     "y": 500,
+     "w": 2356.67,
+     "h": 422.67,
+     "px": [
+      3535,
+      634
+     ],
+     "bytes": 52022
+    },
+    {
+     "id": "front",
+     "file": "assets/rooms/cafe/front.webp",
+     "baseline": 1000,
+     "opaque": false,
+     "x": -100,
+     "y": 750.67,
+     "w": 2999.33,
+     "h": 345.33,
+     "px": [
+      4499,
+      518
+     ],
+     "bytes": 26820
+    }
+   ],
+   "floor": {
+    "y0": 707,
+    "y1": 960.4
+   },
+   "surfaces": [
+    {
+     "id": "pantry-1",
+     "layer": "back",
+     "x0": 49,
+     "x1": 357,
+     "y": 231
+    },
+    {
+     "id": "pantry-2",
+     "layer": "back",
+     "x0": 49,
+     "x1": 357,
+     "y": 357
+    },
+    {
+     "id": "pantry-3",
+     "layer": "back",
+     "x0": 49,
+     "x1": 357,
+     "y": 483
+    },
+    {
+     "id": "pantry-4",
+     "layer": "back",
+     "x0": 49,
+     "x1": 357,
+     "y": 609
+    },
+    {
+     "id": "window-sill",
+     "layer": "back",
+     "x0": 595,
+     "x1": 819,
+     "y": 348.6
+    },
+    {
+     "id": "shelf-k1",
+     "layer": "back",
+     "x0": 1169,
+     "x1": 1337,
+     "y": 168
+    },
+    {
+     "id": "shelf-k2",
+     "layer": "back",
+     "x0": 1169,
+     "x1": 1337,
+     "y": 287
+    },
+    {
+     "id": "cup-shelf-1",
+     "layer": "back",
+     "x0": 1764,
+     "x1": 1904,
+     "y": 203
+    },
+    {
+     "id": "cup-shelf-2",
+     "layer": "back",
+     "x0": 1764,
+     "x1": 1904,
+     "y": 315
+    },
+    {
+     "id": "dining-shelf",
+     "layer": "back",
+     "x0": 2282,
+     "x1": 2534,
+     "y": 399
+    },
+    {
+     "id": "sideboard",
+     "layer": "counter",
+     "x0": 2268,
+     "x1": 2548,
+     "y": 595
+    },
+    {
+     "id": "window-seat-sill",
+     "layer": "back",
+     "x0": 1981,
+     "x1": 2233,
+     "y": 474.6
+    },
+    {
+     "id": "fridge-top",
+     "layer": "counter",
+     "x0": 413,
+     "x1": 581,
+     "y": 250.6
+    },
+    {
+     "id": "fridge-1",
+     "layer": "counter",
+     "x0": 420,
+     "x1": 574,
+     "y": 483,
+     "inside": "fridge-door:open"
+    },
+    {
+     "id": "fridge-2",
+     "layer": "counter",
+     "x0": 420,
+     "x1": 574,
+     "y": 574,
+     "inside": "fridge-door:open"
+    },
+    {
+     "id": "fridge-3",
+     "layer": "counter",
+     "x0": 424.2,
+     "x1": 569.8,
+     "y": 658,
+     "inside": "fridge-door:open"
+    },
+    {
+     "id": "oven-rack",
+     "layer": "counter",
+     "x0": 950.6,
+     "x1": 1107.4,
+     "y": 651,
+     "inside": "oven-door:open"
+    },
+    {
+     "id": "counter-sink",
+     "layer": "counter",
+     "x0": 588,
+     "x1": 777,
+     "y": 504
+    },
+    {
+     "id": "cutting-board",
+     "layer": "counter",
+     "x0": 786.8,
+     "x1": 900.2,
+     "y": 492.8
+    },
+    {
+     "id": "stovetop",
+     "layer": "counter",
+     "x0": 917,
+     "x1": 1141,
+     "y": 504
+    },
+    {
+     "id": "counter-right",
+     "layer": "counter",
+     "x0": 1141,
+     "x1": 1358,
+     "y": 504
+    },
+    {
+     "id": "back-bar",
+     "layer": "counter",
+     "x0": 1386,
+     "x1": 1918,
+     "y": 504
+    },
+    {
+     "id": "window-seat",
+     "layer": "counter",
+     "x0": 1974,
+     "x1": 2156,
+     "y": 576.8
+    },
+    {
+     "id": "island-top",
+     "layer": "mid",
+     "x0": 532,
+     "x1": 889,
+     "y": 630
+    },
+    {
+     "id": "island-shelf",
+     "layer": "mid",
+     "x0": 567,
+     "x1": 854,
+     "y": 770
+    },
+    {
+     "id": "order-counter",
+     "layer": "mid",
+     "x0": 1388.8,
+     "x1": 1908.2,
+     "y": 616
+    },
+    {
+     "id": "display-shelf",
+     "layer": "mid",
+     "x0": 1421,
+     "x1": 1618.4,
+     "y": 712.6
+    },
+    {
+     "id": "table-1",
+     "layer": "front",
+     "x0": 2205,
+     "x1": 2415,
+     "y": 805
+    },
+    {
+     "id": "table-2",
+     "layer": "front",
+     "x0": 2443,
+     "x1": 2653,
+     "y": 805
+    },
+    {
+     "id": "table-3",
+     "layer": "front",
+     "x0": 2681,
+     "x1": 2891,
+     "y": 805
+    }
+   ],
+   "seats": [
+    {
+     "id": "island-stool-1",
+     "layer": "mid",
+     "at": [
+      602,
+      820.4
+     ]
+    },
+    {
+     "id": "island-stool-2",
+     "layer": "mid",
+     "at": [
+      819,
+      820.4
+     ]
+    },
+    {
+     "id": "window-seat-1",
+     "layer": "counter",
+     "at": [
+      2044,
+      576.8
+     ]
+    },
+    {
+     "id": "window-seat-2",
+     "layer": "counter",
+     "at": [
+      2135,
+      576.8
+     ]
+    },
+    {
+     "id": "table-1-chair-l",
+     "layer": "mid",
+     "at": [
+      2254,
+      865.2
+     ]
+    },
+    {
+     "id": "table-1-chair-r",
+     "layer": "mid",
+     "at": [
+      2366,
+      865.2
+     ]
+    },
+    {
+     "id": "table-2-chair-l",
+     "layer": "mid",
+     "at": [
+      2492,
+      865.2
+     ]
+    },
+    {
+     "id": "table-2-chair-r",
+     "layer": "mid",
+     "at": [
+      2604,
+      865.2
+     ]
+    },
+    {
+     "id": "table-3-stool-l",
+     "layer": "mid",
+     "at": [
+      2730,
+      865.2
+     ]
+    },
+    {
+     "id": "table-3-stool-r",
+     "layer": "mid",
+     "at": [
+      2842,
+      865.2
+     ]
+    }
+   ],
+   "pieces": {
+    "fridge-door": {
+     "layer": "counter",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/cafe/fridge-door-closed.webp",
+       "bytes": 4244
+      },
+      "open": {
+       "file": "assets/rooms/cafe/fridge-door-open.webp",
+       "bytes": 7354
+      }
+     },
+     "px": [
+      416,
+      548
+     ],
+     "x": 314.67,
+     "y": 372,
+     "w": 277.33,
+     "h": 365.33,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": [
+      406,
+      553
+     ]
+    },
+    "oven-door": {
+     "layer": "counter",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/cafe/oven-door-closed.webp",
+       "bytes": 2364
+      },
+      "closedOn": {
+       "file": "assets/rooms/cafe/oven-door-closedOn.webp",
+       "bytes": 2878
+      },
+      "open": {
+       "file": "assets/rooms/cafe/oven-door-open.webp",
+       "bytes": 2456
+      }
+     },
+     "px": [
+      349,
+      317
+     ],
+     "x": 912.67,
+     "y": 548.67,
+     "w": 232.67,
+     "h": 211.33,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": [
+      1029,
+      707
+     ]
+    },
+    "burner-1": {
+     "layer": "counter",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/cafe/burner-1-off.webp",
+       "bytes": 1102
+      },
+      "on": {
+       "file": "assets/rooms/cafe/burner-1-on.webp",
+       "bytes": 4748
+      }
+     },
+     "px": [
+      151,
+      67
+     ],
+     "x": 922.67,
+     "y": 476,
+     "w": 100.67,
+     "h": 44.67,
+     "taps": [
+      "off",
+      "on"
+     ],
+     "pivot": null
+    },
+    "burner-2": {
+     "layer": "counter",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/cafe/burner-2-off.webp",
+       "bytes": 1102
+      },
+      "on": {
+       "file": "assets/rooms/cafe/burner-2-on.webp",
+       "bytes": 4744
+      }
+     },
+     "px": [
+      151,
+      67
+     ],
+     "x": 1034.67,
+     "y": 476,
+     "w": 100.67,
+     "h": 44.67,
+     "taps": [
+      "off",
+      "on"
+     ],
+     "pivot": null
+    },
+    "knob-1": {
+     "layer": "counter",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/cafe/knob-1-off.webp",
+       "bytes": 1472
+      },
+      "on": {
+       "file": "assets/rooms/cafe/knob-1-on.webp",
+       "bytes": 1674
+      }
+     },
+     "px": [
+      64,
+      48
+     ],
+     "x": 956.67,
+     "y": 517.33,
+     "w": 42.67,
+     "h": 32,
+     "taps": [
+      "off",
+      "on"
+     ],
+     "pivot": null,
+     "controls": "burner-1"
+    },
+    "knob-2": {
+     "layer": "counter",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/cafe/knob-2-off.webp",
+       "bytes": 1472
+      },
+      "on": {
+       "file": "assets/rooms/cafe/knob-2-on.webp",
+       "bytes": 1674
+      }
+     },
+     "px": [
+      64,
+      48
+     ],
+     "x": 1068.67,
+     "y": 517.33,
+     "w": 42.67,
+     "h": 32,
+     "taps": [
+      "off",
+      "on"
+     ],
+     "pivot": null,
+     "controls": "burner-2"
+    },
+    "sink-tap": {
+     "layer": "counter",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/cafe/sink-tap-off.webp",
+       "bytes": 2140
+      },
+      "on": {
+       "file": "assets/rooms/cafe/sink-tap-on.webp",
+       "bytes": 3378
+      }
+     },
+     "px": [
+      124,
+      127
+     ],
+     "x": 670.67,
+     "y": 426.67,
+     "w": 82.67,
+     "h": 84.67,
+     "taps": [
+      "off",
+      "on"
+     ],
+     "pivot": null
+    },
+    "toaster": {
+     "layer": "counter",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/cafe/toaster-up.webp",
+       "bytes": 3190
+      },
+      "down": {
+       "file": "assets/rooms/cafe/toaster-down.webp",
+       "bytes": 3302
+      }
+     },
+     "px": [
+      147,
+      101
+     ],
+     "x": 1146.67,
+     "y": 444,
+     "w": 98,
+     "h": 67.33,
+     "taps": [
+      "up",
+      "down"
+     ],
+     "pivot": null
+    },
+    "blender": {
+     "layer": "counter",
+     "default": "empty",
+     "variants": {
+      "empty": {
+       "file": "assets/rooms/cafe/blender-empty.webp",
+       "bytes": 4124
+      },
+      "pink": {
+       "file": "assets/rooms/cafe/blender-pink.webp",
+       "bytes": 4432
+      },
+      "yellow": {
+       "file": "assets/rooms/cafe/blender-yellow.webp",
+       "bytes": 4426
+      },
+      "green": {
+       "file": "assets/rooms/cafe/blender-green.webp",
+       "bytes": 4504
+      },
+      "choc": {
+       "file": "assets/rooms/cafe/blender-choc.webp",
+       "bytes": 4524
+      },
+      "purple": {
+       "file": "assets/rooms/cafe/blender-purple.webp",
+       "bytes": 4468
+      },
+      "cream": {
+       "file": "assets/rooms/cafe/blender-cream.webp",
+       "bytes": 4460
+      }
+     },
+     "px": [
+      116,
+      225
+     ],
+     "x": 1233.33,
+     "y": 360,
+     "w": 77.33,
+     "h": 150,
+     "taps": null,
+     "pivot": null
+    },
+    "coffee-machine": {
+     "layer": "counter",
+     "default": "idle",
+     "variants": {
+      "idle": {
+       "file": "assets/rooms/cafe/coffee-machine-idle.webp",
+       "bytes": 5562
+      },
+      "coffee": {
+       "file": "assets/rooms/cafe/coffee-machine-coffee.webp",
+       "bytes": 5814
+      },
+      "cocoa": {
+       "file": "assets/rooms/cafe/coffee-machine-cocoa.webp",
+       "bytes": 5806
+      },
+      "milk": {
+       "file": "assets/rooms/cafe/coffee-machine-milk.webp",
+       "bytes": 5810
+      }
+     },
+     "px": [
+      243,
+      219
+     ],
+     "x": 1396,
+     "y": 364,
+     "w": 162,
+     "h": 146,
+     "taps": null,
+     "pivot": null
+    },
+    "register": {
+     "layer": "mid",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/cafe/register-closed.webp",
+       "bytes": 4334
+      },
+      "open": {
+       "file": "assets/rooms/cafe/register-open.webp",
+       "bytes": 7460
+      }
+     },
+     "px": [
+      189,
+      183
+     ],
+     "x": 1652,
+     "y": 519.33,
+     "w": 126,
+     "h": 122,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": null
+    },
+    "counter-bell": {
+     "layer": "mid",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/cafe/counter-bell-up.webp",
+       "bytes": 2026
+      },
+      "down": {
+       "file": "assets/rooms/cafe/counter-bell-down.webp",
+       "bytes": 2482
+      }
+     },
+     "px": [
+      117,
+      106
+     ],
+     "x": 1774,
+     "y": 552.67,
+     "w": 78,
+     "h": 70.67,
+     "taps": [
+      "up",
+      "down"
+     ],
+     "pivot": null
+    },
+    "menu-board": {
+     "layer": "back",
+     "default": "blank",
+     "variants": {
+      "blank": {
+       "file": "assets/rooms/cafe/menu-board-blank.webp",
+       "bytes": 5412
+      },
+      "pictures": {
+       "file": "assets/rooms/cafe/menu-board-pictures.webp",
+       "bytes": 9974
+      }
+     },
+     "px": [
+      412,
+      472
+     ],
+     "x": 1458.67,
+     "y": 46.67,
+     "w": 274.67,
+     "h": 314.67,
+     "taps": null,
+     "pivot": null,
+     "textArea": [
+      1486.8,
+      182,
+      218.4,
+      133
+     ]
+    },
+    "front-door": {
+     "layer": "back",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/cafe/front-door-closed.webp",
+       "bytes": 6940
+      },
+      "open": {
+       "file": "assets/rooms/cafe/front-door-open.webp",
+       "bytes": 6574
+      }
+     },
+     "px": [
+      315,
+      653
+     ],
+     "x": 2517.33,
+     "y": 304,
+     "w": 210,
+     "h": 435.33,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": [
+      2597,
+      518
+     ]
+    },
+    "door-bell": {
+     "layer": "back",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/cafe/door-bell-still.webp",
+       "bytes": 1718
+      },
+      "ring": {
+       "file": "assets/rooms/cafe/door-bell-ring.webp",
+       "bytes": 2278
+      }
+     },
+     "px": [
+      85,
+      93
+     ],
+     "x": 2612,
+     "y": 308.67,
+     "w": 56.67,
+     "h": 62,
+     "taps": null,
+     "pivot": [
+      2632,
+      317.8
+     ]
+    }
+   },
+   "slots": [
+    {
+     "id": "burner-1",
+     "kind": "burner",
+     "layer": "counter",
+     "at": [
+      973,
+      502.6
+     ],
+     "piece": "burner-1",
+     "box": null
+    },
+    {
+     "id": "burner-2",
+     "kind": "burner",
+     "layer": "counter",
+     "at": [
+      1085,
+      502.6
+     ],
+     "piece": "burner-2",
+     "box": null
+    },
+    {
+     "id": "oven",
+     "kind": "oven",
+     "layer": "counter",
+     "at": [
+      1029,
+      651
+     ],
+     "box": [
+      945,
+      564.2,
+      168,
+      128.8
+     ],
+     "piece": "oven-door"
+    },
+    {
+     "id": "sink",
+     "kind": "sink",
+     "layer": "counter",
+     "at": [
+      693,
+      508.2
+     ],
+     "box": [
+      630,
+      483,
+      126,
+      28
+     ],
+     "piece": "sink-tap"
+    },
+    {
+     "id": "cutting-board",
+     "kind": "board",
+     "layer": "counter",
+     "at": [
+      843.5,
+      492.8
+     ],
+     "box": [
+      784,
+      441,
+      119,
+      53.2
+     ]
+    },
+    {
+     "id": "toaster",
+     "kind": "toaster",
+     "layer": "counter",
+     "at": [
+      1181.6,
+      455
+     ],
+     "piece": "toaster",
+     "box": null
+    },
+    {
+     "id": "blender",
+     "kind": "blender",
+     "layer": "counter",
+     "at": [
+      1267,
+      380.8
+     ],
+     "box": [
+      1240.4,
+      380.8,
+      53.2,
+      81.2
+     ],
+     "piece": "blender"
+    },
+    {
+     "id": "coffee-cup",
+     "kind": "coffee",
+     "layer": "counter",
+     "at": [
+      1477,
+      483
+     ],
+     "piece": "coffee-machine",
+     "box": null
+    },
+    {
+     "id": "fridge",
+     "kind": "fridge",
+     "layer": "counter",
+     "box": [
+      417.2,
+      399,
+      159.6,
+      303.8
+     ],
+     "piece": "fridge-door",
+     "at": null
+    },
+    {
+     "id": "register-drawer",
+     "kind": "register",
+     "layer": "mid",
+     "at": [
+      1715,
+      623
+     ],
+     "piece": "register",
+     "box": null
+    },
+    {
+     "id": "register-key-1",
+     "kind": "key",
+     "layer": "mid",
+     "at": [
+      1694,
+      574
+     ],
+     "piece": "register",
+     "note": 0,
+     "box": null
+    },
+    {
+     "id": "register-key-2",
+     "kind": "key",
+     "layer": "mid",
+     "at": [
+      1712.2,
+      574
+     ],
+     "piece": "register",
+     "note": 1,
+     "box": null
+    },
+    {
+     "id": "register-key-3",
+     "kind": "key",
+     "layer": "mid",
+     "at": [
+      1730.4,
+      574
+     ],
+     "piece": "register",
+     "note": 2,
+     "box": null
+    },
+    {
+     "id": "register-key-4",
+     "kind": "key",
+     "layer": "mid",
+     "at": [
+      1691.2,
+      586.6
+     ],
+     "piece": "register",
+     "note": 3,
+     "box": null
+    },
+    {
+     "id": "register-key-5",
+     "kind": "key",
+     "layer": "mid",
+     "at": [
+      1709.4,
+      586.6
+     ],
+     "piece": "register",
+     "note": 4,
+     "box": null
+    },
+    {
+     "id": "register-key-6",
+     "kind": "key",
+     "layer": "mid",
+     "at": [
+      1727.6,
+      586.6
+     ],
+     "piece": "register",
+     "note": 5,
+     "box": null
+    },
+    {
+     "id": "counter-bell",
+     "kind": "bell",
+     "layer": "mid",
+     "at": [
+      1813,
+      588
+     ],
+     "piece": "counter-bell",
+     "box": null
+    },
+    {
+     "id": "tip-jar",
+     "kind": "tip-jar",
+     "layer": "mid",
+     "at": [
+      1863.4,
+      616
+     ],
+     "box": null
+    },
+    {
+     "id": "ice-cream-vanilla",
+     "kind": "scoop",
+     "layer": "counter",
+     "at": [
+      1757,
+      571.2
+     ],
+     "box": null
+    },
+    {
+     "id": "ice-cream-strawberry",
+     "kind": "scoop",
+     "layer": "counter",
+     "at": [
+      1808.8,
+      571.2
+     ],
+     "box": null
+    },
+    {
+     "id": "ice-cream-chocolate",
+     "kind": "scoop",
+     "layer": "counter",
+     "at": [
+      1860.6,
+      571.2
+     ],
+     "box": null
+    },
+    {
+     "id": "door",
+     "kind": "door",
+     "layer": "back",
+     "at": [
+      2660,
+      721
+     ],
+     "piece": "front-door",
+     "box": null
+    },
+    {
+     "id": "order-spot",
+     "kind": "queue",
+     "layer": "mid",
+     "at": [
+      1694,
+      910
+     ],
+     "box": null
+    },
+    {
+     "id": "staff-spot",
+     "kind": "staff",
+     "layer": "counter",
+     "at": [
+      1610,
+      777
+     ],
+     "box": null
+    }
+   ],
+   "spawners": [
+    {
+     "id": "fridge",
+     "surfaces": [
+      "fridge-1",
+      "fridge-2",
+      "fridge-3"
+     ],
+     "piece": "fridge-door",
+     "when": "open",
+     "items": [
+      "egg",
+      "milk",
+      "butter",
+      "cheese",
+      "tomato",
+      "lettuce",
+      "carrot",
+      "strawberry",
+      "blueberries",
+      "lemon",
+      "sausage",
+      "fish",
+      "chicken",
+      "tofu"
+     ]
+    },
+    {
+     "id": "pantry",
+     "surfaces": [
+      "pantry-1",
+      "pantry-2",
+      "pantry-3",
+      "pantry-4"
+     ],
+     "items": [
+      "flour",
+      "sugar",
+      "rice",
+      "pasta",
+      "honey",
+      "chocolate",
+      "sprinkles",
+      "coffee-beans",
+      "bread",
+      "onion",
+      "potato",
+      "banana",
+      "apple",
+      "seaweed"
+     ]
+    },
+    {
+     "id": "ice-cream",
+     "slots": [
+      "ice-cream-vanilla",
+      "ice-cream-strawberry",
+      "ice-cream-chocolate"
+     ],
+     "items": [
+      "scoop"
+     ]
+    },
+    {
+     "id": "cups",
+     "at": [
+      1638,
+      504
+     ],
+     "items": [
+      "cafe-cup"
+     ]
+    },
+    {
+     "id": "plates",
+     "at": [
+      1685.6,
+      504
+     ],
+     "items": [
+      "plate"
+     ]
+    }
+   ],
+   "zones": [
+    {
+     "id": "kitchen",
+     "x0": 0,
+     "x1": 1365,
+     "camera": 0
+    },
+    {
+     "id": "counter",
+     "x0": 1365,
+     "x1": 1932,
+     "camera": 900
+    },
+    {
+     "id": "dining",
+     "x0": 1932,
+     "x1": 2879.8,
+     "camera": 1440
+    }
+   ]
+  },
+  "booth": {
+   "id": "booth",
+   "width": 1440,
+   "height": 1000,
+   "canvas": {
+    "x": -100,
+    "y": -100,
+    "w": 1640,
+    "h": 1200
+   },
+   "pxPerUnit": 1.5,
+   "layers": [
+    {
+     "id": "back",
+     "file": "assets/rooms/booth/back.webp",
+     "baseline": 0,
+     "opaque": true,
+     "x": -100,
+     "y": -100,
+     "w": 1640,
+     "h": 1200,
+     "px": [
+      2460,
+      1800
+     ],
+     "bytes": 116050
+    },
+    {
+     "id": "mid",
+     "file": "assets/rooms/booth/mid.webp",
+     "baseline": 900,
+     "opaque": false,
+     "x": 678,
+     "y": 818.67,
+     "w": 134,
+     "h": 100,
+     "px": [
+      201,
+      150
+     ],
+     "bytes": 4624
+    }
+   ],
+   "floor": {
+    "y0": 707,
+    "y1": 960.4
+   },
+   "surfaces": [
+    {
+     "id": "hat-shelf",
+     "layer": "back",
+     "x0": 682,
+     "x1": 871,
+     "y": 364
+    },
+    {
+     "id": "book-shelf",
+     "layer": "back",
+     "x0": 682,
+     "x1": 871,
+     "y": 525
+    }
+   ],
+   "seats": [
+    {
+     "id": "pouf-1",
+     "layer": "mid",
+     "at": [
+      745,
+      840
+     ]
+    },
+    {
+     "id": "rug-1",
+     "layer": "back",
+     "at": [
+      164,
+      903
+     ]
+    }
+   ]
   }
  },
  "map": {
@@ -319,7 +1653,7 @@
     "id": "back",
     "opaque": true,
     "file": "assets/rooms/city/back.webp",
-    "bytes": 134756,
+    "bytes": 133904,
     "px": [
      3900,
      1800
@@ -330,7 +1664,7 @@
     "h": 1200,
     "night": {
      "file": "assets/rooms/city/back-night.webp",
-     "bytes": 107090
+     "bytes": 105490
     }
    },
    {
@@ -568,6 +1902,47 @@
     ],
     "copies": null
    },
+   "booth": {
+    "file": "assets/rooms/city/booth.webp",
+    "bytes": 15748,
+    "px": [
+     244,
+     590
+    ],
+    "x": 1007.33,
+    "y": 262,
+    "w": 162.67,
+    "h": 393.33,
+    "night": {
+     "file": "assets/rooms/city/booth-night.webp",
+     "bytes": 15802
+    },
+    "depth": 640,
+    "pivot": null,
+    "copies": null
+   },
+   "booth-curtain": {
+    "file": "assets/rooms/city/booth-curtain.webp",
+    "bytes": 3560,
+    "px": [
+     145,
+     256
+    ],
+    "x": 1040,
+    "y": 473.33,
+    "w": 96.67,
+    "h": 170.67,
+    "night": {
+     "file": "assets/rooms/city/booth-curtain-night.webp",
+     "bytes": 2874
+    },
+    "depth": 641,
+    "pivot": [
+     1088.5,
+     483
+    ],
+    "copies": null
+   },
    "bus": {
     "file": "assets/rooms/city/bus.webp",
     "bytes": 11878,
@@ -705,7 +2080,10 @@
     18.2,
     -19.6
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "plate": {
    "label": "plate",
@@ -743,7 +2121,10 @@
     -30.8,
     30.8,
     -9.8
-   ]
+   ],
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "bowl": {
    "label": "bowl",
@@ -797,7 +2178,10 @@
     -25.2,
     25.2,
     -28
-   ]
+   ],
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "teapot": {
    "label": "teapot",
@@ -831,7 +2215,10 @@
     30.8,
     -28
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "pan": {
    "label": "frying pan",
@@ -885,7 +2272,10 @@
     -56,
     0,
     -8.4
-   ]
+   ],
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "pot": {
    "label": "soup pot",
@@ -938,7 +2328,10 @@
     0,
     -34.75
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "cookie-jar": {
    "label": "cookie jar",
@@ -991,7 +2384,10 @@
     0,
     -39
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "cupcake": {
    "label": "cupcake",
@@ -1062,7 +2458,10 @@
     0,
     -36.75
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "croissant": {
    "label": "croissant",
@@ -1116,7 +2515,10 @@
     0,
     -18
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "apple": {
    "label": "apple",
@@ -1173,6 +2575,22 @@
       12.5,
       51
      ]
+    },
+    "sliced": {
+     "file": "assets/sprites/props/apple-sliced.webp",
+     "px": [
+      147,
+      80
+     ],
+     "bytes": 3352,
+     "size": [
+      73.5,
+      40
+     ],
+     "anchor": [
+      36.5,
+      35.5
+     ]
     }
    },
    "taps": null,
@@ -1186,7 +2604,15 @@
     0,
     -25.5
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": {
+    "cut": [
+     "whole",
+     "sliced"
+    ]
+   },
+   "leaves": null
   },
   "banana": {
    "label": "banana",
@@ -1227,6 +2653,22 @@
       42,
       57
      ]
+    },
+    "sliced": {
+     "file": "assets/sprites/props/banana-sliced.webp",
+     "px": [
+      126,
+      78
+     ],
+     "bytes": 3942,
+     "size": [
+      63,
+      39
+     ],
+     "anchor": [
+      31.5,
+      35
+     ]
     }
    },
    "taps": [
@@ -1239,7 +2681,15 @@
     0,
     -20
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": {
+    "cut": [
+     "peeled",
+     "sliced"
+    ]
+   },
+   "leaves": null
   },
   "egg": {
    "label": "egg",
@@ -1280,6 +2730,38 @@
       47.5,
       24.5
      ]
+    },
+    "fried": {
+     "file": "assets/sprites/props/egg-fried.webp",
+     "px": [
+      144,
+      57
+     ],
+     "bytes": 2568,
+     "size": [
+      72,
+      28.5
+     ],
+     "anchor": [
+      35.5,
+      23.5
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/egg-toasty.webp",
+     "px": [
+      144,
+      91
+     ],
+     "bytes": 3292,
+     "size": [
+      72,
+      45.5
+     ],
+     "anchor": [
+      35.5,
+      40.5
+     ]
     }
    },
    "taps": [
@@ -1292,7 +2774,22 @@
     0,
     -24.25
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": {
+    "crack": [
+     "whole",
+     "cracked"
+    ],
+    "cook": [
+     "cracked",
+     "fried",
+     "fried",
+     "toasty"
+    ],
+    "method": "fried"
+   },
+   "leaves": null
   },
   "bread": {
    "label": "bread",
@@ -1333,6 +2830,54 @@
       40,
       43
      ]
+    },
+    "slice": {
+     "file": "assets/sprites/props/bread-slice.webp",
+     "px": [
+      150,
+      142
+     ],
+     "bytes": 3302,
+     "size": [
+      75,
+      71
+     ],
+     "anchor": [
+      37.5,
+      67.5
+     ]
+    },
+    "toast": {
+     "file": "assets/sprites/props/bread-toast.webp",
+     "px": [
+      150,
+      142
+     ],
+     "bytes": 3310,
+     "size": [
+      75,
+      71
+     ],
+     "anchor": [
+      37.5,
+      67.5
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/bread-toasty.webp",
+     "px": [
+      150,
+      184
+     ],
+     "bytes": 4296,
+     "size": [
+      75,
+      92
+     ],
+     "anchor": [
+      37.5,
+      88.5
+     ]
     }
    },
    "taps": [
@@ -1345,7 +2890,23 @@
     0,
     -20
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": {
+    "cut": [
+     "loaf",
+     "sliced",
+     "slice"
+    ],
+    "cook": [
+     "slice",
+     "toast",
+     "toast",
+     "toasty"
+    ],
+    "method": "toasted"
+   },
+   "leaves": null
   },
   "cake-slice": {
    "label": "cake slice",
@@ -1399,7 +2960,10 @@
     0,
     -22.75
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "juice": {
    "label": "juice glass",
@@ -1452,7 +3016,10 @@
     0,
     -38.25
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "ball": {
    "label": "ball",
@@ -1486,7 +3053,10 @@
     0,
     -29.75
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "teddy": {
    "label": "teddy bear",
@@ -1520,7 +3090,10 @@
     0,
     -42
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "toy-car": {
    "label": "toy car",
@@ -1554,7 +3127,10 @@
     0,
     -26.25
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "book": {
    "label": "picture book",
@@ -1607,7 +3183,10 @@
     0,
     -9.5
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "flower-pot": {
    "label": "flower pot",
@@ -1659,7 +3238,10 @@
     0,
     -45.25
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "gift": {
    "label": "gift box",
@@ -1712,7 +3294,10 @@
     0,
     -33
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "backpack": {
    "label": "backpack",
@@ -1747,7 +3332,10 @@
     0,
     -67.2
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "car": {
    "label": "car",
@@ -1781,7 +3369,10 @@
     0,
     -87.75
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
   },
   "blocks": {
    "label": "toy blocks",
@@ -1815,7 +3406,4492 @@
     0,
     -34
    ],
-   "surface": null
+   "surface": null,
+   "set": "starter",
+   "prep": null,
+   "leaves": null
+  },
+  "tomato": {
+   "label": "tomato",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "red",
+    "fridge"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/tomato-whole.webp",
+     "px": [
+      116,
+      115
+     ],
+     "bytes": 3234,
+     "size": [
+      58,
+      57.5
+     ],
+     "anchor": [
+      29,
+      54
+     ]
+    },
+    "sliced": {
+     "file": "assets/sprites/props/tomato-sliced.webp",
+     "px": [
+      150,
+      82
+     ],
+     "bytes": 4794,
+     "size": [
+      75,
+      41
+     ],
+     "anchor": [
+      37.5,
+      38.5
+     ]
+    }
+   },
+   "taps": [
+    "whole",
+    "sliced"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -27
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "sliced"
+    ]
+   },
+   "leaves": null
+  },
+  "cheese": {
+   "label": "cheese",
+   "tags": [
+    "food",
+    "ingredient",
+    "dairy",
+    "yellow",
+    "fridge"
+   ],
+   "default": "block",
+   "variants": {
+    "block": {
+     "file": "assets/sprites/props/cheese-block.webp",
+     "px": [
+      146,
+      96
+     ],
+     "bytes": 3498,
+     "size": [
+      73,
+      48
+     ],
+     "anchor": [
+      38.5,
+      44.5
+     ]
+    },
+    "slice": {
+     "file": "assets/sprites/props/cheese-slice.webp",
+     "px": [
+      126,
+      85
+     ],
+     "bytes": 3110,
+     "size": [
+      63,
+      42.5
+     ],
+     "anchor": [
+      31.5,
+      37.5
+     ]
+    }
+   },
+   "taps": [
+    "block",
+    "slice"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -22.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "block",
+     "slice"
+    ]
+   },
+   "leaves": null
+  },
+  "lettuce": {
+   "label": "lettuce",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "green",
+    "fridge"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/lettuce-whole.webp",
+     "px": [
+      130,
+      111
+     ],
+     "bytes": 4266,
+     "size": [
+      65,
+      55.5
+     ],
+     "anchor": [
+      32.5,
+      51.5
+     ]
+    },
+    "chopped": {
+     "file": "assets/sprites/props/lettuce-chopped.webp",
+     "px": [
+      145,
+      95
+     ],
+     "bytes": 4262,
+     "size": [
+      72.5,
+      47.5
+     ],
+     "anchor": [
+      37,
+      43.5
+     ]
+    }
+   },
+   "taps": [
+    "whole",
+    "chopped"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -25.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "chopped"
+    ]
+   },
+   "leaves": null
+  },
+  "carrot": {
+   "label": "carrot",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "orange",
+    "fridge"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/carrot-whole.webp",
+     "px": [
+      184,
+      103
+     ],
+     "bytes": 3194,
+     "size": [
+      92,
+      51.5
+     ],
+     "anchor": [
+      43,
+      49
+     ]
+    },
+    "chopped": {
+     "file": "assets/sprites/props/carrot-chopped.webp",
+     "px": [
+      129,
+      87
+     ],
+     "bytes": 3780,
+     "size": [
+      64.5,
+      43.5
+     ],
+     "anchor": [
+      35,
+      40
+     ]
+    }
+   },
+   "taps": [
+    "whole",
+    "chopped"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -24.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "chopped"
+    ]
+   },
+   "leaves": null
+  },
+  "onion": {
+   "label": "onion",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "pantry"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/onion-whole.webp",
+     "px": [
+      120,
+      134
+     ],
+     "bytes": 3000,
+     "size": [
+      60,
+      67
+     ],
+     "anchor": [
+      30,
+      57
+     ]
+    },
+    "chopped": {
+     "file": "assets/sprites/props/onion-chopped.webp",
+     "px": [
+      131,
+      74
+     ],
+     "bytes": 3364,
+     "size": [
+      65.5,
+      37
+     ],
+     "anchor": [
+      32,
+      36
+     ]
+    }
+   },
+   "taps": [
+    "whole",
+    "chopped"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -28.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "chopped"
+    ]
+   },
+   "leaves": null
+  },
+  "potato": {
+   "label": "potato",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "pantry"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/potato-whole.webp",
+     "px": [
+      129,
+      81
+     ],
+     "bytes": 2346,
+     "size": [
+      64.5,
+      40.5
+     ],
+     "anchor": [
+      32,
+      37
+     ]
+    },
+    "sticks": {
+     "file": "assets/sprites/props/potato-sticks.webp",
+     "px": [
+      160,
+      84
+     ],
+     "bytes": 3612,
+     "size": [
+      80,
+      42
+     ],
+     "anchor": [
+      42,
+      33
+     ]
+    },
+    "fries": {
+     "file": "assets/sprites/props/potato-fries.webp",
+     "px": [
+      107,
+      135
+     ],
+     "bytes": 4016,
+     "size": [
+      53.5,
+      67.5
+     ],
+     "anchor": [
+      27.5,
+      64
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/potato-toasty.webp",
+     "px": [
+      107,
+      184
+     ],
+     "bytes": 4268,
+     "size": [
+      53.5,
+      92
+     ],
+     "anchor": [
+      27.5,
+      88.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -18.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "sticks"
+    ],
+    "cook": [
+     "sticks",
+     "fries",
+     "fries",
+     "toasty"
+    ]
+   },
+   "leaves": null
+  },
+  "strawberry": {
+   "label": "strawberry",
+   "tags": [
+    "food",
+    "ingredient",
+    "fruit",
+    "red",
+    "sweet",
+    "fridge"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/strawberry-whole.webp",
+     "px": [
+      98,
+      101
+     ],
+     "bytes": 2918,
+     "size": [
+      49,
+      50.5
+     ],
+     "anchor": [
+      24.5,
+      47
+     ]
+    },
+    "sliced": {
+     "file": "assets/sprites/props/strawberry-sliced.webp",
+     "px": [
+      139,
+      71
+     ],
+     "bytes": 3232,
+     "size": [
+      69.5,
+      35.5
+     ],
+     "anchor": [
+      33,
+      32
+     ]
+    }
+   },
+   "taps": [
+    "whole",
+    "sliced"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -23.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "sliced"
+    ]
+   },
+   "leaves": null
+  },
+  "blueberries": {
+   "label": "blueberries",
+   "tags": [
+    "food",
+    "ingredient",
+    "fruit",
+    "blue",
+    "sweet",
+    "fridge"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/blueberries.webp",
+     "px": [
+      118,
+      102
+     ],
+     "bytes": 4120,
+     "size": [
+      59,
+      51
+     ],
+     "anchor": [
+      29.5,
+      46.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -23.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "lemon": {
+   "label": "lemon",
+   "tags": [
+    "food",
+    "ingredient",
+    "fruit",
+    "yellow",
+    "sour",
+    "fridge"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/lemon-whole.webp",
+     "px": [
+      146,
+      100
+     ],
+     "bytes": 2800,
+     "size": [
+      73,
+      50
+     ],
+     "anchor": [
+      36.5,
+      46.5
+     ]
+    },
+    "sliced": {
+     "file": "assets/sprites/props/lemon-sliced.webp",
+     "px": [
+      144,
+      90
+     ],
+     "bytes": 3450,
+     "size": [
+      72,
+      45
+     ],
+     "anchor": [
+      34.5,
+      41.5
+     ]
+    }
+   },
+   "taps": [
+    "whole",
+    "sliced"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -23.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "whole",
+     "sliced"
+    ]
+   },
+   "leaves": null
+  },
+  "flour": {
+   "label": "flour",
+   "tags": [
+    "food",
+    "ingredient",
+    "baking",
+    "pantry"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/flour.webp",
+     "px": [
+      118,
+      146
+     ],
+     "bytes": 3534,
+     "size": [
+      59,
+      73
+     ],
+     "anchor": [
+      29.5,
+      69.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -34.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "sugar": {
+   "label": "sugar",
+   "tags": [
+    "food",
+    "ingredient",
+    "baking",
+    "sweet",
+    "pantry"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/sugar.webp",
+     "px": [
+      118,
+      138
+     ],
+     "bytes": 3638,
+     "size": [
+      59,
+      69
+     ],
+     "anchor": [
+      29.5,
+      65.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -32.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "butter": {
+   "label": "butter",
+   "tags": [
+    "food",
+    "ingredient",
+    "dairy",
+    "fridge"
+   ],
+   "default": "stick",
+   "variants": {
+    "stick": {
+     "file": "assets/sprites/props/butter-stick.webp",
+     "px": [
+      144,
+      56
+     ],
+     "bytes": 1646,
+     "size": [
+      72,
+      28
+     ],
+     "anchor": [
+      36,
+      24.5
+     ]
+    },
+    "pat": {
+     "file": "assets/sprites/props/butter-pat.webp",
+     "px": [
+      82,
+      54
+     ],
+     "bytes": 1542,
+     "size": [
+      41,
+      27
+     ],
+     "anchor": [
+      22,
+      23.5
+     ]
+    }
+   },
+   "taps": [
+    "stick",
+    "pat"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -12.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "stick",
+     "pat"
+    ]
+   },
+   "leaves": null
+  },
+  "milk": {
+   "label": "milk",
+   "tags": [
+    "food",
+    "ingredient",
+    "dairy",
+    "drink",
+    "fridge"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/milk.webp",
+     "px": [
+      88,
+      166
+     ],
+     "bytes": 2654,
+     "size": [
+      44,
+      83
+     ],
+     "anchor": [
+      22,
+      79.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -35
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "chocolate": {
+   "label": "chocolate",
+   "tags": [
+    "food",
+    "ingredient",
+    "sweet",
+    "brown",
+    "pantry"
+   ],
+   "default": "bar",
+   "variants": {
+    "bar": {
+     "file": "assets/sprites/props/chocolate-bar.webp",
+     "px": [
+      132,
+      62
+     ],
+     "bytes": 2102,
+     "size": [
+      66,
+      31
+     ],
+     "anchor": [
+      31.5,
+      24.5
+     ]
+    },
+    "chunks": {
+     "file": "assets/sprites/props/chocolate-chunks.webp",
+     "px": [
+      118,
+      83
+     ],
+     "bytes": 2400,
+     "size": [
+      59,
+      41.5
+     ],
+     "anchor": [
+      28,
+      36.5
+     ]
+    }
+   },
+   "taps": [
+    "bar",
+    "chunks"
+   ],
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -12.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cut": [
+     "bar",
+     "chunks"
+    ]
+   },
+   "leaves": null
+  },
+  "sprinkles": {
+   "label": "sprinkles",
+   "tags": [
+    "food",
+    "ingredient",
+    "sweet",
+    "topping",
+    "pantry"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/sprinkles.webp",
+     "px": [
+      88,
+      129
+     ],
+     "bytes": 2744,
+     "size": [
+      44,
+      64.5
+     ],
+     "anchor": [
+      22,
+      61
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -30.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "honey": {
+   "label": "honey",
+   "tags": [
+    "food",
+    "ingredient",
+    "sweet",
+    "topping",
+    "pantry"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/honey.webp",
+     "px": [
+      119,
+      170
+     ],
+     "bytes": 3298,
+     "size": [
+      59.5,
+      85
+     ],
+     "anchor": [
+      25.5,
+      81.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -40.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "pasta": {
+   "label": "pasta",
+   "tags": [
+    "food",
+    "ingredient",
+    "grain",
+    "pantry"
+   ],
+   "default": "dry",
+   "variants": {
+    "dry": {
+     "file": "assets/sprites/props/pasta-dry.webp",
+     "px": [
+      76,
+      149
+     ],
+     "bytes": 3608,
+     "size": [
+      38,
+      74.5
+     ],
+     "anchor": [
+      19,
+      71
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/pasta-cooked.webp",
+     "px": [
+      134,
+      55
+     ],
+     "bytes": 2474,
+     "size": [
+      67,
+      27.5
+     ],
+     "anchor": [
+      33.5,
+      24
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -35.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "dry",
+     "cooked",
+     "cooked",
+     "cooked"
+    ],
+    "method": "boiled"
+   },
+   "leaves": null
+  },
+  "rice": {
+   "label": "rice",
+   "tags": [
+    "food",
+    "ingredient",
+    "grain",
+    "pantry"
+   ],
+   "default": "dry",
+   "variants": {
+    "dry": {
+     "file": "assets/sprites/props/rice-dry.webp",
+     "px": [
+      118,
+      132
+     ],
+     "bytes": 3856,
+     "size": [
+      59,
+      66
+     ],
+     "anchor": [
+      29.5,
+      62.5
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/rice-cooked.webp",
+     "px": [
+      120,
+      74
+     ],
+     "bytes": 2010,
+     "size": [
+      60,
+      37
+     ],
+     "anchor": [
+      30,
+      33.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -31.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "dry",
+     "cooked",
+     "cooked",
+     "cooked"
+    ],
+    "method": "boiled"
+   },
+   "leaves": null
+  },
+  "sausage": {
+   "label": "sausage",
+   "tags": [
+    "food",
+    "ingredient",
+    "meat",
+    "fridge"
+   ],
+   "default": "raw",
+   "variants": {
+    "raw": {
+     "file": "assets/sprites/props/sausage-raw.webp",
+     "px": [
+      182,
+      56
+     ],
+     "bytes": 1588,
+     "size": [
+      91,
+      28
+     ],
+     "anchor": [
+      45.5,
+      24.5
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/sausage-cooked.webp",
+     "px": [
+      182,
+      56
+     ],
+     "bytes": 2188,
+     "size": [
+      91,
+      28
+     ],
+     "anchor": [
+      45.5,
+      24.5
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/sausage-toasty.webp",
+     "px": [
+      182,
+      102
+     ],
+     "bytes": 2562,
+     "size": [
+      91,
+      51
+     ],
+     "anchor": [
+      45.5,
+      47.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -12.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "raw",
+     "cooked",
+     "cooked",
+     "toasty"
+    ]
+   },
+   "leaves": null
+  },
+  "fish": {
+   "label": "fish",
+   "tags": [
+    "food",
+    "ingredient",
+    "fish",
+    "fridge"
+   ],
+   "default": "raw",
+   "variants": {
+    "raw": {
+     "file": "assets/sprites/props/fish-raw.webp",
+     "px": [
+      141,
+      82
+     ],
+     "bytes": 2894,
+     "size": [
+      70.5,
+      41
+     ],
+     "anchor": [
+      34.5,
+      36
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/fish-cooked.webp",
+     "px": [
+      146,
+      65
+     ],
+     "bytes": 2550,
+     "size": [
+      73,
+      32.5
+     ],
+     "anchor": [
+      36,
+      27.5
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/fish-toasty.webp",
+     "px": [
+      146,
+      108
+     ],
+     "bytes": 2714,
+     "size": [
+      73,
+      54
+     ],
+     "anchor": [
+      36,
+      49
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -18
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "raw",
+     "cooked",
+     "cooked",
+     "toasty"
+    ]
+   },
+   "leaves": null
+  },
+  "chicken": {
+   "label": "chicken",
+   "tags": [
+    "food",
+    "ingredient",
+    "meat",
+    "fridge"
+   ],
+   "default": "raw",
+   "variants": {
+    "raw": {
+     "file": "assets/sprites/props/chicken-raw.webp",
+     "px": [
+      169,
+      85
+     ],
+     "bytes": 3376,
+     "size": [
+      84.5,
+      42.5
+     ],
+     "anchor": [
+      37.5,
+      40
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/chicken-cooked.webp",
+     "px": [
+      169,
+      85
+     ],
+     "bytes": 3442,
+     "size": [
+      84.5,
+      42.5
+     ],
+     "anchor": [
+      37.5,
+      40
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/chicken-toasty.webp",
+     "px": [
+      169,
+      131
+     ],
+     "bytes": 3836,
+     "size": [
+      84.5,
+      65.5
+     ],
+     "anchor": [
+      37.5,
+      63
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -20
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "raw",
+     "cooked",
+     "cooked",
+     "toasty"
+    ]
+   },
+   "leaves": null
+  },
+  "tofu": {
+   "label": "tofu",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "fridge"
+   ],
+   "default": "raw",
+   "variants": {
+    "raw": {
+     "file": "assets/sprites/props/tofu-raw.webp",
+     "px": [
+      88,
+      82
+     ],
+     "bytes": 1618,
+     "size": [
+      44,
+      41
+     ],
+     "anchor": [
+      27.5,
+      37.5
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/tofu-cooked.webp",
+     "px": [
+      88,
+      82
+     ],
+     "bytes": 1786,
+     "size": [
+      44,
+      41
+     ],
+     "anchor": [
+      27.5,
+      37.5
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/tofu-toasty.webp",
+     "px": [
+      88,
+      82
+     ],
+     "bytes": 1820,
+     "size": [
+      44,
+      41
+     ],
+     "anchor": [
+      27.5,
+      37.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -18.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "raw",
+     "cooked",
+     "cooked",
+     "toasty"
+    ]
+   },
+   "leaves": null
+  },
+  "seaweed": {
+   "label": "seaweed",
+   "tags": [
+    "food",
+    "ingredient",
+    "veg",
+    "pantry"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/seaweed.webp",
+     "px": [
+      122,
+      87
+     ],
+     "bytes": 1122,
+     "size": [
+      61,
+      43.5
+     ],
+     "anchor": [
+      30.5,
+      40
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -20
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "pancake": {
+   "label": "pancake",
+   "tags": [
+    "food",
+    "ingredient",
+    "baking",
+    "sweet"
+   ],
+   "default": "batter",
+   "variants": {
+    "batter": {
+     "file": "assets/sprites/props/pancake-batter.webp",
+     "px": [
+      141,
+      48
+     ],
+     "bytes": 1716,
+     "size": [
+      70.5,
+      24
+     ],
+     "anchor": [
+      35,
+      20.5
+     ]
+    },
+    "cooked": {
+     "file": "assets/sprites/props/pancake-cooked.webp",
+     "px": [
+      154,
+      48
+     ],
+     "bytes": 2112,
+     "size": [
+      77,
+      24
+     ],
+     "anchor": [
+      38.5,
+      20.5
+     ]
+    },
+    "toasty": {
+     "file": "assets/sprites/props/pancake-toasty.webp",
+     "px": [
+      154,
+      91
+     ],
+     "bytes": 2558,
+     "size": [
+      77,
+      45.5
+     ],
+     "anchor": [
+      38.5,
+      42
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -10.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "batter",
+     "cooked",
+     "cooked",
+     "toasty"
+    ],
+    "method": "fried"
+   },
+   "leaves": null
+  },
+  "scoop": {
+   "label": "ice cream scoop",
+   "tags": [
+    "food",
+    "ingredient",
+    "sweet",
+    "cold",
+    "dessert"
+   ],
+   "default": "vanilla",
+   "variants": {
+    "vanilla": {
+     "file": "assets/sprites/props/scoop-vanilla.webp",
+     "px": [
+      110,
+      103
+     ],
+     "bytes": 2516,
+     "size": [
+      55,
+      51.5
+     ],
+     "anchor": [
+      27.5,
+      50
+     ]
+    },
+    "strawberry": {
+     "file": "assets/sprites/props/scoop-strawberry.webp",
+     "px": [
+      110,
+      103
+     ],
+     "bytes": 2494,
+     "size": [
+      55,
+      51.5
+     ],
+     "anchor": [
+      27.5,
+      50
+     ]
+    },
+    "chocolate": {
+     "file": "assets/sprites/props/scoop-chocolate.webp",
+     "px": [
+      110,
+      103
+     ],
+     "bytes": 2078,
+     "size": [
+      55,
+      51.5
+     ],
+     "anchor": [
+      27.5,
+      50
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "cone": {
+   "label": "ice cream cone",
+   "tags": [
+    "food",
+    "ingredient",
+    "sweet",
+    "container"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/cone.webp",
+     "px": [
+      98,
+      109
+     ],
+     "bytes": 2682,
+     "size": [
+      49,
+      54.5
+     ],
+     "anchor": [
+      24.5,
+      50
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -25
+   ],
+   "surface": [
+    -16.8,
+    16.8,
+    -46.2
+   ],
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "coffee-beans": {
+   "label": "coffee beans",
+   "tags": [
+    "food",
+    "ingredient",
+    "drink",
+    "pantry"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/coffee-beans.webp",
+     "px": [
+      118,
+      138
+     ],
+     "bytes": 3986,
+     "size": [
+      59,
+      69
+     ],
+     "anchor": [
+      29.5,
+      65.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -32.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "cafe-cup": {
+   "label": "cafe cup",
+   "tags": [
+    "dish",
+    "cup",
+    "drink"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/cafe-cup-empty.webp",
+     "px": [
+      126,
+      89
+     ],
+     "bytes": 3018,
+     "size": [
+      63,
+      44.5
+     ],
+     "anchor": [
+      31.5,
+      39.5
+     ]
+    },
+    "coffee": {
+     "file": "assets/sprites/props/cafe-cup-coffee.webp",
+     "px": [
+      126,
+      146
+     ],
+     "bytes": 3454,
+     "size": [
+      63,
+      73
+     ],
+     "anchor": [
+      31.5,
+      68
+     ]
+    },
+    "cocoa": {
+     "file": "assets/sprites/props/cafe-cup-cocoa.webp",
+     "px": [
+      126,
+      146
+     ],
+     "bytes": 3674,
+     "size": [
+      63,
+      73
+     ],
+     "anchor": [
+      31.5,
+      68
+     ]
+    },
+    "latte": {
+     "file": "assets/sprites/props/cafe-cup-latte.webp",
+     "px": [
+      126,
+      89
+     ],
+     "bytes": 3150,
+     "size": [
+      63,
+      44.5
+     ],
+     "anchor": [
+      31.5,
+      39.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    21,
+    -19.6
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "saucepan": {
+   "label": "saucepan",
+   "tags": [
+    "cookware",
+    "container",
+    "pot"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/saucepan-empty.webp",
+     "px": [
+      275,
+      110
+     ],
+     "bytes": 3214,
+     "size": [
+      137.5,
+      55
+     ],
+     "anchor": [
+      40,
+      51.5
+     ]
+    },
+    "water": {
+     "file": "assets/sprites/props/saucepan-water.webp",
+     "px": [
+      275,
+      110
+     ],
+     "bytes": 3332,
+     "size": [
+      137.5,
+      55
+     ],
+     "anchor": [
+      40,
+      51.5
+     ]
+    },
+    "boiling": {
+     "file": "assets/sprites/props/saucepan-boiling.webp",
+     "px": [
+      275,
+      213
+     ],
+     "bytes": 4986,
+     "size": [
+      137.5,
+      106.5
+     ],
+     "anchor": [
+      40,
+      103
+     ]
+    },
+    "pasta": {
+     "file": "assets/sprites/props/saucepan-pasta.webp",
+     "px": [
+      275,
+      213
+     ],
+     "bytes": 5666,
+     "size": [
+      137.5,
+      106.5
+     ],
+     "anchor": [
+      40,
+      103
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    70,
+    -33.6
+   ],
+   "surface": [
+    -30.8,
+    30.8,
+    -42
+   ],
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "mixing-bowl": {
+   "label": "mixing bowl",
+   "tags": [
+    "cookware",
+    "container",
+    "bowl"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/mixing-bowl-empty.webp",
+     "px": [
+      210,
+      110
+     ],
+     "bytes": 3588,
+     "size": [
+      105,
+      55
+     ],
+     "anchor": [
+      52.5,
+      51.5
+     ]
+    },
+    "batter": {
+     "file": "assets/sprites/props/mixing-bowl-batter.webp",
+     "px": [
+      210,
+      110
+     ],
+     "bytes": 3688,
+     "size": [
+      105,
+      55
+     ],
+     "anchor": [
+      52.5,
+      51.5
+     ]
+    },
+    "choc-batter": {
+     "file": "assets/sprites/props/mixing-bowl-choc-batter.webp",
+     "px": [
+      210,
+      110
+     ],
+     "bytes": 3644,
+     "size": [
+      105,
+      55
+     ],
+     "anchor": [
+      52.5,
+      51.5
+     ]
+    },
+    "pink-batter": {
+     "file": "assets/sprites/props/mixing-bowl-pink-batter.webp",
+     "px": [
+      210,
+      110
+     ],
+     "bytes": 3730,
+     "size": [
+      105,
+      55
+     ],
+     "anchor": [
+      52.5,
+      51.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -25.75
+   ],
+   "surface": [
+    -39.2,
+    39.2,
+    -40.6
+   ],
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "whisk": {
+   "label": "whisk",
+   "tags": [
+    "tool"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/whisk.webp",
+     "px": [
+      162,
+      53
+     ],
+     "bytes": 2016,
+     "size": [
+      81,
+      26.5
+     ],
+     "anchor": [
+      65,
+      4.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    35,
+    -5.6
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "knife": {
+   "label": "knife",
+   "tags": [
+    "tool",
+    "chop"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/knife.webp",
+     "px": [
+      204,
+      48
+     ],
+     "bytes": 1834,
+     "size": [
+      102,
+      24
+     ],
+     "anchor": [
+      51,
+      20.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    23.8,
+    -6.3
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "spatula": {
+   "label": "spatula",
+   "tags": [
+    "tool",
+    "flip"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/spatula.webp",
+     "px": [
+      214,
+      46
+     ],
+     "bytes": 1702,
+     "size": [
+      107,
+      23
+     ],
+     "anchor": [
+      47.5,
+      19.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    28,
+    -4.9
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "ladle": {
+   "label": "ladle",
+   "tags": [
+    "tool",
+    "scoop"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/ladle-empty.webp",
+     "px": [
+      184,
+      124
+     ],
+     "bytes": 3328,
+     "size": [
+      92,
+      62
+     ],
+     "anchor": [
+      40.5,
+      58.5
+     ]
+    },
+    "soup": {
+     "file": "assets/sprites/props/ladle-soup.webp",
+     "px": [
+      184,
+      124
+     ],
+     "bytes": 3750,
+     "size": [
+      92,
+      62
+     ],
+     "anchor": [
+      40.5,
+      58.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    21,
+    -21
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "tray": {
+   "label": "tray",
+   "tags": [
+    "dish",
+    "container"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/tray.webp",
+     "px": [
+      272,
+      48
+     ],
+     "bytes": 1832,
+     "size": [
+      136,
+      24
+     ],
+     "anchor": [
+      68,
+      20.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -10.25
+   ],
+   "surface": [
+    -53.2,
+    53.2,
+    -16.8
+   ],
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "baking-tray": {
+   "label": "baking tray",
+   "tags": [
+    "cookware",
+    "container",
+    "oven"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/baking-tray-empty.webp",
+     "px": [
+      266,
+      34
+     ],
+     "bytes": 1334,
+     "size": [
+      133,
+      17
+     ],
+     "anchor": [
+      66.5,
+      13.5
+     ]
+    },
+    "raw": {
+     "file": "assets/sprites/props/baking-tray-raw.webp",
+     "px": [
+      266,
+      51
+     ],
+     "bytes": 3122,
+     "size": [
+      133,
+      25.5
+     ],
+     "anchor": [
+      66.5,
+      22
+     ]
+    },
+    "cookies": {
+     "file": "assets/sprites/props/baking-tray-cookies.webp",
+     "px": [
+      266,
+      97
+     ],
+     "bytes": 3272,
+     "size": [
+      133,
+      48.5
+     ],
+     "anchor": [
+      66.5,
+      45
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -6.75
+   ],
+   "surface": [
+    -53.2,
+    53.2,
+    -9.8
+   ],
+   "set": "cafe",
+   "prep": {
+    "cook": [
+     "raw",
+     "cookies",
+     "cookies",
+     "cookies"
+    ],
+    "method": "baked"
+   },
+   "leaves": null
+  },
+  "garnish-shaker": {
+   "label": "garnish shaker",
+   "tags": [
+    "tool",
+    "topping",
+    "shake"
+   ],
+   "default": "herbs",
+   "variants": {
+    "herbs": {
+     "file": "assets/sprites/props/garnish-shaker-herbs.webp",
+     "px": [
+      76,
+      126
+     ],
+     "bytes": 2190,
+     "size": [
+      38,
+      63
+     ],
+     "anchor": [
+      19,
+      59.5
+     ]
+    },
+    "pepper": {
+     "file": "assets/sprites/props/garnish-shaker-pepper.webp",
+     "px": [
+      76,
+      126
+     ],
+     "bytes": 1852,
+     "size": [
+      38,
+      63
+     ],
+     "anchor": [
+      19,
+      59.5
+     ]
+    },
+    "salt": {
+     "file": "assets/sprites/props/garnish-shaker-salt.webp",
+     "px": [
+      76,
+      126
+     ],
+     "bytes": 1986,
+     "size": [
+      38,
+      63
+     ],
+     "anchor": [
+      19,
+      59.5
+     ]
+    },
+    "sprinkles": {
+     "file": "assets/sprites/props/garnish-shaker-sprinkles.webp",
+     "px": [
+      76,
+      126
+     ],
+     "bytes": 2242,
+     "size": [
+      38,
+      63
+     ],
+     "anchor": [
+      19,
+      59.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -29.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "sauce-bottle": {
+   "label": "sauce bottle",
+   "tags": [
+    "tool",
+    "topping",
+    "shake"
+   ],
+   "default": "tomato",
+   "variants": {
+    "tomato": {
+     "file": "assets/sprites/props/sauce-bottle-tomato.webp",
+     "px": [
+      82,
+      160
+     ],
+     "bytes": 2980,
+     "size": [
+      41,
+      80
+     ],
+     "anchor": [
+      20.5,
+      76.5
+     ]
+    },
+    "mustard": {
+     "file": "assets/sprites/props/sauce-bottle-mustard.webp",
+     "px": [
+      82,
+      160
+     ],
+     "bytes": 3146,
+     "size": [
+      41,
+      80
+     ],
+     "anchor": [
+      20.5,
+      76.5
+     ]
+    },
+    "chocolate": {
+     "file": "assets/sprites/props/sauce-bottle-chocolate.webp",
+     "px": [
+      82,
+      160
+     ],
+     "bytes": 2766,
+     "size": [
+      41,
+      80
+     ],
+     "anchor": [
+      20.5,
+      76.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -38.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "glass": {
+   "label": "glass",
+   "tags": [
+    "dish",
+    "cup",
+    "drink"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/glass.webp",
+     "px": [
+      82,
+      149
+     ],
+     "bytes": 1868,
+     "size": [
+      41,
+      74.5
+     ],
+     "anchor": [
+      20.5,
+      71
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -35.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "tip-jar": {
+   "label": "tip jar",
+   "tags": [
+    "container",
+    "shake",
+    "music"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/tip-jar-empty.webp",
+     "px": [
+      104,
+      115
+     ],
+     "bytes": 2370,
+     "size": [
+      52,
+      57.5
+     ],
+     "anchor": [
+      26,
+      54
+     ]
+    },
+    "coins": {
+     "file": "assets/sprites/props/tip-jar-coins.webp",
+     "px": [
+      104,
+      115
+     ],
+     "bytes": 3456,
+     "size": [
+      52,
+      57.5
+     ],
+     "anchor": [
+      26,
+      54
+     ]
+    },
+    "full": {
+     "file": "assets/sprites/props/tip-jar-full.webp",
+     "px": [
+      104,
+      115
+     ],
+     "bytes": 4350,
+     "size": [
+      52,
+      57.5
+     ],
+     "anchor": [
+      26,
+      54
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -27
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "coin": {
+   "label": "coin",
+   "tags": [
+    "coin",
+    "token"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/coin.webp",
+     "px": [
+      54,
+      54
+     ],
+     "bytes": 1934,
+     "size": [
+      27,
+      27
+     ],
+     "anchor": [
+      13.5,
+      23.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -11.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "pancakes": {
+   "label": "pancake stack",
+   "tags": [
+    "food",
+    "dish",
+    "sweet",
+    "breakfast"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/pancakes-whole.webp",
+     "px": [
+      200,
+      132
+     ],
+     "bytes": 5768,
+     "size": [
+      100,
+      66
+     ],
+     "anchor": [
+      50,
+      62.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/pancakes-bite1.webp",
+     "px": [
+      200,
+      132
+     ],
+     "bytes": 5082,
+     "size": [
+      100,
+      66
+     ],
+     "anchor": [
+      50,
+      62.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/pancakes-bite2.webp",
+     "px": [
+      200,
+      132
+     ],
+     "bytes": 4782,
+     "size": [
+      100,
+      66
+     ],
+     "anchor": [
+      50,
+      62.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -31.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "burger": {
+   "label": "burger",
+   "tags": [
+    "food",
+    "dish",
+    "savory"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/burger-whole.webp",
+     "px": [
+      200,
+      143
+     ],
+     "bytes": 4948,
+     "size": [
+      100,
+      71.5
+     ],
+     "anchor": [
+      50,
+      68
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/burger-bite1.webp",
+     "px": [
+      200,
+      146
+     ],
+     "bytes": 4926,
+     "size": [
+      100,
+      73
+     ],
+     "anchor": [
+      50,
+      69.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/burger-bite2.webp",
+     "px": [
+      200,
+      146
+     ],
+     "bytes": 4988,
+     "size": [
+      100,
+      73
+     ],
+     "anchor": [
+      50,
+      69.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -34
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "pizza": {
+   "label": "pizza",
+   "tags": [
+    "food",
+    "dish",
+    "savory",
+    "baked"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/pizza-whole.webp",
+     "px": [
+      210,
+      83
+     ],
+     "bytes": 6248,
+     "size": [
+      105,
+      41.5
+     ],
+     "anchor": [
+      52.5,
+      38
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/pizza-bite1.webp",
+     "px": [
+      210,
+      87
+     ],
+     "bytes": 5544,
+     "size": [
+      105,
+      43.5
+     ],
+     "anchor": [
+      52.5,
+      40
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/pizza-bite2.webp",
+     "px": [
+      210,
+      87
+     ],
+     "bytes": 5200,
+     "size": [
+      105,
+      43.5
+     ],
+     "anchor": [
+      52.5,
+      40
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -19
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "salad": {
+   "label": "salad",
+   "tags": [
+    "food",
+    "dish",
+    "veg",
+    "healthy"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/salad-whole.webp",
+     "px": [
+      172,
+      118
+     ],
+     "bytes": 4682,
+     "size": [
+      86,
+      59
+     ],
+     "anchor": [
+      44.5,
+      55.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/salad-bite1.webp",
+     "px": [
+      175,
+      121
+     ],
+     "bytes": 4560,
+     "size": [
+      87.5,
+      60.5
+     ],
+     "anchor": [
+      44.5,
+      57
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/salad-bite2.webp",
+     "px": [
+      175,
+      121
+     ],
+     "bytes": 4380,
+     "size": [
+      87.5,
+      60.5
+     ],
+     "anchor": [
+      44.5,
+      57
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -27.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "bowl"
+  },
+  "spaghetti": {
+   "label": "spaghetti",
+   "tags": [
+    "food",
+    "dish",
+    "savory"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/spaghetti-whole.webp",
+     "px": [
+      200,
+      108
+     ],
+     "bytes": 4094,
+     "size": [
+      100,
+      54
+     ],
+     "anchor": [
+      50,
+      50.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/spaghetti-bite1.webp",
+     "px": [
+      200,
+      108
+     ],
+     "bytes": 3958,
+     "size": [
+      100,
+      54
+     ],
+     "anchor": [
+      50,
+      50.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/spaghetti-bite2.webp",
+     "px": [
+      200,
+      108
+     ],
+     "bytes": 3906,
+     "size": [
+      100,
+      54
+     ],
+     "anchor": [
+      50,
+      50.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -25.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "sandwich": {
+   "label": "sandwich",
+   "tags": [
+    "food",
+    "dish",
+    "savory"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/sandwich-whole.webp",
+     "px": [
+      200,
+      156
+     ],
+     "bytes": 4772,
+     "size": [
+      100,
+      78
+     ],
+     "anchor": [
+      50,
+      74.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/sandwich-bite1.webp",
+     "px": [
+      200,
+      156
+     ],
+     "bytes": 4422,
+     "size": [
+      100,
+      78
+     ],
+     "anchor": [
+      50,
+      74.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/sandwich-bite2.webp",
+     "px": [
+      200,
+      156
+     ],
+     "bytes": 4170,
+     "size": [
+      100,
+      78
+     ],
+     "anchor": [
+      50,
+      74.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -37.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "sushi": {
+   "label": "sushi roll",
+   "tags": [
+    "food",
+    "dish",
+    "fish",
+    "savory"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/sushi-whole.webp",
+     "px": [
+      216,
+      86
+     ],
+     "bytes": 5256,
+     "size": [
+      108,
+      43
+     ],
+     "anchor": [
+      54,
+      38
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/sushi-bite1.webp",
+     "px": [
+      219,
+      102
+     ],
+     "bytes": 4856,
+     "size": [
+      109.5,
+      51
+     ],
+     "anchor": [
+      54,
+      46
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/sushi-bite2.webp",
+     "px": [
+      222,
+      102
+     ],
+     "bytes": 4476,
+     "size": [
+      111,
+      51
+     ],
+     "anchor": [
+      55.5,
+      46
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -19
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "tray"
+  },
+  "soup": {
+   "label": "soup bowl",
+   "tags": [
+    "food",
+    "dish",
+    "savory",
+    "warm"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/soup-whole.webp",
+     "px": [
+      182,
+      166
+     ],
+     "bytes": 4290,
+     "size": [
+      91,
+      83
+     ],
+     "anchor": [
+      45.5,
+      79.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/soup-bite1.webp",
+     "px": [
+      182,
+      104
+     ],
+     "bytes": 3608,
+     "size": [
+      91,
+      52
+     ],
+     "anchor": [
+      45.5,
+      48.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/soup-bite2.webp",
+     "px": [
+      182,
+      104
+     ],
+     "bytes": 3564,
+     "size": [
+      91,
+      52
+     ],
+     "anchor": [
+      45.5,
+      48.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -39.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "fruit-bowl": {
+   "label": "fruit bowl",
+   "tags": [
+    "food",
+    "dish",
+    "fruit",
+    "sweet",
+    "healthy"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/fruit-bowl-whole.webp",
+     "px": [
+      160,
+      117
+     ],
+     "bytes": 4366,
+     "size": [
+      80,
+      58.5
+     ],
+     "anchor": [
+      40,
+      55
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/fruit-bowl-bite1.webp",
+     "px": [
+      166,
+      118
+     ],
+     "bytes": 4150,
+     "size": [
+      83,
+      59
+     ],
+     "anchor": [
+      40,
+      55.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/fruit-bowl-bite2.webp",
+     "px": [
+      175,
+      118
+     ],
+     "bytes": 4028,
+     "size": [
+      87.5,
+      59
+     ],
+     "anchor": [
+      44.5,
+      55.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -27.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "bowl"
+  },
+  "sundae": {
+   "label": "ice cream sundae",
+   "tags": [
+    "food",
+    "dish",
+    "sweet",
+    "cold",
+    "dessert"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/sundae-whole.webp",
+     "px": [
+      126,
+      205
+     ],
+     "bytes": 6230,
+     "size": [
+      63,
+      102.5
+     ],
+     "anchor": [
+      31.5,
+      99
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/sundae-bite1.webp",
+     "px": [
+      127,
+      205
+     ],
+     "bytes": 5936,
+     "size": [
+      63.5,
+      102.5
+     ],
+     "anchor": [
+      31.5,
+      99
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/sundae-bite2.webp",
+     "px": [
+      128,
+      205
+     ],
+     "bytes": 6006,
+     "size": [
+      64,
+      102.5
+     ],
+     "anchor": [
+      32,
+      99
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -49.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "glass"
+  },
+  "cookies": {
+   "label": "cookies",
+   "tags": [
+    "food",
+    "dish",
+    "sweet",
+    "baked"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/cookies-whole.webp",
+     "px": [
+      200,
+      70
+     ],
+     "bytes": 3924,
+     "size": [
+      100,
+      35
+     ],
+     "anchor": [
+      50,
+      31.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/cookies-bite1.webp",
+     "px": [
+      200,
+      70
+     ],
+     "bytes": 3866,
+     "size": [
+      100,
+      35
+     ],
+     "anchor": [
+      50,
+      31.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/cookies-bite2.webp",
+     "px": [
+      200,
+      70
+     ],
+     "bytes": 3738,
+     "size": [
+      100,
+      35
+     ],
+     "anchor": [
+      50,
+      31.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -15.75
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "grilled-cheese": {
+   "label": "grilled cheese",
+   "tags": [
+    "food",
+    "dish",
+    "savory",
+    "toasty"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/grilled-cheese-whole.webp",
+     "px": [
+      200,
+      124
+     ],
+     "bytes": 6438,
+     "size": [
+      100,
+      62
+     ],
+     "anchor": [
+      50,
+      58.5
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/grilled-cheese-bite1.webp",
+     "px": [
+      200,
+      124
+     ],
+     "bytes": 6242,
+     "size": [
+      100,
+      62
+     ],
+     "anchor": [
+      50,
+      58.5
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/grilled-cheese-bite2.webp",
+     "px": [
+      200,
+      124
+     ],
+     "bytes": 5888,
+     "size": [
+      100,
+      62
+     ],
+     "anchor": [
+      50,
+      58.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -29.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "egg-toast": {
+   "label": "egg on toast",
+   "tags": [
+    "food",
+    "dish",
+    "breakfast",
+    "savory"
+   ],
+   "default": "whole",
+   "variants": {
+    "whole": {
+     "file": "assets/sprites/props/egg-toast-whole.webp",
+     "px": [
+      200,
+      113
+     ],
+     "bytes": 5154,
+     "size": [
+      100,
+      56.5
+     ],
+     "anchor": [
+      50,
+      53
+     ]
+    },
+    "bite1": {
+     "file": "assets/sprites/props/egg-toast-bite1.webp",
+     "px": [
+      200,
+      113
+     ],
+     "bytes": 4860,
+     "size": [
+      100,
+      56.5
+     ],
+     "anchor": [
+      50,
+      53
+     ]
+    },
+    "bite2": {
+     "file": "assets/sprites/props/egg-toast-bite2.webp",
+     "px": [
+      200,
+      113
+     ],
+     "bytes": 4776,
+     "size": [
+      100,
+      56.5
+     ],
+     "anchor": [
+      50,
+      53
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "whole",
+    "bite1",
+    "bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -26.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "smoothie": {
+   "label": "smoothie",
+   "tags": [
+    "food",
+    "dish",
+    "drink",
+    "sweet",
+    "cold"
+   ],
+   "default": "pink",
+   "variants": {
+    "pink": {
+     "file": "assets/sprites/props/smoothie-pink.webp",
+     "px": [
+      102,
+      194
+     ],
+     "bytes": 3674,
+     "size": [
+      51,
+      97
+     ],
+     "anchor": [
+      27.5,
+      93.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/smoothie-yellow.webp",
+     "px": [
+      102,
+      194
+     ],
+     "bytes": 3646,
+     "size": [
+      51,
+      97
+     ],
+     "anchor": [
+      27.5,
+      93.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/smoothie-green.webp",
+     "px": [
+      102,
+      194
+     ],
+     "bytes": 3766,
+     "size": [
+      51,
+      97
+     ],
+     "anchor": [
+      27.5,
+      93.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/smoothie-purple.webp",
+     "px": [
+      102,
+      194
+     ],
+     "bytes": 3724,
+     "size": [
+      51,
+      97
+     ],
+     "anchor": [
+      27.5,
+      93.5
+     ]
+    },
+    "choc": {
+     "file": "assets/sprites/props/smoothie-choc.webp",
+     "px": [
+      102,
+      194
+     ],
+     "bytes": 3804,
+     "size": [
+      51,
+      97
+     ],
+     "anchor": [
+      27.5,
+      93.5
+     ]
+    },
+    "cream": {
+     "file": "assets/sprites/props/smoothie-cream.webp",
+     "px": [
+      102,
+      194
+     ],
+     "bytes": 3580,
+     "size": [
+      51,
+      97
+     ],
+     "anchor": [
+      27.5,
+      93.5
+     ]
+    },
+    "empty": {
+     "file": "assets/sprites/props/smoothie-empty.webp",
+     "px": [
+      88,
+      194
+     ],
+     "bytes": 2508,
+     "size": [
+      44,
+      97
+     ],
+     "anchor": [
+      20.5,
+      93.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "pink",
+    "empty"
+   ],
+   "grip": [
+    0,
+    -35
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "mystery-dish": {
+   "label": "mystery dish",
+   "tags": [
+    "food",
+    "dish",
+    "mystery"
+   ],
+   "default": "pink",
+   "variants": {
+    "pink": {
+     "file": "assets/sprites/props/mystery-dish-pink.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3998,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "pink-bite1": {
+     "file": "assets/sprites/props/mystery-dish-pink-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4046,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "pink-bite2": {
+     "file": "assets/sprites/props/mystery-dish-pink-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3982,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/mystery-dish-yellow.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4096,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "yellow-bite1": {
+     "file": "assets/sprites/props/mystery-dish-yellow-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4200,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "yellow-bite2": {
+     "file": "assets/sprites/props/mystery-dish-yellow-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4152,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/mystery-dish-green.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4096,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "green-bite1": {
+     "file": "assets/sprites/props/mystery-dish-green-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4140,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "green-bite2": {
+     "file": "assets/sprites/props/mystery-dish-green-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4082,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "brown": {
+     "file": "assets/sprites/props/mystery-dish-brown.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4302,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "brown-bite1": {
+     "file": "assets/sprites/props/mystery-dish-brown-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4398,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "brown-bite2": {
+     "file": "assets/sprites/props/mystery-dish-brown-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4282,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/mystery-dish-purple.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3928,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "purple-bite1": {
+     "file": "assets/sprites/props/mystery-dish-purple-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3992,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "purple-bite2": {
+     "file": "assets/sprites/props/mystery-dish-purple-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4022,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "orange": {
+     "file": "assets/sprites/props/mystery-dish-orange.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3996,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "orange-bite1": {
+     "file": "assets/sprites/props/mystery-dish-orange-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4066,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "orange-bite2": {
+     "file": "assets/sprites/props/mystery-dish-orange-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4000,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/mystery-dish-blue.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4264,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "blue-bite1": {
+     "file": "assets/sprites/props/mystery-dish-blue-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4320,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "blue-bite2": {
+     "file": "assets/sprites/props/mystery-dish-blue-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 4152,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "cream": {
+     "file": "assets/sprites/props/mystery-dish-cream.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3826,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "cream-bite1": {
+     "file": "assets/sprites/props/mystery-dish-cream-bite1.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3898,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    },
+    "cream-bite2": {
+     "file": "assets/sprites/props/mystery-dish-cream-bite2.webp",
+     "px": [
+      200,
+      148
+     ],
+     "bytes": 3908,
+     "size": [
+      100,
+      74
+     ],
+     "anchor": [
+      50,
+      70.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "pink",
+    "pink-bite1",
+    "pink-bite2",
+    null
+   ],
+   "grip": [
+    0,
+    -35.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": "plate"
+  },
+  "mystery-eyes": {
+   "label": "mystery eyes",
+   "tags": [
+    "mystery-part"
+   ],
+   "default": "googly",
+   "variants": {
+    "googly": {
+     "file": "assets/sprites/props/mystery-eyes-googly.webp",
+     "px": [
+      91,
+      54
+     ],
+     "bytes": 2272,
+     "size": [
+      45.5,
+      27
+     ],
+     "anchor": [
+      22,
+      15
+     ]
+    },
+    "wonky": {
+     "file": "assets/sprites/props/mystery-eyes-wonky.webp",
+     "px": [
+      90,
+      63
+     ],
+     "bytes": 2302,
+     "size": [
+      45,
+      31.5
+     ],
+     "anchor": [
+      21,
+      18.5
+     ]
+    },
+    "happy": {
+     "file": "assets/sprites/props/mystery-eyes-happy.webp",
+     "px": [
+      76,
+      23
+     ],
+     "bytes": 938,
+     "size": [
+      38,
+      11.5
+     ],
+     "anchor": [
+      19,
+      5
+     ]
+    },
+    "sleepy": {
+     "file": "assets/sprites/props/mystery-eyes-sleepy.webp",
+     "px": [
+      93,
+      34
+     ],
+     "bytes": 970,
+     "size": [
+      46.5,
+      17
+     ],
+     "anchor": [
+      19,
+      10.5
+     ]
+    },
+    "stars": {
+     "file": "assets/sprites/props/mystery-eyes-stars.webp",
+     "px": [
+      84,
+      43
+     ],
+     "bytes": 1628,
+     "size": [
+      42,
+      21.5
+     ],
+     "anchor": [
+      21,
+      11.5
+     ]
+    },
+    "dots": {
+     "file": "assets/sprites/props/mystery-eyes-dots.webp",
+     "px": [
+      62,
+      32
+     ],
+     "bytes": 988,
+     "size": [
+      31,
+      16
+     ],
+     "anchor": [
+      15.5,
+      8
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -7.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "mystery-mouth": {
+   "label": "mystery mouth",
+   "tags": [
+    "mystery-part"
+   ],
+   "default": "grin",
+   "variants": {
+    "grin": {
+     "file": "assets/sprites/props/mystery-mouth-grin.webp",
+     "px": [
+      60,
+      37
+     ],
+     "bytes": 1048,
+     "size": [
+      30,
+      18.5
+     ],
+     "anchor": [
+      15,
+      6.5
+     ]
+    },
+    "tongue": {
+     "file": "assets/sprites/props/mystery-mouth-tongue.webp",
+     "px": [
+      54,
+      37
+     ],
+     "bytes": 1038,
+     "size": [
+      27,
+      18.5
+     ],
+     "anchor": [
+      13.5,
+      5
+     ]
+    },
+    "o": {
+     "file": "assets/sprites/props/mystery-mouth-o.webp",
+     "px": [
+      34,
+      40
+     ],
+     "bytes": 906,
+     "size": [
+      17,
+      20
+     ],
+     "anchor": [
+      8.5,
+      8.5
+     ]
+    },
+    "wavy": {
+     "file": "assets/sprites/props/mystery-mouth-wavy.webp",
+     "px": [
+      66,
+      24
+     ],
+     "bytes": 890,
+     "size": [
+      33,
+      12
+     ],
+     "anchor": [
+      16.5,
+      6
+     ]
+    },
+    "teeth": {
+     "file": "assets/sprites/props/mystery-mouth-teeth.webp",
+     "px": [
+      60,
+      37
+     ],
+     "bytes": 1178,
+     "size": [
+      30,
+      18.5
+     ],
+     "anchor": [
+      15,
+      6.5
+     ]
+    },
+    "smile": {
+     "file": "assets/sprites/props/mystery-mouth-smile.webp",
+     "px": [
+      48,
+      22
+     ],
+     "bytes": 774,
+     "size": [
+      24,
+      11
+     ],
+     "anchor": [
+      12,
+      5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -3.25
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  },
+  "mystery-topper": {
+   "label": "mystery topper",
+   "tags": [
+    "mystery-part"
+   ],
+   "default": "sprout",
+   "variants": {
+    "sprout": {
+     "file": "assets/sprites/props/mystery-topper-sprout.webp",
+     "px": [
+      69,
+      65
+     ],
+     "bytes": 1344,
+     "size": [
+      34.5,
+      32.5
+     ],
+     "anchor": [
+      17,
+      29
+     ]
+    },
+    "cherry": {
+     "file": "assets/sprites/props/mystery-topper-cherry.webp",
+     "px": [
+      45,
+      56
+     ],
+     "bytes": 1358,
+     "size": [
+      22.5,
+      28
+     ],
+     "anchor": [
+      10.5,
+      24.5
+     ]
+    },
+    "flag": {
+     "file": "assets/sprites/props/mystery-topper-flag.webp",
+     "px": [
+      54,
+      70
+     ],
+     "bytes": 1190,
+     "size": [
+      27,
+      35
+     ],
+     "anchor": [
+      3.5,
+      31.5
+     ]
+    },
+    "bow": {
+     "file": "assets/sprites/props/mystery-topper-bow.webp",
+     "px": [
+      70,
+      48
+     ],
+     "bytes": 1398,
+     "size": [
+      35,
+      24
+     ],
+     "anchor": [
+      17.5,
+      19
+     ]
+    },
+    "steam": {
+     "file": "assets/sprites/props/mystery-topper-steam.webp",
+     "px": [
+      46,
+      85
+     ],
+     "bytes": 1108,
+     "size": [
+      23,
+      42.5
+     ],
+     "anchor": [
+      13.5,
+      37.5
+     ]
+    },
+    "candle": {
+     "file": "assets/sprites/props/mystery-topper-candle.webp",
+     "px": [
+      28,
+      82
+     ],
+     "bytes": 1396,
+     "size": [
+      14,
+      41
+     ],
+     "anchor": [
+      7,
+      37.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14.5
+   ],
+   "surface": null,
+   "set": "cafe",
+   "prep": null,
+   "leaves": null
+  }
+ },
+ "cafe": {
+  "doneness": {
+   "levels": [
+    "raw",
+    "cooked",
+    "cooked",
+    "toasty"
+   ],
+   "note": "prep.cook[n] names the variant for doneness n. Toasty = warm caramel + grill stripes + a steam curl.",
+   "tint": [
+    null,
+    "sepia(.25) saturate(1.15)",
+    "sepia(.4) saturate(1.2) brightness(.96)",
+    "sepia(.6) saturate(1.3) brightness(.9)"
+   ]
+  },
+  "ingredients": [
+   "tomato",
+   "egg",
+   "bread",
+   "cheese",
+   "lettuce",
+   "carrot",
+   "onion",
+   "potato",
+   "banana",
+   "apple",
+   "strawberry",
+   "blueberries",
+   "lemon",
+   "flour",
+   "sugar",
+   "butter",
+   "milk",
+   "chocolate",
+   "sprinkles",
+   "honey",
+   "pasta",
+   "rice",
+   "sausage",
+   "fish",
+   "chicken",
+   "tofu",
+   "seaweed",
+   "pancake",
+   "scoop",
+   "cone",
+   "coffee-beans",
+   "cafe-cup"
+  ],
+  "dishes": [
+   "pancakes",
+   "burger",
+   "pizza",
+   "salad",
+   "spaghetti",
+   "sandwich",
+   "sushi",
+   "soup",
+   "fruit-bowl",
+   "sundae",
+   "cookies",
+   "grilled-cheese",
+   "egg-toast",
+   "smoothie",
+   "cupcake",
+   "cake-slice"
+  ],
+  "cookware": {
+   "pan": "pan",
+   "pot": "pot",
+   "saucepan": "saucepan",
+   "mixing-bowl": "mixing-bowl",
+   "baking-tray": "baking-tray",
+   "whisk": "whisk",
+   "knife": "knife",
+   "spatula": "spatula",
+   "ladle": "ladle",
+   "plate": "plate",
+   "bowl": "bowl",
+   "cup": "cafe-cup",
+   "mug": "mug",
+   "glass": "glass",
+   "tray": "tray",
+   "garnish-shaker": "garnish-shaker",
+   "sauce-bottle": "sauce-bottle"
+  },
+  "mystery": {
+   "base": "mystery-dish",
+   "colors": [
+    "pink",
+    "yellow",
+    "green",
+    "brown",
+    "purple",
+    "orange",
+    "blue",
+    "cream"
+   ],
+   "parts": {
+    "eyes": "mystery-eyes",
+    "mouth": "mystery-mouth",
+    "topper": "mystery-topper"
+   },
+   "at": {
+    "eyes": [
+     0,
+     -39.2
+    ],
+    "mouth": [
+     1.4,
+     -23.8
+    ],
+    "topper": [
+     2.8,
+     -60.2
+    ]
+   }
   }
  }
 }

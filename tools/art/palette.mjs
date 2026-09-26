@@ -34,11 +34,21 @@ export const UI = { tangerine: '#F79A4B', grass: '#62B96B', sky: '#4AA6E0', sun:
 export const SKINS = {
   s1: ['#F3D0B5', '#E2AB8E'], s2: ['#EDC3A2', '#D9A07F'], s3: ['#D39A6E', '#B97E55'],
   s4: ['#A8714D', '#8C5A3B'], s5: ['#7E5236', '#65402A'],
+  // P1.15 (Character Maker): more tones, so every kid finds theirs.
+  s6: ['#FAE3D2', '#EBC0A5'], s7: ['#E5B98F', '#CC9A70'], s8: ['#C68A5E', '#A96F47'],
+  s9: ['#93603F', '#7A4C30'], s10: ['#5E3B29', '#4A2D1F'],
 };
+/** Skin tones light to dark (the Character Maker's swatch order). */
+export const SKIN_ORDER = ['s6', 's1', 's2', 's7', 's3', 's8', 's4', 's9', 's5', 's10'];
 export const HAIRS = {
   black: ['#3A2A2C', '#55403F'], brown: ['#6A4A3A', '#523729'], copper: ['#C9713F', '#A95A31'],
   honey: ['#E0B872', '#C49A55'], grey: ['#B8B0AA', '#9A918B'],
+  // P1.15: more naturals and a few play colours.
+  auburn: ['#8E3F2C', '#743222'], blonde: ['#F0D597', '#D8B872'], white: ['#EEE9E3', '#D2CAC2'],
+  rose: ['#E9AFAE', '#D48C8E'], teal: ['#8CBDB8', '#679E9C'], lav: ['#B9A5D2', '#9C86B9'],
 };
+/** Hair colours in the Character Maker's swatch order. */
+export const HAIR_ORDER = ['black', 'brown', 'auburn', 'copper', 'honey', 'blonde', 'grey', 'white', 'rose', 'teal', 'lav'];
 
 // Line weights. All art is AUTHORED on the style-v2 convention: a 4.5 unit
 // ink outline in "art units" (style-v2 scene px). One art unit is ART_SCALE
