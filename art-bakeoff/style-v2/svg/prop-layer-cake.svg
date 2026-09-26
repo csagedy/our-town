@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-80 -186 160 192">
+<style>
+.o path,.o rect,.o circle,.o ellipse,.o polygon,.o polyline,.o line{stroke:#3D2C29;stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.o .d{fill:none;stroke-width:3}
+.o .thin{stroke-width:3}
+.o .n,.o .n *{stroke:none}
+.o .tl{fill:none;stroke-width:3}
+.o .ink{fill:#3D2C29;stroke:none}
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-sh{fill:var(--hair-sh)}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bot)}.shoe{fill:var(--shoe)}.sock{fill:var(--sock)}
+</style><defs>
+  <pattern id="brick" width="192" height="96" patternUnits="userSpaceOnUse">
+    <rect width="192" height="96" fill="#F6E3D8"/>
+    <rect x="3" y="3" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="3" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="-45" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="51" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="147" y="35" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="3" y="67" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="67" width="90" height="26" rx="4" fill="#EECAB8"/>
+    <rect x="195" y="35" width="90" height="26" rx="4" fill="#EECAB8"/>
+  </pattern>
+  <pattern id="tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#CFE5DA"/><path d="M0 43 L44 43 M43 0 L43 44" stroke="#AFD2C5" stroke-width="3"/></pattern>
+</defs>
+<g class="o"><g><path fill="#FBF3E8" d="M-18 0 L18 0 L10 -8 L-10 -8Z"/><rect fill="#FBF3E8" x="-7" y="-30" width="14" height="24"/><rect fill="#FBF3E8" x="-75" y="-40" width="150" height="12" rx="6"/><g transform="translate(0 -40)"><g transform="translate(0 0) scale(0.9)">
+  <rect fill="#F4C7A6" x="-60" y="-96" width="120" height="96" rx="8"/>
+  <path class="tl" style="stroke:#FBF3E8;stroke:#FBF3E8;stroke-width:6" d="M-58 -48 L58 -48"/>
+  <path fill="#F6D3CF" d="M-64 -100 Q-64 -110 -54 -110 L54 -110 Q64 -110 64 -100 L64 -84 Q58 -72 52 -84 Q46 -68 38 -84 Q30 -76 22 -86 L10 -86 Q2 -66 -8 -86 Q-16 -76 -26 -86 Q-36 -70 -44 -86 Q-54 -74 -64 -86Z"/>
+  <path fill="#DC6B6E" d="M-36 -106 Q-48 -114 -46 -124 Q-36 -130 -26 -124 Q-24 -114 -36 -106Z"/><path class="n" fill="#79A86D" d="M-43 -124 L-36 -120 L-29 -124 L-36 -129Z"/><path fill="#DC6B6E" d="M0 -106 Q-12 -114 -10 -124 Q0 -130 10 -124 Q12 -114 0 -106Z"/><path class="n" fill="#79A86D" d="M-7 -124 L0 -120 L7 -124 L0 -129Z"/><path fill="#DC6B6E" d="M34 -106 Q22 -114 24 -124 Q34 -130 44 -124 Q46 -114 34 -106Z"/><path class="n" fill="#79A86D" d="M27 -124 L34 -120 L41 -124 L34 -129Z"/></g></g></g></g>
+</svg>

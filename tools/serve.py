@@ -39,16 +39,27 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             super().log_message(fmt, *args)
 
 
+class Server(http.server.ThreadingHTTPServer):
+    # The stdlib default listen backlog is 5. Chrome fetches an ES module graph
+    # over several parallel connections (HTTP/1.0: one per request), and when
+    # the machine is busy the server thread can't accept() fast enough: the
+    # full queue makes macOS reset connections (net::ERR_CONNECTION_RESET on a
+    # module, so boot never runs). Flaky e2e tests, bead dollhouse-game-mhf.17.
+    request_queue_size = 256
+    daemon_threads = True
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--port', type=int, default=8124)
     ap.add_argument('--lan', action='store_true', help='bind 0.0.0.0 instead of 127.0.0.1')
     ap.add_argument('--quiet', action='store_true', help='no per-request log lines')
+    ap.add_argument('--root', default=ROOT, help='directory to serve (tests serve a temp copy)')
     args = ap.parse_args()
 
     host = '0.0.0.0' if args.lan else '127.0.0.1'
-    handler = functools.partial(Handler, directory=ROOT)
-    httpd = http.server.ThreadingHTTPServer((host, args.port), handler)
+    handler = functools.partial(Handler, directory=os.path.abspath(args.root))
+    httpd = Server((host, args.port), handler)
     httpd.quiet = args.quiet
     port = httpd.server_address[1]
     # The test harness reads this exact line to learn the port.

@@ -1,0 +1,334 @@
+{
+  "name": "char_boy",
+  "ppm": 320.0,
+  "poses": {
+    "stand": {
+      "file": "char_boy__stand.png",
+      "w": 198,
+      "h": 374,
+      "anchor_px": [
+        98.76,
+        364.26
+      ],
+      "head_px": [
+        98.76,
+        108.26
+      ],
+      "hand_R_px": [
+        155.9,
+        273.35
+      ],
+      "hand_L_px": [
+        41.62,
+        273.35
+      ],
+      "seat_px": [
+        98.76,
+        295.46
+      ],
+      "face": "front",
+      "yaw": 0
+    },
+    "wave": {
+      "file": "char_boy__wave.png",
+      "w": 221,
+      "h": 374,
+      "anchor_px": [
+        98.76,
+        364.26
+      ],
+      "head_px": [
+        98.76,
+        108.26
+      ],
+      "hand_R_px": [
+        195.75,
+        169.16
+      ],
+      "hand_L_px": [
+        39.16,
+        272.56
+      ],
+      "seat_px": [
+        98.76,
+        295.46
+      ],
+      "face": "front",
+      "yaw": 0
+    },
+    "hold_up": {
+      "file": "char_boy__hold_up.png",
+      "w": 198,
+      "h": 374,
+      "anchor_px": [
+        98.76,
+        364.26
+      ],
+      "head_px": [
+        98.76,
+        108.26
+      ],
+      "hand_R_px": [
+        155.74,
+        217.17
+      ],
+      "hand_L_px": [
+        41.78,
+        217.17
+      ],
+      "seat_px": [
+        98.76,
+        295.46
+      ],
+      "face": "front",
+      "yaw": 0
+    },
+    "cheer": {
+      "file": "char_boy__cheer.png",
+      "w": 198,
+      "h": 374,
+      "anchor_px": [
+        98.76,
+        364.26
+      ],
+      "head_px": [
+        98.76,
+        108.26
+      ],
+      "hand_R_px": [
+        165.09,
+        142.23
+      ],
+      "hand_L_px": [
+        32.43,
+        142.23
+      ],
+      "seat_px": [
+        98.76,
+        295.46
+      ],
+      "face": "front",
+      "yaw": 0
+    },
+    "walk": {
+      "file": "char_boy__walk.png",
+      "w": 198,
+      "h": 375,
+      "anchor_px": [
+        109.8,
+        368.51
+      ],
+      "head_px": [
+        109.8,
+        108.67
+      ],
+      "hand_R_px": [
+        137.88,
+        269.1
+      ],
+      "hand_L_px": [
+        95.16,
+        250.2
+      ],
+      "seat_px": [
+        106.22,
+        295.87
+      ],
+      "face": "3q",
+      "yaw": 34
+    },
+    "sit": {
+      "file": "char_boy__sit.png",
+      "w": 198,
+      "h": 347,
+      "anchor_px": [
+        98.76,
+        364.7
+      ],
+      "head_px": [
+        98.76,
+        108.7
+      ],
+      "hand_R_px": [
+        146.74,
+        243.77
+      ],
+      "hand_L_px": [
+        50.78,
+        243.77
+      ],
+      "seat_px": [
+        98.76,
+        295.9
+      ],
+      "face": "front",
+      "yaw": 0
+    }
+  },
+  "emotions": {
+    "neutral": [
+      "eyes_open",
+      "mouth_smile"
+    ],
+    "happy": [
+      "eyes_happy",
+      "mouth_laugh"
+    ],
+    "surprised": [
+      "eyes_wide",
+      "mouth_oh"
+    ],
+    "sad": [
+      "eyes_sad",
+      "mouth_frown"
+    ],
+    "sleepy": [
+      "eyes_closed",
+      "mouth_flat"
+    ]
+  },
+  "face_front": {
+    "eyes_open": {
+      "file": "char_boy__eyes_open.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_happy": {
+      "file": "char_boy__eyes_happy.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_wide": {
+      "file": "char_boy__eyes_wide.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_sad": {
+      "file": "char_boy__eyes_sad.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_closed": {
+      "file": "char_boy__eyes_closed.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_smile": {
+      "file": "char_boy__mouth_smile.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_laugh": {
+      "file": "char_boy__mouth_laugh.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_oh": {
+      "file": "char_boy__mouth_oh.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_frown": {
+      "file": "char_boy__mouth_frown.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_flat": {
+      "file": "char_boy__mouth_flat.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    }
+  },
+  "face_3q": {
+    "eyes_open": {
+      "file": "char_boy__eyes_open_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_happy": {
+      "file": "char_boy__eyes_happy_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_wide": {
+      "file": "char_boy__eyes_wide_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_sad": {
+      "file": "char_boy__eyes_sad_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "eyes_closed": {
+      "file": "char_boy__eyes_closed_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_smile": {
+      "file": "char_boy__mouth_smile_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_laugh": {
+      "file": "char_boy__mouth_laugh_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_oh": {
+      "file": "char_boy__mouth_oh_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_frown": {
+      "file": "char_boy__mouth_frown_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    },
+    "mouth_flat": {
+      "file": "char_boy__mouth_flat_3q.png",
+      "center_px": [
+        85.5,
+        85.5
+      ]
+    }
+  }
+}

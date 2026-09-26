@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-65 -58 130 64">
+<style>
+.o path,.o rect,.o circle,.o ellipse,.o polygon,.o polyline,.o line{stroke:#3D2C29;stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.o .d{fill:none;stroke-width:3}
+.o .thin{stroke-width:3}
+.o .n,.o .n *{stroke:none}
+.o .tl{fill:none;stroke-width:3}
+.o .ink{fill:#3D2C29;stroke:none}
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-sh{fill:var(--hair-sh)}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bot)}.shoe{fill:var(--shoe)}.sock{fill:var(--sock)}
+</style><defs>
+  <pattern id="brick" width="192" height="96" patternUnits="userSpaceOnUse">
+    <rect width="192" height="96" fill="#F6E3D8"/>
+    <rect x="3" y="3" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="3" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="-45" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="51" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="147" y="35" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="3" y="67" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="67" width="90" height="26" rx="4" fill="#EECAB8"/>
+    <rect x="195" y="35" width="90" height="26" rx="4" fill="#EECAB8"/>
+  </pattern>
+  <pattern id="tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#CFE5DA"/><path d="M0 43 L44 43 M43 0 L43 44" stroke="#AFD2C5" stroke-width="3"/></pattern>
+</defs>
+<g class="o"><g transform="translate(0 0)"><path fill="#E2A860" d="M-52 -8 Q-60 -30 -34 -38 Q0 -52 34 -38 Q60 -30 52 -8 Q42 -12 36 -16 Q20 -4 0 -6 Q-20 -4 -36 -16 Q-42 -12 -52 -8Z"/>
+  <path class="d" d="M-24 -42 Q-18 -26 -26 -12 M-4 -46 Q2 -26 -4 -6 M18 -44 Q24 -26 18 -8"/><path class="n" fill="#F2C88A" d="M-12 -40 Q0 -44 10 -40 Q0 -38 -12 -40Z"/></g></g>
+</svg>

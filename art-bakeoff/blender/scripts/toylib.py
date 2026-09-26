@@ -33,6 +33,7 @@ OUTLINE_PX = 2.6          # inverted-hull outline width in output pixels
 SAMPLES = 64              # EEVEE TAA samples
 PAD_PX = 8                # transparent padding around sprites
 EXPOSURE = -0.3         # global brightness trim (stops)
+CHAR_SCALE = 1.3        # toy-scale kids: bigger than "real" next to furniture
 
 # ----------------------------------------------------------------------------
 # Palette: change colours here (or override from a JSON file, see NOTES.md).

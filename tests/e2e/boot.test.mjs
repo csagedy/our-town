@@ -65,20 +65,31 @@ describe('boot stage (iPad Air, landscape, touch)', () => {
   });
 
   it('squishes on a touch tap', async () => {
+    // Snapshot the reaction in the same task as the squish (the counter
+    // changes there), not on a later poll: on a loaded machine the 420ms
+    // animation could already be over by the time a poll gets to look.
+    await page.eval(() => {
+      const buddy = document.querySelector('.buddy');
+      new MutationObserver((_, obs) => {
+        obs.disconnect();
+        window.__atSquish = {
+          anims: document.querySelector('.buddy-squish').getAnimations().length,
+          happy: buddy.classList.contains('is-happy'),
+        };
+      }).observe(buddy, { attributes: true, attributeFilter: ['data-squishes'] });
+    });
     await page.tapElement('.buddy');
     await page.waitFor(() => document.querySelector('.buddy').dataset.squishes === '1');
-    const running = await page.eval(() => ({
-      anims: document.querySelector('.buddy-squish').getAnimations().length,
-      happy: document.querySelector('.buddy').classList.contains('is-happy'),
-    }));
+    const running = await page.waitFor(() => window.__atSquish);
     assert.equal(running.anims, 1, 'squish animation is running');
     assert.equal(running.happy, true, 'face switched to happy');
     await page.screenshot('boot-ipad-air-squish');
     const seen = await page.eval(() => window.__seen);
     assert.deepEqual(seen, ['pointerdown:touch:true', 'pointerup:touch:true']);
     // The squish settles: animation finishes and the face returns to neutral.
+    await page.waitForAnimations('.buddy-squish');
     await page.waitFor(() => document.querySelector('.buddy-squish').getAnimations().length === 0
-      && !document.querySelector('.buddy').classList.contains('is-happy'), { timeout: 2000 });
+      && !document.querySelector('.buddy').classList.contains('is-happy'));
   });
 
   it('counts each tap', async () => {
@@ -105,16 +116,13 @@ describe('boot stage (iPad Air, landscape, touch)', () => {
     assert.deepEqual(page.errors, []);
   });
 
-  it('has no service worker yet (P1.2 hook is off)', async () => {
+  it('registers the service worker (details in tests/e2e/offline.test.mjs)', async () => {
     const r = await page.eval(async () => {
       const pwa = await import('./src/pwa.js');
-      return {
-        enabled: pwa.SW_ENABLED,
-        regs: (await navigator.serviceWorker.getRegistrations()).length,
-        version: await pwa.installedVersion(),
-      };
+      await navigator.serviceWorker.ready;
+      return { enabled: pwa.SW_ENABLED, regs: (await navigator.serviceWorker.getRegistrations()).length };
     });
-    assert.deepEqual(r, { enabled: false, regs: 0, version: '' });
+    assert.deepEqual(r, { enabled: true, regs: 1 });
   });
 
   it('serves a valid manifest with the three icons', async () => {

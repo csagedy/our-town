@@ -2,11 +2,11 @@
 // touch -> stage -> animation path until the real scenes arrive, and is
 // meant to be deleted once the city map (P1.13) exists.
 //
-// The tap rule here mirrors design.md section 2.2 (under 10pt of movement and
-// under 250ms); P1.6 replaces this with the shared input module.
+// Touch goes through the shared input module (src/engine/input.js): the
+// buddy is tap-only, so a drag on it neither moves it nor pans the room.
 
-const TAP_SLOP = 10;    // CSS px (= iPad points)
-const TAP_MS = 250;
+import { sfx } from '../audio/index.js';
+import { mountBlobs } from './input-demo.js';
 
 const BUDDY_SVG = `
 <svg viewBox="0 0 360 380" aria-hidden="true">
@@ -40,42 +40,70 @@ const SQUISH = [
   { transform: 'scale(1, 1)' },
 ];
 
-export function mountBoot(stage) {
+// Temporary wide test room for the P1.5 camera: 2880 units of colored
+// stripes (12 x 240) over a floor band, reachable with index.html?room=wide.
+export const WIDE_TEST_ROOM = { width: 2880, backdrop: { top: '#9ad0f5', bottom: '#8d6e63', horizon: 760 } };
+const STRIPE_W = 240;
+
+function buildWideTestRoom(stage) {
+  const { width } = WIDE_TEST_ROOM;
+  const n = width / STRIPE_W;
+  for (let i = 0; i < n; i++) {
+    const el = document.createElement('div');
+    el.className = 'test-stripe';
+    el.dataset.stripe = String(i);
+    // First and last stripes carry the 100-unit art bleed past the room edges.
+    const left = i * STRIPE_W - (i === 0 ? 100 : 0);
+    const w = STRIPE_W + (i === 0 ? 100 : 0) + (i === n - 1 ? 100 : 0);
+    el.style.transform = `translate(${left}px, 0)`;
+    el.style.width = `${w}px`;
+    el.style.background = `hsl(${Math.round((i * 360) / n)}, 70%, ${i % 2 ? 68 : 58}%)`;
+    stage.world.appendChild(el);
+  }
+  const floor = document.createElement('div');
+  floor.className = 'test-floor';
+  floor.style.transform = 'translate(-100px, 0)';
+  floor.style.width = `${width + 200}px`;
+  stage.world.appendChild(floor);
+}
+
+/**
+ * Mount the boot scene. opts.input: the input module (createInput). opts.room:
+ * 'wide' for the P1.5 wide test room, which also gets the P1.6 blob demo.
+ * opts.squishes: the saved squish count to start from; opts.onSquish(count):
+ * called after each squish (main.js saves it through the store, P1.4).
+ */
+export function mountBoot(stage, opts = {}) {
+  const { input } = opts;
+  if (opts.room === 'wide') {
+    stage.setRoom(WIDE_TEST_ROOM);
+    buildWideTestRoom(stage);
+  } else {
+    stage.setRoom({ width: 1440, backdrop: { top: '#ffcf70', bottom: '#f4a57c', horizon: 740 } });
+  }
+
   const buddy = document.createElement('div');
   buddy.className = 'buddy';
-  buddy.dataset.squishes = '0';
+  buddy.dataset.squishes = String(opts.squishes || 0);
   const squishEl = document.createElement('div');
   squishEl.className = 'buddy-squish';
   squishEl.innerHTML = BUDDY_SVG;
   buddy.appendChild(squishEl);
-  stage.el.appendChild(buddy);
+  stage.world.appendChild(buddy);
 
   let happyTimer = 0;
   function squish() {
+    sfx.play('boing');
     squishEl.animate(SQUISH, { duration: 420, easing: 'ease-out' });
     buddy.classList.add('is-happy');
     clearTimeout(happyTimer);
     happyTimer = setTimeout(() => buddy.classList.remove('is-happy'), 700);
     buddy.dataset.squishes = String(Number(buddy.dataset.squishes) + 1);
+    if (opts.onSquish) opts.onSquish(Number(buddy.dataset.squishes));
   }
 
-  let down = null;
-  buddy.addEventListener('pointerdown', (e) => {
-    if (down) return;                         // ignore a second finger
-    down = { id: e.pointerId, x: e.clientX, y: e.clientY, t: e.timeStamp, moved: false };
-    buddy.setPointerCapture(e.pointerId);
-  });
-  buddy.addEventListener('pointermove', (e) => {
-    if (!down || e.pointerId !== down.id) return;
-    if (Math.hypot(e.clientX - down.x, e.clientY - down.y) >= TAP_SLOP) down.moved = true;
-  });
-  buddy.addEventListener('pointerup', (e) => {
-    if (!down || e.pointerId !== down.id) return;
-    const isTap = !down.moved && e.timeStamp - down.t < TAP_MS;
-    down = null;
-    if (isTap) squish();
-  });
-  buddy.addEventListener('pointercancel', () => { down = null; });
+  input.register(buddy, { onTap: squish });
+  const demo = opts.room === 'wide' ? mountBlobs(stage, input) : null;
 
-  return { el: buddy, squish };
+  return { el: buddy, squish, demo };
 }

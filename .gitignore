@@ -12,3 +12,6 @@ test-results/
 
 # Test harness screenshots
 test-results/
+
+# Third-party reference screenshots (copyrighted, never publish)
+art-ref/

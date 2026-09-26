@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -40 256 76">
+<style>
+.o path,.o rect,.o circle,.o ellipse,.o polygon,.o polyline,.o line{stroke:#3D2C29;stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.o .d{fill:none;stroke-width:3}
+.o .thin{stroke-width:3}
+.o .n,.o .n *{stroke:none}
+.o .tl{fill:none;stroke-width:3}
+.o .ink{fill:#3D2C29;stroke:none}
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-sh{fill:var(--hair-sh)}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bot)}.shoe{fill:var(--shoe)}.sock{fill:var(--sock)}
+</style><defs>
+  <pattern id="brick" width="192" height="96" patternUnits="userSpaceOnUse">
+    <rect width="192" height="96" fill="#F6E3D8"/>
+    <rect x="3" y="3" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="3" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="-45" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="51" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="147" y="35" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="3" y="67" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="67" width="90" height="26" rx="4" fill="#EECAB8"/>
+    <rect x="195" y="35" width="90" height="26" rx="4" fill="#EECAB8"/>
+  </pattern>
+  <pattern id="tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#CFE5DA"/><path d="M0 43 L44 43 M43 0 L43 44" stroke="#AFD2C5" stroke-width="3"/></pattern>
+</defs>
+<g class="o"><g>
+  <rect fill="#9C6C4C" x="-12" y="-8" width="84" height="16" rx="8"/><rect fill="#B2B6BA" x="68" y="-6" width="26" height="12" rx="4"/>
+  <ellipse fill="#57515A" cx="160" cy="2" rx="72" ry="28"/><ellipse fill="#433E46" class="thin" cx="160" cy="-2" rx="60" ry="20"/>
+  <path fill="#FFFDF6" class="thin" d="M126 -4 Q124 -16 144 -16 Q156 -24 172 -16 Q192 -14 188 -2 Q190 10 170 8 Q150 14 136 8 Q122 6 126 -4Z"/>
+  <ellipse fill="#DFB050" class="thin" cx="158" cy="-5" rx="12" ry="9"/><path class="n" fill="#fff" d="M152 -9 Q156 -12 160 -10 Q156 -8 152 -9Z"/></g></g>
+</svg>

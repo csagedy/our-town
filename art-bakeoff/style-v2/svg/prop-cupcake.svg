@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-45 -110 90 115">
+<style>
+.o path,.o rect,.o circle,.o ellipse,.o polygon,.o polyline,.o line{stroke:#3D2C29;stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.o .d{fill:none;stroke-width:3}
+.o .thin{stroke-width:3}
+.o .n,.o .n *{stroke:none}
+.o .tl{fill:none;stroke-width:3}
+.o .ink{fill:#3D2C29;stroke:none}
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-sh{fill:var(--hair-sh)}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bot)}.shoe{fill:var(--shoe)}.sock{fill:var(--sock)}
+</style><defs>
+  <pattern id="brick" width="192" height="96" patternUnits="userSpaceOnUse">
+    <rect width="192" height="96" fill="#F6E3D8"/>
+    <rect x="3" y="3" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="3" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="-45" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="51" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="147" y="35" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="3" y="67" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="67" width="90" height="26" rx="4" fill="#EECAB8"/>
+    <rect x="195" y="35" width="90" height="26" rx="4" fill="#EECAB8"/>
+  </pattern>
+  <pattern id="tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#CFE5DA"/><path d="M0 43 L44 43 M43 0 L43 44" stroke="#AFD2C5" stroke-width="3"/></pattern>
+</defs>
+<g class="o"><g transform="translate(0 0)">
+  <path fill="#E9AFAE" d="M-30 -40 Q-38 -58 -18 -62 Q-16 -82 4 -78 Q24 -84 22 -62 Q40 -58 30 -40Z"/>
+  <path class="d" d="M-16 -56 Q0 -48 14 -58"/>
+  <path fill="#8CBDB8" d="M-26 -40 L26 -40 L20 0 L-20 0Z"/><path class="tl" style="stroke:#679E9C;" d="M-12 -38 L-10 -2 M0 -38 L0 -2 M12 -38 L10 -2"/>
+  <path class="d" d="M3 -84 Q6 -96 14 -100"/><circle fill="#DC6B6E" cx="2" cy="-86" r="9"/>
+  <g class="n"><rect fill="#F4DC98" x="-18" y="-52" width="7" height="3" rx="1.5" transform="rotate(30 -15 -50)"/><rect fill="#8CBDB8" x="10" y="-66" width="7" height="3" rx="1.5" transform="rotate(-20 13 -64)"/><rect fill="#FBF3E8" x="-4" y="-70" width="7" height="3" rx="1.5"/></g></g></g>
+</svg>

@@ -1,0 +1,30 @@
+{
+  "w": 2048,
+  "h": 1536,
+  "ppm": 320.0,
+  "shear_k": 0.4,
+  "cam_center": [
+    0.0,
+    1.42
+  ],
+  "layers": {
+    "back": {
+      "file": "bg_back.png",
+      "render_s": 5.3
+    },
+    "island": {
+      "file": "bg_island.png",
+      "render_s": 1.2
+    },
+    "chairs": {
+      "file": "bg_chairs.png",
+      "render_s": 1.0
+    },
+    "front": {
+      "file": "bg_front.png",
+      "render_s": 1.1
+    }
+  },
+  "objects": 771,
+  "build_s": 0.7
+}

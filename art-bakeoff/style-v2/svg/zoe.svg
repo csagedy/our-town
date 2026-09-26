@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -450 260 470">
+<style>
+.o path,.o rect,.o circle,.o ellipse,.o polygon,.o polyline,.o line{stroke:#3D2C29;stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.o .d{fill:none;stroke-width:3}
+.o .thin{stroke-width:3}
+.o .n,.o .n *{stroke:none}
+.o .tl{fill:none;stroke-width:3}
+.o .ink{fill:#3D2C29;stroke:none}
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-sh{fill:var(--hair-sh)}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bot)}.shoe{fill:var(--shoe)}.sock{fill:var(--sock)}
+</style><defs>
+  <pattern id="brick" width="192" height="96" patternUnits="userSpaceOnUse">
+    <rect width="192" height="96" fill="#F6E3D8"/>
+    <rect x="3" y="3" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="3" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="-45" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="51" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="147" y="35" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="3" y="67" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="67" width="90" height="26" rx="4" fill="#EECAB8"/>
+    <rect x="195" y="35" width="90" height="26" rx="4" fill="#EECAB8"/>
+  </pattern>
+  <pattern id="tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#CFE5DA"/><path d="M0 43 L44 43 M43 0 L43 44" stroke="#AFD2C5" stroke-width="3"/></pattern>
+</defs>
+<g class="o"><g id="zoe" style="--skin:#A8714D;--skin-sh:#8C5A3B;--hair:#3A2A2C;--hair-sh:#55403F;--top:#B9CDA4;--top-sh:#93AE85;--acc:#E9AFAE;--acc-sh:#D48C8E;--bot:#9A7A98;--shoe:#FBF3E8;--sock:#FFFFFF">
+  <ellipse class="n" fill="#3D2C29" opacity=".12" cx="0" cy="0" rx="66" ry="13"/>
+  
+  <g id="zoe-legs">
+    <rect class="bot" x="-36" y="-134" width="30" height="118" rx="13"/><rect class="bot" x="6" y="-134" width="30" height="118" rx="13"/>
+    <path class="shoe" d="M-6 0 L-44 0 Q-54 0 -54 -10 Q-54 -32 -28 -32 Q-6 -32 -6 -12Z"/><path class="shoe" d="M6 0 L44 0 Q54 0 54 -10 Q54 -32 28 -32 Q6 -32 6 -12Z"/>
+    <path class="d" d="M-50 -9 L-8 -9"/><path class="d" d="M50 -9 L8 -9"/>
+    <circle class="n" fill="#D48C8E" cx="-24" cy="-22" r="3.5"/><circle class="n" fill="#D48C8E" cx="24" cy="-22" r="3.5"/>
+  </g>
+  <g id="zoe-body">
+    <rect class="skin" x="-13" y="-238" width="26" height="36" rx="8"/>
+    <path class="top" d="M-40 -218 Q-52 -216 -54 -200 L-58 -132 Q-58 -120 -46 -120 L46 -120 Q58 -120 58 -132 L54 -200 Q52 -216 40 -218Z"/>
+    <path fill="#FBF3E8" class="thin" d="M-24 -219 Q-18 -198 0 -206 Q18 -198 24 -219 Q0 -210 -24 -219Z"/>
+    <path class="acc" d="M-30 -200 L30 -200 L32 -158 L52 -158 Q57 -158 58 -152 L63 -102 Q63 -94 55 -94 L-55 -94 Q-63 -94 -63 -102 L-58 -152 Q-57 -158 -52 -158 L-32 -158Z"/>
+    <path class="acc" d="M-30 -200 L-24 -220 L-16 -218 L-22 -200Z"/><path class="acc" d="M30 -200 L24 -220 L16 -218 L22 -200Z"/>
+    <rect class="acc-sh" x="-60" y="-162" width="120" height="12" rx="6"/>
+    <path class="acc-sh" d="M58 -156 Q76 -168 78 -150 Q70 -144 58 -150Z"/><path class="acc-sh" d="M58 -154 Q72 -136 66 -122 Q58 -128 56 -150Z"/>
+    <g class="n" fill="#FBF3E8"><circle cx="-44" cy="-110" r="3.5"/><circle cx="40" cy="-104" r="3.5"/><circle cx="-8" cy="-186" r="3.5"/><circle cx="16" cy="-174" r="3.5"/><circle cx="48" cy="-134" r="3.5"/><circle cx="-46" cy="-138" r="3.5"/></g>
+    <rect fill="#FBF3E8" class="thin" x="-22" y="-140" width="44" height="30" rx="8"/>
+    <path class="thin" fill="#DC6B6E" d="M0 -114 Q-11 -122 -9 -130 Q-5 -134 0 -131 Q5 -134 9 -130 Q11 -122 0 -114Z"/><path class="n" fill="#79A86D" d="M-6 -132 L0 -128 L6 -132 L0 -136Z"/>
+  </g>
+  <g id="zoe-arm-l-pivot" transform="translate(-46 -206) rotate(8)"><g id="zoe-arm-l">
+    <rect class="skin" x="-11" y="0" width="22" height="76" rx="11"/>
+    <path class="top" d="M-18 -8 Q0 -22 18 -8 L17 34 Q0 40 -17 34Z"/><path class="tl" style="stroke:#FBF3E8;" d="M-16 11.9 L16 11.9 M-16 22.1 L16 22.1"/>
+    <circle class="skin" cx="0" cy="84" r="16"/><path class="d" d="M-9 80 q-4 8 2 12"/>
+  </g></g>
+  <g id="zoe-head" transform="translate(0 -300) rotate(0 0 80)">
+    <g id="zoe-hair-back">
+    <path class="hair" d="M60 -102 Q65.8 -89.1 52 -80 Q49 -66 30 -63.9 Q18.4 -51.6 0 -58 Q-18.4 -51.6 -30 -63.9 Q-49 -66 -52 -80 Q-65.8 -89.1 -60 -102 Q-65.8 -114.9 -52 -124 Q-49 -138 -30 -140.1 Q-18.4 -152.4 0 -146 Q18.4 -152.4 30 -140.1 Q49 -138 52 -124 Q65.8 -114.9 60 -102Z"/>
+    <path class="d" d="M-30 -118 Q-20 -128 -8 -122"/><path class="d" d="M14 -128 Q26 -130 34 -118"/><path class="d" d="M-6 -90 Q6 -98 16 -92"/>
+  </g>
+    <ellipse class="skin" cx="-80" cy="11.2" rx="13" ry="17"/><path class="d" d="M-85 4.8 q-5 8 1 16"/><ellipse class="skin" cx="80" cy="11.2" rx="13" ry="17"/><path class="d" d="M85 4.8 q5 8 -1 16"/>
+    <path class="skin" d="M0 -80 C50.8 -80 82 -48 82 -1.6 C82 48 49.2 80 0 80 C-49.2 80 -82 48 -82 -1.6 C-82 -48 -50.8 -80 0 -80Z"/>
+    <g id="zoe-face"><g id="zoe-face-happy" class="face"><ellipse class="ink" cx="-31" cy="10" rx="8.5" ry="11"/><ellipse class="ink" cx="31" cy="10" rx="8.5" ry="11"/><path class="d" style="stroke-width:3.5" d="M-38 5 l-7 -4"/><path class="d" style="stroke-width:3.5" d="M38 5 l7 -4"/><ellipse class="skin-sh thin" cx="0" cy="28" rx="7" ry="5.5"/><path class="d" style="stroke-width:3.5" d="M-9 42 Q0 50 9 42"/></g><g id="zoe-face-laughing" class="face" style="display:none"><path class="d" style="stroke-width:5" d="M-41 14 Q-31 1 -21 14"/><path class="d" style="stroke-width:5" d="M21 14 Q31 1 41 14"/><path class="d" style="stroke-width:3.5" d="M-38 9 l-7 -4"/><path class="d" style="stroke-width:3.5" d="M38 9 l7 -4"/><ellipse class="skin-sh thin" cx="0" cy="28" rx="7" ry="5.5"/><path class="thin" fill="#9C4852" d="M-13 38 Q0 41 13 38 Q11 55 0 55 Q-11 55 -13 38Z"/><path class="n" fill="#EE9A9C" d="M-6 51 Q0 46 6 51 Q0 54 -6 51Z"/></g><g id="zoe-face-surprised" class="face" style="display:none"><ellipse class="ink" cx="-31" cy="8" rx="9.5" ry="13"/><ellipse class="ink" cx="31" cy="8" rx="9.5" ry="13"/><path class="d" style="stroke-width:3.5" d="M-38 1 l-7 -4"/><path class="d" style="stroke-width:3.5" d="M38 1 l7 -4"/><path class="d" style="stroke-width:3.5" d="M-40 -19 Q-31 -27 -22 -19"/><path class="d" style="stroke-width:3.5" d="M22 -19 Q31 -27 40 -19"/><ellipse class="skin-sh thin" cx="0" cy="28" rx="7" ry="5.5"/><ellipse class="thin" fill="#9C4852" cx="0" cy="44" rx="6" ry="8"/></g></g>
+    <g id="zoe-hair-front">
+    <path class="hair" d="M-86 -4 C-94 -70 -52 -94 0 -94 C52 -94 94 -70 86 -4 C80 -28 72 -42 58 -50 C32 -60 -32 -60 -58 -50 C-72 -42 -80 -28 -86 -4Z"/>
+    <path class="acc" d="M-76 -40 C-66 -86 66 -86 76 -40 L66 -36 C56 -72 -56 -72 -66 -36Z"/>
+    <path class="d" d="M-44 -82 Q-30 -74 -16 -80"/><path class="d" d="M30 -84 Q44 -80 52 -70"/>
+    <path class="hair" d="M-68 -14 Q-66.9 -5.1 -74 -1.9 Q-80 3.1 -86 -1.9 Q-93.1 -5.1 -92 -14 Q-93.1 -22.9 -86 -26.1 Q-80 -31.1 -74 -26.1 Q-66.9 -22.9 -68 -14Z"/><path class="hair" d="M92 -14 Q93.1 -5.1 86 -1.9 Q80 3.1 74 -1.9 Q66.9 -5.1 68 -14 Q66.9 -22.9 74 -26.1 Q80 -31.1 86 -26.1 Q93.1 -22.9 92 -14Z"/>
+  </g>
+  </g>
+  
+  <g id="zoe-arm-r-pivot" transform="translate(46 -206) rotate(-8)"><g id="zoe-arm-r">
+    <rect class="skin" x="-11" y="0" width="22" height="76" rx="11"/>
+    <path class="top" d="M-18 -8 Q0 -22 18 -8 L17 34 Q0 40 -17 34Z"/><path class="tl" style="stroke:#FBF3E8;" d="M-16 11.9 L16 11.9 M-16 22.1 L16 22.1"/>
+    <circle class="skin" cx="0" cy="84" r="16"/><path class="d" d="M-9 80 q-4 8 2 12"/>
+  </g></g>
+</g></g>
+</svg>

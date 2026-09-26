@@ -4,77 +4,77 @@
       2048,
       1536
     ],
-    "render_only": 11.59,
-    "seconds": 11.59
+    "render_only": 12.31,
+    "seconds": 12.32
   },
   "char_big_kid": {
     "layer": "body",
     "px": [
-      339,
-      504
+      434,
+      636
     ],
-    "seconds": 0.85
+    "seconds": 1.22
   },
   "char_big_kid__face_layers": {
     "count": 10,
-    "seconds": 8.54
+    "seconds": 9.6
   },
   "char_big_kid__total": {
-    "seconds": 9.57
+    "seconds": 11.02
   },
   "char_little_kid": {
     "layer": "body",
     "px": [
-      256,
-      446
+      327,
+      574
     ],
-    "seconds": 0.8
+    "seconds": 1.09
   },
   "char_little_kid__face_layers": {
     "count": 10,
-    "seconds": 8.79
+    "seconds": 8.5
   },
   "char_little_kid__total": {
-    "seconds": 9.77
+    "seconds": 9.78
   },
   "prop_cupcake": {
     "px": [
       122,
-      166
+      165
     ],
-    "render_only": 2.2,
-    "seconds": 3.56
+    "render_only": 1.98,
+    "seconds": 3.43
   },
   "prop_frying_pan": {
     "px": [
-      281,
-      69
+      279,
+      114
     ],
-    "render_only": 0.94,
-    "seconds": 1.13
+    "render_only": 0.68,
+    "seconds": 0.89
   },
   "prop_mixing_bowl": {
     "px": [
       207,
-      194
+      208
     ],
-    "render_only": 0.88,
-    "seconds": 1.13
+    "render_only": 0.82,
+    "seconds": 1.08
   },
   "prop_tomato_sliced": {
     "px": [
       190,
       141
     ],
-    "render_only": 0.87,
-    "seconds": 1.24
+    "render_only": 0.93,
+    "seconds": 1.32
   },
   "prop_tomato_whole": {
     "px": [
       121,
       111
     ],
-    "render_only": 0.46,
-    "seconds": 0.47
+    "render_only": 0.53,
+    "seconds": 0.54
   }
 }

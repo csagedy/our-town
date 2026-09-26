@@ -1,0 +1,263 @@
+{
+  "bg_back": {
+    "seconds": 5.3
+  },
+  "bg_chairs": {
+    "seconds": 0.99
+  },
+  "bg_front": {
+    "seconds": 1.07
+  },
+  "bg_island": {
+    "seconds": 1.2
+  },
+  "char_adult__cheer": {
+    "px": [
+      260,
+      558
+    ],
+    "render_only": 0.55,
+    "seconds": 0.55
+  },
+  "char_adult__faces": {
+    "seconds": 0.07
+  },
+  "char_adult__hold_up": {
+    "px": [
+      215,
+      558
+    ],
+    "render_only": 0.49,
+    "seconds": 0.5
+  },
+  "char_adult__sit": {
+    "px": [
+      211,
+      472
+    ],
+    "render_only": 0.54,
+    "seconds": 0.54
+  },
+  "char_adult__stand": {
+    "px": [
+      216,
+      558
+    ],
+    "render_only": 0.55,
+    "seconds": 0.65
+  },
+  "char_adult__walk": {
+    "px": [
+      229,
+      546
+    ],
+    "render_only": 0.54,
+    "seconds": 0.54
+  },
+  "char_adult__wave": {
+    "px": [
+      296,
+      558
+    ],
+    "render_only": 0.52,
+    "seconds": 0.52
+  },
+  "char_boy__cheer": {
+    "px": [
+      198,
+      374
+    ],
+    "render_only": 0.62,
+    "seconds": 0.62
+  },
+  "char_boy__faces": {
+    "seconds": 0.09
+  },
+  "char_boy__hold_up": {
+    "px": [
+      198,
+      374
+    ],
+    "render_only": 0.59,
+    "seconds": 0.59
+  },
+  "char_boy__sit": {
+    "px": [
+      198,
+      347
+    ],
+    "render_only": 0.67,
+    "seconds": 0.68
+  },
+  "char_boy__stand": {
+    "px": [
+      198,
+      374
+    ],
+    "render_only": 0.6,
+    "seconds": 0.71
+  },
+  "char_boy__walk": {
+    "px": [
+      198,
+      375
+    ],
+    "render_only": 0.64,
+    "seconds": 0.64
+  },
+  "char_boy__wave": {
+    "px": [
+      221,
+      374
+    ],
+    "render_only": 0.59,
+    "seconds": 0.6
+  },
+  "char_girl__cheer": {
+    "px": [
+      272,
+      421
+    ],
+    "render_only": 0.81,
+    "seconds": 0.82
+  },
+  "char_girl__faces": {
+    "seconds": 0.07
+  },
+  "char_girl__hold_up": {
+    "px": [
+      272,
+      421
+    ],
+    "render_only": 0.78,
+    "seconds": 0.79
+  },
+  "char_girl__sit": {
+    "px": [
+      272,
+      374
+    ],
+    "render_only": 0.81,
+    "seconds": 0.82
+  },
+  "char_girl__stand": {
+    "px": [
+      272,
+      421
+    ],
+    "render_only": 0.83,
+    "seconds": 1.0
+  },
+  "char_girl__walk": {
+    "px": [
+      236,
+      415
+    ],
+    "render_only": 0.84,
+    "seconds": 0.85
+  },
+  "char_girl__wave": {
+    "px": [
+      276,
+      421
+    ],
+    "render_only": 0.8,
+    "seconds": 0.8
+  },
+  "prop_cupcake": {
+    "px": [
+      68,
+      100
+    ],
+    "render_only": 0.33,
+    "seconds": 0.38
+  },
+  "prop_cupcake@2x": {
+    "px": [
+      123,
+      187
+    ],
+    "render_only": 0.22,
+    "seconds": 0.27
+  },
+  "prop_frying_pan": {
+    "px": [
+      174,
+      62
+    ],
+    "render_only": 0.23,
+    "seconds": 0.24
+  },
+  "prop_frying_pan@2x": {
+    "px": [
+      336,
+      112
+    ],
+    "render_only": 0.2,
+    "seconds": 0.21
+  },
+  "prop_layer_cake": {
+    "px": [
+      115,
+      123
+    ],
+    "render_only": 0.16,
+    "seconds": 0.16
+  },
+  "prop_layer_cake@2x": {
+    "px": [
+      217,
+      233
+    ],
+    "render_only": 0.23,
+    "seconds": 0.23
+  },
+  "prop_mug": {
+    "px": [
+      65,
+      63
+    ],
+    "render_only": 0.16,
+    "seconds": 0.16
+  },
+  "prop_mug@2x": {
+    "px": [
+      117,
+      114
+    ],
+    "render_only": 0.18,
+    "seconds": 0.18
+  },
+  "prop_teapot": {
+    "px": [
+      127,
+      83
+    ],
+    "render_only": 0.17,
+    "seconds": 0.2
+  },
+  "prop_teapot@2x": {
+    "px": [
+      241,
+      154
+    ],
+    "render_only": 0.2,
+    "seconds": 0.23
+  },
+  "prop_tomato": {
+    "px": [
+      59,
+      57
+    ],
+    "render_only": 0.18,
+    "seconds": 0.19
+  },
+  "prop_tomato@2x": {
+    "px": [
+      106,
+      101
+    ],
+    "render_only": 0.19,
+    "seconds": 0.2
+  }
+}

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -600 260 620">
+<style>
+.o path,.o rect,.o circle,.o ellipse,.o polygon,.o polyline,.o line{stroke:#3D2C29;stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.o .d{fill:none;stroke-width:3}
+.o .thin{stroke-width:3}
+.o .n,.o .n *{stroke:none}
+.o .tl{fill:none;stroke-width:3}
+.o .ink{fill:#3D2C29;stroke:none}
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-sh{fill:var(--hair-sh)}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bot)}.shoe{fill:var(--shoe)}.sock{fill:var(--sock)}
+</style><defs>
+  <pattern id="brick" width="192" height="96" patternUnits="userSpaceOnUse">
+    <rect width="192" height="96" fill="#F6E3D8"/>
+    <rect x="3" y="3" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="3" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="-45" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="51" y="35" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="147" y="35" width="90" height="26" rx="4" fill="#E7BBA7"/><rect x="3" y="67" width="90" height="26" rx="4" fill="#EECAB8"/><rect x="99" y="67" width="90" height="26" rx="4" fill="#EECAB8"/>
+    <rect x="195" y="35" width="90" height="26" rx="4" fill="#EECAB8"/>
+  </pattern>
+  <pattern id="tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#CFE5DA"/><path d="M0 43 L44 43 M43 0 L43 44" stroke="#AFD2C5" stroke-width="3"/></pattern>
+</defs>
+<g class="o"><g id="customer" style="--skin:#EDC3A2;--skin-sh:#D9A07F;--hair:#6A4A3A;--hair-sh:#523729;--top:#DFB050;--top-sh:#C4933A;--acc:#8CBDB8;--acc-sh:#679E9C;--bot:#8C6E5C;--shoe:#433E46;--sock:#FBF3E8">
+  <ellipse class="n" fill="#3D2C29" opacity=".12" cx="0" cy="0" rx="72" ry="13"/>
+  
+  <g id="customer-legs">
+    <rect class="bot" x="-48" y="-222" width="42" height="204" rx="14"/><rect class="bot" x="6" y="-222" width="42" height="204" rx="14"/>
+    <rect class="bot" x="-50" y="-226" width="100" height="40" rx="12"/>
+    <path class="d" d="M0 -196 L0 -186"/>
+    <path class="shoe" d="M-4 0 L-50 0 Q-62 0 -62 -12 Q-62 -34 -32 -34 Q-4 -34 -4 -12Z"/><path class="shoe" d="M4 0 L50 0 Q62 0 62 -12 Q62 -34 32 -34 Q4 -34 4 -12Z"/>
+  </g>
+  <g id="customer-body">
+    <rect class="skin" x="-15" y="-396" width="30" height="40" rx="9"/>
+    <path class="top" d="M-46 -374 Q-58 -372 -60 -354 L-64 -222 Q-64 -206 -50 -206 L50 -206 Q64 -206 64 -222 L60 -354 Q58 -372 46 -374Z"/>
+    <path fill="#FBF3E8" d="M-20 -374 L20 -374 L12 -206 L-12 -206Z"/>
+    <path class="d" d="M-20 -374 Q0 -358 20 -374"/>
+    <g fill="#FBF3E8" class="thin"><circle cx="-18" cy="-334" r="4.5"/><circle cx="-16" cy="-294" r="4.5"/><circle cx="-15" cy="-254" r="4.5"/></g>
+    <path class="d" d="M-52 -262 L-30 -262 L-30 -236 L-52 -236"/><path class="d" d="M52 -262 L30 -262 L30 -236 L52 -236"/>
+    <path class="tl" style="stroke:#C4933A;" d="M-54 -222 L-54 -210 M-44 -222 L-44 -210 M-34 -222 L-34 -210 M26 -222 L26 -210 M36 -222 L36 -210 M46 -222 L46 -210 M56 -222 L56 -210"/>
+  </g>
+  <g id="customer-arm-l-pivot" transform="translate(-56 -352) rotate(8)"><g id="customer-arm-l">
+    <rect class="skin" x="-11" y="0" width="22" height="130" rx="11"/>
+    <path class="top" d="M-18 -8 Q0 -22 18 -8 L17 118 Q0 124 -17 118Z"/><path class="tl" style="stroke:#C4933A;" d="M-16 41.3 L16 41.3 M-16 76.7 L16 76.7"/>
+    <circle class="skin" cx="0" cy="138" r="16"/><path class="d" d="M-9 134 q-4 8 2 12"/>
+  </g></g>
+  <g id="customer-head" transform="translate(0 -452) rotate(0 0 78)">
+    
+    <ellipse class="skin" cx="-72" cy="10.9" rx="13" ry="17"/><path class="d" d="M-77 4.7 q-5 8 1 16"/><ellipse class="skin" cx="72" cy="10.9" rx="13" ry="17"/><path class="d" d="M77 4.7 q5 8 -1 16"/>
+    <path class="skin" d="M0 -78 C45.9 -78 74 -46.8 74 -1.6 C74 46.8 44.4 78 0 78 C-44.4 78 -74 46.8 -74 -1.6 C-74 -46.8 -45.9 -78 0 -78Z"/>
+    <g id="customer-face"><g id="customer-face-pleased" class="face"><ellipse class="ink" cx="-28" cy="10" rx="7.5" ry="10"/><ellipse class="ink" cx="28" cy="10" rx="7.5" ry="10"/><ellipse class="skin-sh thin" cx="0" cy="30" rx="7" ry="5.5"/><path class="d" style="stroke-width:3.5" d="M-10 46 Q0 54 10 46"/></g><g id="customer-face-yum" class="face" style="display:none"><path class="d" style="stroke-width:5" d="M-38 8 Q-28 18 -18 8"/><path class="d" style="stroke-width:5" d="M18 8 Q28 18 38 8"/><ellipse class="skin-sh thin" cx="0" cy="30" rx="7" ry="5.5"/><path class="thin" fill="#9C4852" d="M-11 43 Q0 46 11 43 Q9 60 0 60 Q-9 60 -11 43Z"/><path class="n" fill="#EE9A9C" d="M-6 56 Q0 51 6 56 Q0 59 -6 56Z"/><ellipse class="n" fill="#E9AFAE" opacity=".45" cx="-48" cy="36" rx="13" ry="7"/><ellipse class="n" fill="#E9AFAE" opacity=".45" cx="48" cy="36" rx="13" ry="7"/></g><g id="customer-face-surprised" class="face" style="display:none"><ellipse class="ink" cx="-28" cy="9" rx="8.5" ry="12"/><ellipse class="ink" cx="28" cy="9" rx="8.5" ry="12"/><path class="d" style="stroke-width:3.5" d="M-37 -17 Q-28 -25 -19 -17"/><path class="d" style="stroke-width:3.5" d="M19 -17 Q28 -25 37 -17"/><ellipse class="skin-sh thin" cx="0" cy="30" rx="7" ry="5.5"/><ellipse class="thin" fill="#9C4852" cx="0" cy="48" rx="6" ry="8"/></g></g>
+    <g id="customer-hair-front">
+    <path class="hair" d="M-76 -12 C-76 12 -72 22 -64 30 L-58 -12Z"/><path class="hair" d="M76 -12 C76 12 72 22 64 30 L58 -12Z"/>
+    <path class="acc" d="M-78 -30 C-82 -92 -40 -116 0 -116 C40 -116 82 -92 78 -30Z"/>
+    <path class="hair" d="M17 -120 Q19.2 -113 12 -109.4 Q8.1 -102.7 0 -105 Q-8.1 -102.7 -12 -109.4 Q-19.2 -113 -17 -120 Q-19.2 -127 -12 -130.6 Q-8.1 -137.3 0 -135 Q8.1 -137.3 12 -130.6 Q19.2 -127 17 -120Z" style="fill:#FBF3E8"/>
+    <rect class="acc-sh" x="-84" y="-44" width="168" height="30" rx="14"/>
+    <path class="tl" style="stroke:#679E9C;" d="M-64 -40 L-64 -18 M-48 -40 L-48 -18 M-32 -40 L-32 -18 M-16 -40 L-16 -18 M0 -40 L0 -18 M16 -40 L16 -18 M32 -40 L32 -18 M48 -40 L48 -18 M64 -40 L64 -18"/>
+    <path class="d" d="M-40 -80 Q-30 -96 -12 -100"/>
+    <g fill="none" style="stroke-width:3.5"><circle cx="-28" cy="10" r="20" class="thin"/><circle cx="28" cy="10" r="20" class="thin"/></g>
+    <path class="d" d="M-9 8 Q0 2 9 8 M-48 6 L-66 0 M48 6 L66 0"/>
+  </g>
+  </g>
+  
+  <g id="customer-arm-r-pivot" transform="translate(56 -352) rotate(-8)"><g id="customer-arm-r">
+    <rect class="skin" x="-11" y="0" width="22" height="130" rx="11"/>
+    <path class="top" d="M-18 -8 Q0 -22 18 -8 L17 118 Q0 124 -17 118Z"/><path class="tl" style="stroke:#C4933A;" d="M-16 41.3 L16 41.3 M-16 76.7 L16 76.7"/>
+    <circle class="skin" cx="0" cy="138" r="16"/><path class="d" d="M-9 134 q-4 8 2 12"/>
+  </g></g>
+</g></g>
+</svg>

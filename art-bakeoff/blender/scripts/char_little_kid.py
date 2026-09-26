@@ -85,6 +85,7 @@ def build():
 
     face = C.build_face_parts(c, r, root)
     root.rotation_euler.z = math.radians(YAW)
+    root.scale = (T.CHAR_SCALE,) * 3
     return face
 
 

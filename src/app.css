@@ -54,6 +54,22 @@ body {
   touch-action: none;
 }
 
+/* The room layer: the camera pans it with a single translate3d
+   (will-change is set only while dragging or flinging). Its width is the
+   room width, set by stage.setRoom(). */
+.stage-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1440px;
+  height: 1000px;
+  transform-origin: 0 0;
+}
+
+/* Solid fill behind the room art, sized by stage.js to cover the letterbox
+   bleed at any aspect ratio (portrait included). */
+.stage-backdrop { position: absolute; }
+
 .stage img, .stage svg { -webkit-user-drag: none; pointer-events: none; }
 
 /* ---- boot placeholder (src/scenes/boot.js), temporary ---- */
@@ -74,3 +90,58 @@ body {
 .buddy .face-happy { opacity: 0; }
 .buddy.is-happy .face-happy { opacity: 1; }
 .buddy.is-happy .face-neutral { opacity: 0; }
+
+/* ---- wide test room (src/scenes/boot.js, ?room=wide), temporary ---- */
+.test-stripe {
+  position: absolute;
+  left: 0;
+  top: -100px;          /* art bleeds 100 units past the room edges */
+  height: 1200px;
+}
+.test-floor {
+  position: absolute;
+  left: 0;
+  top: 760px;
+  height: 340px;
+  background: #8d6e63;
+}
+
+/* A thing being dragged (src/engine/input.js sets data-dragging) floats
+   above the rest of the room. */
+[data-dragging] { z-index: 1000; }
+
+/* ---- P1.6 input demo blobs (src/scenes/input-demo.js, ?room=wide), temporary ---- */
+.blob {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+/* Lift shadow: a static sprite; only its opacity changes (input.js fades it in). */
+.blob-shadow {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -14%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(43, 45, 66, 0.35), rgba(43, 45, 66, 0));
+  opacity: 0;
+}
+.blob-lift, .blob-body {
+  position: absolute;
+  inset: 0;
+}
+.blob-body {
+  border-radius: 50% 50% 46% 46%;
+  transform-origin: 50% 100%;
+}
+.blob-body i {
+  position: absolute;
+  top: 34%;
+  width: 14%;
+  height: 20%;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.blob-body i:first-child { left: 30%; }
+.blob-body i:last-child { right: 30%; }

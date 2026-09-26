@@ -1,102 +1,102 @@
 {
   "file": "char_big_kid.png",
-  "w": 339,
-  "h": 504,
+  "w": 434,
+  "h": 636,
   "ppm": 393.8461538461538,
   "anchor_px": [
-    162.4,
-    481.92
+    207.94,
+    610.48
   ],
   "layers": {
     "eyes_open": {
       "file": "char_big_kid__eyes_open.png",
       "offset": [
-        78,
-        118
+        100,
+        150
       ],
-      "w": 124,
-      "h": 58
+      "w": 159,
+      "h": 75
     },
     "eyes_wide": {
       "file": "char_big_kid__eyes_wide.png",
       "offset": [
-        76,
-        116
+        96,
+        148
       ],
-      "w": 130,
-      "h": 65
+      "w": 168,
+      "h": 83
     },
     "eyes_happy": {
       "file": "char_big_kid__eyes_happy.png",
       "offset": [
-        80,
-        130
+        102,
+        167
       ],
-      "w": 122,
-      "h": 31
+      "w": 156,
+      "h": 38
     },
     "eyes_closed": {
       "file": "char_big_kid__eyes_closed.png",
       "offset": [
-        81,
-        130
+        103,
+        167
       ],
-      "w": 120,
-      "h": 28
+      "w": 155,
+      "h": 34
     },
     "eyes_sad": {
       "file": "char_big_kid__eyes_sad.png",
       "offset": [
-        79,
-        116
+        101,
+        148
       ],
-      "w": 122,
-      "h": 62
+      "w": 156,
+      "h": 78
     },
     "mouth_smile": {
       "file": "char_big_kid__mouth_smile.png",
       "offset": [
-        115,
-        172
+        147,
+        221
       ],
-      "w": 47,
-      "h": 22
+      "w": 59,
+      "h": 27
     },
     "mouth_laugh": {
       "file": "char_big_kid__mouth_laugh.png",
       "offset": [
-        114,
-        184
+        145,
+        236
       ],
-      "w": 53,
-      "h": 24
+      "w": 68,
+      "h": 29
     },
     "mouth_oh": {
       "file": "char_big_kid__mouth_oh.png",
       "offset": [
-        127,
-        174
+        162,
+        224
       ],
-      "w": 25,
-      "h": 28
+      "w": 32,
+      "h": 34
     },
     "mouth_frown": {
       "file": "char_big_kid__mouth_frown.png",
       "offset": [
-        122,
-        181
+        156,
+        233
       ],
-      "w": 35,
-      "h": 20
+      "w": 44,
+      "h": 23
     },
     "mouth_yum": {
       "file": "char_big_kid__mouth_yum.png",
       "offset": [
-        117,
-        172
+        149,
+        221
       ],
-      "w": 43,
-      "h": 35
+      "w": 55,
+      "h": 43
     }
   },
   "emotions": {
