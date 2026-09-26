@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "dollhouse_game",
+  "project_id": "78f35c38-5a7a-4046-8e5c-c17803bca68f"
+}
