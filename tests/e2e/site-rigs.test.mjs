@@ -237,6 +237,17 @@ describe('construction site crane and wrecking ball (ipad-air, landscape, touch)
     await waitWith(page, (id) => window.__store.state.entities[id].props.seat === 'crane-cab', S.kid);
     assert.equal((await ent(page, S.kid)).props.pose, 'sit');
     await page.waitFor(calm);
+    // Inside the cab: fully on screen at the build-yard camera, the face in the cab window.
+    const box = await page.eval((id) => {
+      const r = window.__town.scene.view.viewOf(id).el.getBoundingClientRect();
+      const head = window.__town.scene.chars.inspect(id).anchors.head;
+      const cab = window.__town.scene.pieces.el('crane-cab').getBoundingClientRect();
+      const h = window.__stage.worldToScreen(head.x, head.y);
+      return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, vh: innerHeight, vw: innerWidth, head: h, cab: { top: cab.top, bottom: cab.bottom, left: cab.left, right: cab.right }, cam: window.__stage.camera.x };
+    }, S.kid);
+    assert.equal(box.cam, 0, 'the build-yard camera');
+    assert.ok(box.top >= 0 && box.bottom <= box.vh && box.left >= 0 && box.right <= box.vw, `fully on screen ${JSON.stringify(box)}`);
+    assert.ok(box.head.y > box.cab.top + 20 && box.head.y < box.cab.bottom && box.head.x > box.cab.left && box.head.x < box.cab.right, 'the face is in the cab');
     await page.screenshot('rigs-kid-in-cab');
   });
 
@@ -300,6 +311,65 @@ describe('construction site crane and wrecking ball (ipad-air, landscape, touch)
     S.scatter = Object.fromEntries(await Promise.all(rest.map(async (id) => { const e = await ent(page, id); return [id, [e.x, e.y]]; })));
   });
 
+  it('drive the wrecking crane to the far left of the deck and knock down a tower there', async () => {
+    // A 4-block tower at column 0 (the far end of the deck), set up through the store.
+    S.far = await page.eval(() => {
+      const st = window.__store; const g = window.__town.scene.grid; const ids = [];
+      for (let r = 0; r < 4; r++) {
+        const id = st.newId();
+        st.dispatch('spawn', { id, kind: 'block-1x1', room: 'construction/yard', x: g.x0 + 0.5 * g.cell, y: g.y - r * g.cell, z: r * 2 + 1, props: { paint: 'blue', built: true } });
+        ids.push(id);
+      }
+      return ids;
+    });
+    await page.eval(() => window.__stage.camera.panTo(700));
+    await page.waitFor(calm);
+    const drive = await page.eval(() => window.__town.scene.wreck.drive);
+    // Drive: drag the crawler to the left (two real drags, the camera panned between them).
+    await clearRec(page);
+    const leg = async (units) => {
+      const from = await piecePoint(page, 'wreck-body');
+      assert.ok(from, 'a touch point on the crawler');
+      const dx = await unitsToPx(page, units);
+      await page.drag(from, { x: from.x + dx, y: from.y }, { steps: 24, durationMs: 700 });
+      await page.frames(2);
+    };
+    await leg(-560);
+    const mid = await page.eval(() => window.__town.scene.wreck.dx());
+    assert.ok(mid < -500 && mid > -620, `drove left (${mid})`);
+    assert.ok((await sounds(page)).includes('rumble'), 'the treads rumble');
+    await page.eval(() => window.__stage.camera.panTo(0));
+    await page.waitFor(calm);
+    await leg(-600);
+    const dx = await page.eval(() => window.__town.scene.wreck.dx());
+    assert.equal(dx, drive.x0, 'clamped at the far end of the yard');
+    assert.equal(await page.eval(() => window.__town.scene.fixtures().props.wreckX), dx, 'where it stands is store state');
+    await page.waitFor(calm);
+    await page.screenshot('rigs-wreck-driven');
+    // Pull the ball back to the right and let go.
+    await clearRec(page);
+    const from = await piecePoint(page, 'wreck-ball');
+    assert.ok(from, 'a touch point on the ball');
+    const to = await page.eval(([fx, fy]) => { const w = window.__stage.screenToWorld(fx, fy); const c = window.__town.scene.wreck.rest; return window.__stage.worldToScreen(w.x + 551, w.y + 124); }, [from.x, from.y]);
+    await page.drag(from, to, { steps: 20, durationMs: 500 });
+    await page.waitFor(() => window.__town.scene.stats().rigs.booms >= 2, { timeout: 10000 });
+    await page.frames(10);
+    await page.screenshot('rigs-wreck-far-boom');
+    await page.waitFor(craneIdle, { timeout: 30000 });
+    await page.waitFor(calm, { timeout: 20000 });
+    const plan = await page.eval(() => window.__town.scene.wreck.plan());
+    assert.deepEqual(plan.tip, await page.eval(() => window.__town.scene.wreck.tip), 'the plan swings from where the crane stands');
+    for (const id of S.far) {
+      assert.equal(await placedAt(page, id), null, `${id} knocked off the grid`);
+      const e = await ent(page, id);
+      const h = plan.hits.find((q) => q.id === id && q.kind === 'knock');
+      assert.ok(h, `${id} is in the plan`);
+      assert.deepEqual([e.x, e.y], [h.x, h.y]);
+      assert.ok(e.y >= 900 && e.y <= 948);
+    }
+    await page.screenshot('rigs-wreck-far-after');
+  });
+
   it('reload: the crane (and what hangs on it) and the scattered pieces are all still there', async () => {
     // Leave a block hanging: pick up one of the scattered ones with the hook.
     const e = await ent(page, S.tower.ids[1]);
@@ -313,6 +383,7 @@ describe('construction site crane and wrecking ball (ipad-air, landscape, touch)
     const id = h.load[0];
     await flipLever(page, 'up');
     const before = await hook(page);
+    const dxBefore = await page.eval(() => window.__town.scene.wreck.dx());
     await page.goto('index.html');
     await record(page);
     await page.waitFor(() => window.__town && window.__town.at === 'construction/yard' && !window.__town.busy && window.__town.scene.crane);
@@ -328,6 +399,7 @@ describe('construction site crane and wrecking ball (ipad-air, landscape, touch)
       assert.deepEqual([q.x, q.y], xy);
     }
     assert.ok((await placedAt(page, S.tower.ids[0])), 'the hammered block is still built');
+    assert.equal(await page.eval(() => window.__town.scene.wreck.dx()), dxBefore, 'the wrecking crane is still where it was driven');
     await page.screenshot('rigs-after-reload');
   });
 

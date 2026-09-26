@@ -455,6 +455,16 @@ export const RECIPES = {
       noise(v, { dur: 1.1, peak: 0.035, attack: 0.1, hold: 0.7, filter: { type: 'bandpass', f: 260, q: 1.4 } });
     },
   },
+  // The wrecking crane's treads: a low chugging rumble with a clanky rattle (replayed while it drives).
+  rumble: {
+    dur: 0.46,
+    play(v) {
+      [0, 0.1, 0.2, 0.3].forEach((at, i) => {
+        tone(v, { type: 'triangle', f: 62 + (i % 2) * 8, sweep: [[0.07, 52]], at, dur: 0.1, peak: 0.26, attack: 0.008, filter: { type: 'lowpass', f: 380, fixed: true } });
+        noise(v, { at, dur: 0.07, peak: 0.1, attack: 0.006, filter: { type: 'bandpass', f: 520 + v.rnd() * 200, q: 1.3 } });
+      });
+    },
+  },
   // The hook takes hold (or sets a load down): a heavy metal "clunk".
   clunk: {
     dur: 0.36,

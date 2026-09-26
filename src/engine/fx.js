@@ -34,6 +34,9 @@ Object.assign(SHAPES, {
 });
 // Heat (P2a.3): a soft steam curl rising off hot food, pots and the oven.
 SHAPES.steam = '<svg viewBox="0 0 20 20"><path d="M9 19 C4 15 14 12 9 8 C6 5.5 9 2.5 11 1" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.6" stroke-linecap="round"/></svg>';
+// School (P2d.1): a sleepy "z" drifting up off a napping character (a drawn
+// zigzag, not text).
+SHAPES.zzz = '<svg viewBox="0 0 20 20"><path d="M4 4 L16 4 L5 16 L16 16" fill="none" stroke="#8FA3C9" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 export const FX_TYPES = Object.keys(SHAPES);
 
 // Per type: base size (units), lifetime (ms), rise (units, negative = up), spin (deg).
@@ -47,6 +50,7 @@ const LOOK = {
   swirl: { size: 36, life: 700, rise: -14, spin: 300 },
   chick: { size: 46, life: 1500, rise: -34, spin: 0 },
   steam: { size: 34, life: 1400, rise: -70, spin: 30 },
+  zzz: { size: 24, life: 1800, rise: -90, spin: -20 },
 };
 
 export function createFx(layer, { cap = FX_CAP, random = Math.random } = {}) {

@@ -147,7 +147,7 @@
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
         { "use": "mix" },
-        { "use": "container", "accepts": ["food"], "capacity": 2, "sound": "sizzle", "layout": "plate", "area": [0.04, 0.3, 0.62, 0.66], "scale": 0.9 },
+        { "use": "container", "accepts": ["ingredient"], "capacity": 2, "sound": "sizzle", "layout": "plate", "area": [0.04, 0.3, 0.62, 0.66], "scale": 0.9 },
         { "use": "spill", "on": "longPress" }
       ],
       "label": "Frying Pan",
@@ -450,6 +450,7 @@
       "home": { "room": "cafe/kitchen" }
     },
     "crayon": {
+      "art": { "sprite": "crayon" },
       "ph": { "shape": "tall", "fill": "#ff595e", "looks": { "red": { "fill": "#ff595e" }, "orange": { "fill": "#ff924c" }, "yellow": { "fill": "#ffca3a" }, "green": { "fill": "#8ac926" }, "blue": { "fill": "#1982c4" }, "purple": { "fill": "#6a4c93" } } },
       "size": [22, 74],
       "tags": ["toy", "school", "crayon"],
@@ -1661,6 +1662,596 @@
       ],
       "fixed": true,
       "home": { "room": "cafe/kitchen" }
+    },
+    "crayon-box": {
+      "art": { "sprite": "crayon-box" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [66, 56],
+      "tags": ["school", "art", "container"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["tap", "pop"], "fx": "sparkle" },
+        { "use": "container", "accepts": ["crayon", "marker", "chalk"], "capacity": 6, "layout": "hidden", "sound": "plink" }
+      ],
+      "label": "Crayon Box",
+      "home": { "room": "school/classroom" }
+    },
+    "marker": {
+      "art": { "sprite": "marker" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [63, 27],
+      "tags": ["school", "art", "draw", "marker"],
+      "sounds": { "tap": "squeak", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "sound", "name": "squeak", "pitches": [1.2, 1.4, 1.6] }
+      ],
+      "label": "Marker",
+      "home": { "room": "school/classroom" }
+    },
+    "glue-stick": {
+      "art": { "sprite": "glue-stick" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [27, 59],
+      "tags": ["school", "art", "glue"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["pop", "pop"], "fx": "sparkle" }
+      ],
+      "label": "Glue Stick",
+      "home": { "room": "school/classroom" }
+    },
+    "scissors": {
+      "art": { "sprite": "scissors" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [67, 31],
+      "tags": ["school", "art", "cut"],
+      "sounds": { "tap": "chop", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "chop", "pitches": [1.2, 1.4] },
+        { "use": "wobble", "amount": 0.6 }
+      ],
+      "label": "Safety Scissors",
+      "home": { "room": "school/classroom" }
+    },
+    "paper-sheet": {
+      "art": { "sprite": "paper-sheet" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [61, 70],
+      "tags": ["school", "art", "paper", "stampable"],
+      "sounds": { "tap": "whoosh", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "look" },
+        { "use": "wobble", "amount": 0.5, "sound": "whoosh" }
+      ],
+      "label": "Paper",
+      "home": { "room": "school/classroom" }
+    },
+    "stamp": {
+      "art": { "sprite": "stamp" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [38, 56],
+      "tags": ["school", "art", "stamp", "teacher"],
+      "sounds": { "tap": "clunk", "drop": "tap" },
+      "behaviors": [
+        { "use": "cycle", "key": "face", "looks": ["star", "smile", "check"], "sound": "clunk" }
+      ],
+      "label": "Stamp",
+      "home": { "room": "school/classroom" }
+    },
+    "picture-book": {
+      "art": { "sprite": "picture-book" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [62, 67],
+      "tags": ["school", "book", "story"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["tap", "whoosh"], "fx": "sparkle" }
+      ],
+      "label": "Picture Book",
+      "home": { "room": "school/classroom" }
+    },
+    "puzzle": {
+      "art": { "sprite": "puzzle" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [116, 61],
+      "tags": ["school", "toy", "puzzle"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "toggle", "key": "done", "looks": ["pieces", "done"], "sounds": ["clack", "tada"], "fx": "sparkle" }
+      ],
+      "label": "Puzzle",
+      "home": { "room": "school/classroom" }
+    },
+    "unit-block": {
+      "art": { "sprite": "unit-block" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [38, 38],
+      "tags": ["school", "toy", "block"],
+      "sounds": { "tap": "knock", "drop": "knock" },
+      "behaviors": [
+        { "use": "variant", "key": "shape" },
+        { "use": "wobble", "amount": 1, "sound": "knock" }
+      ],
+      "label": "Wooden Block",
+      "home": { "room": "school/classroom" }
+    },
+    "hand-bell": {
+      "art": { "sprite": "hand-bell" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [47, 73],
+      "tags": ["school", "teacher", "bell", "sound"],
+      "sounds": { "tap": "bell", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "bell", "pitches": [1, 1.12] },
+        { "use": "wobble", "amount": 1.2 }
+      ],
+      "label": "Hand Bell",
+      "home": { "room": "school/classroom" }
+    },
+    "globe": {
+      "art": { "sprite": "globe" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [57, 73],
+      "tags": ["school", "teacher", "globe", "spin"],
+      "sounds": { "tap": "whoosh", "drop": "knock" },
+      "behaviors": [
+        { "use": "toggle", "key": "spin", "looks": ["still", "spin"], "sounds": ["tap", "whoosh"], "fx": "sparkle" }
+      ],
+      "label": "Globe",
+      "home": { "room": "school/classroom" }
+    },
+    "school-backpack": {
+      "art": { "sprite": "school-backpack" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [69, 73],
+      "tags": ["wear", "wearable:back", "container", "school", "bag"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "container", "accepts": ["food", "toy", "dish", "cup", "drink", "book", "school", "crayon", "lunch", "snack"], "capacity": 3, "layout": "interior", "area": [0.14, 0.2, 0.86, 1], "peek": 0.4, "scale": 0.6 },
+        { "use": "peek" },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Backpack",
+      "home": { "room": "school/classroom" }
+    },
+    "school-lunchbox": {
+      "art": { "sprite": "school-lunchbox" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [72, 52],
+      "tags": ["school", "container", "lunch", "lunchbox"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["knock", "pop"], "fx": "sparkle" },
+        { "use": "container", "accepts": ["food", "drink", "lunch", "snack"], "capacity": 3, "layout": "hidden" },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Lunchbox",
+      "home": { "room": "school/classroom" }
+    },
+    "lunch-tray": {
+      "art": { "sprite": "lunch-tray" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [105, 21],
+      "tags": ["school", "lunch", "tray", "container"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food", "drink", "lunch", "snack", "dish"], "capacity": 3, "look": "lunch", "layout": "row", "cols": 3, "area": [0.1, 0.2, 0.9, 0.7], "scale": 0.7 }
+      ],
+      "label": "Lunch Tray",
+      "home": { "room": "school/classroom" }
+    },
+    "milk-carton": {
+      "art": { "sprite": "milk-carton" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [33, 57],
+      "tags": ["school", "drink", "lunch", "milk"],
+      "sounds": { "tap": "pop", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["tap", "pop"], "fx": "sparkle" }
+      ],
+      "label": "Milk",
+      "home": { "room": "school/classroom" }
+    },
+    "juice-box": {
+      "art": { "sprite": "juice-box" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [33, 69],
+      "tags": ["school", "drink", "lunch", "snack", "sweet"],
+      "sounds": { "tap": "pour", "drop": "thud" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["full", "empty"], "then": "stay", "sound": "pour" }
+      ],
+      "label": "Juice Box",
+      "home": { "room": "school/classroom" }
+    },
+    "snack-cup": {
+      "art": { "sprite": "snack-cup" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [44, 50],
+      "tags": ["school", "food", "snack", "lunch", "sweet"],
+      "sounds": { "tap": "munch", "drop": "tap" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["full", "half", "empty"], "then": "stay" }
+      ],
+      "label": "Snack Cup",
+      "home": { "room": "school/classroom" }
+    },
+    "nap-cot": {
+      "art": { "sprite": "nap-cot" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [175, 39],
+      "tags": ["school", "nap", "bed", "furniture"],
+      "sounds": { "tap": "squish", "drop": "thud" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.5, "sound": "squish" }
+      ],
+      "label": "Nap Cot",
+      "home": { "room": "school/classroom" }
+    },
+    "nap-blanket": {
+      "art": { "sprite": "nap-blanket" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [68, 36],
+      "tags": ["school", "nap", "blanket", "cloth"],
+      "sounds": { "tap": "whoosh", "drop": "squish" },
+      "behaviors": [
+        { "use": "toggle", "key": "spread", "looks": ["folded", "spread"], "sounds": ["tap", "whoosh"], "fx": "sparkle" }
+      ],
+      "label": "Nap Blanket",
+      "home": { "room": "school/classroom" }
+    },
+    "plush-bunny": {
+      "art": { "sprite": "plush-bunny" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [59, 92],
+      "tags": ["school", "toy", "plush", "soft", "hug"],
+      "sounds": { "tap": "squeak", "drop": "squish" },
+      "behaviors": [
+        { "use": "squeak" }
+      ],
+      "label": "Stuffed Bunny",
+      "home": { "room": "school/classroom" }
+    },
+    "show-tell-box": {
+      "art": { "sprite": "show-tell-box" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [75, 62],
+      "tags": ["school", "container", "show-and-tell"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["knock", "tada"], "fx": "sparkle" },
+        { "use": "container", "accepts": ["*"], "capacity": 2, "layout": "hidden" }
+      ],
+      "label": "Show-and-Tell Box",
+      "home": { "room": "school/classroom" }
+    },
+    "sticker-sheet": {
+      "art": { "sprite": "sticker-sheet" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [67, 60],
+      "tags": ["school", "reward", "sticker", "teacher"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "cycle", "key": "left", "looks": ["full", "some"], "sound": "plink" }
+      ],
+      "label": "Stickers",
+      "home": { "room": "school/classroom" }
+    },
+    "star-chart": {
+      "art": { "sprite": "star-chart" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [91, 77],
+      "tags": ["school", "reward", "chart", "teacher"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "toggle", "key": "many", "looks": ["few", "many"], "sounds": ["tap", "tada"], "fx": "sparkle" }
+      ],
+      "label": "Star Chart",
+      "home": { "room": "school/classroom" }
+    },
+    "weather-card": {
+      "art": { "sprite": "weather-card" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [56, 60],
+      "tags": ["school", "weather", "card", "calendar"],
+      "sounds": { "tap": "whoosh", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "weather" },
+        { "use": "wobble", "amount": 0.6, "sound": "whoosh" }
+      ],
+      "label": "Weather Card",
+      "home": { "room": "school/classroom" }
+    },
+    "playground-ball": {
+      "art": { "sprite": "playground-ball" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [55, 55],
+      "tags": ["school", "toy", "ball", "recess", "bouncy"],
+      "sounds": { "tap": "boing", "drop": "boing" },
+      "behaviors": [
+        { "use": "sound", "name": "boing", "pitches": [0.8, 1, 1.25] },
+        { "use": "wobble", "amount": 1.2 }
+      ],
+      "label": "Playground Ball",
+      "home": { "room": "school/classroom" }
+    },
+    "jump-rope": {
+      "art": { "sprite": "jump-rope" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [93, 35],
+      "tags": ["school", "toy", "recess", "rope"],
+      "sounds": { "tap": "whoosh", "drop": "tap" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["coiled", "open"], "sounds": ["tap", "whoosh"], "fx": "sparkle" }
+      ],
+      "label": "Jump Rope",
+      "home": { "room": "school/classroom" }
+    },
+    "chalk": {
+      "art": { "sprite": "chalk" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [48, 25],
+      "tags": ["school", "recess", "draw", "chalk"],
+      "sounds": { "tap": "squeak", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "sound", "name": "squeak", "pitches": [0.9, 1.1] }
+      ],
+      "label": "Sidewalk Chalk",
+      "home": { "room": "school/classroom" }
+    },
+    "sand-pail": {
+      "art": { "sprite": "sand-pail" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [47, 52],
+      "tags": ["school", "recess", "sand", "bucket"],
+      "sounds": { "tap": "clink", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "full", "looks": ["empty", "full"], "sounds": ["pour", "squish"], "fx": "puff" }
+      ],
+      "label": "Sand Pail",
+      "home": { "room": "school/classroom" }
+    },
+    "spade": {
+      "art": { "sprite": "spade" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [49, 61],
+      "tags": ["school", "recess", "sand", "dig", "tool"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.8, "sound": "clink" }
+      ],
+      "label": "Sand Spade",
+      "home": { "room": "school/classroom" }
+    },
+    "sand-castle": {
+      "art": { "sprite": "sand-castle" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [63, 63],
+      "tags": ["school", "recess", "sand", "build"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.5, "sound": "squish" }
+      ],
+      "label": "Sand Castle",
+      "home": { "room": "school/classroom" }
+    },
+    "lanyard": {
+      "art": { "sprite": "lanyard" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [46, 95],
+      "tags": ["wear", "wearable:over", "school", "teacher"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Teacher Lanyard",
+      "home": { "room": "school/classroom" }
+    },
+    "smock": {
+      "art": { "sprite": "smock" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [94, 71],
+      "tags": ["wear", "wearable:over", "school", "art"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Art Smock",
+      "home": { "room": "school/classroom" }
+    },
+    "sun-hat": {
+      "art": { "sprite": "sun-hat" },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [101, 47],
+      "tags": ["wear", "wearable:hat", "school", "recess"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Sun Hat",
+      "home": { "room": "school/classroom" }
+    },
+    "fish-food": {
+      "art": { "sprite": "garnish-shaker", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [38, 63],
+      "tags": ["school", "fish-food", "shake"],
+      "sounds": { "tap": "plink", "drop": "clink" },
+      "behaviors": [
+        { "use": "wobble", "amount": 0.8, "sound": "plink" }
+      ],
+      "label": "Fish Food",
+      "home": { "room": "school/classroom" }
+    },
+    "school-art-caddy": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [96, 60],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["crayon", "marker", "glue-stick", "scissors", "paper-sheet", "stamp"], "vary": { "color": ["red", "blue", "green", "purple"] }, "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-block-bin": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [88, 52],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "knock", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["unit-block", "blocks"], "vary": { "shape": ["square", "long", "arch", "cylinder", "triangle"] }, "sound": "knock" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-toy-bin": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [88, 52],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["toy-car", "puzzle"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-crayon-bin": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [88, 52],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["crayon", "chalk"], "vary": { "color": ["blue", "yellow", "green", "pink"] }, "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-plush-bin": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [88, 52],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "squeak", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["plush-bunny", "teddy"], "sound": "squeak" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-books": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [140, 70],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "whoosh", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["picture-book", "book"], "sound": "whoosh" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-weather-cards": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [60, 56],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "whoosh", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["weather-card"], "vary": { "weather": ["sun", "cloud", "rain", "snow"] }, "sound": "whoosh" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-cots": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [80, 70],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "squish", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["nap-cot", "nap-blanket"], "sound": "squish" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-lunch": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [200, 90],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lunch-tray", "milk-carton", "juice-box", "snack-cup", "apple", "school-lunchbox"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-recess-bin": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [90, 60],
+      "tags": ["spawner", "stock", "hotspot", "school"],
+      "sounds": { "tap": "boing", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["playground-ball", "jump-rope", "chalk", "sand-pail", "spade", "sun-hat"], "sound": "boing" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-paint": {
+      "art": { "sprite": "paint-cup", "scale": 0.8 },
+      "ph": { "shape": "cup", "fill": "#E4846F" },
+      "size": [30, 52],
+      "tags": ["spawner", "stock", "school"],
+      "sounds": { "tap": "bubble", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "spawner", "kinds": ["paint-cup"], "sound": "bubble", "keep": ["color"] }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "paint-cup": {
+      "art": { "sprite": "paint-cup" },
+      "ph": { "shape": "cup", "fill": "#E4846F" },
+      "size": [38, 64],
+      "tags": ["school", "art", "paint"],
+      "sounds": { "tap": "bubble", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "wobble", "amount": 0.6, "sound": "bubble" }
+      ],
+      "label": "Paint Cup",
+      "home": { "room": "school/classroom" }
+    },
+    "school-marker": {
+      "art": { "sprite": "marker", "scale": 0.9 },
+      "ph": { "shape": "flat", "fill": "#8FB1DC" },
+      "size": [56, 24],
+      "tags": ["spawner", "stock", "school"],
+      "sounds": { "tap": "squeak", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "spawner", "kinds": ["marker"], "sound": "squeak", "keep": ["color"] }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-cubby": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [48, 262],
+      "tags": ["cubby", "hotspot", "school"],
+      "sounds": { "tap": "chime", "drop": "tap" },
+      "behaviors": [
+        { "use": "container", "accepts": ["*"], "capacity": 3, "layout": "row", "cols": 3, "sound": "chime" }
+      ],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
+    },
+    "school-fishbowl": {
+      "ph": { "shape": "box", "fill": "#CBE6F1" },
+      "size": [80, 66],
+      "tags": ["pet", "hotspot", "school"],
+      "sounds": { "tap": "bubble", "drop": "bubble" },
+      "behaviors": [],
+      "fixed": true,
+      "home": { "room": "school/classroom" }
     },
     "block-1x1": {
       "art": { "sprite": "block-1x1" },

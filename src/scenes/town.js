@@ -4,7 +4,7 @@
 // every location, docs/STYLE.md section 7) brings you back to the map.
 //
 //   const town = await mountTown(stage, { input, store });
-//   town.at            'city' | 'cafe/kitchen' | 'booth' | 'construction/yard'
+//   town.at            'city' | 'cafe/kitchen' | 'booth' | 'construction/yard' | 'theater/stage'
 //   town.go(location)  animated; resolves when the new scene is up
 //   town.busy          true during a transition (taps are ignored meanwhile)
 //
@@ -26,12 +26,13 @@ import { KITCHEN_ID } from './kitchen.js';
 import { mountCafe, cafeFiles } from './cafe.js';   // P2a.1: the cafe strip (location id stays 'cafe/kitchen')
 import { mountBooth, boothFiles, BOOTH_ID } from './booth.js';
 import { mountSite, siteFiles, SITE_ID } from './site.js';   // P2c.1: the construction site strip
+import { mountTheater, theaterFiles, THEATER_ID } from './theater.js';   // P2b.1: the theater strip
 import * as tween from '../engine/tween.js';
 import { sfx } from '../audio/index.js';
 import { createCarry } from './carry.js';
 
 export const HERE_KEY = 'ourtown.here';
-export const LOCATIONS = [CITY_ID, KITCHEN_ID, BOOTH_ID, SITE_ID];
+export const LOCATIONS = [CITY_ID, KITCHEN_ID, BOOTH_ID, SITE_ID, THEATER_ID];
 const ZOOM_MS = 460;
 const OPEN_MS = 420;
 
@@ -94,6 +95,7 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     if (at === KITCHEN_ID) scene = await mountCafe(stage, { input, store, manifest, carry, from, storage });
     else if (at === BOOTH_ID) scene = await mountBooth(stage, { input, store, manifest, carry });   // P1.15
     else if (at === SITE_ID) scene = await mountSite(stage, { input, store, manifest, carry, from, storage });   // P2c.1
+    else if (at === THEATER_ID) scene = await mountTheater(stage, { input, store, manifest, carry, from, storage });   // P2b.1
     else scene = await mountCity(stage, { input, store, manifest, carry, cameraX: here.mapX, from, onEnter: (_, loc, pt) => go(loc, { from: pt }) });
     here.at = at;
     saveHere(here, storage);
@@ -157,7 +159,7 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     roomEl.style.transformOrigin = `${w.x}px ${w.y}px`;
     const zoom = tween.animate(roomEl, [{ transform: 'scale(1)' }, { transform: 'scale(1.8)' }], { duration: ZOOM_MS, easing: 'ease-in', fill: 'forwards' });
     sfx.play('whoosh', { gain: 0.7 });
-    const files = to === KITCHEN_ID ? cafeFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : to === SITE_ID ? siteFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night, { cameraX: here.mapX });
+    const files = to === KITCHEN_ID ? cafeFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : to === SITE_ID ? siteFiles(manifest) : to === THEATER_ID ? theaterFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night, { cameraX: here.mapX });
     await Promise.all([tween.done(irisAnim(pt, true, ZOOM_MS)), tween.done(zoom)]);
     zoom.cancel();
     await mount(to, leaving, files);   // releases the old scene, then decodes the new one (bead 6hn)

@@ -158,7 +158,7 @@ export const PIECES = {
   'crane-cab': { react: 'wobble', sound: ['whistle'] },
   'wreck-boom': { react: 'wobble', sound: ['knock', { pitch: 0.6 }] },
   'crane-trolley': { rig: true }, 'crane-cable': { rig: true }, 'crane-hook': { rig: true },
-  'wreck-chain': { rig: true }, 'wreck-ball': { rig: true },
+  'wreck-chain': { rig: true }, 'wreck-ball': { rig: true }, 'wreck-body': { rig: true },
   dirt: { react: 'squish', sound: ['thud', { pitch: 0.7 }], fx: 'puff', later: 'P2c.3' },
   'dump-truck': { react: 'wobble', sound: ['honk'], later: 'P2c.3' },
   'truck-bed': { react: 'wobble', sound: ['knock', { pitch: 0.7 }], later: 'P2c.3' },

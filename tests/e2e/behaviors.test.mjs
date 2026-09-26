@@ -239,7 +239,8 @@ describe('containers: accept by tag, refuse with a bounce-back, spill (ipad-air)
     // P2a.2: an uncracked egg goes in through the pan's mix behavior (it cracks on the rim).
     assert.ok(['container:accept', 'mix:accept'].includes(r.via[0]) && r.via.length === 1, r.via.join());
     assert.equal((await ent(page, ids.egg)).props.cracked, 1);
-    assert.match((await ent(page, ids.pan)).spriteKey, /:egg$/);
+    // P2a.3: the pan draws what is in it (the egg shows its doneness), not an 'egg' look.
+    assert.equal(await page.eval((i) => window.__scene.view.parentOf(i), ids.egg), ids.pan);
     await page.screenshot('behaviors-containers-filled');
   });
 

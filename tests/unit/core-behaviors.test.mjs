@@ -218,7 +218,7 @@ test('container: accepts the right tags, refuses others (and when full) playfull
   assert.deepEqual(w.b.log().at(-1).via, ['mix:refuse'], 'full (an egg goes through the bowl\'s mix behavior, P2a.2)');
   assert.equal(w.b.log().at(-1).reason, 'full');
   assert.deepEqual(childrenOf(w.store.state, bowl).map((c) => c.slot).sort(), ['s0', 's1', 's2']);
-  // The cookie jar takes sweets only; the pan takes food (an egg cracks in).
+  // The cookie jar takes sweets only; the pan takes ingredients (an egg cracks in).
   const jar = w.spawn('cookie-jar', 565, 540);
   w.b.onDropInto(w.e(extra), w.e(jar), w.ctx);
   assert.deepEqual(w.b.log().at(-1).via, ['container:refuse']);

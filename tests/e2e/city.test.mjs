@@ -86,10 +86,10 @@ for (const name of Object.keys(VIEWPORTS)) {
       await page.screenshot(`city-${name}-east`);
     });
 
-    // The construction site is built now (P2c.1, tests/e2e/site.test.mjs goes in).
+    // The construction site (P2c.1, tests/e2e/site.test.mjs) and the theater
+    // (P2b.1, tests/e2e/theater.test.mjs) are built now and go in.
     it('the unbuilt buildings play a "coming soon" reaction, never a dead tap', async () => {
       const cases = [
-        ['theater', 0.3, 'theater-curtains', 'whoosh'],
         ['school', 0.55, 'school-bell', 'bell'],
       ];
       for (const [id, dy, part, sound] of cases) {

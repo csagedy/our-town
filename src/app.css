@@ -238,6 +238,7 @@ body {
 .fx-swirl { width: 36px; height: 36px; color: #FFFFFF; }
 .fx-chick { width: 46px; height: 46px; }
 .fx-steam { width: 34px; height: 34px; }
+.fx-zzz { width: 24px; height: 24px; }   /* P2d.1 school: a napping z */
 
 /* ---- P1.7 test room placeholder art (src/scenes/test-room.js), temporary ---- */
 .art i { position: absolute; display: block; }

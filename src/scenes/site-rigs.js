@@ -47,7 +47,7 @@ import {
 } from '../core/crane.js';
 import { pullOf, ballPos, ballAt, swingPath, planWreck, MIN_PULL, TUMBLE_MS, LAND_AT } from '../core/wreck.js';
 
-export const RIG_PIECES = ['crane-trolley', 'crane-cable', 'crane-hook', 'wreck-chain', 'wreck-ball'];
+export const RIG_PIECES = ['crane-trolley', 'crane-cable', 'crane-hook', 'wreck-chain', 'wreck-ball', 'wreck-body'];
 const HOOK_SORT = 999;            // the hook and its load draw in front of the mid layer, behind the front art
 const FLOOR_Y = 915;              // a load lowered over open ground lands here (in front of the deck)
 const GROUND = 935;               // the ball's bottom skids along this line
@@ -66,12 +66,13 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
   const grid = m.grid;
   const geo = craneGeom(m.rigs.towerCrane);
   const wr = m.rigs.wreckingBall;
-  const tip = wr.tip;
+  const TIP0 = wr.tip;
+  const drive = wr.drive || { x0: 0, x1: 0, exhaust: [TIP0[0], TIP0[1]] };
   const gy = GROUND - wr.ballRadius;
-  const rest = wr.ballCentre;
+  const REST0 = wr.ballCentre;
   let view = null;
   let chars = null;
-  const stats = { frames: 0, grabs: 0, drops: 0, travels: 0, swings: 0, wrecks: 0, knocked: 0, tumbles: 0, booms: 0, wobbles: 0, giggles: 0 };
+  const stats = { frames: 0, drives: 0, grabs: 0, drops: 0, travels: 0, swings: 0, wrecks: 0, knocked: 0, tumbles: 0, booms: 0, wobbles: 0, giggles: 0 };
   const play = (name, o) => { if (view) view.play(name, o); };
   const viewOf = (id) => (view ? view.viewOf(id) : null);
   const piece = (pid) => pieces.get(pid) || null;
@@ -335,7 +336,109 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
   // ---------------------------------------------------------------------------
   // The wrecking ball
 
-  const wb = { mode: 'rest', P: { x: rest[0], y: rest[1] }, plan: null, path: null, t0: 0, raf: 0, seq: null, drawn: false, reel: null, clatterAt: 0 };
+  // dx: how far the wrecking crane has been driven (fixtures props.wreckX, world units; 0 = where it is painted).
+  const wb = { mode: 'rest', dx: 0, P: { x: REST0[0], y: REST0[1] }, plan: null, path: null, t0: 0, raf: 0, seq: null, drawn: false, reel: null, clatterAt: 0, glide: 0 };
+  const tipAt = (dx) => [TIP0[0] + dx, TIP0[1]];
+  const restAt = (dx) => [REST0[0] + dx, REST0[1]];
+  let tip = tipAt(0);
+  let rest = restAt(0);
+
+  // ---- driving the wrecking crane ----
+  const WRECK_ELS = ['wreck-body', 'wreck-boom', 'wreck-chain', 'wreck-ball'];
+  const seatBase = (m.seats || []).find((q) => q.id === 'wreck-cab');
+  /** Draw the whole wrecking crane shifted by dx (bob: a little bounce of the body on its treads). */
+  function placeWreck(dx, bob = 0) {
+    wb.dx = dx;
+    tip = tipAt(dx);
+    rest = restAt(dx);
+    for (const pid of WRECK_ELS) {
+      const pc = piece(pid), def = m.pieces[pid];
+      if (!pc || !def) continue;
+      const y = pid === 'wreck-body' ? def.y + bob : def.y;
+      pc.el.style.transform = `translate3d(${r1(def.x + dx)}px, ${r1(y)}px, 0px)`;
+    }
+    // Its cab seat rides along (the view's seats and the characters' copy).
+    if (seatBase) {
+      const x = r1(seatBase.at[0] + dx);
+      for (const list of [room.def.seats || [], (chars && chars.seats) || []]) {
+        const st = list.find((q) => q.id === 'wreck-cab');
+        if (!st) continue;
+        const half = st.x1 != null ? (st.x1 - st.x0) / 2 : 44;
+        st.x = x;
+        if (st.x1 != null) { st.x0 = x - half; st.x1 = x + half; }
+      }
+    }
+    if (wb.mode === 'rest') wb.P = { x: rest[0], y: rest[1] };
+  }
+  const clampDx = (dx) => r1(clamp(dx, drive.x0, drive.x1));
+
+  /** Commit where the crane stands (a store op), and bring its cab sitter along. */
+  function parkWreck() {
+    const f = site.fixtures();
+    if (!f) return;
+    const dx = clampDx(wb.dx);
+    if ((f.props.wreckX || 0) !== dx) store.dispatch('set', { id: f.id, path: 'props.wreckX', value: dx });
+    if (seatBase) {
+      const x = r1(seatBase.at[0] + dx);
+      for (const e of inRoom(store.state, SITE_ID)) {
+        if (isChar(e) && e.props.seat === 'wreck-cab' && Math.abs(e.x - x) > 0.05) store.dispatch('move', { id: e.id, room: SITE_ID, x, y: e.y, z: 0 });
+      }
+    }
+  }
+
+  /** Glide the crane to dx (the other iPad drove it; a reload), rAF only while it moves. */
+  function glideWreck(to) {
+    if (wb.mode === 'drive') return;
+    if (wb.glide) cancelAnimationFrame(wb.glide);
+    const from = wb.dx, t0 = performance.now(), dur = Math.min(900, 200 + Math.abs(to - from) * 1.2);
+    const stepG = (now) => {
+      stats.frames++;
+      const u = clamp((now - t0) / dur, 0, 1);
+      const k = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+      placeWreck(from + (to - from) * k, u < 1 ? Math.sin(u * 30) * 1.5 : 0);
+      if (wb.mode === 'rest') drawBall(wb.P);
+      wb.glide = u < 1 ? requestAnimationFrame(stepG) : 0;
+    };
+    wb.glide = requestAnimationFrame(stepG);
+  }
+
+  const ex = { at: 0, dist: 0, last: 0 };
+  function driveStart(info) {
+    if (wb.mode !== 'rest') return false;
+    if (wb.glide) { cancelAnimationFrame(wb.glide); wb.glide = 0; }
+    wb.mode = 'drive';
+    info.data.dx0 = wb.dx;
+    ex.at = 0; ex.dist = 0; ex.last = wb.dx;
+    play('rumble', { gain: 0.8 });
+    ex.sound = performance.now();
+    puff();
+    return true;
+  }
+  function puff() {
+    const [x, y] = drive.exhaust;
+    fx.burst('puff', x + wb.dx, y - 6, { count: 2, spread: 22, scale: 0.45, stagger: 60 });
+  }
+  function driveMove(info) {
+    if (wb.mode !== 'drive') return;
+    const dx = clampDx(info.data.dx0 + info.dx);
+    ex.dist += Math.abs(dx - ex.last);
+    ex.last = dx;
+    placeWreck(dx, Math.sin(ex.dist / 9) * 1.6);
+    drawBall(wb.P);
+    const now = performance.now();
+    if (ex.dist - ex.at > 45) { ex.at = ex.dist; puff(); }
+    if (now - ex.sound > 330 && ex.dist > 4) { ex.sound = now; play('rumble', { gain: 0.8, pitch: 0.95 + Math.random() * 0.1 }); }
+  }
+  function driveEnd() {
+    if (wb.mode !== 'drive') return;
+    wb.mode = 'rest';
+    placeWreck(clampDx(wb.dx), 0);
+    drawBall(wb.P);
+    stats.drives++;
+    parkWreck();
+    play('thud', { gain: 0.5, pitch: 0.7 });
+  }
+
 
   function drawBall(P) {
     const dx = P.x - tip[0], dy = P.y - tip[1];
@@ -424,7 +527,7 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
     stats.wrecks++;
     quiet = true;
     try {
-      store.dispatch('set', { id: f.id, path: 'props.wreck', value: Object.assign({ seq }, plan) });
+      store.dispatch('set', { id: f.id, path: 'props.wreck', value: Object.assign({ seq, tip: tip.slice() }, plan) });
       for (const h of plan.hits) {
         if (h.kind === 'wobble') continue;
         const e = getEntity(store.state, h.id);
@@ -449,6 +552,11 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
     if (!plan || plan.seq === wb.seq) return;
     wb.seq = plan.seq;
     wb.plan = plan;
+    // The swing hangs from where the crane stood when it was planned (the plan says).
+    if (Array.isArray(plan.tip) && Math.abs(plan.tip[0] - tip[0]) > 0.05) {
+      if (wb.glide) { cancelAnimationFrame(wb.glide); wb.glide = 0; }
+      placeWreck(plan.tip[0] - TIP0[0]);
+    }
     const path = swingPath({ L: plan.L, a0: plan.a0 });
     swingBall(path);
     play('swoosh', { gain: 0.9 });
@@ -618,6 +726,20 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
       onDragStart: trolleyStart, onDragMove: trolleyMove, onDragEnd: trolleyEnd, minHit: 110,
     });
     reg('wreck-ball', { onTap: ballTap, onDragStart: ballDragStart, onDragMove: ballDragMove, onDragEnd: ballDragEnd, minHit: 110 });
+    reg('wreck-body', {
+      onTap: () => { if (wb.mode === 'rest') { play('rumble', { gain: 0.8 }); puff(); const pb = piece('wreck-body'); if (pb) tween.wobble(pb.body, { amount: 0.2 }); } },
+      onDragStart: driveStart, onDragMove: driveMove, onDragEnd: driveEnd,
+    });
+    // The tower crane's cab: its window is see-through (a character sits inside), so the
+    // picture takes no touches; a strip along its roof still answers a tap.
+    const cab = piece('crane-cab');
+    if (cab && !cab.el.querySelector('.rig-hit')) {
+      cab.el.style.pointerEvents = 'none';
+      const pad = document.createElement('div');
+      pad.className = 'rig-hit';
+      pad.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:34px;pointer-events:auto';
+      cab.el.appendChild(pad);
+    }
     // The cable and the hook art are only drawn: the hook entity takes the touches; the chain is part of the ball.
     for (const pid of ['crane-cable', 'crane-hook', 'wreck-chain']) { const p = piece(pid); if (p) p.el.style.pointerEvents = 'none'; }
   }
@@ -705,6 +827,11 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
   const unsubscribe = store.subscribe((st, env) => {
     if (!env) return;
     const a = env.args;
+    if (env.op === 'set' && a.path === 'props.wreckX') {
+      const f = site.fixtures();
+      if (f && a.id === f.id && typeof a.value === 'number' && Math.abs(a.value - wb.dx) > 0.05 && wb.mode === 'rest') glideWreck(clampDx(a.value));
+      return;
+    }
     if (env.op === 'set' && a.path === 'props.wreck') {
       const f = site.fixtures();
       if (f && a.id === f.id && a.value && typeof a.value === 'object') playPlan(a.value);
@@ -737,9 +864,11 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
       const h = hookEnt();
       if (h) { cr.x = h.x; cr.y = h.y; }
       drawCrane(true);
+      const f = site.fixtures();
+      placeWreck(clampDx((f && f.props.wreckX) || 0));
       view.refresh();
     },
-    stats: () => Object.assign({}, stats, { craneMoving: !!cr.raf, ballMoving: !!wb.raf }),
+    stats: () => Object.assign({}, stats, { craneMoving: !!cr.raf, ballMoving: !!(wb.raf || wb.glide) }),
     crane: {
       hook: () => { const h = hookEnt(); return h ? { id: h.id, x: h.x, y: h.y, load: loadOf().map((e) => e.id) } : null; },
       shown: () => ({ x: cr.x, y: cr.y, th: cr.th, mode: cr.mode, moving: !!cr.raf }),
@@ -751,13 +880,15 @@ export function createSiteRigs({ stage, store, input, room, fx, manifest, catalo
     wreck: {
       ball: () => ({ x: wb.P.x, y: wb.P.y, mode: wb.mode, moving: !!wb.raf }),
       plan: () => wb.plan,
-      tip, gy, rest,
+      get tip() { return tip; }, get rest() { return rest; }, gy,
+      dx: () => wb.dx, drive,
     },
     destroy() {
       unsubscribe();
       if (cr.raf) cancelAnimationFrame(cr.raf);
       if (wb.raf) cancelAnimationFrame(wb.raf);
-      cr.raf = wb.raf = 0;
+      if (wb.glide) cancelAnimationFrame(wb.glide);
+      cr.raf = wb.raf = wb.glide = 0;
     },
   };
 }

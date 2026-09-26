@@ -593,12 +593,29 @@ function foreground() {
 }
 
 // ---- TOWER CRANE pieces (front) ------------------------------------------
+// The operator's cab: a big box hanging off the jib beside the mast top, with a
+// see-through window (a character in the crane-cab seat shows through it; the
+// cab's walls hide their legs). The cab's inside (back wall, seat) is drawn in
+// the back layer (craneCabInside), behind the character.
+const CAB = { x0: TC.x + 20, x1: TC.x + 300, y0: TC.cabY - 4, y1: 690, wx0: TC.x + 44, wx1: TC.x + 276, wy0: TC.cabY + 24, wy1: 470 };
 function craneCab() {
-  const { x, cabY } = TC;
-  return `<g>${R(x - 44, cabY + 94, 88, 22, P.char, ' rx="6"')}
-  <path fill="${P.mustard}" d="M${x + 30} ${cabY + 100} L${x + 30} ${cabY + 10} Q${x + 30} ${cabY - 4} ${x + 44} ${cabY - 4} L${x + 124} ${cabY - 4} Q${x + 140} ${cabY - 4} ${x + 140} ${cabY + 12} L${x + 150} ${cabY + 100}Z"/>
-  <path fill="${P.sky}" d="M${x + 44} ${cabY + 60} L${x + 44} ${cabY + 12} L${x + 126} ${cabY + 12} L${x + 134} ${cabY + 60}Z"/>${glint(`M${x + 60} ${cabY + 50} L${x + 80} ${cabY + 20}`)}
-  ${R(x + 26, cabY + 96, 128, 14, P.mustardDeep, ' rx="5"')}</g>`;
+  const { x0, x1, y0, y1, wx0, wx1, wy0, wy1 } = CAB;
+  const outer = `M${x0 + 18} ${y0} L${x1 - 18} ${y0} Q${x1} ${y0} ${x1} ${y0 + 18} L${x1} ${y1 - 18} Q${x1} ${y1} ${x1 - 18} ${y1} L${x0 + 18} ${y1} Q${x0} ${y1} ${x0} ${y1 - 18} L${x0} ${y0 + 18} Q${x0} ${y0} ${x0 + 18} ${y0}Z`;
+  const hole = `M${wx0 + 12} ${wy0} L${wx1 - 12} ${wy0} Q${wx1} ${wy0} ${wx1} ${wy0 + 12} L${wx1} ${wy1 - 12} Q${wx1} ${wy1} ${wx1 - 12} ${wy1} L${wx0 + 12} ${wy1} Q${wx0} ${wy1} ${wx0} ${wy1 - 12} L${wx0} ${wy0 + 12} Q${wx0} ${wy0} ${wx0 + 12} ${wy0}Z`;
+  return `<g><path fill="${P.mustard}" fill-rule="evenodd" d="${outer} ${hole}"/>
+  <path fill="${P.sky}" class="n" opacity=".16" d="${hole}"/>
+  ${glint(`M${wx0 + 26} ${wy1 - 40} L${wx0 + 76} ${wy0 + 40}`)}${glint(`M${wx0 + 58} ${wy1 - 30} L${wx0 + 92} ${wy1 - 90}`)}
+  ${R(x0 + 14, wy1 + 40, x1 - x0 - 28, 16, P.mustardDeep, ' rx="6"')}${R(x0 + 14, wy1 + 90, x1 - x0 - 28, 16, P.mustardDeep, ' rx="6"')}
+  ${bolt(x0 + 34, y1 - 30)}${bolt(x1 - 34, y1 - 30)}
+  ${R(x0 - 6, y1 - 16, x1 - x0 + 12, 22, P.char, ' rx="7"')}</g>`;
+}
+/** The cab's inside (back layer): a darker back wall and the operator's seat. */
+function craneCabInside() {
+  const { wx0, wx1, wy0, wy1 } = CAB;
+  const cx = (wx0 + wx1) / 2;
+  return `<g id="crane-cab-inside">${R(wx0 - 4, wy0 - 4, wx1 - wx0 + 8, wy1 - wy0 + 8, P.mustardDeep)}
+  ${R(cx - 70, wy1 - 150, 140, 150, P.charDeep, ' rx="22"')}${R(cx - 56, wy1 - 136, 112, 120, P.char, ' rx="16"')}
+  <circle fill="${P.berry}" cx="${wx1 - 36}" cy="${wy0 + 40}" r="10"/><circle fill="${P.leaf}" cx="${wx1 - 36}" cy="${wy0 + 72}" r="10"/></g>`;
 }
 function craneJib() {
   const { x, jibY0: y0, jibY1: y1, jibX0: L, jibX1: Rr } = TC;
@@ -645,11 +662,11 @@ export const ROOM = {
   layers: [
     { id: 'back', baseline: 0, opaque: true,
       art: () => `${sky()}${fence()}${fenceStuffBuild()}${floodlight(760, 560)}${floodlight(3560, 560)}${ground()}${deck()}${yardClutter()}${pitHole()}
-        ${craneMast()}${steelFrame()}${siteOffice()}${toolWall()}` },
+        ${craneMast()}${craneCabInside()}${steelFrame()}${siteOffice()}${toolWall()}` },
     { id: 'counter', baseline: 728,
       art: () => `${pitLip()}${scaffold()}${pottyBody()}${workbench()}` },
     { id: 'mid', baseline: 903,
-      art: () => `${lumberPile()}${brickPallet()}${coneStack()}${leverBox()}${wreckBody()}${truckBody()}${excavatorBody()}${mixerStand()}` },
+      art: () => `${lumberPile()}${brickPallet()}${coneStack()}${leverBox()}${truckBody()}${excavatorBody()}${mixerStand()}` },
     { id: 'front', baseline: 1000,
       art: () => `${lunchBench()}${foreground()}` },
   ],
@@ -658,6 +675,8 @@ export const ROOM = {
     { id: 'dirt', layer: 'back', variants: { full: dirtFill } },
     { id: 'potty-door', layer: 'counter', variants: { closed: () => pottyDoor(false), open: () => pottyDoor(true) }, taps: ['closed', 'open'], pivot: [POTTY.x0 + 14, POTTY.top + 58] },
     { id: 'crane-lever', layer: 'mid', variants: { up: () => lever(false), down: () => lever(true) }, taps: ['up', 'down'], pivot: [(LEVER.x0 + LEVER.x1) / 2, MB - 170], controls: 'crane-hook' },
+    // P2c.2 fix (q62.25): the wrecking crane's crawler is its own piece, so it can drive (boom, chain and ball ride along).
+    { id: 'wreck-body', layer: 'mid', variants: { still: wreckBody } },
     { id: 'wreck-boom', layer: 'mid', variants: { still: wreckBoom }, pivot: WR.pivot },
     { id: 'wreck-chain', layer: 'mid', variants: { still: wreckChain }, pivot: WR.tip },
     { id: 'wreck-ball', layer: 'mid', variants: { still: wreckBall }, pivot: WR.tip },
@@ -691,7 +710,8 @@ export const ROOM = {
   ],
   seats: [
     { id: 'excavator-cab', layer: 'mid', at: [EX.x0 + 86, MB - 110] },
-    { id: 'crane-cab', layer: 'front', at: [TC.x + 86, TC.cabY - 4] },
+    // Inside the cab: sorted at the counter depth, so the cab (a front piece) draws over the sitter and its window shows them.
+    { id: 'crane-cab', layer: 'counter', at: [(CAB.wx0 + CAB.wx1) / 2, 550] },
     { id: 'truck-cab', layer: 'mid', at: [TR.x0 + 80, MB - 110] },
     { id: 'wreck-cab', layer: 'mid', at: [WR.x0 + 102, MB - 110] },
     { id: 'bench-1', layer: 'front', at: [BENCHSEAT.x0 + 80, BENCHSEAT.y - 8] }, { id: 'bench-2', layer: 'front', at: [BENCHSEAT.x1 - 80, BENCHSEAT.y - 8] },
@@ -745,9 +765,11 @@ export const SITE_RIGS = {
   },
   lever: { piece: 'crane-lever', pivot: W([(LEVER.x0 + LEVER.x1) / 2, MB - 170]), up: 'up', down: 'down', note: 'up = hook rises, down = hook lowers' },
   wreckingBall: {
-    pieces: { boom: 'wreck-boom', chain: 'wreck-chain', ball: 'wreck-ball' }, boomPivot: W(WR.pivot), tip: W(WR.tip),
+    pieces: { body: 'wreck-body', boom: 'wreck-boom', chain: 'wreck-chain', ball: 'wreck-ball' }, boomPivot: W(WR.pivot), tip: W(WR.tip),
+    // Driving: the whole crane (body, boom, chain, ball, its cab seat) shifts by dx along x, dx in [x0, x1] (world units).
+    drive: { x0: +((340 - WR.tip[0] * ART_SCALE)).toFixed(1), x1: 40, exhaust: W([WR.x1 - 61, MB - 74 - 204]) },
     ballCentre: W(WR.ball), ballRadius: +(WR.ballR * ART_SCALE).toFixed(1), chainLength: +((WR.ball[1] - WR.tip[1]) * ART_SCALE).toFixed(1),
-    note: 'Swing: rotate chain and ball together about tip (pendulum). Boom may tilt a few degrees about boomPivot.',
+    note: 'Swing: rotate chain and ball together about tip (pendulum). Boom may tilt a few degrees about boomPivot. Drive: translate body, boom, chain and ball (and the wreck-cab seat) by dx.',
   },
   excavator: {
     pieces: { body: 'excavator', arm: 'excavator-arm', bucket: 'excavator-bucket' }, armPivot: W(EX.pivot), elbow: W(EX.elbow), bucketPivot: W(EX.tip),

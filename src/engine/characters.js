@@ -486,6 +486,8 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       onTap() {
         const e = entityOf(rec.id);
         if (!e) return;
+        // A scene may answer a tap on the whole character first (P2b.1: a bow on the stage).
+        if (base.charTap && base.charTap(e, { type, key })) return;
         if (type === 'held') {
           if (!rec.held[key]) return;
           store.dispatch('set', { id: e.id, path: 'props.raise', value: e.props.raise === key ? null : key });

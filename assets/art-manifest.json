@@ -1938,7 +1938,7 @@
       4620,
       1800
      ],
-     "bytes": 230966,
+     "bytes": 232846,
      "tiles": [
       {
        "file": "assets/rooms/site/tiles/back-0.webp",
@@ -1962,7 +1962,7 @@
         1112,
         1800
        ],
-       "bytes": 61002
+       "bytes": 63048
       },
       {
        "file": "assets/rooms/site/tiles/back-2.webp",
@@ -2092,7 +2092,7 @@
       4307,
       371
      ],
-     "bytes": 65630,
+     "bytes": 55260,
      "tiles": [
       {
        "file": "assets/rooms/site/tiles/mid-0.webp",
@@ -2128,7 +2128,7 @@
         362,
         371
        ],
-       "bytes": 6216
+       "bytes": 826
       },
       {
        "file": "assets/rooms/site/tiles/mid-3.webp",
@@ -2140,7 +2140,7 @@
         1052,
         371
        ],
-       "bytes": 20152
+       "bytes": 14970
       },
       {
        "file": "assets/rooms/site/tiles/mid-4.webp",
@@ -2364,10 +2364,10 @@
     },
     {
      "id": "crane-cab",
-     "layer": "front",
+     "layer": "counter",
      "at": [
-      1075.2,
-      130.2
+      1127,
+      385
      ]
     },
     {
@@ -2492,6 +2492,26 @@
       784
      ],
      "controls": "crane-hook"
+    },
+    "wreck-body": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/site/wreck-body-still.webp",
+       "bytes": 11010
+      }
+     },
+     "px": [
+      582,
+      328
+     ],
+     "x": 1388.67,
+     "y": 700,
+     "w": 388,
+     "h": 218.67,
+     "taps": null,
+     "pivot": null
     },
     "wreck-boom": {
      "layer": "mid",
@@ -2754,17 +2774,17 @@
      "variants": {
       "still": {
        "file": "assets/rooms/site/crane-cab-still.webp",
-       "bytes": 2730
+       "bytes": 6388
       }
      },
      "px": [
-      221,
-      139
+      319,
+      548
      ],
-     "x": 980,
+     "x": 1020.67,
      "y": 126,
-     "w": 147.33,
-     "h": 92.67,
+     "w": 212.67,
+     "h": 365.33,
      "taps": null,
      "pivot": null
     },
@@ -3257,6 +3277,7 @@
     },
     "wreckingBall": {
      "pieces": {
+      "body": "wreck-body",
       "boom": "wreck-boom",
       "chain": "wreck-chain",
       "ball": "wreck-ball"
@@ -3269,13 +3290,21 @@
       1302,
       308
      ],
+     "drive": {
+      "x0": -962,
+      "x1": 40,
+      "exhaust": [
+       1630.3,
+       708.4
+      ]
+     },
      "ballCentre": [
       1302,
       609
      ],
      "ballRadius": 46.2,
      "chainLength": 301,
-     "note": "Swing: rotate chain and ball together about tip (pendulum). Boom may tilt a few degrees about boomPivot."
+     "note": "Swing: rotate chain and ball together about tip (pendulum). Boom may tilt a few degrees about boomPivot. Drive: translate body, boom, chain and ball (and the wreck-cab seat) by dx."
     },
     "excavator": {
      "pieces": {

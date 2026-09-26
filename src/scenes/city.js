@@ -1,9 +1,9 @@
 // The city map (P1.13, docs/design.md 2.6): the home screen. A front-on
 // little town, 2400 units wide so it pans with a finger. Every building
 // reacts to a tap: the cafe opens its door and you go in (town.js runs the
-// transition); the theater, the construction site and the school are not
-// built yet, so they play a "coming soon" reaction instead (curtains wiggle,
-// the crane waves, the bell rings). The sun/moon in the sky toggles night
+// transition); so do the construction site (P2c.1) and the theater (P2b.1,
+// its curtains swish); the school is not built yet, so it plays a "coming
+// soon" reaction instead (the bell rings). The sun/moon in the sky toggles night
 // (a `mapSet {night}` op, so it is saved and shared). Lots and the Lost &
 // Found box wiggle for now (structures and the lost-things drawer arrive in
 // P2c.5 and P1.14).
@@ -49,7 +49,7 @@ const OWNER = {
   booth: 'booth', 'booth-curtain': 'booth',   // P1.15: the Character Maker
 };
 // Built locations: a tap goes in. The rest react ("coming soon").
-export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth', construction: 'construction/yard' };   // P2c.1: the site
+export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth', construction: 'construction/yard', theater: 'theater/stage' };   // P2c.1: the site; P2b.1: the theater
 export const BUILDINGS = ['cafe', 'theater', 'construction', 'school'];
 // P1.14: things and characters carried onto the map rest on the street (the
 // upper sidewalk, the road, the lower sidewalk) and are drawn this much
@@ -269,7 +269,8 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
         tween.done(open).then(() => onEnter('booth', DOORS.booth, at));
       }
     },
-    theater() {
+    theater(el, info) {
+      if (entering) return;
       bounce('theater');
       sfx.play('whoosh');
       later(260, () => sfx.play('cheer', { gain: 0.8 }));
@@ -280,6 +281,15 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
         { transform: 'scale(1.06, 0.99) skewX(-4deg)', offset: 0.45 }, { transform: 'scale(0.95, 1.01) skewX(2deg)', offset: 0.7 },
         { transform: 'scale(1, 1)' },
       ], { duration: 900, easing: 'ease-in-out' }));
+      // P2b.1: the theater is built: the curtains swish and in we go (a tap
+      // only; the car's poke(), info null, just plays the reaction).
+      if (info && DOORS.theater && onEnter) {
+        entering = true;
+        stats.entered++;
+        const p = map.pieces['theater-curtains'];
+        const at = stage.worldToScreen(p.x + p.w / 2, p.y + p.h * 0.55);
+        later(520, () => onEnter('theater', DOORS.theater, at));
+      }
     },
     construction(el, info) {
       if (entering) return;
@@ -431,7 +441,7 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
     /** World point where a location's door is (the transition zooms there). */
     doorPoint(location) {
       if (location === DOORS.construction) return this.doorWorld('construction');   // P2c.1
-      const piece = location === DOORS.cafe ? 'cafe-door' : location === DOORS.booth ? 'booth-curtain' : null;
+      const piece = location === DOORS.cafe ? 'cafe-door' : location === DOORS.booth ? 'booth-curtain' : location === DOORS.theater ? 'theater-curtains' : null;
       if (!piece) return null;
       const p = map.pieces[piece];
       return { x: p.x + p.w / 2, y: p.y + p.h * 0.55 };
