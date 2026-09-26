@@ -1104,6 +1104,18 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       later(rec, at, () => { if (!rec.dragging) tweenTo(rec, rec.basePose, 260); });
       return true;
     },
+    /**
+     * Take one bite of `itemId` (P2a.5: a cafe customer eating): the bite ops,
+     * munch and crumbs at the mouth, no face change (the caller picks the
+     * faces). Returns {ate, gone}.
+     */
+    bite(id, itemId) {
+      const rec = recs.get(id);
+      const item = entityOf(itemId);
+      if (!rec || !item) return { ate: false, gone: !item };
+      stats.bites++;
+      return biteOf(rec, item);
+    },
     /** Screen-independent world anchor of a character (mouth, handL, head...). */
     anchor: (id, name) => { const rec = recs.get(id); return rec ? worldAnchor(rec, name) : null; },
     destroy() {

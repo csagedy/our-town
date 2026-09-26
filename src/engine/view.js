@@ -690,6 +690,18 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
       tween.squash(v.body, { delay: f.landAt, amount: 0.8 });
       return true;
     },
+    /**
+     * Glide top-level entity `id` from world point (x, y) (feet; drawn at
+     * that spot's depth scale) to where it rests now: a walk (P2a.5: a cafe
+     * customer walking in from the door). opts: {duration, easing}. Returns
+     * the animation, or null if it is not drawn here, held or inside something.
+     */
+    glideFrom(id, x, y, opts = {}) {
+      const v = views.get(id);
+      if (!v || v.held || inContainer(v)) return null;
+      glideFrom(v, { x, y, s: depthScale(def, sortKey(def, x, y).key) }, Object.assign({ duration: 1000, easing: 'linear' }, opts));
+      return v.posAnim;
+    },
     /** Re-render one entity now (sprite re-checked). False if not drawn or held. */
     repaint(id) {
       const v = views.get(id);

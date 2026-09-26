@@ -50,6 +50,7 @@ import { defineBehavior, resolveBehaviors, getBehavior } from './registry.js';
 import { mysteryLook, mysterySprite, MYSTERY_KIND } from '../mystery.js';
 import { resolveDish, itemsOf, foodParamsOf, discoverArgs, DISH_TINTS } from '../recipes.js';
 import * as tween from '../../engine/tween.js';
+import { tipJarLook, COIN_KIND } from '../customers.js';
 import {
   DONENESS_MAX, MIX_DONE, foodLook as lookOfFood, prepChain, cutIndex, isPeeled, donenessOf, colorOf,
   averageColor, blendHex, batterOf, mixState, BATTER_HEX, BATTER_ART, toRgb, toHex,
@@ -747,4 +748,31 @@ defineBehavior('drink', {
   look: (e, p) => ((e.props.bites | 0) >= 1 ? p.empty : (typeof e.props[p.key] === 'string' ? e.props[p.key] : null)),
   onTap: sip,
   verbs: { bite: sip },
+});
+
+// tipjar (P2a.5): the tip jar on the order counter. Coins dropped in go in
+// with a clink (the coin is used up; `inc props.coins`), and its look fills
+// up: empty -> coins -> full (src/core/customers.js tipJarLook). A tap
+// shakes it like a tambourine: a jingle (and the scene's customers dance).
+defineBehavior('tipjar', {
+  params: { key: 'coins' },
+  look: (e, p) => tipJarLook(e.props[p.key]),
+  onTap(e, rx, p) {
+    const n = e.props[p.key] | 0;
+    rx.shake({ amount: 0.7 });
+    const notes = n ? [1.2, 1.5, 1.35, 1.7] : [1.1, 1.3];
+    notes.forEach((pitch, i) => rx.play('clink', { pitch, gain: 0.6, when: i * 0.07 }));
+    if (n) rx.burst('sparkle', { count: 5 });
+    return true;
+  },
+  accepts: (target, item) => item.kind === COIN_KIND,
+  receive(target, item, rx, p) {
+    if (item.kind !== COIN_KIND) return null;
+    rx.dispatch('remove', { id: item.id, hard: true });
+    rx.inc(p.key, 1);
+    rx.play('clink', { pitch: 1.3 + rx.random() * 0.3 });
+    rx.squish({ amount: 0.6 });
+    rx.burst('sparkle', { count: 5 });
+    return 'accept';
+  },
 });

@@ -690,6 +690,20 @@ export const RECIPES = {
       }
     },
   },
+  // The cash register (P2a.5): the drawer's "cha" (a soft mechanical clack)
+  // then the "ching" (two bright bell notes, E6 and A6).
+  chaching: {
+    dur: 1.1,
+    play(v) {
+      noise(v, { dur: 0.07, peak: 0.16, filter: { type: 'bandpass', f: 1800, q: 1.2 } });
+      tone(v, { type: 'triangle', f: 220, dur: 0.08, peak: 0.12, attack: 0.005, sweep: [[0.07, 140]], filter: { type: 'lowpass', f: 1200 } });
+      for (const [d, at, peak] of [[7, 0.1, 0.18], [9, 0.19, 0.2]]) {
+        const f = pentatonicFreq(d);
+        tone(v, { f, at, dur: 0.8, peak, attack: 0.005 });
+        tone(v, { f: f * 2.76, at, dur: 0.25, peak: peak * 0.25, attack: 0.005 });
+      }
+    },
+  },
 };
 
 export const SOUND_NAMES = Object.keys(RECIPES);

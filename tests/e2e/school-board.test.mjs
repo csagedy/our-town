@@ -260,8 +260,8 @@ describe('school teaching wall (ipad-air, landscape, touch)', () => {
     const table = await page.eval(() => window.__town.scene.room.def.surfaces.find((q) => q.id === 'kid-table'));
     const onTable = await newOf(async () => page.drag(await entPoint(page, bin), await toScreen(page, 1470, table.y - 20), { steps: 14, durationMs: 340 }));
     const onFloor = await newOf(async () => page.drag(await entPoint(page, bin), await toScreen(page, 1600, 870), { steps: 14, durationMs: 340 }));
-    const book = await newOf(async () => page.drag(await entPoint(page, books), await toScreen(page, 1780, 880), { steps: 14, durationMs: 340 }));
-    const mag = await newOf(async () => page.drag(await elPoint(page, { hit: 'letter-O' }), await toScreen(page, 1260, 875), { steps: 14, durationMs: 340 }));
+    const book = await newOf(async () => page.drag(await entPoint(page, books), await toScreen(page, 1860, 880), { steps: 14, durationMs: 340 }));
+    const mag = await newOf(async () => page.drag(await elPoint(page, { hit: 'letter-O' }), await toScreen(page, 1700, 875), { steps: 14, durationMs: 340 }));
     const ents = await page.eval((ids) => ids.map((id) => { const e = window.__store.state.entities[id]; return Object.assign({}, e, { pk: e.parent ? window.__store.state.entities[e.parent].kind : null }); }), [onTable, onFloor, book, mag]);
     assert.equal(ents[0].y, table.y, 'the crayon rests on the table');
     assert.ok([1, 2, 3].every((i) => ents[i].room === 'school/classroom' && ents[i].y > 850), 'the others lie on the floor: ' + JSON.stringify(ents.map((q) => [q.kind, q.x, q.y, q.pk, q.room])));
@@ -270,7 +270,7 @@ describe('school teaching wall (ipad-air, landscape, touch)', () => {
       const st = window.__store;
       const ids = { pocket: st.newId(), cupcake: st.newId(), block: st.newId() };
       st.dispatch('spawn', { id: ids.pocket, kind: 'cupcake', room: 'pocket/' + st.device, x: 0, y: 0 });
-      st.dispatch('spawn', { id: ids.cupcake, kind: 'cupcake', room: 'school/classroom', x: 1700, y: 960 });
+      st.dispatch('spawn', { id: ids.cupcake, kind: 'cupcake', room: 'school/classroom', x: 2000, y: 960 });
       st.dispatch('spawn', { id: ids.block, kind: 'blocks', room: 'school/classroom', x: 1880, y: 940 });
       return ids;
     });

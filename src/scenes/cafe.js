@@ -37,6 +37,11 @@
 // - RECIPES (P2a.4, cafe-recipes.js): plates stack what is put on them and
 //   assemble on a tap (a recipe's dish or a Mystery Dish), a pan slides its
 //   food onto a plate, and the recipe book on the counter's back shelf opens.
+// - CUSTOMERS (P2a.5, cafe-customers.js): the door bell (or the closed door)
+//   brings a walk-in to a free table, a picture order in a thought bubble,
+//   serving on the table or into their hands, eating, coins; the counter
+//   bell gives orders to the kids' own seated characters; coins go in the
+//   register (the drawer opens, cha-ching, the pile) or the tip jar.
 // - FIRST VISIT: the stock, cookware and dishes on the shelves and tables,
 //   the kitchen cast and two customers at the tables.
 
@@ -58,6 +63,7 @@ import { createPrep, ensureStations } from './cafe-prep.js';
 import { createHeat } from './cafe-heat.js';
 import { createRecipes } from './cafe-recipes.js';
 import { loadRecipes } from '../core/recipes.js';
+import { createCustomers } from './cafe-customers.js';
 
 export const CAFE_ID = 'cafe/kitchen';
 export const FIXTURES_KIND = 'cafe-fixtures';
@@ -389,6 +395,19 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   // P2a.4 recipes: plating, the pan onto a plate, the recipe book.
   const recipes = createRecipes({ store, catalog, behaviors, m, room, stage, input, sfx, speech, fx });
   const recHooks = recipes.wrap(heatHooks);
+  // P2a.5 customers: the door bell, walk-ins, orders, serving, coins, the register, the tip jar.
+  const customers = createCustomers({
+    store, catalog, behaviors, m, room, chars, fx, sfx,
+    pieceApi: {
+      el: (pid) => (pieces.get(pid) || {}).el || null,
+      state: (pid) => state(pid),
+      set: (pid, value) => { const f = fixtures(); if (f && state(pid) !== value) store.dispatch('set', { id: f.id, path: 'props.' + pid, value }); },
+      press: (pid, variant) => press(pid, Object.assign({}, PIECES[pid], { press: variant })),
+      fixtures: () => fixtures(),
+    },
+    isGuest: () => typeof window !== 'undefined' && !!(window.__together && window.__together.session && window.__together.session.role === 'guest'),
+  });
+  const custHooks = customers.wrap(recHooks);
   // Pieces take touches (registered before the entity views, so where a
   // padded hit box is a tie the thing in front of the fixture wins).
   const pieces = new Map();          // id -> {el, body, img, shown, gen}
@@ -398,9 +417,9 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     el.dataset.piece = pid;
     const rec = { el, body: el.firstChild, img: el.querySelector('img'), shown: null, gen: 0 };
     pieces.set(pid, rec);
-    input.register(el, { onTap: () => tapPiece(pid), pan: true });
+    input.register(el, { onTap: (info) => tapPiece(pid, { info }), pan: true });
   }
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: recHooks, labels: textLabels(catalog, manifest) });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: custHooks, labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -437,6 +456,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   prep.bind(view);
   heat.bind(view);
   recipes.bind(view);
+  customers.bind(view);
 
   // ---- pieces ----
   const overrides = new Map();       // id -> variant shown for a moment (a bell press)
@@ -493,10 +513,12 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     timers.add(t);
   }
 
-  function tapPiece(pid, { raw = false } = {}) {
+  function tapPiece(pid, { raw = false, info = null } = {}) {
     const spec = PIECES[pid] || {};
     const p = pieces.get(pid);
     stats.taps[pid] = (stats.taps[pid] || 0) + 1;
+    // P2a.5: the door and its bell bring a customer in; the register's keys boop.
+    if (!raw && customers.onPieceTap(pid, info)) return;
     // A prep station answers for its appliance (the blender blends, the
     // coffee machine fills the cup under it, the toaster pops its toast).
     if (!raw && prep.onPieceTap(pid)) {
@@ -525,7 +547,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       playS(spec.sound || ['pop']);
       burstAt(pid, 'sparkle', { count: 4 });
     }
-    if (!raw) { prep.afterPieceTap(pid); heat.afterPieceTap(pid); }
+    if (!raw) { prep.afterPieceTap(pid); heat.afterPieceTap(pid); customers.afterPieceTap(pid); }
   }
 
   applyInside();
@@ -564,6 +586,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     prep,
     heat,
     recipes,
+    customers,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: inside the front door, in a row. */
@@ -581,6 +604,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       prep.destroy();
       heat.destroy();
       recipes.destroy();
+      customers.destroy();
       for (const p of pieces.values()) input.unregister(p.el);
       tiles.destroy();
       view.destroy();

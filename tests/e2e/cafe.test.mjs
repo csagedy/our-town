@@ -285,7 +285,9 @@ for (const name of Object.keys(VIEWPORTS)) {
         await page.waitFor(() => !window.__stage.camera.moving);
         // P2a.2: the toaster (and parts of the blender and sink) sit under an
         // invisible prep station that takes the touch and answers for its piece.
-        const p = (await piecePoint(page, pid)) || (await stationPoint(page, pid));
+        let p = (await piecePoint(page, pid)) || (await stationPoint(page, pid));
+        // P2a.5: the register's keys boop; its drawer (the lower part) opens and shuts.
+        if (pid === 'register') p = await page.eval(() => { const r = window.__town.scene.pieces.el('register').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height * 0.82 }; });
         assert.ok(p, `${pid}: a touch can reach it`);
         const spec = PIECES[pid];
         const target = spec.controls || pid;

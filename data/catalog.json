@@ -414,6 +414,30 @@
       "label": "Plate",
       "home": { "room": "cafe/kitchen" }
     },
+    "coin": {
+      "art": { "sprite": "coin" },
+      "ph": { "shape": "round", "fill": "#F2C14E" },
+      "size": [27, 27],
+      "tags": ["coin", "token"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "clink", "pitches": [1.3, 1.45, 1.6] }
+      ],
+      "label": "Coin",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "tip-jar": {
+      "art": { "sprite": "tip-jar" },
+      "ph": { "shape": "cup", "fill": "#CFE8EF" },
+      "size": [52, 58],
+      "tags": ["container", "shake", "music"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "tipjar" }
+      ],
+      "label": "Tip Jar",
+      "home": { "room": "cafe/kitchen" }
+    },
     "basket": {
       "ph": { "shape": "cup", "fill": "#c68b59" },
       "size": [124, 84],

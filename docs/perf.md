@@ -145,3 +145,17 @@ Fix: `audio.prepare()` (`src/audio/context.js`, `prepareAudio()` in `src/audio/i
 
 Tests: `tests/e2e/city.test.mjs` "city map memory (ipad-pro-9.7)": at rest (day and night, camera 0/480/960/130) exactly the images within one column of the view have a src, nothing of the other set or far away, no whole-layer image; a drag decodes the columns ahead; city -> cafe -> city stays within max(city, cafe) + 4 MB and nothing on screen is blank when the iris opens; the AudioContext exists before any gesture and the first tap only resumes it. `tests/unit/city.test.mjs` checks the tiles in the manifest.
 
+
+## Theater show effects (P2b.2, bead q62.8, 2026-09-26)
+
+`node tools/perf.mjs --rate 6 --scene theater` (new flag: only the theater, then exit), `ipad-pro-9.7`, headless Chrome with CPU throttle x6. Real taps on the fog machine, the confetti cannon and the snow machine back to back, so all three effects run at once; then the thunder sheet (with the lightning flash). Every particle goes through ONE fx pool for the show (`SHOW_CAP` = 48 elements, `fx.path()`: transform + opacity WAAPI only, no blend modes, no blur, no rAF): fog 8 clouds + confetti 20 + snow 16 = 44 at once, the ambience a couple at a time. The flash is one plain white div made for the flash and removed after it (skipped with `prefers-reduced-motion`).
+
+| scenario | avg fps | p95 frame | max frame | long tasks | DOM nodes | running anims | layouts | JS heap |
+|---|---|---|---|---|---|---|---|---|
+| theater idle, stage, 3 s | 59.9 | 16.8 ms | 16.8 ms | 0 | 1409 | 9 (idle character life) | 6 | 7.2 MB |
+| fog + confetti + snow at once (1st: pool fills) | 59.7 | 16.7 ms | 16.8 ms | 0 | 1597 | 19 | 139 | 4.0 MB |
+| fog + confetti + snow again (warm pool) | 59.9 | 16.8 ms | 16.8 ms | 0 | 1597 | 18 | 138 | 4.1 MB |
+| thunder + flash | 59.7 | 16.8 ms | 16.8 ms | 0 | 1600 | 3 | 18 | 4.1 MB |
+| idle after the effects, 3 s | 59.6 | 16.7 ms | 16.8 ms | 0 | 1597 | 2 (character life) | 6 | 4.1 MB |
+
+Show pool peak: 44 particles (cap 48). After the effects: 0 show animations, 0 show timers, 0 active particles (`afterFx` in the JSON); the ambience stops itself after 10 s (or when the stage leaves the screen / the scene changes), so an untouched theater does no work. The DOM grows by the pool's 48 elements once (created on first use, reused forever). Layouts during the burst: a probe firing one effect at a time found ~15-20 for fog or snow (the audience's face changes) and ~115 for confetti, all from the audience cheer the confetti triggers (the P2b.1 `cheer()`: arm gestures and hearts on each seated character, the same as a bow); the particles themselves add none beyond style recalcs. Decoded images rise from 77.7 to 95.4 MB once all four backdrops and the effect machine variants have been shown (each backdrop is 1294x1448 = 7.2 MB); still to check on the A9X.
