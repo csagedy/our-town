@@ -11,6 +11,7 @@ The source of truth is the code in `tools/art/`:
 | `props/household.mjs` | the style-v2 kitchen props (mug, jar, pot, plants, lamps, shelves' contents, stools...) |
 | `props/starter.mjs` | the 22 starter props and their tap/bite variants |
 | `rooms/kitchen.mjs` | the kitchen room, split into depth layers, with surfaces and seats |
+| `rooms/city.mjs` | the city map (home screen): back/front layers plus tappable pieces and moving parts, each with a night variant |
 | `characters/*.mjs` | body types, limbs, faces, hair, outfit pieces, poses and the starter cast (contract: `docs/rig.md`) |
 | `build.mjs` | the build (`python3 tools/build.py art`): rig data, rasters, `assets/art-manifest.json`, contact sheet |
 
@@ -59,6 +60,7 @@ Muted, warm and earthy. Never use pure saturated primaries in the world; saturat
 | steel / steelDeep, glass | `#D8DADC` / `#B2B6BA`, `#E9F4F1` | taps, rails; jars, display case |
 | food | crust `#E2A860`, toast `#F1D19B`, choc `#8A5B45`, berry `#DC6B6E`, lemon `#F3D46A`, egg `#FFFDF6`, banana `#F5DB7A` | |
 | mouth / tongue | `#9C4852` / `#EE9A9C` | open mouths only |
+| nightSky / nightSkyDeep | `#3A4170` / `#2E3460` | the city map's night sky (everything else at night is the day art through the NIGHT filter) |
 
 **Skin tones** (`SKINS`, `--skin` / `--skin-sh`): `#F3D0B5/#E2AB8E`, `#EDC3A2/#D9A07F`, `#D39A6E/#B97E55`, `#A8714D/#8C5A3B`, `#7E5236/#65402A`.
 **Hair** (`HAIRS`, `--hair` / `--hair-sh`): near-black `#3A2A2C`, brown `#6A4A3A`, copper `#C9713F`, honey `#E0B872`, grey `#B8B0AA`.
@@ -157,6 +159,14 @@ Notes:
 - Memory: one room (four layers) is about 29 MB decoded plus its GPU copy. Load one room at a time and drop the last room's `<img>`s on travel.
 - Bytes: the whole starter set (rig 76 KB, kitchen 320 KB, props 142 KB) is well inside the 3 MB first-load budget.
 
+### The city map (P1.13)
+
+`tools/art/rooms/city.mjs` draws the map like a room (art units, 1.5 px per world unit) but ships it as a `back` layer (opaque), a `front` layer and **pieces**: every thing that reacts to a tap (the four buildings, the sun and the moon, the birds, the bus, the lots, the Lost & Found box) and every moving part (the cafe door, the theater curtains, the crane's jib, the school bell) is its own cropped WebP with a world box, a draw-order `depth` and, for moving parts, a `pivot`. The six lots are one image placed at six `copies`.
+
+**Night** is built, never computed at runtime: each layer and piece is rasterized a second time through an SVG `feColorMatrix` (NIGHT in `city.mjs`, a cool blue dim), with the sky swapped for `nightSky` and stars, and the `lit()` extras drawn on top unfiltered (warm window glass, lamp glows at 30–45%, bulbs, headlights). Draw functions call `lit()` next to the shape they light, so the two variants always line up; day and night share one crop box (the union), so the runtime swaps them in place with an opacity cross-fade and then drops the unused file (only one set is decoded at a time: about 30 MB for the whole map).
+
+Rules for adding to the map: buildings must read by silhouette alone (no words on signs: a cup, a star, a crane, a bell); anything tappable gets its own piece; keep it dense (trees, lamps, little distant houses in every gap).
+
 ### Files and manifest
 
 `python3 tools/build.py art` writes:
@@ -164,6 +174,7 @@ Notes:
 - `assets/rooms/<room>/<layer>.webp` and `assets/sprites/props/<prop>[-<variant>].webp`.
 - `assets/art-manifest.json`, all in world units:
   - `rooms.<id>`: `width`, `canvas` (the bleed box), `pxPerUnit`, `layers[]` (`id, file, x, y, w, h, px, bytes, baseline, opaque`), `surfaces[]` (`id, layer, x0, x1, y`), `seats[]` (`id, layer, at`), `floor` (`y0, y1`).
+  - `map`: the city map: `width`, `canvas`, `backdrop.{day,night}`, `layers[]` and `pieces.<id>` (`file, x, y, w, h, px, bytes, night: {file, bytes} | null, depth, pivot | null, copies | null`).
   - `props.<id>`: `label, tags, default, variants.<name>` (`file, px, bytes, size, anchor`), `taps, oneWay, bites, grip, surface`. `grip` and `surface` are relative to the anchor.
   - `characters`: `rig` (file), `cast`, `bodies.<id>` (`height`, `anchor` = the feet point), `poses`, `expressions`, `wear` (piece → slot).
 - `tools/art/contact-sheet/*.png`: screenshots of `tools/art/contact-sheet/index.html`, which composes the shipped files through the runtime assembler (so it also checks the format).

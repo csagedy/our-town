@@ -224,9 +224,9 @@ for (const name of ['ipad-air', 'ipad-pro-9.7', 'ipad-pro-12.9']) {
   });
 }
 
-describe('stage: the default 1440 room', () => {
+describe('stage: a 1440 room (the buddy room)', () => {
   let page;
-  before(async () => { page = await openPage({ viewport: 'ipad-pro-9.7' }); });
+  before(async () => { page = await openPage({ viewport: 'ipad-pro-9.7', path: 'index.html?room=buddy' }); });
   after(async () => { if (page) await page.close(); });
 
   it('does not pan and has no letterbox gaps, landscape and portrait', async () => {

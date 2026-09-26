@@ -12,6 +12,17 @@
 // placeholders otherwise. Both rooms run the behavior runtime, so every tap
 // on anything reacts (kinds not in the catalog get the universal fallback).
 //
+// index.html?room=containers (id test/pantry) is set up for P1.9: a fridge
+// with shelves holding an egg-carton spawner, a tray holding a plate holding
+// a cupcake (and a mug), a basket (contents peek over the rim), a bowl (a
+// heap), a pallet (a stack of blocks), a spare plate, and spawners: the
+// crayon cup, the brick pile and the toy bin (also a container). Its entity
+// cap is low (12 loose clones) so the "go home" rule shows quickly.
+// index.html?room=porch (id test/porch) starts empty: carry something there
+// with scene.carry(id, 'test/porch') (a `travel` op, like P1.14's pocket
+// tray will) and open it. Scene hooks: scene.tidy() (the "go home" parent
+// action, P1.16 will put it in the parent menu), scene.carry(id, room).
+//
 // Temporary, like the boot scene: the real rooms arrive with the locations.
 
 import { mountRoom } from '../engine/room.js';
@@ -23,6 +34,8 @@ import { inRoom } from '../engine/world.js';
 import { sfx } from '../audio/index.js';
 import { loadCatalog } from '../core/catalog.js';
 import { createBehaviors } from '../core/behaviors/index.js';
+import { mountCharacters, seedCharacters } from '../engine/characters.js';
+import { speech } from '../audio/index.js';
 
 export const TEST_ROOM = {
   id: 'test/lab',
@@ -62,6 +75,45 @@ export const TEST_ITEMS = [
   ['test-teddy', null, 1370, 920],
 ];
 
+// ?room=cast (id test/cast, P1.10): the test room plus seats (a bench under
+// the shelf, a stool, a sofa to lie on), the starter cast (seedCharacters
+// placements) and things to give them: food to eat, hats, a cape.
+export const CAST_ROOM = Object.assign({}, TEST_ROOM, {
+  id: 'test/cast',
+  backdrop: { top: '#fde2e4', bottom: '#d9a38a', horizon: 700 },
+  seats: [
+    { id: 'bench-1', x: 205, y: 640, depth: 712 },
+    { id: 'bench-2', x: 385, y: 640, depth: 712 },
+    { id: 'stool', x: 1372, y: 738, depth: 800 },
+    { id: 'sofa', x: 640, y: 874, depth: 950, lie: true, half: 140 },
+  ],
+  art: TEST_ROOM.art.concat([
+    { id: 'bench', layer: 'mid', depth: 712, x: 110, y: 636, w: 370, h: 76, cls: 'ph-bench',
+      html: '<i class="top"></i><i class="leg l"></i><i class="leg r"></i>' },
+    { id: 'stool', layer: 'mid', depth: 800, x: 1330, y: 734, w: 84, h: 66, cls: 'ph-stool',
+      html: '<i class="top"></i><i class="leg l"></i><i class="leg r"></i>' },
+    { id: 'sofa', layer: 'mid', depth: 950, x: 480, y: 796, w: 320, h: 154, cls: 'ph-sofa',
+      html: '<i class="back"></i><i class="seat"></i><i class="arm l"></i><i class="arm r"></i>' },
+  ]),
+});
+export const CAST_ITEMS = [
+  ['cupcake', 'counter', 600],
+  ['apple', 'counter', 700],
+  ['egg', 'counter', 800],
+  ['mug', 'table', 1060],
+];
+export const TEST_CAST = [
+  { cast: 'girl9', seat: 'bench-1' },
+  { cast: 'grandpa', seat: 'bench-2' },
+  { cast: 'grownup', x: 110, y: 945 },
+  { cast: 'boy5', x: 880, y: 950 },
+];
+export const TEST_CAST_ITEMS = [
+  { kind: 'crown', x: 1150, y: 640 },
+  { kind: 'hero-cape', x: 1270, y: 640 },
+  { kind: 'chef-hat', x: 1230, y: 960 },
+];
+
 // ?room=catalog first-boot layout: 15 catalog kinds, same format.
 export const CATALOG_ROOM = Object.assign({}, TEST_ROOM, { id: 'test/catalog' });
 export const CATALOG_ITEMS = [
@@ -82,17 +134,55 @@ export const CATALOG_ITEMS = [
   ['toy-bin', null, 1180, 930],
 ];
 
+// ?room=containers first-boot layout: [kind, surface id or null, x, floor y,
+// contents]. Contents are [kind, slot, contents] (spawned inside, nested).
+// No sofa here: the floor is for the brick pile, the pallet and the toys.
+const noSofa = (def) => ({
+  art: (def.art || []).filter((a) => a.id !== 'sofa'),
+  seats: (def.seats || []).filter((q) => q.id !== 'sofa'),
+});
+export const CONTAINERS_ROOM = Object.assign({}, TEST_ROOM, noSofa(TEST_ROOM), {
+  id: 'test/pantry', cap: 12,
+  backdrop: { top: '#d8f3dc', bottom: '#95d5b2', horizon: 700 },
+});
+export const CONTAINER_ITEMS = [
+  ['fridge', null, 190, 724, [['egg-carton', 's0'], ['apple', 's3']]],
+  ['crayon-cup', 'shelf', 400],
+  ['tray', 'counter', 640, null, [['plate', 's1', [['cupcake', 's0']]], ['mug', 's2']]],
+  ['basket', 'counter', 810, null, [['teddy', 's0'], ['apple', 's1']]],
+  ['bowl', 'table', 1080, null, [['egg', 's0']]],
+  ['plate', 'table', 1250],
+  ['brick-pile', null, 430, 940],
+  ['pallet', null, 700, 900, [['blocks', 's0'], ['blocks', 's1']]],
+  ['toy-bin', null, 1180, 930],
+];
+
+// ?room=porch: a second room to carry things into (empty at first).
+export const PORCH_ROOM = Object.assign({}, TEST_ROOM, noSofa(TEST_ROOM), {
+  id: 'test/porch',
+  backdrop: { top: '#cde7ff', bottom: '#a3c4f3', horizon: 700 },
+});
+
 /** Spawn the first-boot items (or `extra` more, for perf tests) into the store. */
 export function spawnTestItems(store, { extra = 0, room = normalizeRoom(TEST_ROOM), items = TEST_ITEMS } = {}) {
   const spawn = (kind, x, y) => {
     const s = spriteFor(kind);
     const r = settle(room, { x, y, halfW: s.w / 2 });
-    store.dispatch('spawn', { id: store.newId(), kind, room: room.id, x: Math.round(r.x), y: r.y });
+    const id = store.newId();
+    store.dispatch('spawn', { id, kind, room: room.id, x: Math.round(r.x), y: r.y });
+    return id;
+  };
+  const fill = (parent, contents) => {
+    for (const [kind, slot, inner] of contents || []) {
+      const id = store.newId();
+      store.dispatch('spawn', { id, kind, parent, slot });
+      fill(id, inner);
+    }
   };
   if (!extra) {
-    for (const [kind, on, x, fy] of items) {
+    for (const [kind, on, x, fy, contents] of items) {
       const s = on && room.surfaces.find((q) => q.id === on);
-      spawn(kind, x, s ? s.y : fy);
+      fill(spawn(kind, x, s ? s.y : fy), contents);
     }
     return;
   }
@@ -105,23 +195,43 @@ export function spawnTestItems(store, { extra = 0, room = normalizeRoom(TEST_ROO
   }
 }
 
-/** Mount the test room (set 'test') or the catalog room (set 'catalog'). Loads the catalog first. */
+const SETS = {
+  test: [TEST_ROOM, TEST_ITEMS],
+  catalog: [CATALOG_ROOM, CATALOG_ITEMS],
+  containers: [CONTAINERS_ROOM, CONTAINER_ITEMS],
+  porch: [PORCH_ROOM, []],
+  cast: [CAST_ROOM, CAST_ITEMS],
+};
+/** The dev routes this module mounts (?room=<set>). */
+export const TEST_SETS = Object.keys(SETS);
+
+/** Mount a test room: set 'test', 'catalog', 'containers' or 'porch'. Loads the catalog first. */
 export async function mountTestRoom(stage, { input, store, set = 'test' }) {
   const catalog = await loadCatalog();
   // Catalog kinds draw from the art manifest (or their placeholder) for
   // every spriteFor() caller too, not only the view.
   const removeSource = addSpriteSource((kind) => (catalog.has(kind) ? catalog.sprite(kind) : null));
-  const isCatalog = set === 'catalog';
-  const room = mountRoom(stage, isCatalog ? CATALOG_ROOM : TEST_ROOM);
+  const [roomDef, items] = SETS[set] || SETS.test;
+  const room = mountRoom(stage, roomDef);
   const fx = createFx(room.fxLayer);
   const behaviors = createBehaviors({ catalog, store });
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors });
+  // Characters (P1.10) can be in every test room; the starter cast is in ?room=cast.
+  const chars = await mountCharacters({ store, input, behaviors, room, sfx, speech });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: chars ? chars.hooks : behaviors });
   behaviors.bind(view, fx);
-  const items = isCatalog ? CATALOG_ITEMS : TEST_ITEMS;
-  if (!inRoom(store.state, room.id).length) spawnTestItems(store, { room: room.def, items });
+  if (chars) chars.bind(view, fx);
+  // First boot only (and the empty porch stays empty).
+  if (items.length && !inRoom(store.state, room.id).length) {
+    spawnTestItems(store, { room: room.def, items });
+    if (chars && set === 'cast') seedCharacters(store, chars.rig, { room: room.id, seats: chars.seats, placements: TEST_CAST, items: TEST_CAST_ITEMS });
+  }
   return {
-    room, view, fx, catalog, behaviors,
+    room, view, fx, catalog, behaviors, chars,
     spawnExtra: (n) => spawnTestItems(store, { extra: n, room: room.def }),
-    destroy() { view.destroy(); fx.clear(); room.destroy(); removeSource(); },
+    /** "Go home": loose things back to their catalog home (P1.9; P1.16's parent menu later). */
+    tidy: () => behaviors.tidy(),
+    /** Carry a top-level thing (and everything inside it) to another room: a `travel` op. */
+    carry: (id, to) => !!store.dispatch('travel', { ids: [id], to }),
+    destroy() { view.destroy(); if (chars) chars.destroy(); fx.clear(); room.destroy(); removeSource(); },
   };
 }

@@ -202,17 +202,22 @@ test('container: accepts the right tags, refuses others (and when full) playfull
   assert.ok(lively(r));
   assert.equal(w.sounds.at(-1), 'boing');
   assert.equal(w.e(ball).parent, null);
-  // Accepted: attached inside, the bowl's look changes.
+  // Accepted: attached inside in a slot, drawn in the bowl's heap (P1.9).
   assert.equal(w.b.onDropInto(w.e(apple), w.e(bowl), w.ctx), true);
   assert.deepEqual(w.b.log().at(-1).via, ['container:accept']);
   assert.equal(w.e(apple).parent, bowl);
-  assert.equal(w.b.lookOf(w.e(bowl)), 'soup');
+  assert.equal(w.e(apple).slot, 's0');
+  const spot = w.b.layoutOf(w.e(bowl), [w.e(apple)]).get(apple);
+  assert.equal(spot.hidden, false);
+  assert.equal(spot.front, false, 'a heap sits behind the bowl front, peeking over the rim');
   // Capacity 3.
   for (let i = 0; i < 2; i++) assert.ok(w.b.onDropInto(w.e(w.spawn('cupcake')), w.e(bowl), w.ctx));
   assert.equal(childrenOf(w.store.state, bowl).length, 3);
   const extra = w.spawn('egg');
   w.b.onDropInto(w.e(extra), w.e(bowl), w.ctx);
   assert.deepEqual(w.b.log().at(-1).via, ['container:refuse'], 'full');
+  assert.equal(w.b.log().at(-1).reason, 'full');
+  assert.deepEqual(childrenOf(w.store.state, bowl).map((c) => c.slot).sort(), ['s0', 's1', 's2']);
   // The cookie jar takes sweets only; the pan takes ingredients only.
   const jar = w.spawn('cookie-jar', 565, 540);
   w.b.onDropInto(w.e(extra), w.e(jar), w.ctx);
@@ -281,23 +286,54 @@ test('eatable: bites are inc ops through the looks, then gone (or a core stays)'
   assert.equal(w.b.act(c2, 'fly'), false);
 });
 
-test('spawner: pops out new things up to its cap, then a playful shake; not draggable', () => {
+test('spawner: a tap pops a clone onto a free spot; never draggable itself; the room cap sends old clones home', () => {
   const w = world();
+  w.def.cap = 4;
   const bin = w.spawn('toy-bin', 1180, 930);
   assert.equal(w.b.canDrag(w.e(bin)), false);
   assert.equal(w.b.canDrag(w.e(w.spawn('ball'))), true);
-  for (let i = 0; i < 5; i++) assert.deepEqual(w.tap(bin).via, ['spawner']);
-  const out = inRoom(w.store.state, w.def.id).filter((e) => e.props.from === bin);
-  assert.equal(out.length, 5);
+  const made = [];
+  for (let i = 0; i < 4; i++) {
+    const r = w.tap(bin);
+    assert.deepEqual(r.via, ['spawner']);
+    assert.ok(lively(r));
+    made.push(inRoom(w.store.state, w.def.id).filter((e) => e.props.from === bin).map((e) => e.id).find((id) => !made.includes(id)));
+  }
+  let out = inRoom(w.store.state, w.def.id).filter((e) => e.props.from === bin);
+  assert.equal(out.length, 4);
   for (const e of out) {
     assert.ok(['ball', 'toy-car', 'teddy'].includes(e.kind));
     assert.ok(e.y >= 700 && e.y <= 960 && e.x > 0 && e.x < 1440);
   }
-  assert.equal(w.pops.length, 5);
-  const full = w.tap(bin);
-  assert.deepEqual(full.via, ['spawner']);
-  assert.ok(lively(full));
-  assert.equal(inRoom(w.store.state, w.def.id).filter((e) => e.props.from === bin).length, 5);
+  assert.equal(w.pops.length, 4);
+  // Past the cap the oldest untouched clone goes home (a hard remove), quietly.
+  w.tap(bin);
+  out = inRoom(w.store.state, w.def.id).filter((e) => e.props.from === bin);
+  assert.equal(out.length, 4, 'back at the cap');
+  assert.equal(w.store.state.entities[made[0]].deleted, true, 'the oldest went home');
+  // A tapped clone was touched just now: the next oldest goes instead.
+  w.tap(made[1]);
+  w.tap(bin);
+  assert.ok(w.e(made[1]), 'a clone a kid just touched stays');
+  assert.equal(w.store.state.entities[made[2]].deleted, true);
+});
+
+test('spawner: a drag pulls out a clone under the finger; dropping it back sends it home', () => {
+  const w = world();
+  const cup = w.spawn('crayon-cup', 400, 330);
+  const id = w.b.cloneFor(w.e(cup), Object.assign({}, w.ctx, { info: { x: 420, y: 300 } }));
+  assert.ok(id);
+  const c = w.e(id);
+  assert.equal(c.kind, 'crayon');
+  assert.equal(c.props.from, cup);
+  assert.ok(['red', 'orange', 'yellow', 'green', 'blue', 'purple'].includes(c.props.color));
+  assert.equal(w.b.lookOf(c), c.props.color, 'the variant behavior draws its color');
+  assert.equal(c.x, 420);
+  assert.equal(w.b.dropTarget(c, w.e(cup)), true);
+  assert.equal(w.b.onDropInto(c, w.e(cup), w.ctx), true);
+  assert.deepEqual(w.b.log().at(-1).via, ['spawner:accept']);
+  assert.equal(w.e(id), undefined, 'home again');
+  assert.equal(w.b.cloneFor(w.e(w.spawn('ball')), w.ctx), null, 'only spawners clone');
 });
 
 test('landSound: the kind\'s drop sound, else the surface\'s', () => {

@@ -55,7 +55,8 @@ Status: v1 design, the source of truth for Phase 1 to 3 beads. Hard requirements
 - **Pocket tray:** a persistent strip at the bottom of the screen (collapsed to a tab icon) holds up to 8 things and characters. It is visible in every scene. This is the fast way for Ian: drop something in the tray, open the map, go, drag it out.
 
 ### 2.6 City map and travel
-- The hub is an illustrated top-down city with 4 big building icons at least 200pt wide, plus the Character Maker booth, the Lost & Found box and a park. A map button (house-shaped icon) sits in the top-left corner of every scene.
+- The hub is an illustrated city seen front-on like a Toca map (a street 2400 units wide that pans), with 4 big buildings at least 200pt wide that read by silhouette alone, plus the Lost & Found box, 6 empty lots and a park strip (the Character Maker booth comes later). A round map button (house icon) sits in the top-left corner of every location. Built in P1.13: `src/scenes/town.js`, `city.js`; art `tools/art/rooms/city.mjs`.
+- An unbuilt location never gives a dead tap: its building plays a "coming soon" reaction (theater curtains wiggle, the crane waves, the school bell rings).
 - Tap a building: it bounces, its signature sound plays (a bell, a curtain whoosh, a truck beep, a school bell), then a 400ms zoom transition into the location. The last room you were in is remembered.
 - **Built structures appear on the map** (§3.3). The map has 6 empty "lots" that Ian's saved builds fill.
 - Day/night: a sun/moon toggle on the map turns the whole city to night. Lights turn on in all scenes and characters get sleepy faces. It's purely cosmetic.

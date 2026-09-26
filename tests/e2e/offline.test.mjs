@@ -26,7 +26,9 @@ const swVersion = (file) => readFileSync(file, 'utf8').match(/var VERSION = '([^
 const controlled = () => navigator.serviceWorker.ready.then(() => !!navigator.serviceWorker.controller);
 const version = async () => (await import('./src/pwa.js')).installedVersion();
 const waiting = async () => (await import('./src/pwa.js')).waitingVersion();
-const buddyInteractive = () => document.querySelector('.buddy')?.dataset.squishes;
+// The city map (the default scene) is up with every image decoded.
+const cityReady = () => window.__town && window.__town.at === 'city'
+  && Promise.all([...document.images].filter((i) => i.getAttribute('src')).map((i) => i.decode().then(() => i.naturalWidth > 0, () => false))).then((ok) => ok.length > 0 && ok.every(Boolean));
 
 describe('service worker: offline', () => {
   let page; let site;
@@ -61,7 +63,7 @@ describe('service worker: offline', () => {
     assert.ok(r === true || r === false, `persist() answered ${r}`);
   });
 
-  it('boots with the network gone (server killed and CDP offline) and the buddy still reacts', async () => {
+  it('boots with the network gone (server killed and CDP offline): the city draws and reacts', async () => {
     page.stopServer();
     await page.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -69,13 +71,13 @@ describe('service worker: offline', () => {
     page.errors.length = 0;
     await page.goto('index.html');
     assert.equal(await page.eval(() => !!navigator.serviceWorker.controller), true);
-    assert.equal(await page.eval(buddyInteractive), '0');
-    await page.tapElement('.buddy');
-    await page.waitFor(() => document.querySelector('.buddy').dataset.squishes === '1');
-    // The folder URL (what the home-screen icon opens) works offline too. The
-    // squish count is saved (P1.4 persistence), so the tap above may show.
+    assert.equal(await page.eval(cityReady), true, 'every map image came from the cache');
+    const theater = await page.eval(() => window.__town.scene.screenPoint('theater', 0.3));
+    await page.tap(theater.x, theater.y);
+    await page.waitFor(() => window.__town.scene.stats.last === 'theater');
+    // The folder URL (what the home-screen icon opens) works offline too.
     await page.goto('./');
-    assert.match(String(await page.eval(buddyInteractive)), /^[01]$/);
+    assert.equal(await page.eval(cityReady), true);
     await page.screenshot('offline-boot');
     assert.deepEqual(page.externalRequests(), []);
     assert.deepEqual(page.errors.filter((e) => !/ERR_INTERNET_DISCONNECTED|ERR_CONNECTION_REFUSED/.test(e)), []);
@@ -119,7 +121,7 @@ describe('service worker: updates wait for a cold launch or "Update now"', () =>
     await new Promise((r) => setTimeout(r, 1000));
     assert.equal(await page.eval(() => window.__midSession), 'still here', 'page was not reloaded');
     assert.equal(await page.eval(version), v1, 'old worker still in control');
-    assert.equal(await page.eval(() => document.querySelector('.buddy').dataset.squishes), '0');
+    assert.equal(await page.eval(() => window.__town.at), 'city', 'the running city is untouched');
     // The old cache is still there for the running page; the new one is filled.
     const keys = await page.eval(() => caches.keys());
     assert.deepEqual(keys.sort(), [`ourtown-${v1}`, `ourtown-${v2}`].sort());

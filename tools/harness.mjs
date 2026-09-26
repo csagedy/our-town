@@ -29,6 +29,7 @@
 //   page.longPress(x, y, {holdMs})    press and hold (default 600ms)
 //   page.drag(from, to, {steps, durationMs, holdMs})   one-finger drag, from/to = {x, y}
 //   page.touch(type, points)          raw CDP touch: 'touchStart'|'touchMove'|'touchEnd'|'touchCancel'
+//   page.gesture()                    -> g(type, points, atMs): raw touches with gesture-relative timestamps
 //   page.screenshot(name)             PNG into test-results/<name>.png, returns the path
 //   page.errors                       uncaught exceptions, console.error, failed loads (strings)
 //   page.requests                     every request URL the page made
@@ -459,6 +460,13 @@ export async function openPage(opts = {}) {
   page.touch = (type, points, timestamp) => send('Input.dispatchTouchEvent', {
     type, touchPoints: points, timestamp: timestamp ?? gestureClock()(0),
   });
+  // A raw gesture on its own clock: g(type, points, atMs) stamps each event
+  // atMs after the gesture began, so a scripted path keeps its timing (a tap
+  // stays under the tap limit) even when this process is scheduled late.
+  page.gesture = () => {
+    const at = gestureClock();
+    return (type, points, atMs) => page.touch(type, points, at(atMs));
+  };
   page.tap = async (x, y, { holdMs = 60 } = {}) => {
     const at = gestureClock();
     await page.touch('touchStart', [point(x, y)], at(0));

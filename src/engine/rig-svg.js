@@ -109,7 +109,8 @@ export function faceSlot(rig, spec, slot, atom) {
 /**
  * Assemble a character. opts: pose (name or pose object), expr (name or slot
  * object), blink, held: {L, R} SVG drawn upright at that hand (under the
- * mitten), shadow (default true), id (for data-char).
+ * mitten), shadow (default true), id (for data-char), marks (tag the removable
+ * wear fragments with data-w="<slot>" so the runtime can hit-test them).
  * Returns { svg: '<g class="o rig" ...>', anchors, frames, body }.
  */
 export function renderCharacter(rig, spec, opts) {
@@ -128,11 +129,13 @@ export function renderCharacter(rig, spec, opts) {
 
   const out = [];
   const put = (frame, svg, extra) => { if (svg) out.push(`<g data-f="${frame}"${extra || ''} transform="${matrixAttr(frames[frame])}">${svg}</g>`); };
+  const mk = (slot) => (opts.marks ? ` data-w="${slot}"` : '');
+  const wrapW = (slot, svg) => (svg && opts.marks ? `<g data-w="${slot}">${svg}</g>` : svg || '');
   const limb = (layer, fu, fl) => { if (!layer) return; put(fu, layer.upper); put(fl, layer.lower); put(fu, layer.patch); };
 
   if (opts.shadow !== false && pose.anchor !== 'back') out.push(`<ellipse class="n" data-f="shadow" fill="#3D2C29" opacity=".12" cx="${anchors.feet[0]}" cy="0" rx="${sk.shadow}" ry="13"/>`);
   const back = piece('back');
-  if (back) put('torso', back.back);
+  if (back) put('torso', back.back, mk('back'));
   if (hair.back && !(hair.backKind === 'top' && hides.top)) put('head', hair.back, ' data-p="hair-back"');
   const bottom = piece('bottom');
   const legs = () => {
@@ -150,8 +153,8 @@ export function renderCharacter(rig, spec, opts) {
   put('torso', body.parts.torso);
   const top = piece('top'), over = piece('over');
   if (top) put('torso', top.torso);
-  if (over) put('torso', over.torso);
-  if (back) put('torso', back.torso);
+  if (over) put('torso', over.torso, mk('over'));
+  if (back) put('torso', back.torso, mk('back'));
   if (pose.legsFront) legs();
 
   const front = pose.front || [];
@@ -167,7 +170,7 @@ export function renderCharacter(rig, spec, opts) {
   const faceAcc = piece('face'), hat = piece('hat');
   put('head', body.parts.ears + body.parts.head + body.face.nose + face
     + (spec.facialHair ? body.facialHair[spec.facialHair] || '' : '')
-    + hair.front + (faceAcc ? faceAcc.head : '') + (hat ? hat.head : ''), ' data-p="head"');
+    + hair.front + (faceAcc ? wrapW('face', faceAcc.head) : '') + (hat ? wrapW('hat', hat.head) : ''), ' data-p="head"');
   SIDES.forEach(([s]) => { if (front.indexOf(s) >= 0) arm(s); });
 
   return {

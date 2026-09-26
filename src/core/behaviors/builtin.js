@@ -7,14 +7,18 @@
 //   sound      tap plays a sound (with a pitch picked from a list)
 //   squeak     a squeeze toy: a big squish, a squeak, hearts
 //   wobble     rocks like jelly
-//   spill      tap (or long press) tips the contents out around it
-//   container  accepts drops of things with the right tags; refuses others with a bounce-back
+//   spill      tap (or long press) tips the contents out onto distinct spots around it
+//   container  accepts drops of things with the right tags into slots drawn by a layout
+//              (P1.9, src/core/containers.js); refuses others, and a full one, with a bounce-back
 //   eatable    tap (or a character, later) takes a bite through the bite looks
-//   spawner    P1.9 stub: tap pops out a new thing (capped); not draggable
+//   spawner    an infinite source (P1.9): dragging from it pulls out a new clone, a tap pops
+//              one out; a clone dropped back on it goes home. Not draggable itself.
+//   variant    the look is a prop's value (a crayon's color)
+//   peek       tap: the things inside a basket or bag hop up so you can see them
 
 import { defineBehavior } from './registry.js';
 import { pick } from '../../engine/random.js';
-import { inRoom } from '../../engine/world.js';
+import { checkLayout } from '../containers.js';
 
 const isStrList = (v, min = 1) => Array.isArray(v) && v.length >= min && v.every((s) => typeof s === 'string' && s);
 const soundOk = (name, sounds) => name == null || !sounds || sounds.includes(name);
@@ -112,20 +116,18 @@ defineBehavior('wobble', {
   },
 });
 
-// Tip the contents out: each child gets a spot around the container (on the
-// same surface if there is room, else the floor) and pops out with a fall.
+// Tip the contents out: each child gets its own free spot around the
+// container (on the surface it stands on while there is room, then the
+// floor; containers.js planSpill: no two land on top of each other) and pops
+// out with a fall. A container inside another spills from where it is drawn.
 function spillOut(e, rx, p) {
   const kids = rx.children();
   if (!kids.length) return false;
-  const n = kids.length;
-  kids.forEach((c, i) => {
-    const side = n === 1 ? (rx.random() < 0.5 ? -1 : 1) : (i - (n - 1) / 2) / ((n - 1) / 2 || 1);
-    const x = e.x + side * p.spread + (rx.random() - 0.5) * 30;
-    const spot = rx.settleAt(c, x, e.y, { floorJitter: true });
-    if (rx.dispatch('detach', { id: c.id, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z })) {
-      rx.popFrom(c.id, e.x, e.y - rx.size().h * 0.6);
-    }
-  });
+  const at = rx.where();
+  const top = at.y - rx.size().h * 0.6;
+  for (const s of rx.spots(kids, { from: at, gap: Math.max(6, p.spread / 10) })) {
+    if (rx.dispatch('detach', { id: s.id, room: rx.room.id, x: s.x, y: s.y, z: s.z })) rx.popFrom(s.id, at.x, top);
+  }
   rx.play(p.sound);
   rx.wobble({ amount: 1.2 });
   rx.burst('puff', { count: 5 });
@@ -136,7 +138,7 @@ defineBehavior('spill', {
   params: {
     on: 'tap',          // 'tap' | 'longPress': which gesture tips it
     sound: 'whoosh',
-    spread: 110,        // how far things land from it (units)
+    spread: 110,        // room between the things it tips out (units x 10)
   },
   check(p, { sounds }) {
     if (p.on !== 'tap' && p.on !== 'longPress') return 'on must be tap or longPress';
@@ -149,28 +151,51 @@ defineBehavior('spill', {
 
 defineBehavior('container', {
   params: {
-    accepts: [],         // tags it takes (an item needs any one of them)
-    capacity: 4,         // how many things fit
+    accepts: [],         // tags it takes (an item needs any one of them; "*" takes anything)
+    capacity: 4,         // how many things fit (one slot each)
     look: null,          // look while it holds something (a bowl of soup), or null
     sound: 'plink',      // accepted
     refuseSound: 'boing',
+    // Slot layout (src/core/containers.js): how the things inside are drawn.
+    layout: 'hidden',    // hidden | row | grid | shelves | stack | heap | plate | interior
+    area: null,          // [left, top, right, bottom] fractions of its box where feet go
+    cols: null,          // spots per row / shelf
+    shelves: null,       // shelf lines, y fractions top to bottom (layout: shelves)
+    peek: null,          // heap / interior: how much of each thing shows over the rim (0 = hidden)
+    scale: null,         // things inside are drawn this much smaller
   },
   check(p, { sounds }) {
     if (!isStrList(p.accepts)) return 'accepts must list at least one tag';
     if (!(Number.isInteger(p.capacity) && p.capacity > 0)) return 'capacity must be a positive integer';
     if (!soundOk(p.sound, sounds) || !soundOk(p.refuseSound, sounds)) return 'unknown sound';
-    return null;
+    return checkLayout(p);
   },
   look: (e, p, w) => (p.look && w.children().length ? p.look : null),
   accepts: () => true,   // every container is a drop target: a wrong item gets a playful "no", never nothing
   receive(target, item, rx, p) {
+    if (item.parent === target.id) {
+      // Picked up and put back: it springs back to its own slot.
+      rx.reason = 'back';
+      rx.play(p.sound, { pitch: 0.9 });
+      rx.squish({ amount: 0.6 });
+      return 'accept';
+    }
     const tags = rx.catalog.tagsOf(item.kind);
-    const fits = p.accepts.some((t) => tags.includes(t));
-    if (!fits || rx.children().length >= p.capacity) {
+    if (!(p.accepts.includes('*') || p.accepts.some((t) => tags.includes(t)))) {
+      rx.reason = 'wrong';
       rx.refuse(p.refuseSound);
       return 'refuse';
     }
-    if (!rx.dispatch('attach', { id: item.id, parent: target.id, slot: 'in' })) {
+    const slot = rx.slotFor(p, item);
+    if (!slot) {
+      // Full: a "no room!" shake, and the things inside hop to show it.
+      rx.reason = 'full';
+      rx.refuse(p.refuseSound);
+      rx.hopKids({ height: 0.3 });
+      return 'refuse';
+    }
+    if (!rx.dispatch('attach', { id: item.id, parent: target.id, slot })) {
+      rx.reason = 'loop';
       rx.refuse(p.refuseSound);
       return 'refuse';
     }
@@ -220,38 +245,92 @@ defineBehavior('eatable', {
   verbs: { bite },
 });
 
+// Random props for a new clone: { color: ['red', 'blue'] } -> { color: 'blue' }.
+function varyProps(p, random) {
+  const out = {};
+  if (p.vary) for (const k of Object.keys(p.vary)) out[k] = pick(p.vary[k], random);
+  return out;
+}
+
+const isCloneFor = (target, item, p) => typeof item.props.from === 'string' && (item.props.from === target.id || p.kinds.includes(item.kind));
+
 defineBehavior('spawner', {
   params: {
-    kinds: [],       // catalog kinds it pops out
-    max: 6,          // loose things from it in this room at once (then a playful "that's plenty" shake)
+    kinds: [],       // catalog kinds it gives out (a random one each time)
+    vary: null,      // random props per clone: { "color": ["red", "blue"] }
     sound: 'pop',
-    spread: 150,
+    homeSound: 'whoosh',   // a clone dropped back on it goes home
   },
   check(p, { kinds, sounds }) {
     if (!isStrList(p.kinds)) return 'kinds must list at least one kind';
     const missing = p.kinds.filter((k) => !kinds[k]);
     if (missing.length) return 'unknown kinds ' + missing.join(', ');
-    if (!(Number.isInteger(p.max) && p.max > 0)) return 'max must be a positive integer';
-    return soundOk(p.sound, sounds) ? null : 'unknown sound ' + p.sound;
+    if (p.vary != null && !(p.vary && typeof p.vary === 'object' && Object.values(p.vary).every((l) => Array.isArray(l) && l.length))) return 'vary must map props to lists';
+    return soundOk(p.sound, sounds) && soundOk(p.homeSound, sounds) ? null : 'unknown sound';
   },
-  canDrag: () => false,   // P1.9: dragging from a spawner clones a new thing
-  onTap(e, rx, p) {
-    const out = inRoom(rx.state, rx.room.id).filter((x) => x.props.from === e.id).length;
-    if (out >= p.max) {
-      rx.shake();
-      rx.play('boing', { pitch: 0.8 });
-      rx.burst('puff', { count: 4 });
-      return true;
-    }
+  canDrag: () => false,   // the spawner stays put; a drag on it pulls out a clone (dragOut)
+  // A drag that starts on the spawner: a new clone appears under the finger
+  // and the finger carries it (view.js). The room's cap is kept after.
+  dragOut(e, rx, p) {
     const kind = pick(p.kinds, rx.random);
     const id = rx.newId();
-    const x = e.x + (rx.random() < 0.5 ? -1 : 1) * (p.spread * (0.6 + rx.random() * 0.4));
-    const spot = rx.settleAt({ id, kind }, x, e.y, { floorJitter: true });
-    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: { from: e.id } })) return false;
-    rx.popFrom(id, e.x, e.y - rx.size().h);
+    const s = rx.catalog.sprite(kind);
+    const info = rx.info || {};
+    // Under the finger (its body centered on it), where the drag is now.
+    const fx = typeof info.x === 'number' ? info.x : rx.where().x;
+    const fy = typeof info.y === 'number' ? info.y : rx.where().y - 40;
+    const x = Math.round(Math.max(s.w / 2, Math.min(rx.room.def.width - s.w / 2, fx)));
+    const y = Math.round(Math.max(s.h, Math.min(1000, fy + s.h * 0.45)));
+    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x, y, props: Object.assign({ from: e.id }, varyProps(p, rx.random)) })) return null;
+    rx.play(p.sound, { pitch: 1.15 });
+    rx.squish({ amount: 0.7 });
+    rx.burst('sparkle', { count: 4 });
+    rx.enforceCap([id]);
+    return id;
+  },
+  // A tap pops one out onto a free spot nearby.
+  onTap(e, rx, p) {
+    const kind = pick(p.kinds, rx.random);
+    const id = rx.newId();
+    const at = rx.where();
+    const [spot] = rx.spots([{ id, kind }], { from: at });
+    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: Object.assign({ from: e.id }, varyProps(p, rx.random)) })) return false;
+    rx.popFrom(id, at.x, at.y - rx.size().h);
     rx.play(p.sound);
     rx.squish({ amount: 1.2 });
     rx.burst('sparkle', { count: 6 });
+    rx.enforceCap([id]);
+    return true;
+  },
+  accepts: (target, item, p) => isCloneFor(target, item, p),
+  // A clone (of this spawner, or of a kind it gives out) dropped on it goes home.
+  receive(target, item, rx, p) {
+    if (!isCloneFor(target, item, p)) return null;
+    rx.goHome(item.id, { to: target.id });
+    rx.play(p.homeSound, { pitch: 1.2 });
+    rx.squish({ amount: 1.1 });
+    return 'accept';
+  },
+});
+
+defineBehavior('variant', {
+  params: {
+    key: 'color',       // the prop whose value is the look name
+  },
+  look: (e, p) => (typeof e.props[p.key] === 'string' ? e.props[p.key] : null),
+});
+
+defineBehavior('peek', {
+  params: {
+    sound: 'whoosh',
+    height: 0.6,        // how far the things inside hop up (fraction of their height)
+  },
+  check: (p, { sounds }) => (soundOk(p.sound, sounds) ? null : 'unknown sound ' + p.sound),
+  onTap(e, rx, p) {
+    if (!rx.children().length) return false;
+    rx.hopKids({ height: p.height });
+    rx.play(p.sound, { pitch: 1.3 });
+    rx.squish({ amount: 0.6 });
     return true;
   },
 });

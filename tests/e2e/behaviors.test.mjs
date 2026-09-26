@@ -217,16 +217,12 @@ describe('containers: accept by tag, refuse with a bounce-back, spill (ipad-air)
     assert.ok(Math.abs(rect - feet.y) < 2, 'drawn back at its spot');
   });
 
-  it('the bowl accepts an apple: it goes in and the bowl fills up', async () => {
-    const bowl0 = await ent(page, ids.bowl);
+  it('the bowl accepts an apple: it goes in and peeks over the rim (P1.9 heap)', async () => {
     const r = await dropOnto(page, ids.apple, ids.bowl);
     assert.deepEqual(r.via, ['container:accept']);
     const apple = await ent(page, ids.apple);
     assert.equal(apple.parent, ids.bowl);
-    assert.equal(apple.drawn, false, 'inside the bowl');
-    const bowl = await ent(page, ids.bowl);
-    assert.notEqual(bowl.spriteKey, bowl0.spriteKey);
-    assert.match(bowl.spriteKey, /soup/);
+    assert.equal(await page.eval((i) => window.__scene.view.parentOf(i), ids.apple), ids.bowl, 'drawn inside the bowl');
     await page.screenshot('behaviors-bowl-filled');
   });
 
@@ -248,14 +244,14 @@ describe('containers: accept by tag, refuse with a bounce-back, spill (ipad-air)
   it('contents survive a reload; tapping the bowl and long-pressing the jar spill them out', async () => {
     await page.goto('index.html?room=catalog');
     assert.equal((await ent(page, ids.apple)).parent, ids.bowl);
-    assert.match((await ent(page, ids.bowl)).spriteKey, /soup/);
+    assert.equal(await page.eval((i) => window.__scene.view.parentOf(i), ids.apple), ids.bowl);
     const r = await tapEntity(page, ids.bowl);
     assert.deepEqual(r.via, ['spill']);
-    await page.waitFor(`!!window.__scene.view.viewOf(${JSON.stringify(ids.apple)})`);
+    await page.waitFor(`!window.__scene.view.parentOf(${JSON.stringify(ids.apple)})`);
     const apple = await ent(page, ids.apple);
     assert.equal(apple.parent, null);
     assert.ok(apple.y === 540 || (apple.y >= 700 && apple.y <= 960), 'landed on the counter or the floor');
-    assert.doesNotMatch((await ent(page, ids.bowl)).spriteKey, /soup/);
+    assert.equal(await page.eval((i) => window.__scene.view.parentOf(i), ids.apple), null, 'drawn loose again');
 
     await idle(page);
     const jar = await ent(page, ids['cookie-jar']);

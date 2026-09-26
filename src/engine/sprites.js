@@ -5,7 +5,8 @@
 //
 //   spriteFor(kind, props) -> { key, w, h, sound, draw: 'shape' | 'img', ... }
 //     an 'img' sprite has `src` and optionally `img: {left, top, w, h}`, the
-//     image's box inside the w x h entity box (for an off-center anchor)
+//     image's box inside the w x h entity box (for an off-center anchor);
+//     a 'custom' sprite has paint(bodyEl), which draws it (characters)
 //   addSpriteSource(fn)     fn(kind, props) -> sprite | null, tried before the placeholders
 //   paintSprite(bodyEl, sprite)   (re)draw a sprite into a view's body element
 //
@@ -67,6 +68,13 @@ export function spriteFor(kind, props = {}) {
 export function paintSprite(body, sprite) {
   body.textContent = '';
   const st = body.style;
+  if (sprite.draw === 'custom') {
+    // Drawn by its owner (a live SVG character): paint(body) fills it.
+    body.className = 'ent-body ent-custom';
+    st.background = '';
+    sprite.paint(body);
+    return;
+  }
   if (sprite.draw === 'img') {
     body.className = 'ent-body ent-img';
     st.background = '';

@@ -37,7 +37,7 @@ async function crashAndReopen(page) {
   page.errors.splice(page.errors.indexOf('renderer crashed'), 1);
   for (let attempt = 0; ; attempt++) {
     await new Promise((r) => setTimeout(r, 300));
-    try { await page.goto('index.html'); return; } catch (err) {
+    try { await page.goto('index.html?room=buddy'); return; } catch (err) {
       if (attempt >= 3 || !/ERR_ABORTED/.test(err.message)) throw err;
     }
   }
@@ -45,7 +45,7 @@ async function crashAndReopen(page) {
 
 describe('persistence (real IndexedDB)', () => {
   let page;
-  before(async () => { page = await openPage({ viewport: 'ipad-air' }); });
+  before(async () => { page = await openPage({ viewport: 'ipad-air', path: 'index.html?room=buddy' }); });
   after(async () => { if (page) await page.close(); });
 
   it('boots on IndexedDB with a stable device id', async () => {
@@ -53,14 +53,14 @@ describe('persistence (real IndexedDB)', () => {
     assert.equal(r.mode, 'idb');
     assert.match(r.device, /^[0-9a-z]{6}$/);
     assert.equal(r.recovered, false);
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
     assert.equal(await page.eval(() => window.__persist.device), r.device, 'same device id after reload');
   });
 
   it('keeps state across a reload', async () => {
     assert.equal(await page.eval(squishes), '0');
     await tapTimes(page, 3, '3');
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
     assert.equal(await page.eval(squishes), '3');
     assert.equal(await page.eval(storedSquishes), 3);
     assert.deepEqual(page.errors, []);
@@ -108,7 +108,7 @@ describe('persistence (real IndexedDB)', () => {
       };
       req.onerror = () => reject(req.error);
     }));
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
     const r = await page.eval(async () => {
       const backups = await new Promise((resolve) => {
         const req = indexedDB.open('ourtown');
@@ -129,7 +129,7 @@ describe('persistence (real IndexedDB)', () => {
     await page.screenshot('persist-recovered');
     // And the fresh world saves normally again.
     await tapTimes(page, 2, '2');
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
     assert.equal(await page.eval(squishes), '2');
     assert.equal(await page.eval(() => window.__persist.recovered), false);
   });
@@ -182,7 +182,7 @@ describe('persistence (real IndexedDB)', () => {
       rmSync(dir, { recursive: true, force: true });
     }
     assert.equal(await page.eval(storedSquishes), 2, 'store holds the imported world');
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
     assert.equal(await page.eval(squishes), '2', 'imported world survives a reload');
 
     // A file from a newer app version is refused and changes nothing.
@@ -219,14 +219,14 @@ describe('persistence with no storage (private mode)', () => {
     await page.send('Page.addScriptToEvaluateOnNewDocument', {
       source: "IDBFactory.prototype.open = function () { throw new DOMException('The operation is insecure.', 'SecurityError'); };",
     });
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
   });
   after(async () => { if (page) await page.close(); });
 
   it('plays normally and simply forgets on reload', async () => {
     assert.equal(await page.eval(() => window.__persist.mode), 'memory');
     await tapTimes(page, 2, '2');
-    await page.goto('index.html');
+    await page.goto('index.html?room=buddy');
     assert.equal(await page.eval(squishes), '0');
     assert.deepEqual(page.errors, []);
   });

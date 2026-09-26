@@ -22,6 +22,7 @@ export const P = {
   chalk: '#56645D',
   denim: '#7F9FC4', denimDeep: '#6886AE', brown: '#8C6E5C', brownDeep: '#735746',
   mouth: '#9C4852', tongue: '#EE9A9C',
+  nightSky: '#3A4170', nightSkyDeep: '#2E3460',   // the city map at night (rooms/city.mjs)
 };
 
 // UI buttons are the only saturated colours in the game.

@@ -252,3 +252,138 @@ body {
 .ph-plant .leaf { width: 70px; height: 120px; background: #2d6a4f; border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%; border: 4px solid #1b4332; }
 .ph-plant .leaf.a { left: 10px; top: 0; transform: rotate(-20deg); }
 .ph-plant .leaf.b { left: 60px; top: 10px; transform: rotate(18deg); }
+
+/* ---- rooms from the art pipeline: an <img> filling its art box ---- */
+.art-img img { display: block; width: 100%; height: 100%; }
+
+/* ---- city map (src/scenes/city.js, P1.13) ----
+   Each art piece holds .city-body (the thing that bounces or turns; its
+   transform-origin is the feet, or the pivot from the manifest) with the day
+   image and, stacked on top, the night image (opacity cross-fade only). */
+.city-static { pointer-events: none; }
+.city-body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 100%;
+}
+.city-body img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.city-body img:not([src]) { visibility: hidden; }
+
+/* ---- UI buttons (docs/STYLE.md section 7): big, round, saturated, in the
+   corners, above the art, no outline and no text. The ring and the drop
+   shadow sit on the (still) button; only the face squishes. ---- */
+.ui-btn {
+  position: absolute;
+  z-index: 10;
+  width: max(72px, 6.45vw);
+  height: max(72px, 6.45vw);
+  border-radius: 50%;
+  touch-action: none;
+}
+.ui-btn::before {             /* soft drop shadow: a static disc, black at 16% */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.16);
+}
+.ui-btn-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: max(5px, 0.59vw) solid #fff;
+  overflow: hidden;
+  transform-origin: 50% 60%;
+}
+.ui-btn-face::after {         /* the subtle darker lower half */
+  content: "";
+  position: absolute;
+  left: -10%;
+  top: 52%;
+  width: 120%;
+  height: 90%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.08);
+}
+.ui-btn svg {
+  position: absolute;
+  left: 22%;
+  top: 20%;
+  width: 56%;
+  height: 56%;
+  fill: #fff;
+  z-index: 1;
+}
+.ui-map {
+  left: calc(var(--safe-left) + max(14px, 1.2vw));
+  top: calc(var(--safe-top) + max(14px, 1.2vw));
+}
+.ui-map .ui-btn-face { background: #F79A4B; }
+
+/* ---- town transition (src/scenes/town.js): a dot that grows over the screen ---- */
+.town-iris {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;          /* catches taps while visible: nothing reacts mid-transition */
+}
+.town-iris-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #FBF3E8;
+  transform: scale(0);
+}
+
+/* Characters (src/engine/characters.js): live SVG in an entity body. The
+   breathing is one composited CSS animation per character (transform on an
+   HTML wrapper, random negative delay set inline); offscreen characters and
+   hidden pages pause it. Blink = the closed eyes shown by a class. */
+.ent-custom { overflow: visible; }
+.char-bob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: char-breathe 1.8s ease-in-out infinite alternate;
+}
+.char-bob svg { display: block; overflow: visible; }
+/* Touch goes to what is painted (a hat, a held cupcake, an arm), not the svg's box. */
+.char-bob, .char-bob svg { pointer-events: none; }
+.char-bob svg * { pointer-events: auto; }
+.char-bob.char-off, .chars-paused .char-bob, .char-bob.char-lifted { animation-play-state: paused; }
+@keyframes char-breathe {
+  from { transform: scale(1, 1); }
+  to { transform: scale(1.012, 1.024); }
+}
+.char-svg [data-slot="blink"] { display: none; }
+.char-svg.blink [data-slot="blink"] { display: inline; }
+.char-svg.blink [data-slot="eyes"] { display: none; }
+/* Test room seats (P1.10): a bench, a stool and a sofa. */
+.ph-bench .top { left: 0; top: 0; width: 100%; height: 22px; background: #c08552; border: 4px solid #6f3b12; border-radius: 8px; box-sizing: border-box; }
+.ph-bench .leg, .ph-stool .leg { top: 18px; bottom: 0; width: 16px; background: #6f3b12; }
+.ph-bench .leg.l { left: 30px; }
+.ph-bench .leg.r { right: 30px; }
+.ph-stool .top { left: 0; top: 0; width: 100%; height: 20px; background: #e76f51; border: 4px solid #7f2f1d; border-radius: 10px; box-sizing: border-box; }
+.ph-stool .leg.l { left: 12px; }
+.ph-stool .leg.r { right: 12px; }
+.ph-sofa .back { left: 22px; right: 22px; top: 0; height: 90px; background: #7fb7be; border: 4px solid #3d6f75; border-radius: 30px 30px 8px 8px; box-sizing: border-box; }
+.ph-sofa .seat { left: 10px; right: 10px; top: 74px; height: 64px; background: #9fd0d6; border: 4px solid #3d6f75; border-radius: 16px; box-sizing: border-box; }
+.ph-sofa .arm { top: 50px; width: 44px; height: 100px; background: #7fb7be; border: 4px solid #3d6f75; border-radius: 22px; box-sizing: border-box; }
+.ph-sofa .arm.l { left: 0; }
+.ph-sofa .arm.r { right: 0; }

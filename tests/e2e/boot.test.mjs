@@ -1,5 +1,6 @@
 // End-to-end: the boot stage loads cleanly on an iPad-sized touch viewport and
-// the placeholder buddy reacts to a real (trusted) touch tap.
+// the retired placeholder buddy (now at ?room=buddy; the default scene is the
+// city map, tests/e2e/city.test.mjs) reacts to a real (trusted) touch tap.
 
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -10,7 +11,7 @@ const squishes = () => document.querySelector('.buddy').dataset.squishes;
 describe('boot stage (iPad Air, landscape, touch)', () => {
   let page;
   before(async () => {
-    page = await openPage({ viewport: 'ipad-air' });
+    page = await openPage({ viewport: 'ipad-air', path: 'index.html?room=buddy' });
     // Record what the page actually receives, to prove input arrives as touch pointers.
     await page.eval(() => {
       window.__seen = [];
@@ -145,7 +146,7 @@ describe('boot stage (iPad Air, landscape, touch)', () => {
 
 describe('boot stage (original iPad Pro 9.7", 4:3)', () => {
   let page;
-  before(async () => { page = await openPage({ viewport: 'ipad-pro-9.7' }); });
+  before(async () => { page = await openPage({ viewport: 'ipad-pro-9.7', path: 'index.html?room=buddy' }); });
   after(async () => { if (page) await page.close(); });
 
   it('letterboxes the stage and still reacts to a tap', async () => {

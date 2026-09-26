@@ -291,6 +291,367 @@
    ]
   }
  },
+ "map": {
+  "id": "city",
+  "width": 2400,
+  "height": 1000,
+  "canvas": {
+   "x": -100,
+   "y": -100,
+   "w": 2600,
+   "h": 1200
+  },
+  "pxPerUnit": 1.5,
+  "backdrop": {
+   "day": {
+    "top": "#CBE6F1",
+    "bottom": "#B9CDA4",
+    "horizon": 700
+   },
+   "night": {
+    "top": "#3A4170",
+    "bottom": "#576a89",
+    "horizon": 700
+   }
+  },
+  "layers": [
+   {
+    "id": "back",
+    "opaque": true,
+    "file": "assets/rooms/city/back.webp",
+    "bytes": 134756,
+    "px": [
+     3900,
+     1800
+    ],
+    "x": -100,
+    "y": -100,
+    "w": 2600,
+    "h": 1200,
+    "night": {
+     "file": "assets/rooms/city/back-night.webp",
+     "bytes": 107090
+    }
+   },
+   {
+    "id": "front",
+    "opaque": false,
+    "file": "assets/rooms/city/front.webp",
+    "bytes": 56424,
+    "px": [
+     3893,
+     450
+    ],
+    "x": -95.33,
+    "y": 762.67,
+    "w": 2595.33,
+    "h": 300,
+    "night": {
+     "file": "assets/rooms/city/front-night.webp",
+     "bytes": 42594
+    }
+   }
+  ],
+  "pieces": {
+   "sun": {
+    "file": "assets/rooms/city/sun.webp",
+    "bytes": 7864,
+    "px": [
+     194,
+     196
+    ],
+    "x": 467.33,
+    "y": 46.67,
+    "w": 129.33,
+    "h": 130.67,
+    "night": null,
+    "depth": 5,
+    "pivot": null,
+    "copies": null
+   },
+   "moon": {
+    "file": "assets/rooms/city/moon.webp",
+    "bytes": 8012,
+    "px": [
+     228,
+     222
+    ],
+    "x": 458,
+    "y": 38,
+    "w": 152,
+    "h": 148,
+    "night": null,
+    "depth": 5,
+    "pivot": null,
+    "copies": null
+   },
+   "birds": {
+    "file": "assets/rooms/city/birds.webp",
+    "bytes": 5848,
+    "px": [
+     294,
+     145
+    ],
+    "x": 1006.67,
+    "y": 103.33,
+    "w": 196,
+    "h": 96.67,
+    "night": {
+     "file": "assets/rooms/city/birds-night.webp",
+     "bytes": 4434
+    },
+    "depth": 6,
+    "pivot": null,
+    "copies": null
+   },
+   "cafe": {
+    "file": "assets/rooms/city/cafe.webp",
+    "bytes": 49204,
+    "px": [
+     645,
+     819
+    ],
+    "x": 66,
+    "y": 112,
+    "w": 430,
+    "h": 546,
+    "night": {
+     "file": "assets/rooms/city/cafe-night.webp",
+     "bytes": 41156
+    },
+    "depth": 640,
+    "pivot": null,
+    "copies": null
+   },
+   "cafe-door": {
+    "file": "assets/rooms/city/cafe-door.webp",
+    "bytes": 4096,
+    "px": [
+     148,
+     221
+    ],
+    "x": 328.67,
+    "y": 496.67,
+    "w": 98.67,
+    "h": 147.33,
+    "night": {
+     "file": "assets/rooms/city/cafe-door-night.webp",
+     "bytes": 3508
+    },
+    "depth": 641,
+    "pivot": [
+     333.2,
+     570.5
+    ],
+    "copies": null
+   },
+   "theater": {
+    "file": "assets/rooms/city/theater.webp",
+    "bytes": 47268,
+    "px": [
+     664,
+     821
+    ],
+    "x": 588.67,
+    "y": 110.67,
+    "w": 442.67,
+    "h": 547.33,
+    "night": {
+     "file": "assets/rooms/city/theater-night.webp",
+     "bytes": 57164
+    },
+    "depth": 640,
+    "pivot": null,
+    "copies": null
+   },
+   "theater-curtains": {
+    "file": "assets/rooms/city/theater-curtains.webp",
+    "bytes": 6552,
+    "px": [
+     258,
+     242
+    ],
+    "x": 724,
+    "y": 482.67,
+    "w": 172,
+    "h": 161.33,
+    "night": {
+     "file": "assets/rooms/city/theater-curtains-night.webp",
+     "bytes": 4960
+    },
+    "depth": 641,
+    "pivot": [
+     809.9,
+     494.2
+    ],
+    "copies": null
+   },
+   "construction": {
+    "file": "assets/rooms/city/construction.webp",
+    "bytes": 36472,
+    "px": [
+     824,
+     849
+    ],
+    "x": 1154.67,
+    "y": 113.33,
+    "w": 549.33,
+    "h": 566,
+    "night": {
+     "file": "assets/rooms/city/construction-night.webp",
+     "bytes": 26908
+    },
+    "depth": 640,
+    "pivot": null,
+    "copies": null
+   },
+   "crane-jib": {
+    "file": "assets/rooms/city/crane-jib.webp",
+    "bytes": 10966,
+    "px": [
+     462,
+     454
+    ],
+    "x": 1306,
+    "y": 19.33,
+    "w": 308,
+    "h": 302.67,
+    "night": {
+     "file": "assets/rooms/city/crane-jib-night.webp",
+     "bytes": 8622
+    },
+    "depth": 641,
+    "pivot": [
+     1543.5,
+     105
+    ],
+    "copies": null
+   },
+   "school": {
+    "file": "assets/rooms/city/school.webp",
+    "bytes": 45280,
+    "px": [
+     847,
+     850
+    ],
+    "x": 1716,
+    "y": 91.33,
+    "w": 564.67,
+    "h": 566.67,
+    "night": {
+     "file": "assets/rooms/city/school-night.webp",
+     "bytes": 38060
+    },
+    "depth": 640,
+    "pivot": null,
+    "copies": null
+   },
+   "school-bell": {
+    "file": "assets/rooms/city/school-bell.webp",
+    "bytes": 1912,
+    "px": [
+     67,
+     83
+    ],
+    "x": 1929.33,
+    "y": 168,
+    "w": 44.67,
+    "h": 55.33,
+    "night": {
+     "file": "assets/rooms/city/school-bell-night.webp",
+     "bytes": 1590
+    },
+    "depth": 641,
+    "pivot": [
+     1951.6,
+     172.2
+    ],
+    "copies": null
+   },
+   "bus": {
+    "file": "assets/rooms/city/bus.webp",
+    "bytes": 11878,
+    "px": [
+     577,
+     208
+    ],
+    "x": 1777.33,
+    "y": 663.33,
+    "w": 384.67,
+    "h": 138.67,
+    "night": {
+     "file": "assets/rooms/city/bus-night.webp",
+     "bytes": 12176
+    },
+    "depth": 790,
+    "pivot": null,
+    "copies": null
+   },
+   "lot": {
+    "file": "assets/rooms/city/lot.webp",
+    "bytes": 7820,
+    "px": [
+     359,
+     253
+    ],
+    "x": 41.33,
+    "y": 818.67,
+    "w": 239.33,
+    "h": 168.67,
+    "night": {
+     "file": "assets/rooms/city/lot-night.webp",
+     "bytes": 5686
+    },
+    "depth": 960,
+    "pivot": null,
+    "copies": [
+     [
+      41.33,
+      818.67
+     ],
+     [
+      384.33,
+      818.67
+     ],
+     [
+      727.33,
+      818.67
+     ],
+     [
+      1308.33,
+      818.67
+     ],
+     [
+      1651.33,
+      818.67
+     ],
+     [
+      1994.33,
+      818.67
+     ]
+    ]
+   },
+   "lostfound": {
+    "file": "assets/rooms/city/lostfound.webp",
+    "bytes": 6700,
+    "px": [
+     261,
+     212
+    ],
+    "x": 1049.33,
+    "y": 826,
+    "w": 174,
+    "h": 141.33,
+    "night": {
+     "file": "assets/rooms/city/lostfound-night.webp",
+     "bytes": 5502
+    },
+    "depth": 962,
+    "pivot": null,
+    "copies": null
+   }
+  }
+ },
  "props": {
   "mug": {
    "label": "mug",

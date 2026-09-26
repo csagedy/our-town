@@ -23,6 +23,7 @@
 </style>
 <body>
 <section id="room"><h2>Room depth layers (kitchen: back, counter, mid, front) with the cast between them</h2><div id="room-view"></div></section>
+<section id="map"><h2>City map (day and night; dashed box = the 1440-wide screen at camera 0)</h2><div id="map-view"></div></section>
 <section id="poses"><h2>Poses (2-segment limbs) × cast</h2><div id="pose-rows"></div></section>
 <section id="faces"><h2>Expressions × cast</h2><div id="face-rows"></div></section>
 <section id="outfits"><h2>Outfit pieces (wear slots) on each body</h2><div id="outfit-rows"></div></section>
@@ -77,6 +78,27 @@
     const scale = 1100 / c.w;
     document.getElementById('room-view').innerHTML = `<div class="room" style="width:${c.w}px;height:${c.h}px;zoom:${scale}">${html}
       <div style="left:${-c.x}px;top:${-c.y}px;width:1440px;height:1000px;outline:3px dashed rgba(61,44,41,.35)"></div></div>`;
+  }
+
+  // ---- city map: layers + pieces in draw order, day and night ----
+  {
+    const m = manifest.map, c = m.canvas;
+    const img = (file, x, y, w, h) => `<img src="${A + file}" style="left:${x - c.x}px;top:${y - c.y}px;width:${w}px;height:${h}px">`;
+    const scene = (night) => {
+      const items = [];
+      const [back, front] = m.layers;
+      items.push([0, img(night ? back.night.file : back.file, back.x, back.y, back.w, back.h)]);
+      for (const [id, p] of Object.entries(m.pieces)) {
+        if ((id === 'sun' && night) || (id === 'moon' && !night)) continue;
+        const file = night && p.night ? p.night.file : p.file;
+        for (const [x, y] of p.copies || [[p.x, p.y]]) items.push([p.depth, img(file, x, y, p.w, p.h)]);
+      }
+      items.push([1100, img(night && front.night ? front.night.file : front.file, front.x, front.y, front.w, front.h)]);
+      items.sort((a, b) => a[0] - b[0]);
+      return `<div class="room" style="width:${c.w}px;height:${c.h}px;zoom:${1500 / c.w};margin-bottom:8px">${items.map((i) => i[1]).join('')}
+        <div style="left:${-c.x}px;top:${-c.y}px;width:1440px;height:1000px;outline:4px dashed rgba(61,44,41,.4)"></div></div>`;
+    };
+    document.getElementById('map-view').innerHTML = scene(false) + scene(true);
   }
 
   // ---- poses ----

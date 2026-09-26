@@ -130,7 +130,7 @@
       "tags": ["dish", "container"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
-        { "use": "container", "accepts": ["food"], "capacity": 3, "look": "soup" },
+        { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "heap", "area": [0.12, 0.3, 0.88, 1], "scale": 0.8, "peek": 0.55 },
         { "use": "spill", "on": "tap" }
       ],
       "label": "Bowl",
@@ -188,14 +188,205 @@
     "toy-bin": {
       "ph": { "shape": "box", "fill": "#4d96ff" },
       "size": [160, 110],
-      "tags": ["spawner", "furniture"],
+      "tags": ["spawner", "container", "furniture"],
       "sounds": { "tap": "knock", "drop": "thud" },
       "behaviors": [
-        { "use": "spawner", "kinds": ["ball", "toy-car", "teddy"], "max": 5 }
+        { "use": "spawner", "kinds": ["ball", "toy-car", "teddy"] },
+        { "use": "container", "accepts": ["toy"], "capacity": 6, "layout": "interior", "area": [0.08, 0, 0.92, 1], "peek": 0.4, "scale": 0.8 }
       ],
       "label": "Toy Bin",
       "fixed": true,
       "home": { "room": "school/playground" }
+    },
+    "chef-hat": {
+      "ph": { "shape": "blob", "fill": "#FBF3E8" },
+      "size": [70, 60],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Chef Hat",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "crown": {
+      "ph": { "shape": "blob", "fill": "#DFB050" },
+      "size": [70, 50],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Crown",
+      "home": { "room": "theater/closet" }
+    },
+    "beanie": {
+      "ph": { "shape": "blob", "fill": "#8CBDB8" },
+      "size": [70, 50],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Beanie",
+      "home": { "room": "school/classroom" }
+    },
+    "headband": {
+      "ph": { "shape": "flat", "fill": "#F6D3CF" },
+      "size": [70, 30],
+      "tags": ["wear", "wearable:hat"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Headband",
+      "home": { "room": "school/classroom" }
+    },
+    "glasses": {
+      "ph": { "shape": "flat", "fill": "#57515A" },
+      "size": [70, 30],
+      "tags": ["wear", "wearable:face"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Glasses",
+      "home": { "room": "school/classroom" }
+    },
+    "hero-mask": {
+      "ph": { "shape": "flat", "fill": "#9A7A98" },
+      "size": [70, 30],
+      "tags": ["wear", "wearable:face"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Hero Mask",
+      "home": { "room": "theater/closet" }
+    },
+    "apron": {
+      "ph": { "shape": "box", "fill": "#F6D3CF" },
+      "size": [70, 90],
+      "tags": ["wear", "wearable:over"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Apron",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "towel-cape": {
+      "ph": { "shape": "blob", "fill": "#D98B64" },
+      "size": [90, 120],
+      "tags": ["wear", "wearable:back"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Towel Cape",
+      "home": { "room": "theater/closet" }
+    },
+    "hero-cape": {
+      "ph": { "shape": "blob", "fill": "#DC6B6E" },
+      "size": [90, 120],
+      "tags": ["wear", "wearable:back"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Hero Cape",
+      "home": { "room": "theater/closet" }
+    },
+    "tray": {
+      "ph": { "shape": "flat", "fill": "#e9c46a" },
+      "size": [176, 24],
+      "tags": ["dish", "tray", "container"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["dish", "food", "cup"], "capacity": 3, "layout": "row", "area": [0.06, 0.2, 0.94, 0.3] },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Tray",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "plate": {
+      "art": { "sprite": "plate" },
+      "ph": { "shape": "flat", "fill": "#f8f9fa" },
+      "size": [91, 20],
+      "tags": ["dish", "plate", "container"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "plate", "area": [0.16, 0.3, 0.84, 0.5], "scale": 0.85 },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Plate",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "basket": {
+      "ph": { "shape": "cup", "fill": "#c68b59" },
+      "size": [124, 84],
+      "tags": ["container", "basket", "bag"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food", "toy"], "capacity": 5, "layout": "interior", "area": [0.1, 0, 0.9, 1], "peek": 0.4, "scale": 0.8 },
+        { "use": "peek" },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Basket",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "fridge": {
+      "ph": { "shape": "box", "fill": "#dfe7ec" },
+      "size": [230, 330],
+      "tags": ["furniture", "appliance", "container"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food", "ingredient", "drink", "cup", "dish"], "capacity": 6, "layout": "shelves", "shelves": [0.3, 0.63, 0.94], "cols": 2, "area": [0.08, 0, 0.92, 1], "scale": 0.9 },
+        { "use": "wobble", "amount": 0.25, "sound": "knock" }
+      ],
+      "label": "Fridge",
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "egg-carton": {
+      "ph": { "shape": "box", "fill": "#f1e3c6" },
+      "size": [104, 38],
+      "tags": ["spawner", "carton"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["egg"], "sound": "pop" }
+      ],
+      "label": "Eggs",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "crayon": {
+      "ph": { "shape": "tall", "fill": "#ff595e", "looks": { "red": { "fill": "#ff595e" }, "orange": { "fill": "#ff924c" }, "yellow": { "fill": "#ffca3a" }, "green": { "fill": "#8ac926" }, "blue": { "fill": "#1982c4" }, "purple": { "fill": "#6a4c93" } } },
+      "size": [22, 74],
+      "tags": ["toy", "school", "crayon"],
+      "sounds": { "tap": "tap", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" },
+        { "use": "sound", "name": "plink", "pitches": [1, 1.12, 1.26, 1.5] }
+      ],
+      "label": "Crayon",
+      "home": { "spawner": "crayon-cup" }
+    },
+    "crayon-cup": {
+      "ph": { "shape": "cup", "fill": "#4d96ff" },
+      "size": [74, 72],
+      "tags": ["spawner", "school"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["crayon"], "vary": { "color": ["red", "orange", "yellow", "green", "blue", "purple"] }, "sound": "plink" }
+      ],
+      "label": "Crayons",
+      "home": { "room": "school/classroom" }
+    },
+    "brick-pile": {
+      "ph": { "shape": "blob", "fill": "#e76f51" },
+      "size": [130, 64],
+      "tags": ["spawner", "construction"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["blocks"], "sound": "knock" }
+      ],
+      "label": "Brick Pile",
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "pallet": {
+      "ph": { "shape": "flat", "fill": "#b08968" },
+      "size": [140, 22],
+      "tags": ["construction", "container"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "container", "accepts": ["buildpiece"], "capacity": 4, "layout": "stack", "area": [0.1, 0.2, 0.9, 0.35], "scale": 0.9 },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Pallet",
+      "home": { "room": "construction/yard" }
     }
   }
 }

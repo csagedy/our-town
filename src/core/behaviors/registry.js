@@ -15,6 +15,8 @@
 //     accepts(target, item, p),            optional: true if `target` wants drops at all (it becomes a drop target)
 //     receive(target, item, rx, p),        optional: 'accept' | 'refuse' | null (not mine) for a drop onto target
 //     canDrag(e, p),                       optional: false to pin it (spawners)
+//     dragOut(e, rx, p),                   optional: a drag that starts on it pulls out a NEW entity
+//                                          instead (spawners): spawn it and return its id, or null
 //     verbs: { name(e, rx, p) },           optional: actions other systems call (a character eats: 'bite')
 //   });
 //
@@ -32,7 +34,7 @@
 
 export const BEHAVIORS = Object.create(null);
 
-const HOOKS = ['check', 'look', 'onTap', 'onLongPress', 'accepts', 'receive', 'canDrag'];
+const HOOKS = ['check', 'look', 'onTap', 'onLongPress', 'accepts', 'receive', 'canDrag', 'dragOut'];
 
 /** Register a behavior. Throws on a duplicate name or a malformed definition (a bug). */
 export function defineBehavior(name, def) {

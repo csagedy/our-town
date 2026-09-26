@@ -5,7 +5,9 @@
 //   const input = createInput(stage);
 //   const off = input.register(el, {
 //     onTap(info), onLongPress(info),
-//     onDragStart(info)   // return false to refuse (e.g. a grab lease is busy)
+//     onDragStart(info)   // return false to refuse (e.g. a grab lease is busy), or
+//                         // {el, lift: {target, shadow}} when the finger carries another
+//                         // element (a spawner's new clone): it gets the lift feel instead
 //     onDragMove(info),   // every move, and when the camera pans under the finger
 //     onDragEnd(info),    // once; info.cancelled is true for a lost pointer
 //     lift: true,         // lift feel on [data-lift] / [data-lift-shadow] children
@@ -214,7 +216,7 @@ export function createInput(stage, opts = {}) {
   }
 
   function liftStart(g) {
-    const p = liftParts(g.reg);
+    const p = g.carry && g.carry.lift ? g.carry.lift : liftParts(g.reg);
     g.lift = p;
     if (!p) return;
     const { target, shadow } = p;
@@ -328,10 +330,12 @@ export function createInput(stage, opts = {}) {
   // ---- drag ----
   function startDrag(g) {
     clearTimeout(g.timer);
-    if (call(g.reg.h.onDragStart, info(g)) === false) { g.state = 'dead'; return; }
+    const r = call(g.reg.h.onDragStart, info(g));
+    if (r === false) { g.state = 'dead'; return; }
+    g.carry = r && typeof r === 'object' && r.el ? r : null;
     g.state = 'drag';
     g.tilt = null;
-    const el = g.reg.el;
+    const el = g.carry ? g.carry.el : g.reg.el;
     el.dataset.dragging = '';
     el.style.willChange = 'transform';
     liftStart(g);
@@ -351,7 +355,7 @@ export function createInput(stage, opts = {}) {
 
   function endDrag(g, cancelled) {
     clearTimeout(g.still);
-    const el = g.reg.el;
+    const el = g.carry ? g.carry.el : g.reg.el;
     delete el.dataset.dragging;
     el.style.willChange = '';
     liftEnd(g);

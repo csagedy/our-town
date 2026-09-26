@@ -19,7 +19,7 @@ const AUDIO = './src/audio/index.js';
 
 describe('audio on the boot stage (iPad Air, touch)', () => {
   let page;
-  before(async () => { page = await openPage({ viewport: 'ipad-air' }); });
+  before(async () => { page = await openPage({ viewport: 'ipad-air', path: 'index.html?room=buddy' }); });
   after(async () => { if (page) await page.close(); });
 
   const info = () => page.eval(async (url) => {

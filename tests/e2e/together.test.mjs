@@ -39,8 +39,8 @@ describe('two iPads together (real WebRTC, copy/paste pairing)', () => {
 
   before(async () => {
     [zoe, ian] = await Promise.all([
-      openPage({ viewport: 'ipad-air', path: 'index.html?together' }),
-      openPage({ viewport: 'ipad-pro-9.7', path: 'index.html?together' }),
+      openPage({ viewport: 'ipad-air', path: 'index.html?room=buddy&together' }),
+      openPage({ viewport: 'ipad-pro-9.7', path: 'index.html?room=buddy&together' }),
     ]);
     await Promise.all([zoe, ian].map(noCameraButPermission));
   });
@@ -130,8 +130,8 @@ describe('guest side of a dropped link', () => {
   let zoe, ian;
   before(async () => {
     [zoe, ian] = await Promise.all([
-      openPage({ viewport: 'ipad-air', path: 'index.html?together' }),
-      openPage({ viewport: 'ipad-air', path: 'index.html?together' }),
+      openPage({ viewport: 'ipad-air', path: 'index.html?room=buddy&together' }),
+      openPage({ viewport: 'ipad-air', path: 'index.html?room=buddy&together' }),
     ]);
     await Promise.all([zoe, ian].map(noCameraButPermission));
   });
@@ -173,7 +173,7 @@ describe('guest side of a dropped link', () => {
     assert.equal(await ian.eval(() => JSON.stringify(window.__store.state)), own);
     assert.equal(await ian.eval(squishes), '1');
     // And the save on disk is his own town too.
-    await ian.goto('index.html');
+    await ian.goto('index.html?room=buddy');
     assert.equal(await ian.eval(squishes), '1');
     assert.equal(await ian.eval(() => Object.keys(window.__store.state.entities).length), 1);
     assert.deepEqual(ian.errors, []);

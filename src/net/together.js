@@ -2,7 +2,8 @@
 // only with the hidden ?together URL flag, until the parent menu (P1.16)
 // offers it.
 //
-// The shared demo is the boot buddy: its squish count is a store entity, so
+// The shared demo is the boot buddy (?room=buddy&together; the city map's
+// night toggle is a mapSet op, so it is shared with no extra code): its squish count is a store entity, so
 // both iPads show the same count and a tap on either one counts (and makes
 // the buddy squish on the other iPad too).
 //
@@ -44,7 +45,7 @@ export function startTogether({ store, persist, scene, doc = document }) {
   // --- the buddy follows the shared world
   function showBuddy() {
     const b = liveBuddy(store.state);
-    if (!b || !scene) return;
+    if (!b || !scene || !scene.el) return;   // the buddy room only (?room=buddy)
     scene.el.dataset.entity = b.id;
     // A guest's own taps are in flight to the host: keep showing the count
     // it already shows, or the number would flicker back while it travels.
@@ -55,7 +56,7 @@ export function startTogether({ store, persist, scene, doc = document }) {
   store.subscribe((state, env) => {
     showBuddy();
     if (env && env.device !== store.device && env.op === 'inc' && env.args.path === 'props.squishes' &&
-        scene && scene.react && scene.el.dataset.entity === env.args.id) {
+        scene && scene.react && scene.el && scene.el.dataset.entity === env.args.id) {
       scene.react();   // the other kid squished it
     }
   });

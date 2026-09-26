@@ -30,7 +30,6 @@ const blobScreen = (page, i, ox = 0, oy = 0) => page.eval(([n, a, b]) => {
   return window.__stage.worldToScreen(s.x + a, s.y + b);
 }, [i, ox, oy]);
 
-const toWorld = (page, p) => page.eval(([x, y]) => window.__stage.screenToWorld(x, y), [p.x, p.y]);
 const cam = (page) => page.eval(() => window.__stage.camera.x);
 const settled = () => !window.__stage.camera.moving && !window.__stage.camera.dragging;
 const debug = (page) => page.eval(() => window.__input.debug());
@@ -41,8 +40,13 @@ async function assertUnderFinger(page, i, grab, p, msg) {
   // Chrome delivers pointermove aligned to animation frames: let the last
   // queued move reach the page before measuring (it may lag on a busy machine).
   await page.frames(2);
-  const w = await toWorld(page, p);
-  const b = await blob(page, i);
+  // Read the finger's world point and the blob in ONE eval: during edge
+  // auto-pan the camera moves every frame, and two separate evals can land on
+  // either side of a frame (seen as a steady 18.45 units off on a busy machine).
+  const { w, b } = await page.eval(([x, y, n]) => {
+    const s = window.__scene.demo.blobs[n].state;
+    return { w: window.__stage.screenToWorld(x, y), b: { x: s.x, y: s.y } };
+  }, [p.x, p.y, i]);
   const err = Math.hypot(b.x + grab.x - w.x, b.y + grab.y - w.y);
   assert.ok(err < 0.01, `${msg}: blob ${i} is ${err} units off the finger`);
   // And the DOM agrees: the finger is over the blob.
@@ -54,16 +58,19 @@ async function assertUnderFinger(page, i, grab, p, msg) {
 }
 
 /** One-finger touch path: down at from, steps to `to`, optional holds, optional end. */
+// Events carry gesture-relative timestamps (page.gesture), so the page sees
+// the scripted timing even if this process runs late on a busy machine.
 async function touchPath(page, from, to, { steps = 10, stepMs = 16, holdStartMs = 0, holdEndMs = 0, end = 'touchEnd', id = 0 } = {}) {
-  await page.touch('touchStart', [pt(from.x, from.y, id)]);
+  const g = page.gesture();
+  await g('touchStart', [pt(from.x, from.y, id)], 0);
   if (holdStartMs) await sleep(holdStartMs);
   for (let k = 1; k <= steps; k++) {
     const t = k / steps;
-    await page.touch('touchMove', [pt(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t, id)]);
+    await g('touchMove', [pt(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t, id)], holdStartMs + (k - 1) * stepMs);
     await sleep(stepMs);
   }
   if (holdEndMs) await sleep(holdEndMs);
-  if (end) await page.touch(end, []);
+  if (end) await g(end, [], holdStartMs + steps * stepMs + holdEndMs);
   else await page.frames(2);   // finger still down: let the frame-aligned moves arrive
 }
 
@@ -100,12 +107,18 @@ for (const name of ['ipad-pro-9.7', 'ipad-air', 'ipad-pro-12.9']) {
     it('a sloppy tap with 12pt of jitter is still a tap', async () => {
       const b0 = await blob(page, 1);
       const c = await blobScreen(page, 1);
-      await page.touch('touchStart', [pt(c.x, c.y)]);
-      for (const [dx, dy] of [[4, 3], [9, 6], [12, 0], [5, -8], [-8, 8.9], [-3, 11], [2, 4]]) {
-        await page.touch('touchMove', [pt(c.x + dx, c.y + dy)]);
-        await sleep(5);
-      }
-      await page.touch('touchEnd', []);
+      // A 40ms wiggle. The events carry their own 5ms-apart timestamps and are
+      // sent back to back without waiting for each reply: one round trip per
+      // event could add up past the long-press timer (500ms, real time in the
+      // page) on a busy machine and turn the tap into a long-press.
+      const g = page.gesture();
+      let t = 0;
+      await Promise.all([
+        g('touchStart', [pt(c.x, c.y)], 0),
+        ...[[4, 3], [9, 6], [12, 0], [5, -8], [-8, 8.9], [-3, 11], [2, 4]]
+          .map(([dx, dy]) => g('touchMove', [pt(c.x + dx, c.y + dy)], t += 5)),
+        g('touchEnd', [], t + 5),
+      ]);
       const b1 = await blob(page, 1);
       assert.equal(b1.taps, b0.taps + 1, 'counted as a tap');
       assert.deepEqual([b1.drags, b1.commits, b1.x, b1.y], [b0.drags, b0.commits, b0.x, b0.y], 'did not drag');

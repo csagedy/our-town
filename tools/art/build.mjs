@@ -18,6 +18,7 @@ import { openPage } from '../harness.mjs';
 import { P, ART_SCALE, INK_W, css, scaleStrokes } from './palette.mjs';
 import { buildRig } from './characters/rig.mjs';
 import { ROOM as KITCHEN } from './rooms/kitchen.mjs';
+import { CITY } from './rooms/city.mjs';
 import { PROPS } from './props/starter.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -81,6 +82,65 @@ export async function buildRoom(page, room, written) {
   };
 }
 
+/**
+ * The city map (rooms/city.mjs): static layers plus separate pieces, each in a
+ * day and a night variant (docs/STYLE.md section 9, "The city map"). Night =
+ * the day art through the build-time NIGHT colour filter, plus its lit extras;
+ * it is rasterized in exactly the day variant's box so the two swap in place.
+ */
+export async function buildMap(page, map, written) {
+  const k = ART_SCALE * ROOM_PX;
+  const { x: cx, y: cy, w: cw, h: ch } = map.canvas;
+  const place = (inner) => `<g id="art"><g transform="translate(${map.offset[0]} ${map.offset[1]}) scale(${ART_SCALE})"><g class="o">${inner}</g></g></g>`;
+  const toWorld = (x, y) => [round(x * ART_SCALE + map.offset[0], 2), round(y * ART_SCALE + map.offset[1], 2)];
+  const night = (art, lit, sky = '') => `${sky}<g filter="url(#night)">${art}</g><g class="lit">${lit}</g>`;
+  const dir = path.join(ASSETS, 'rooms', map.id);
+  // Day and night are rasterized in ONE box (the union of both crops), so
+  // the two images swap in place even where a night glow reaches past the day art.
+  const job = (inner, box, opaque) => ({
+    svg: svgFor(box || [cx, cy, cw, ch], place(inner), k, map.defs), unit: ROOM_PX, formats: ['webp'], quality: ROOM_QUALITY,
+    crop: opaque || box ? null : { pad: 4, clamp: [cx, cy, cw, ch] }, opaque: opaque ? P.cream : null,
+  });
+  const write = (name, res) => {
+    const file = path.join(dir, `${name}.webp`);
+    const buf = Buffer.from(res.data.webp, 'base64');
+    if (writeIfChanged(file, buf)) written.push(file);
+    return { file: rel(file), bytes: buf.length };
+  };
+  async function variants(name, day, nightSvg, opaque) {
+    let d = await rasterize(page, job(day, null, opaque));
+    let n = nightSvg != null ? await rasterize(page, job(nightSvg, null, opaque)) : null;
+    if (n && !opaque) {
+      const [a, b] = [d.box, n.box];
+      const x0 = Math.min(a[0], b[0]), y0 = Math.min(a[1], b[1]);
+      const box = [x0, y0, Math.max(a[0] + a[2], b[0] + b[2]) - x0, Math.max(a[1] + a[3], b[1] + b[3]) - y0];
+      if (box.join() !== a.join()) d = await rasterize(page, job(day, box, false));
+      if (box.join() !== b.join()) n = await rasterize(page, job(nightSvg, box, false));
+    }
+    const out = { ...write(name, d), px: d.px,
+      x: round(d.box[0], 2), y: round(d.box[1], 2), w: round(d.box[2], 2), h: round(d.box[3], 2) };
+    out.night = n ? write(`${name}-night`, n) : null;
+    return out;
+  }
+  const layers = [];
+  for (const L of map.layers) {
+    const { art, lit } = map.collect(L.art);
+    const day = (L.sky ? L.sky() : '') + art;
+    const v = await variants(L.id, day, night(art, lit, L.nightSky ? L.nightSky() : ''), !!L.opaque);
+    layers.push({ id: L.id, opaque: !!L.opaque, ...v });
+  }
+  const pieces = {};
+  for (const piece of map.pieces) {
+    const { art, lit } = map.collect(piece.art);
+    const v = await variants(piece.id, art, piece.noNight ? null : night(art, lit), false);
+    // Copies: the art is drawn at the first copy's spot; the others are offsets from it.
+    const c0 = piece.copies && piece.copies[0];
+    const copies = c0 ? piece.copies.map(([x, y]) => [round(v.x + (x - c0[0]) * ART_SCALE, 2), round(v.y + (y - c0[1]) * ART_SCALE, 2)]) : null;
+    pieces[piece.id] = { ...v, depth: piece.depth, pivot: piece.pivot ? toWorld(...piece.pivot) : null, copies };
+  }
+  return { id: map.id, width: map.width, height: 1000, canvas: map.canvas, pxPerUnit: ROOM_PX, backdrop: map.backdrop, layers, pieces };
+}
+
 async function buildProps(page, written) {
   const k = ART_SCALE * PROP_PX;
   const unit = ART_SCALE * PROP_PX;                     // output px per art unit
@@ -141,6 +201,7 @@ export async function build({ sheet = true } = {}) {
   const page = await openPage({ root: ROOT, path: 'tools/art/raster.html' });
   try {
     const kitchen = await buildRoom(page, KITCHEN, written);
+    const city = await buildMap(page, CITY, written);
     const props = await buildProps(page, written);
     const manifest = {
       schema: 1,
@@ -157,6 +218,7 @@ export async function build({ sheet = true } = {}) {
         wear: Object.fromEntries(Object.entries(rig.wear).map(([id, w]) => [id, w.slot])),
       },
       rooms: { kitchen },
+      map: city,
       props,
     };
     const mFile = path.join(ASSETS, 'art-manifest.json');
