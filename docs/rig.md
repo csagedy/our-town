@@ -66,18 +66,20 @@ Back to front, as `renderCharacter()` emits them:
 
 | slot | fragments | starter pieces |
 |---|---|---|
-| `hat` | `head` | `beanie`, `chef-hat`, `crown`, `headband`, `hard-hat`, `cap`, `bow`, `hijab` (a headscarf: `hides: ['top', 'hair']`, it covers all the hair) |
+| `hat` | `head` | `beanie`, `chef-hat`, `crown`, `headband`, `hard-hat`, `cap`, `bow`, `hijab` (a headscarf: `hides: ['top', 'hair']`, it covers all the hair), `sun-hat` (P2d) |
 | `face` | `head` | `glasses`, `square-glasses`, `sunglasses`, `hero-mask` |
 | `top` | `torso`, `arm` | `tee-star`, `tee-stripe`, `tee-dots`, `hoodie`, `cardigan`, `chef-coat`, `sparkle-top`, `hero-suit` (a **costume**: see below) |
-| `over` | `torso` | `apron`, `safety-vest` |
+| `over` | `torso` | `apron`, `safety-vest`, `lanyard` and `smock` (P2d) |
 | `belt` | `torso` | `tool-belt` (P2c: band, buckle, two pouches with a hammer and a wrench, at the top's hem) |
 | `hands` | `hand`, `cuff` | `gloves` (P2c: `hand` replaces the bare mitten in the hand frame, authored for the right hand; `cuff` is in the forearm (`armL*`) frame, so both follow the 2-segment arm in every pose) |
 | `bottom` | `pelvis`, `leg` | `pants`, `leggings`, `shorts`, `skirt`, `tutu` |
 | `shoes` | `foot` | `sneakers`, `boots`, `sandals` |
-| `back` | `back`, `torso` | `towel-cape`, `hero-cape`, `wings` |
+| `back` | `back`, `torso` | `towel-cape`, `hero-cape`, `wings`, `school-backpack` (P2d: the bag in `back`, the straps in `torso`) |
 | held L / R | an SVG string per hand (`opts.held`) | any prop: see below |
 
 `rig.wear.<piece>` = `{slot, label, hides, colors, costume?}`. One piece per slot. A worn piece's `colors` are its defaults; the character's `colors` override them. `costume: true` (the `hero-suit`, original design: teal body, orange side panels and sleeves with teal cuffs, an orange disc with a butter star, tealDeep swirls; no web or spider motif) marks a `top` that can also be worn as a removable child over the character's own top (section 10).
+
+**Theater costumes (P2b.1)**, all in the existing slots (`tools/art/props/theater.mjs` names them in `wear`): costume tops (`costume: true`) `gown`, `royal-coat`, `knight-tunic`, `pirate-coat`, `star-dress`, `tuxedo`, `fairy-tutu`, `wizard-robe` (a dress, robe or coat keeps its skirt or tails in the `torso` fragment, so it covers the legs standing and walking and the legs draw over it when sitting); hats `pirate-hat`, `wizard-hat`, `top-hat`, `tiara`, `cat-ears` (with whiskers and a nose), `bunny-ears`, `lion-mane` (`hides: ['top', 'hair']`, a mane ring around the face); faces `masquerade`, `sparkle-mask`; over `feather-boa`; back `lightning-cape`. The fairy wings reuse `wings`, the crown `crown`, the sunglasses `sunglasses`, the hero set the site's `hero-cape`/`hero-mask`/`hero-suit`. They are not in the Character Maker's lists (`WEAR_ORDER`): they come from the theater closet.
 
 The `belt` and `hands` slots were added in P2c for the construction site's wearables (`tools/art/props/site.mjs` `wear`): the belt so it goes on together with a vest or an apron (it could not share `over`), the gloves because nothing else draws on the hands. Adding a slot means: a `WEAR` piece with that `slot`, its colour classes in `palette.mjs` `css()`, its fragments placed in `renderCharacter()`'s draw order (section 3), `SLOTS`, and (for a worn entity) `WORN` in `char-model.js`.
 

@@ -441,6 +441,119 @@ export const RECIPES = {
       tone(v, { type: 'triangle', f: 220, sweep: [[0.3, 90]], at: 1.1, dur: 0.34, peak: 0.18, attack: 0.01, filter: { type: 'lowpass', f: 900 } });
     },
   },
+  // P2c.2 the tower crane and the wrecking ball. The crane's motor: a soft,
+  // chuggy low hum (replayed about every 0.9 s while the crane moves, and
+  // stopped when it stops).
+  motor: {
+    dur: 1.15,
+    play(v) {
+      tone(v, {
+        type: 'triangle', f: 68, sweep: [[0.15, 82]], dur: 1.1, peak: 0.16, attack: 0.08, hold: 0.75,
+        vib: { rate: 9, depth: 6 }, filter: { type: 'lowpass', f: 420, fixed: true },
+      });
+      tone(v, { f: 136, dur: 1.1, peak: 0.05, attack: 0.08, hold: 0.75, vib: { rate: 9, depth: 10 } });
+      noise(v, { dur: 1.1, peak: 0.035, attack: 0.1, hold: 0.7, filter: { type: 'bandpass', f: 260, q: 1.4 } });
+    },
+  },
+  // The hook takes hold (or sets a load down): a heavy metal "clunk".
+  clunk: {
+    dur: 0.36,
+    play(v) {
+      tone(v, { f: 190, sweep: [[0.1, 90]], dur: 0.2, peak: 0.45, attack: 0.005 });
+      tone(v, { type: 'triangle', f: 880, sweep: [[0.08, 700]], dur: 0.3, peak: 0.06, attack: 0.005, filter: { type: 'lowpass', f: 2400 } });
+      noise(v, { dur: 0.05, peak: 0.16, filter: { type: 'bandpass', f: 1100, q: 1.3 } });
+    },
+  },
+  // The wrecking ball flying through the air: a big, low whoosh.
+  swoosh: {
+    dur: 0.95,
+    play(v) {
+      noise(v, {
+        dur: 0.9, peak: 0.42, attack: 0.3, hold: 0.1,
+        filter: { type: 'bandpass', f: 220, q: 1.1, sweep: [[0.4, 900], [0.88, 260]] },
+      });
+    },
+  },
+  // The ball hits the build: a cartoon BOOM (a deep drop, a rumble, a crack of wood).
+  boom: {
+    dur: 1.25,
+    play(v) {
+      tone(v, { f: 110, sweep: [[0.35, 46]], dur: 0.9, peak: 0.42, attack: 0.006 });
+      tone(v, { type: 'triangle', f: 72, sweep: [[0.5, 45]], dur: 1.1, peak: 0.2, attack: 0.01, filter: { type: 'lowpass', f: 300, fixed: true } });
+      noise(v, { dur: 1.0, peak: 0.26, attack: 0.006, filter: { type: 'lowpass', f: 900, q: 0.8, sweep: [[0.9, 120]] } });
+      noise(v, { dur: 0.08, peak: 0.16, filter: { type: 'bandpass', f: 1800, q: 1.2 } });
+    },
+  },
+  // Blocks landing all over: a little tumble of wooden knocks.
+  clatter: {
+    dur: 0.5,
+    play(v) {
+      [0, 0.07, 0.15, 0.22, 0.33].forEach((at, i) => {
+        tone(v, { type: 'triangle', f: 480 + v.rnd() * 260 - i * 30, sweep: [[0.04, 300]], at, dur: 0.08, peak: 0.24 - i * 0.03, filter: { type: 'lowpass', f: 2200 } });
+        noise(v, { at, dur: 0.03, peak: 0.07, filter: { type: 'bandpass', f: 1300, q: 1.5 } });
+      });
+    },
+  },
+  // P2b.1 theater crowd. Applause: three clap "sections" (one noise source
+  // each, band-passed at a different body, the claps are gain automation like
+  // the sizzle's crackles) that swell in and die away, over a soft room bed.
+  applause: {
+    dur: 2.45,
+    play(v) {
+      const t0 = v.t;
+      const END = 2.2;
+      const swell = (t) => (t < 0.35 ? 0.35 + (t / 0.35) * 0.65 : t < 1.2 ? 1 : Math.max(0.08, 1 - (t - 1.2) / (END - 1.2)));
+      for (const [f, q, peak, gap] of [[1050, 1.1, 0.34, 0.06], [1650, 1.3, 0.26, 0.05], [700, 0.9, 0.22, 0.075]]) {
+        const src = v.ctx.createBufferSource();
+        src.buffer = noiseBuffer(v.ctx);
+        src.loop = true;
+        const g = v.ctx.createGain();
+        g.gain.setValueAtTime(SILENT, t0);
+        let t = 0.01 + v.rnd() * 0.03;
+        while (t < END) {
+          const p = peak * swell(t) * (0.55 + v.rnd() * 0.45);
+          g.gain.setValueAtTime(SILENT, t0 + t);
+          g.gain.linearRampToValueAtTime(p, t0 + t + MIN_ATTACK);
+          g.gain.exponentialRampToValueAtTime(SILENT, t0 + t + 0.025 + v.rnd() * 0.02);
+          t += gap * (0.6 + v.rnd() * 0.8);
+        }
+        g.connect(v.out);
+        src.connect(filter(v, { type: 'bandpass', f, q }, g));
+        src.start(t0, v.rnd() * 0.9);
+        src.stop(t0 + END + 0.1);
+        v.track(src, t0 + END + 0.1);
+      }
+      noise(v, { dur: END, peak: 0.05, attack: 0.3, hold: 0.8, filter: { type: 'bandpass', f: 900, q: 0.6 } });
+      // one happy whistle from the back row
+      tone(v, { f: 1500, sweep: [[0.12, 2100], [0.3, 1800]], at: 0.5, dur: 0.34, peak: 0.045, attack: 0.02 });
+    },
+  },
+  // The audience goes "ooooh": a few soft voices on an "oo" vowel, gliding up and down.
+  ooh: {
+    dur: 1.35,
+    play(v) {
+      [196, 247, 294, 330].forEach((f, i) => {
+        const g = f * (0.98 + v.rnd() * 0.04);
+        tone(v, {
+          type: 'triangle', f: g, at: i * 0.03, dur: 1.15, peak: 0.1, attack: 0.16,
+          sweep: [[0.4, g * 1.22], [1.1, g * 0.88]],
+          vib: { rate: 5 + v.rnd() * 1.5, depth: 4 }, filter: { type: 'lowpass', f: 650, q: 1.2 },
+        });
+      });
+      noise(v, { dur: 1.0, peak: 0.03, attack: 0.2, filter: { type: 'lowpass', f: 500 } });
+    },
+  },
+  // Ta-da! A little fanfare when a costume goes on (G5 then a C6 + E6 chord).
+  tada: {
+    dur: 1.2, tuned: true,
+    play(v) {
+      tone(v, { type: 'triangle', f: pentatonicFreq(3), dur: 0.14, peak: 0.18, attack: 0.008, filter: { type: 'lowpass', f: 3000 } });
+      for (const [d, peak] of [[5, 0.2], [7, 0.12], [8, 0.08]]) {
+        tone(v, { type: 'triangle', f: pentatonicFreq(d), at: 0.16, dur: 0.9, peak, attack: 0.01, vib: { rate: 6, depth: 6 }, filter: { type: 'lowpass', f: 3200 } });
+      }
+      tone(v, { f: pentatonicFreq(10), at: 0.2, dur: 0.35, peak: 0.04, attack: 0.005 });
+    },
+  },
   doorbell: {
     dur: 1.45, tuned: true,
     play(v) {

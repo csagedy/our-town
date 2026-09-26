@@ -29,6 +29,12 @@
 //   mystery  a Mystery Dish: its look is its colour + bites, and its sprite is
 //            the composite of base + eyes + mouth + topper (src/core/mystery.js)
 //   drink    a drink in a glass (the smoothie): its colour until sipped
+//   pot      the saucepan (P2a.3): filled at the sink (props.water), its look
+//            is water, boiling while it heats, pasta once the pasta in it
+//            is cooked (the pasta is then drawn by the pot's art)
+//   tray     the baking tray (P2a.3): batter poured on is raw cookie dough
+//            (props.dough); baked it shows cookies; a tap tips the cookies
+//            off onto a free spot (a `cookies` dish, still warm)
 //
 // Pure except what the reaction context does.
 
@@ -37,7 +43,7 @@ import { mysteryLook, mysterySprite } from '../mystery.js';
 import {
   DONENESS_MAX, MIX_DONE, foodLook as lookOfFood, prepChain, cutIndex, isPeeled, donenessOf, colorOf,
   averageColor, blendHex, batterOf, mixState, BATTER_HEX, BATTER_ART, toRgb, toHex,
-  isMixed, smoothieOf, SMOOTHIE_HEX,
+  isMixed, smoothieOf, SMOOTHIE_HEX, potLook, TRAY_DISH,
 } from '../food.js';
 
 export { DONENESS_MAX };
@@ -55,6 +61,8 @@ const darker = (hex, k = 0.78) => toHex(toRgb(hex).map((v) => v * k));
 
 // Peeled looks without art: the whole look, paled (a peeled potato is cream).
 const PEEL_FILTER = 'sepia(0.2) saturate(0.55) brightness(1.16)';
+// A raw egg's yolk art before it cooks: paler, a little see-through.
+const RAW_FILTER = 'saturate(0.55) brightness(1.08) opacity(0.82)';
 // A chopped heap: five little pieces of the last cut look.
 const HEAP = [[0.27, 1.0, -18], [0.5, 1.03, 12], [0.73, 1.0, -6], [0.38, 0.7, 24], [0.62, 0.72, -28]];
 const HEAP_SCALE = 0.56;
@@ -146,6 +154,12 @@ defineBehavior('food', {
   look: (e, p) => lookOfFood(e.props, p, { inside: !!e.parent }),
   sprite(e, p, { catalog, look }) {
     if (!look) return null;
+    // A raw egg in a bowl or pan is its yolk art, glossy and pale until heat
+    // cooks it (P2a.3: raw -> fried -> toasty).
+    if (e.parent && p.crackIn && look === p.crackIn && !donenessOf(e.props)) {
+      const s = catalog.sprite(e.kind, look);
+      return s.draw === 'img' ? Object.assign({}, s, { key: s.key + ':raw', filter: RAW_FILTER }) : null;
+    }
     // A doneness tint ('chopped@2') applies on top of a drawn-up look.
     const at = look.indexOf('@');
     const name = at >= 0 ? look.slice(0, at) : look;
@@ -486,6 +500,61 @@ defineBehavior('sink', {
 });
 
 const getEntityOf = (rx, id) => rx.state.entities[id] || null;
+
+// ---------------------------------------------------------------------------
+// Heat (P2a.3): the saucepan and the baking tray. The heat loop is
+// src/scenes/cafe-heat.js; the rules are src/core/food.js.
+
+defineBehavior('pot', {
+  look: (e, p, w) => potLook(e.props, e.props.water ? w.children() : []),
+  layoutKids(parent, kids, lay) {
+    if (!parent.props.water) return;
+    // In the water: things bob low; cooked pasta is drawn by the pot's art.
+    const pasta = potLook(parent.props, kids) === 'pasta';
+    for (const k of kids) {
+      const L = lay.get(k.id);
+      if (!L) continue;
+      if (pasta && k.kind === 'pasta') L.hidden = true;
+      else L.y = r1(L.y + 8);
+    }
+  },
+});
+
+/** Tip a baked tray's cookies off onto a free spot: a warm `cookies` dish. */
+function tipCookies(e, rx, p) {
+  if (!e.props.dough || donenessOf(e.props) < 1) return false;
+  const id = rx.newId();
+  const at = rx.where();
+  const [spot] = rx.spots([{ id, kind: p.dish }], { from: { x: at.x + 40, y: at.y } });
+  const hotAt = typeof e.props.hotAt === 'number' ? e.props.hotAt : 0;
+  if (!rx.dispatch('spawn', { id, kind: p.dish, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: { hotAt, method: 'baked' } })) return false;
+  rx.set('dough', 0);
+  rx.set('cooked', 0);
+  rx.popFrom(id, at.x, at.y - 40);
+  rx.play('pop', { pitch: 1.1 });
+  rx.play('chime');
+  rx.squish({ amount: 1 });
+  rx.burst('sparkle', { count: 6 });
+  rx.burst('heart', { count: 2 });
+  rx.reason = 'cookies';
+  rx.result = id;
+  return true;
+}
+
+defineBehavior('tray', {
+  params: {
+    looks: ['raw', 'cookies', 'cookies', 'cookies'],   // the dough's look per doneness 0..3
+    dish: TRAY_DISH,                                   // what a tap tips off once it is baked
+  },
+  check(p, { kinds }) {
+    if (!isStrList(p.looks, DONENESS_MAX + 1)) return 'looks must list a look per doneness 0..3';
+    if (kinds && !kinds[p.dish]) return 'dish must be a catalog kind';
+    return null;
+  },
+  look: (e, p) => (e.props.dough ? p.looks[donenessOf(e.props)] : null),
+  onTap: tipCookies,
+  verbs: { tip: tipCookies },
+});
 
 // ---------------------------------------------------------------------------
 

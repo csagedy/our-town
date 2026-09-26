@@ -36,6 +36,16 @@
 <section id="site-zones"><h2>Construction site zones, one 1440-wide screen each (build yard, crane yard, dig pit + workshop; alternate states)</h2><div id="site-zone-view"></div></section>
 <section id="site-builds"><h2>Building pieces snapped on the 40-unit grid: a house, a tower, a bridge and a shop</h2><div id="site-build-view"></div></section>
 <section id="site-props"><h2>Construction site props: building pieces (paint variants), tools, wearables, hero set, treasures (red dot = anchor)</h2><div class="row" id="site-prop-row"></div></section>
+<section id="theater"><h2>Theater strip (2880 wide; dashed = the three camera stops: backstage, stage, audience + lobby). Top: default piece states (curtain open, starry backdrop, lights off). Bottom: alternate states (castle backdrop, pink spotlights, mic recording, trapdoor and trunk open, confetti, fog and snow on, boombox playing, ticket window open, poster pictures) with a show on</h2><div id="theater-view"></div></section>
+<section id="theater-zones"><h2>Theater zones, one 1440-wide screen each (backstage, stage, audience + lobby; show on)</h2><div id="theater-zone-view"></div></section>
+<section id="theater-states"><h2>The stage in more states: half curtain + sea + blue lights + fog; closed curtain + gold lights + mic recording; city + white lights + snow; starry night + open trapdoor + confetti</h2><div id="theater-state-view"></div></section>
+<section id="costume-parade"><h2>Costume parade: the 12-person cast in theater costumes (every new costume piece), on the stage and in poses</h2><div id="parade-view"></div></section>
+<section id="theater-props"><h2>Theater props and costume sprites (red dot = anchor; costumes hang by the hanger hook)</h2><div class="row" id="theater-prop-row"></div></section>
+<section id="school"><h2>School strip (3200 wide; dashed = the three camera stops: arrival + cubbies, classroom, lunch + recess). Top: default piece states. Bottom: alternate states (bus and front doors open, bell ringing, sink on, lights off, rainy weather card and window, goldfish fed, seesaw tipped)</h2><div id="school-view"></div></section>
+<section id="school-zones"><h2>School zones, one 1440-wide screen each (arrival + cubbies + calm corner, classroom, lunch + recess; alternate states)</h2><div id="school-zone-view"></div></section>
+<section id="school-weather"><h2>School weather: the calendar board's weather slot and the classroom window in sun, cloud, rain and snow</h2><div id="school-weather-view"></div></section>
+<section id="school-day"><h2>A day at school: arriving with backpacks, the calm corner, circle time on the rug with the teacher in the rocking chair, painting, lunch on the patio, the slide, swings, seesaw and sandbox</h2><div id="school-day-view"></div></section>
+<section id="school-props"><h2>School props: art supplies, books and toys, lunch, nap, rewards, weather cards, recess toys and the school wearables (red dot = anchor)</h2><div class="row" id="school-prop-row"></div></section>
 <section id="layers"><h2>Room layers, separately</h2><div class="row" id="layer-row"></div></section>
 <script type="module">
   import { renderCharacter, svgWrap, bodyBox } from '../../../src/engine/rig-svg.js';
@@ -335,6 +345,93 @@
     for (const [id, p] of Object.entries(P)) if (p.set === 'site') for (const vn of Object.keys(p.variants)) h += cell(id, vn, 1.25);
     document.getElementById('site-prop-row').innerHTML = h;
   }
+
+  // ---- theater (P2b.1) ----
+  if (manifest.rooms.theater) {
+    const room = manifest.rooms.theater, c = room.canvas, o = [c.x, c.y];
+    const seat = Object.fromEntries(room.seats.map((s) => [s.id, s]));
+    const surf = Object.fromEntries(room.surfaces.map((s) => [s.id, s]));
+    const img = (file, x, y, w, h) => `<img src="${A + file}" style="left:${x - c.x}px;top:${y - c.y}px;width:${w}px;height:${h}px">`;
+    // a cast member in costume: the costume brings its own colours (the character's overrides for those slots are dropped)
+    const VARS = { top: 'top', bottom: 'bot', over: 'over', back: 'back', hat: 'hat', face: 'face', shoes: 'shoe' };
+    const wearAs = (id, wear, colors) => { const b = cast[id], col = Object.assign({}, b.colors);
+      for (const slot of Object.keys(wear)) for (const k of Object.keys(col)) if (VARS[slot] && (k === VARS[slot] || k.startsWith(VARS[slot] + '-'))) delete col[k];
+      const w = Object.assign({}, b.wear, wear); for (const k of Object.keys(w)) if (w[k] == null) delete w[k];
+      return Object.assign({}, b, { wear: w, colors: Object.assign(col, colors || {}) }); };
+    const ALT = { backdrop: 'castle', spotlight: 'pink', 'mic-stand': 'rec', trapdoor: 'open', trunk: 'open', 'confetti-cannon': 'fire', 'fx-confetti': 'down', 'fog-machine': 'on', 'snow-machine': 'on',
+      boombox: 'play', 'ticket-window': 'open', poster: 'pictures', 'thunder-sheet': 'shake', 'fx-thunder': 'down' };
+    const show = (after) => {
+      after.back += placed(wearAs('girl5', { hat: 'cat-ears' }), { pose: 'sit', expr: 'laughing', anchor: 'seat' }, ...seat['balcony-1'].at, o)
+        + placed(cast.boy9, { pose: 'sit', expr: 'surprised', anchor: 'seat' }, ...seat['balcony-3'].at, o);
+      after.counter += placed(cast.grandpa, { pose: 'sit', expr: 'laughing', anchor: 'seat' }, ...seat['seat-C2'].at, o) + placed(cast.grandma, { pose: 'sit', expr: 'love', anchor: 'seat' }, ...seat['seat-C3'].at, o);
+      after.mid += placed(cast.dad, { pose: 'sit-eat', expr: 'yum', anchor: 'seat', held: { R: held('popcorn', 'half') } }, ...seat['seat-B1'].at, o)
+        + placed(cast.teacher, { pose: 'sit', expr: 'happy', anchor: 'seat' }, ...seat['seat-B3'].at, o);
+      after.front += placed(cast.chef, { pose: Object.assign({}, rig.poses.sit, { armR: [20, -96, 0] }), expr: 'happy', anchor: 'seat', held: { R: held('lemonade-cup', 'full') } }, ...seat['seat-A2'].at, o);
+      after.mid += placed(wearAs('girl9', { top: 'gown', hat: 'tiara', over: null }, {}), { pose: 'sing', expr: 'singing' }, 1456, 790, o);
+      after.mid += placed(wearAs('boy5', { top: 'hero-suit', back: 'lightning-cape', face: 'sparkle-mask' }), { pose: 'cheer', expr: 'wheee' }, 1270, 800, o);
+      after.mid += placed(wearAs('builder', { top: 'pirate-coat', hat: 'pirate-hat', over: null }), { pose: 'hold-up', expr: 'laughing', held: { L: held('foam-sword', 'blue') } }, 1660, 790, o);
+      after.counter += placed(wearAs('performer', { top: 'fairy-tutu', back: 'wings', hat: 'bunny-ears', bottom: 'leggings' }), { pose: 'wave', expr: 'happy', held: { R: held('wand', 'sparkle') } }, 420, 800, o);
+      after.mid += placed(wearAs('grownup', { top: 'wizard-robe', hat: 'wizard-hat', over: null }), { pose: 'hold', expr: 'cheeky', held: { R: held('microphone') } }, 790, 900, o);
+      after.mid += placed(cast.girl5, { pose: 'sit', expr: 'happy', anchor: 'seat' }, ...seat['vanity-stool'].at, o);
+      after.front += propImg('rose', null, 1500, 812, o) + propImg('rose', null, 1380, 816, o) + propImg('bouquet', null, 1560, 815, o);
+      after.counter += propImg('ticket', 'stamped', surf['ticket-counter'].x0 + 60, surf['ticket-counter'].y, o) + propImg('popcorn', 'full', surf['snack-counter'].x0 + 20, surf['snack-counter'].y, o);
+      after.counter += placed(wearAs('boy9', { top: 'tuxedo', hat: 'top-hat', face: null }), { pose: 'wave', expr: 'happy' }, 2620, 900, o);
+    };
+    const theaterScene = (states, zoom, clip = null, withShow = false) => {
+      const after = { back: '', counter: '', mid: '', front: '' };
+      if (withShow) show(after);
+      for (const [id, pc] of Object.entries(room.pieces)) {
+        const v = pc.variants[states[id] || pc.default];
+        for (const [x, y] of pc.copies || [[pc.x, pc.y]]) after[pc.layer] += img(v.file, x, y, pc.w, pc.h);
+      }
+      const html = room.layers.map((L) => img(L.file, L.x, L.y, L.w, L.h) + (after[L.id] || '')).join('');
+      const zones = room.zones.map((z) => `<div style="left:${z.camera - c.x}px;top:${-c.y}px;width:1440px;height:1000px;outline:4px dashed rgba(61,44,41,.3)"></div>`).join('');
+      const clipStyle = clip != null ? 'width:1440px;height:1000px;' : `width:${c.w}px;height:${c.h}px;`;
+      const inner = `<div class="room" style="width:${c.w}px;height:${c.h}px;${clip != null ? `margin-left:${-(clip - c.x)}px;margin-top:${c.y}px;` : ''}">${html}${clip != null ? '' : zones}</div>`;
+      return `<div class="room" style="${clipStyle}zoom:${zoom};margin:0 8px 8px 0;display:${clip != null ? 'inline-block' : 'inline-block'};position:relative;contain:paint">${inner}</div>`;
+    };
+    document.getElementById('theater-view').innerHTML = theaterScene({}, 1550 / c.w) + theaterScene(ALT, 1550 / c.w, null, true);
+    const cam = Object.fromEntries(room.zones.map((z) => [z.id, z.camera]));
+    const S = (o2) => Object.assign({}, o2);
+    document.getElementById('theater-zone-view').innerHTML = room.zones.map((z) => theaterScene(ALT, 1, z.camera, true)).join('');
+    document.getElementById('theater-state-view').innerHTML = [S({ 'curtain-left': 'half', 'curtain-right': 'half', valance: 'half', backdrop: 'sea', spotlight: 'blue', 'fog-machine': 'on' }),
+        S({ 'curtain-left': 'closed', 'curtain-right': 'closed', valance: 'closed', spotlight: 'gold', 'mic-stand': 'rec' }),
+        S({ backdrop: 'city', spotlight: 'white', 'snow-machine': 'on' }),
+        S({ backdrop: 'stars', trapdoor: 'open', 'confetti-cannon': 'fire' })].map((st) => theaterScene(st, .52, cam.stage)).join('');
+    // costume parade: every cast member in a costume, on a stage strip
+    {
+      const looks = [
+        ['girl9', { top: 'gown', hat: 'tiara', over: null }, {}, 'sing', 'singing'],
+        ['boy5', { top: 'hero-suit', back: 'lightning-cape', face: 'sparkle-mask' }, {}, 'cheer', 'wheee'],
+        ['grownup', { top: 'wizard-robe', hat: 'wizard-hat', over: null }, {}, 'hold-up', 'laughing'],
+        ['grandpa', { top: 'royal-coat', hat: 'crown' }, {}, 'wave', 'happy'],
+        ['girl5', { top: 'fairy-tutu', back: 'wings', hat: 'bunny-ears', bottom: 'leggings' }, { bot: '#F6D3CF', 'bot-sh': '#E9AFAE' }, 'wave2', 'happy'],
+        ['boy9', { top: 'tuxedo', hat: 'top-hat', face: null }, {}, 'stand', 'cheeky'],
+        ['performer', { top: 'star-dress', hat: 'cat-ears', back: null, over: 'feather-boa', face: 'sunglasses' }, {}, 'sing', 'singing'],
+        ['dad', { top: 'pirate-coat', hat: 'pirate-hat' }, {}, 'hold-up', 'laughing'],
+        ['grandma', { top: 'gown', face: 'masquerade', over: 'feather-boa' }, { top: '#CBE6F1', 'top-sh': '#A5D0E3', 'top-2': '#F4DC98' }, 'wave', 'love'],
+        ['teacher', { top: 'knight-tunic' }, {}, 'hold', 'happy'],
+        ['chef', { top: 'tuxedo', hat: 'lion-mane' }, {}, 'cheer', 'laughing'],
+        ['builder', { top: 'hero-suit', back: 'hero-cape', face: 'hero-mask', hat: null, over: null }, { back: '#9A7A98', 'back-sh': '#7E6180', 'back-2': '#F4DC98', face: '#EE9A55', 'face-sh': '#BC6E4C' }, 'walk-a', 'wheee'],
+      ];
+      const heldFor = { boy9: { L: held('bouquet') }, teacher: { R: held('foam-sword', 'blue') }, grownup: { L: held('wand', 'sparkle') }, dad: { L: held('foam-sword', 'pink') }, girl5: { R: held('wand') }, grandpa: { L: held('microphone') } };
+      const W = 1560, RH = 620, H = RH * 2, floorY = 560;
+      let h = '';
+      for (const r of [0, 1]) h += `<div style="left:0;top:${r * RH}px;width:${W}px;height:${RH}px;background:#5E4A66"></div><div style="left:0;top:${r * RH + floorY - 40}px;width:${W}px;height:${RH - floorY + 40}px;background:#EDCBA9;border-top:4px solid #3D2C29"></div><div style="left:0;top:${r * RH}px;width:${W}px;height:50px;background:#C95F63;border-bottom:8px solid #DFB050"></div>`;
+      looks.forEach(([id, wear, colors, pose, expr], j) => {
+        const r = Math.floor(j / 6), i = j % 6;
+        const spec = wearAs(id, wear, colors);
+        h += placed(spec, { pose, expr, held: heldFor[id] }, 150 + i * 252, r * RH + floorY + (i % 2) * 24, [0, 0]);
+      });
+      document.getElementById('parade-view').innerHTML = `<div class="room" style="width:${W}px;height:${H}px;zoom:${1550 / W}">${h}</div>`;
+    }
+    let th = '';
+    for (const [id, p] of Object.entries(P)) if (p.set === 'theater') for (const vn of Object.keys(p.variants)) th += cell(id, vn, 1.1);
+    document.getElementById('theater-prop-row').innerHTML = th;
+  }
+
+  // ---- school (P2d.1): tools/art/contact-sheet/school.js ----
+  if (manifest.rooms.school) (await import('./school.js')).schoolSheet({ manifest, rig, cast, P, A, held, placed, propImg, cell });
 
   // ---- layers ----
   {

@@ -130,10 +130,10 @@ function coat([c, d, g], kind) {
   return '';
 }
 function tutuDress([c, d, g]) {
-  return `${hanger(-200)}<path class="d" d="M-24 -200 L-30 -186 M24 -200 L30 -186"/>
+  return `<g transform="translate(0 32)">${hanger(-200)}<path class="d" d="M-24 -200 L-30 -186 M24 -200 L30 -186"/>
   <path fill="${c}" d="M-30 -188 Q-16 -170 0 -182 Q16 -170 30 -188 L36 -110 L-36 -110Z"/>${sprinkle([[0, -146, 12]], g)}
   <path fill="${d}" d="${scallop(0, -110, 92, 70, 16, 7, 0, 180, false)}Z"/><path fill="${c}" d="${scallop(0, -114, 80, 56, 14, 7, 0, 180, false)}Z"/>
-  <g class="n" fill="${g}">${[[-60, -90], [-28, -70], [4, -80], [36, -66], [62, -92]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4"/>`).join('')}</g>${R(-40, -120, 80, 14, d, ' rx="6"')}`;
+  <g class="n" fill="${g}">${[[-60, -90], [-28, -70], [4, -80], [36, -66], [62, -92]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4"/>`).join('')}</g>${R(-40, -120, 80, 14, d, ' rx="6"')}</g>`;
 }
 function capeProp([c, d, g], bolt) {
   const out = 'M-22 -156 Q-50 -90 -52 -4 L-36 -20 L-20 -2 L-2 -20 L16 -2 L34 -20 L52 -4 L74 -22 Q98 -20 112 -44 Q70 -80 40 -120 Q24 -144 22 -156Z';
@@ -174,7 +174,7 @@ function sunglasses() {
 }
 function wings() {
   const w = (s) => `<path fill="${P.lav}" d="M${s * 6} -70 C${s * 50} -150 ${s * 116} -110 ${s * 92} -66 C${s * 110} -36 ${s * 74} 4 ${s * 6} -56Z"/><ellipse class="n" fill="${P.sky}" cx="${s * 62}" cy="-98" rx="14" ry="10"/><circle class="n" fill="#fff" cx="${s * 58}" cy="-44" r="7"/>`;
-  return `${w(-1)}${w(1)}${R(-8, -80, 16, 30, P.plum, ' rx="8"')}`;
+  return `<g transform="translate(0 22)">${w(-1)}${w(1)}${R(-8, -80, 16, 30, P.plum, ' rx="8"')}</g>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -231,8 +231,8 @@ const V3 = (map, fn) => Object.fromEntries(Object.entries(map).map(([k, c]) => [
 const cmap = (map, pre) => Object.fromEntries(Object.entries(map).map(([k, c]) => [k, { [pre]: c[0], [`${pre}-sh`]: c[1], ...(c[2] && pre !== 'face' ? { [`${pre}-2`]: c[2] } : {}) }]));
 
 const GOWNS = { pink: [P.rose, P.roseDeep, P.butter], blue: [P.sky, P.skyDeep, P.butter], gold: [P.butter, P.mustard, P.cream] };
-const MASKS = { teal: [P.teal, P.tealDeep], berry: [P.berry, '#B9575B'], lav: [P.lav, P.plum] };
-const SPARKLE = { pink: [P.rose, P.roseDeep], teal: [P.teal, P.tealDeep], gold: [P.mustard, P.mustardDeep] };
+const MASKS = { teal: [P.teal, P.tealDeep], berry: [P.berry, '#B9575B'] };
+const SPARKLE = { pink: [P.rose, P.roseDeep], teal: [P.teal, P.tealDeep] };
 const CROWNS = { gold: [P.mustard, P.mustardDeep, P.berry], silver: [P.steel, P.steelDeep, P.teal] };
 const HANG = [0, -206];   // hanger hook, relative to the hem centre
 
@@ -242,30 +242,30 @@ export const THEATER_PROPS = {
     wear: { piece: 'crown', slot: 'hat', colors: cmap(CROWNS, 'hat') } },
   tiara: W('tiara', 'hat', 'tiara', { default: tiara() }, { default: { hat: P.steel, 'hat-sh': P.steelDeep, 'hat-2': P.rose } }, { grip: [0, -10] }),
   wand: { label: 'magic wand', tags: ['theater', 'prop', 'wand'], variants: { still: wand(false), sparkle: wand(true) }, taps: ['still', 'sparkle'], grip: [2, -40] },
-  'foam-sword': { label: 'foam sword', tags: ['theater', 'prop', 'toy', 'sword'], variants: V3({ blue: [P.sky, P.skyDeep], mint: [P.mint, P.teal], pink: [P.blush, P.rose] }, (c) => foamSword(c)), grip: [-4, -32] },
+  'foam-sword': { label: 'foam sword', tags: ['theater', 'prop', 'toy', 'sword'], variants: V3({ blue: [P.sky, P.skyDeep], pink: [P.blush, P.rose] }, (c) => foamSword(c)), grip: [-4, -32] },
   bouquet: { label: 'flower bouquet', tags: ['theater', 'prop', 'flowers'], variants: { default: bouquet() }, grip: [0, -34] },
   microphone: { label: 'microphone', tags: ['theater', 'prop', 'mic', 'sing'], variants: { default: microphone() }, grip: [0, -44] },
   'top-hat': W('top hat', 'hat', 'top-hat', { default: topHat() }, { default: { hat: P.charDeep, 'hat-sh': P.char, 'hat-2': P.berry } }, { grip: [0, -60] }),
-  'masquerade-mask': W('masquerade mask', 'face', 'masquerade', V3(MASKS, (c) => masquerade(c)), cmap(MASKS, 'face'), { grip: [0, -30] }),
+  'masquerade-mask': W('masquerade mask', 'face', 'masquerade', V3(MASKS, (c) => at(0, 14, 1, masquerade(c))), cmap(MASKS, 'face'), { grip: [0, -30] }),
   // ---- costume closet (on hangers) ----
   gown: W('princess gown', 'top', 'gown', V3(GOWNS, gown), cmap(GOWNS, 'top'), { grip: HANG }),
-  'royal-coat': W('prince coat', 'top', 'royal-coat', { default: coat([P.blue, P.blueDeep, P.butter], 'royal') }, { default: { top: P.blue, 'top-sh': P.blueDeep, 'top-2': P.butter } }, { grip: HANG }),
+  'royal-coat': W('prince coat', 'top', 'royal-coat', { default: at(0, 18, 1, coat([P.blue, P.blueDeep, P.butter], 'royal')) }, { default: { top: P.blue, 'top-sh': P.blueDeep, 'top-2': P.butter } }, { grip: [0, -188] }),
   'knight-tunic': W('knight tunic', 'top', 'knight-tunic', { default: coat([P.blue, P.blueDeep, P.butter], 'knight') }, { default: { top: P.steel, 'top-sh': P.steelDeep, 'top-2': P.blue } }, { grip: HANG }),
   'pirate-hat': W('pirate hat', 'hat', 'pirate-hat', { default: pirateHat() }, { default: { hat: P.charDeep, 'hat-sh': P.char, 'hat-2': P.butter } }, { grip: [0, -40] }),
-  'pirate-coat': W('pirate coat', 'top', 'pirate-coat', { default: coat([P.denimDeep, '#55739A', P.butter], 'pirate') }, { default: { top: P.denimDeep, 'top-sh': '#55739A', 'top-2': P.butter } }, { grip: HANG }),
+  'pirate-coat': W('pirate coat', 'top', 'pirate-coat', { default: at(0, 6, 1, coat([P.denimDeep, '#55739A', P.butter], 'pirate')) }, { default: { top: P.denimDeep, 'top-sh': '#55739A', 'top-2': P.butter } }, { grip: [0, -200] }),
   'cat-ears': W('cat ears', 'hat', 'cat-ears', { default: ears('cat', [P.terra, P.terraDeep, P.blush]) }, { default: { hat: P.terra, 'hat-sh': P.terraDeep, 'hat-2': P.blush } }, { grip: [0, -20] }),
   'bunny-ears': W('bunny ears', 'hat', 'bunny-ears', { default: ears('bunny', [P.white, P.oat, P.blush]) }, { default: { hat: P.white, 'hat-sh': P.oat, 'hat-2': P.blush } }, { grip: [0, -20] }),
   'lion-mane': W('lion mane', 'hat', 'lion-mane', { default: ears('lion', [P.mustard, P.mustardDeep, P.terra]) }, { default: { hat: P.mustard, 'hat-sh': P.mustardDeep, 'hat-2': P.terra } }, { grip: [0, -52] }),
   'star-dress': W('star dress', 'top', 'star-dress', { default: coat([P.blueDeep, P.denimDeep, P.butter], 'star') }, { default: { top: P.blueDeep, 'top-sh': P.denimDeep, 'top-2': P.butter } }, { grip: HANG }),
-  tuxedo: W('tuxedo jacket', 'top', 'tuxedo', { default: coat([P.charDeep, P.char, P.berry], 'tux') }, { default: { top: P.charDeep, 'top-sh': P.char, 'top-2': P.berry } }, { grip: HANG }),
-  'fairy-tutu': W('fairy tutu', 'top', 'fairy-tutu', { default: tutuDress([P.blush, P.rose, P.butter]) }, { default: { top: P.blush, 'top-sh': P.rose, 'top-2': P.butter } }, { grip: HANG }),
-  'fairy-wings': W('fairy wings', 'back', 'wings', { default: wings() }, { default: { back: P.lav, 'back-sh': P.sky, 'back-2': P.white } }, { grip: [0, -66] }),
-  'wizard-hat': W('wizard hat', 'hat', 'wizard-hat', { default: wizardHat() }, { default: { hat: P.plum, 'hat-sh': P.plumDeep, 'hat-2': P.butter } }, { grip: [0, -40] }),
+  tuxedo: W('tuxedo jacket', 'top', 'tuxedo', { default: at(0, 8, 1, coat([P.charDeep, P.char, P.berry], 'tux')) }, { default: { top: P.charDeep, 'top-sh': P.char, 'top-2': P.berry } }, { grip: [0, -198] }),
+  'fairy-tutu': W('fairy tutu', 'top', 'fairy-tutu', { default: tutuDress([P.blush, P.rose, P.butter]) }, { default: { top: P.blush, 'top-sh': P.rose, 'top-2': P.butter } }, { grip: [0, -174] }),
+  'fairy-wings': W('fairy wings', 'back', 'wings', { default: wings() }, { default: { back: P.lav, 'back-sh': P.sky, 'back-2': P.white } }, { grip: [0, -44] }),
+  'wizard-hat': W('wizard hat', 'hat', 'wizard-hat', { default: at(0, 8, 1, wizardHat()) }, { default: { hat: P.plum, 'hat-sh': P.plumDeep, 'hat-2': P.butter } }, { grip: [0, -40] }),
   'wizard-robe': W('wizard robe', 'top', 'wizard-robe', { default: coat([P.plum, P.plumDeep, P.butter], 'wizard') }, { default: { top: P.plum, 'top-sh': P.plumDeep, 'top-2': P.butter } }, { grip: HANG }),
-  sunglasses: W('sunglasses', 'face', 'sunglasses', { default: sunglasses() }, { default: { face: P.charDeep, 'face-sh': P.char } }, { grip: [0, -28] }),
+  sunglasses: W('sunglasses', 'face', 'sunglasses', { default: at(0, 12, 1, sunglasses()) }, { default: { face: P.charDeep, 'face-sh': P.char } }, { grip: [0, -28] }),
   'feather-boa': W('feather boa', 'over', 'feather-boa', { default: boa() }, { default: { over: P.rose, 'over-sh': P.roseDeep, 'over-2': P.blush } }, { grip: [0, -30] }),
   // ---- hero gear (the site's hero cape, mask and suit are reused; these are new) ----
-  'sparkle-mask': W('sparkly hero mask', 'face', 'sparkle-mask', V3(SPARKLE, (c) => sparkleMask(c)), cmap(SPARKLE, 'face'), { grip: [0, -30] }),
+  'sparkle-mask': W('sparkly hero mask', 'face', 'sparkle-mask', V3(SPARKLE, (c) => at(0, 10, 1, sparkleMask(c))), cmap(SPARKLE, 'face'), { grip: [0, -30] }),
   'lightning-cape': W('lightning cape', 'back', 'lightning-cape', { default: capeProp([P.blueDeep, P.denimDeep, P.butter], true) }, { default: { back: P.blueDeep, 'back-sh': P.denimDeep, 'back-2': P.butter } }, { grip: [0, -150] }),
   // ---- snacks and show things ----
   popcorn: { label: 'popcorn', tags: ['food', 'snack', 'theater', 'sweet'], variants: { full: popcorn('full'), half: popcorn('half'), empty: popcorn('empty') }, bites: ['full', 'half', 'empty'], grip: [0, -46] },
@@ -273,7 +273,7 @@ export const THEATER_PROPS = {
   ticket: { label: 'ticket', tags: ['theater', 'ticket', 'paper'], variants: { blank: ticket(false), stamped: ticket(true) }, oneWay: true, grip: [0, -27] },
   rose: { label: 'rose', tags: ['theater', 'flowers', 'throw'], variants: { default: rose() }, grip: [0, -40] },
   program: { label: 'show program', tags: ['theater', 'paper', 'text'], variants: { default: program() }, grip: [0, -55] },
-  tape: { label: 'tape', tags: ['theater', 'tape', 'recording'], variants: V3({ pink: P.rose, teal: P.teal, yellow: P.butter, lav: P.lav }, (c) => tape(c)), grip: [0, -38] },
+  tape: { label: 'tape', tags: ['theater', 'tape', 'recording'], variants: V3({ pink: P.rose, teal: P.teal, yellow: P.butter }, (c) => tape(c)), grip: [0, -38] },
   tambourine: { label: 'tambourine', tags: ['theater', 'instrument'], variants: { default: tambourine() }, grip: [-38, -44] },
   maracas: { label: 'maracas', tags: ['theater', 'instrument'], variants: { default: maracas() }, grip: [-18, -20] },
 };

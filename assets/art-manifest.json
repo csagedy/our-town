@@ -5,7 +5,7 @@
  "inkWorld": 3.15,
  "characters": {
   "rig": "assets/characters/rig.json",
-  "bytes": 241428,
+  "bytes": 377299,
   "cast": [
    "girl9",
    "boy5",
@@ -122,7 +122,30 @@
    "sunglasses": "face",
    "tool-belt": "belt",
    "gloves": "hands",
-   "hero-suit": "top"
+   "hero-suit": "top",
+   "gown": "top",
+   "royal-coat": "top",
+   "knight-tunic": "top",
+   "pirate-coat": "top",
+   "star-dress": "top",
+   "tuxedo": "top",
+   "fairy-tutu": "top",
+   "wizard-robe": "top",
+   "feather-boa": "over",
+   "lightning-cape": "back",
+   "pirate-hat": "hat",
+   "wizard-hat": "hat",
+   "top-hat": "hat",
+   "tiara": "hat",
+   "cat-ears": "hat",
+   "bunny-ears": "hat",
+   "lion-mane": "hat",
+   "masquerade": "face",
+   "sparkle-mask": "face",
+   "school-backpack": "back",
+   "lanyard": "over",
+   "smock": "over",
+   "sun-hat": "hat"
   }
  },
  "rooms": {
@@ -3334,6 +3357,5020 @@
       856.8,
       530.6
      ]
+    }
+   }
+  },
+  "theater": {
+   "id": "theater",
+   "width": 2880,
+   "height": 1000,
+   "canvas": {
+    "x": -100,
+    "y": -100,
+    "w": 3080,
+    "h": 1200
+   },
+   "pxPerUnit": 1.5,
+   "layers": [
+    {
+     "id": "back",
+     "file": "assets/rooms/theater/back.webp",
+     "baseline": 0,
+     "opaque": true,
+     "x": -100,
+     "y": -100,
+     "w": 3080,
+     "h": 1200,
+     "px": [
+      4620,
+      1800
+     ],
+     "bytes": 207934,
+     "tiles": [
+      {
+       "file": "assets/rooms/theater/tiles/back-0.webp",
+       "x": -100,
+       "y": -100,
+       "w": 717.33,
+       "h": 1200,
+       "px": [
+        1076,
+        1800
+       ],
+       "bytes": 83164
+      },
+      {
+       "file": "assets/rooms/theater/tiles/back-1.webp",
+       "x": 616,
+       "y": -100,
+       "w": 705.33,
+       "h": 1200,
+       "px": [
+        1058,
+        1800
+       ],
+       "bytes": 47054
+      },
+      {
+       "file": "assets/rooms/theater/tiles/back-2.webp",
+       "x": 1320,
+       "y": -100,
+       "w": 241.33,
+       "h": 1200,
+       "px": [
+        362,
+        1800
+       ],
+       "bytes": 7824
+      },
+      {
+       "file": "assets/rooms/theater/tiles/back-3.webp",
+       "x": 1560,
+       "y": -100,
+       "w": 737.33,
+       "h": 1200,
+       "px": [
+        1106,
+        1800
+       ],
+       "bytes": 41036
+      },
+      {
+       "file": "assets/rooms/theater/tiles/back-4.webp",
+       "x": 2296,
+       "y": -100,
+       "w": 684,
+       "h": 1200,
+       "px": [
+        1026,
+        1800
+       ],
+       "bytes": 33144
+      }
+     ]
+    },
+    {
+     "id": "counter",
+     "file": "assets/rooms/theater/counter.webp",
+     "baseline": 724,
+     "opaque": false,
+     "x": 262,
+     "y": 248,
+     "w": 2622,
+     "h": 635.33,
+     "px": [
+      3933,
+      953
+     ],
+     "bytes": 84512,
+     "tiles": [
+      {
+       "file": "assets/rooms/theater/tiles/counter-0.webp",
+       "x": 262,
+       "y": 248,
+       "w": 355.33,
+       "h": 635.33,
+       "px": [
+        533,
+        953
+       ],
+       "bytes": 18524
+      },
+      {
+       "file": "assets/rooms/theater/tiles/counter-1.webp",
+       "x": 616,
+       "y": 248,
+       "w": 705.33,
+       "h": 635.33,
+       "px": [
+        1058,
+        953
+       ],
+       "bytes": 17788
+      },
+      {
+       "file": "assets/rooms/theater/tiles/counter-2.webp",
+       "x": 1320,
+       "y": 248,
+       "w": 241.33,
+       "h": 635.33,
+       "px": [
+        362,
+        953
+       ],
+       "bytes": 1208
+      },
+      {
+       "file": "assets/rooms/theater/tiles/counter-3.webp",
+       "x": 1560,
+       "y": 248,
+       "w": 737.33,
+       "h": 635.33,
+       "px": [
+        1106,
+        953
+       ],
+       "bytes": 16436
+      },
+      {
+       "file": "assets/rooms/theater/tiles/counter-4.webp",
+       "x": 2296,
+       "y": 248,
+       "w": 588,
+       "h": 635.33,
+       "px": [
+        882,
+        953
+       ],
+       "bytes": 35444
+      }
+     ]
+    },
+    {
+     "id": "mid",
+     "file": "assets/rooms/theater/mid.webp",
+     "baseline": 764.4,
+     "opaque": false,
+     "x": 352.67,
+     "y": 552,
+     "w": 2167.33,
+     "h": 422.67,
+     "px": [
+      3251,
+      634
+     ],
+     "bytes": 43346,
+     "tiles": [
+      {
+       "file": "assets/rooms/theater/tiles/mid-0.webp",
+       "x": 352.67,
+       "y": 552,
+       "w": 264.66,
+       "h": 422.67,
+       "px": [
+        397,
+        634
+       ],
+       "bytes": 15178
+      },
+      {
+       "file": "assets/rooms/theater/tiles/mid-1.webp",
+       "x": 616,
+       "y": 552,
+       "w": 705.33,
+       "h": 422.67,
+       "px": [
+        1058,
+        634
+       ],
+       "bytes": 16382
+      },
+      {
+       "file": "assets/rooms/theater/tiles/mid-2.webp",
+       "x": 1320,
+       "y": 552,
+       "w": 241.33,
+       "h": 422.67,
+       "px": [
+        362,
+        634
+       ],
+       "bytes": 996
+      },
+      {
+       "file": "assets/rooms/theater/tiles/mid-3.webp",
+       "x": 1560,
+       "y": 552,
+       "w": 737.33,
+       "h": 422.67,
+       "px": [
+        1106,
+        634
+       ],
+       "bytes": 10756
+      },
+      {
+       "file": "assets/rooms/theater/tiles/mid-4.webp",
+       "x": 2296,
+       "y": 552,
+       "w": 224,
+       "h": 422.67,
+       "px": [
+        336,
+        634
+       ],
+       "bytes": 6224
+      }
+     ]
+    },
+    {
+     "id": "front",
+     "file": "assets/rooms/theater/front.webp",
+     "baseline": 1000,
+     "opaque": false,
+     "x": -100,
+     "y": -100,
+     "w": 3080,
+     "h": 1200,
+     "px": [
+      4620,
+      1800
+     ],
+     "bytes": 101700,
+     "tiles": [
+      {
+       "file": "assets/rooms/theater/tiles/front-0.webp",
+       "x": -100,
+       "y": -100,
+       "w": 717.33,
+       "h": 1200,
+       "px": [
+        1076,
+        1800
+       ],
+       "bytes": 12258
+      },
+      {
+       "file": "assets/rooms/theater/tiles/front-1.webp",
+       "x": 616,
+       "y": -100,
+       "w": 705.33,
+       "h": 1200,
+       "px": [
+        1058,
+        1800
+       ],
+       "bytes": 24750
+      },
+      {
+       "file": "assets/rooms/theater/tiles/front-2.webp",
+       "x": 1320,
+       "y": -100,
+       "w": 241.33,
+       "h": 1200,
+       "px": [
+        362,
+        1800
+       ],
+       "bytes": 20220
+      },
+      {
+       "file": "assets/rooms/theater/tiles/front-3.webp",
+       "x": 1560,
+       "y": -100,
+       "w": 737.33,
+       "h": 1200,
+       "px": [
+        1106,
+        1800
+       ],
+       "bytes": 30642
+      },
+      {
+       "file": "assets/rooms/theater/tiles/front-4.webp",
+       "x": 2296,
+       "y": -100,
+       "w": 684,
+       "h": 1200,
+       "px": [
+        1026,
+        1800
+       ],
+       "bytes": 21018
+      }
+     ]
+    }
+   ],
+   "floor": {
+    "y0": 707,
+    "y1": 960.4
+   },
+   "surfaces": [
+    {
+     "id": "props-shelf-1",
+     "layer": "back",
+     "x0": 44.8,
+     "x1": 221.2,
+     "y": 238
+    },
+    {
+     "id": "props-shelf-2",
+     "layer": "back",
+     "x0": 44.8,
+     "x1": 221.2,
+     "y": 364
+    },
+    {
+     "id": "props-shelf-3",
+     "layer": "back",
+     "x0": 44.8,
+     "x1": 221.2,
+     "y": 490
+    },
+    {
+     "id": "props-shelf-4",
+     "layer": "back",
+     "x0": 44.8,
+     "x1": 221.2,
+     "y": 616
+    },
+    {
+     "id": "vanity",
+     "layer": "counter",
+     "x0": 273,
+     "x1": 490,
+     "y": 532
+    },
+    {
+     "id": "rack-top",
+     "layer": "counter",
+     "x0": 574,
+     "x1": 805,
+     "y": 319.2
+    },
+    {
+     "id": "trunk-top",
+     "layer": "mid",
+     "x0": 63,
+     "x1": 224,
+     "y": 770,
+     "inside": "trunk:closed"
+    },
+    {
+     "id": "trunk-inside",
+     "layer": "mid",
+     "x0": 70,
+     "x1": 217,
+     "y": 805,
+     "inside": "trunk:open"
+    },
+    {
+     "id": "stage",
+     "layer": "back",
+     "x0": 1036,
+     "x1": 1876,
+     "y": 805
+    },
+    {
+     "id": "piano-top",
+     "layer": "mid",
+     "x0": 1050,
+     "x1": 1232,
+     "y": 827.4
+    },
+    {
+     "id": "pit-rail",
+     "layer": "front",
+     "x0": 973,
+     "x1": 1939,
+     "y": 956.2
+    },
+    {
+     "id": "balcony-rail",
+     "layer": "counter",
+     "x0": 1946,
+     "x1": 2282,
+     "y": 317.8
+    },
+    {
+     "id": "booth-console",
+     "layer": "counter",
+     "x0": 2303,
+     "x1": 2492,
+     "y": 252
+    },
+    {
+     "id": "ticket-counter",
+     "layer": "counter",
+     "x0": 2522.8,
+     "x1": 2690.8,
+     "y": 554.4
+    },
+    {
+     "id": "snack-counter",
+     "layer": "counter",
+     "x0": 2814,
+     "x1": 2877,
+     "y": 551.6
+    }
+   ],
+   "seats": [
+    {
+     "id": "seat-C1",
+     "layer": "counter",
+     "at": [
+      2037,
+      746.2
+     ]
+    },
+    {
+     "id": "seat-C2",
+     "layer": "counter",
+     "at": [
+      2163,
+      746.2
+     ]
+    },
+    {
+     "id": "seat-C3",
+     "layer": "counter",
+     "at": [
+      2289,
+      746.2
+     ]
+    },
+    {
+     "id": "seat-C4",
+     "layer": "counter",
+     "at": [
+      2415,
+      746.2
+     ]
+    },
+    {
+     "id": "seat-B1",
+     "layer": "mid",
+     "at": [
+      2037,
+      837.2
+     ]
+    },
+    {
+     "id": "seat-B2",
+     "layer": "mid",
+     "at": [
+      2163,
+      837.2
+     ]
+    },
+    {
+     "id": "seat-B3",
+     "layer": "mid",
+     "at": [
+      2289,
+      837.2
+     ]
+    },
+    {
+     "id": "seat-B4",
+     "layer": "mid",
+     "at": [
+      2415,
+      837.2
+     ]
+    },
+    {
+     "id": "seat-A1",
+     "layer": "front",
+     "at": [
+      2037,
+      928.2
+     ]
+    },
+    {
+     "id": "seat-A2",
+     "layer": "front",
+     "at": [
+      2163,
+      928.2
+     ]
+    },
+    {
+     "id": "seat-A3",
+     "layer": "front",
+     "at": [
+      2289,
+      928.2
+     ]
+    },
+    {
+     "id": "seat-A4",
+     "layer": "front",
+     "at": [
+      2415,
+      928.2
+     ]
+    },
+    {
+     "id": "balcony-1",
+     "layer": "back",
+     "at": [
+      2030,
+      357
+     ]
+    },
+    {
+     "id": "balcony-2",
+     "layer": "back",
+     "at": [
+      2135,
+      357
+     ]
+    },
+    {
+     "id": "balcony-3",
+     "layer": "back",
+     "at": [
+      2240,
+      357
+     ]
+    },
+    {
+     "id": "piano-bench",
+     "layer": "mid",
+     "at": [
+      1274,
+      931
+     ]
+    },
+    {
+     "id": "vanity-stool",
+     "layer": "mid",
+     "at": [
+      392,
+      837.2
+     ]
+    }
+   ],
+   "pieces": {
+    "backdrop": {
+     "layer": "back",
+     "default": "stars",
+     "variants": {
+      "stars": {
+       "file": "assets/rooms/theater/backdrop-stars.webp",
+       "bytes": 24342
+      },
+      "castle": {
+       "file": "assets/rooms/theater/backdrop-castle.webp",
+       "bytes": 45410
+      },
+      "sea": {
+       "file": "assets/rooms/theater/backdrop-sea.webp",
+       "bytes": 69286
+      },
+      "city": {
+       "file": "assets/rooms/theater/backdrop-city.webp",
+       "bytes": 42232
+      }
+     },
+     "px": [
+      1294,
+      1448
+     ],
+     "x": 1024.67,
+     "y": 120,
+     "w": 862.67,
+     "h": 965.33,
+     "taps": null,
+     "pivot": null
+    },
+    "trapdoor": {
+     "layer": "back",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/theater/trapdoor-closed.webp",
+       "bytes": 2462
+      },
+      "open": {
+       "file": "assets/rooms/theater/trapdoor-open.webp",
+       "bytes": 4852
+      }
+     },
+     "px": [
+      264,
+      231
+     ],
+     "x": 1606,
+     "y": 669.33,
+     "w": 176,
+     "h": 154,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": [
+      1694,
+      778.4
+     ]
+    },
+    "poster": {
+     "layer": "back",
+     "default": "blank",
+     "variants": {
+      "blank": {
+       "file": "assets/rooms/theater/poster-blank.webp",
+       "bytes": 10644
+      },
+      "pictures": {
+       "file": "assets/rooms/theater/poster-pictures.webp",
+       "bytes": 15562
+      }
+     },
+     "px": [
+      284,
+      370
+     ],
+     "x": 2512.67,
+     "y": 76,
+     "w": 189.33,
+     "h": 246.67,
+     "taps": null,
+     "pivot": null,
+     "textArea": [
+      2552.2,
+      165.2,
+      110.6,
+      119
+     ]
+    },
+    "thunder-sheet": {
+     "layer": "counter",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/theater/thunder-sheet-still.webp",
+       "bytes": 5980
+      },
+      "shake": {
+       "file": "assets/rooms/theater/thunder-sheet-shake.webp",
+       "bytes": 9604
+      }
+     },
+     "px": [
+      299,
+      1023
+     ],
+     "x": 775.33,
+     "y": -100,
+     "w": 199.33,
+     "h": 682,
+     "taps": null,
+     "pivot": [
+      875,
+      252
+     ]
+    },
+    "ticket-window": {
+     "layer": "counter",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/theater/ticket-window-closed.webp",
+       "bytes": 4470
+      },
+      "open": {
+       "file": "assets/rooms/theater/ticket-window-open.webp",
+       "bytes": 3660
+      }
+     },
+     "px": [
+      168,
+      222
+     ],
+     "x": 2550.67,
+     "y": 410,
+     "w": 112,
+     "h": 148,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": null
+    },
+    "boombox": {
+     "layer": "counter",
+     "default": "idle",
+     "variants": {
+      "idle": {
+       "file": "assets/rooms/theater/boombox-idle.webp",
+       "bytes": 7188
+      },
+      "play": {
+       "file": "assets/rooms/theater/boombox-play.webp",
+       "bytes": 8996
+      },
+      "rec": {
+       "file": "assets/rooms/theater/boombox-rec.webp",
+       "bytes": 8742
+      }
+     },
+     "px": [
+      290,
+      164
+     ],
+     "x": 2306,
+     "y": 142.67,
+     "w": 193.33,
+     "h": 109.33,
+     "taps": null,
+     "pivot": null
+    },
+    "fx-fog": {
+     "layer": "counter",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/theater/fx-fog-up.webp",
+       "bytes": 1966
+      },
+      "down": {
+       "file": "assets/rooms/theater/fx-fog-down.webp",
+       "bytes": 3356
+      }
+     },
+     "px": [
+      105,
+      93
+     ],
+     "x": 2283.33,
+     "y": 211.33,
+     "w": 70,
+     "h": 62,
+     "taps": null,
+     "pivot": null,
+     "controls": "fog-machine"
+    },
+    "fx-confetti": {
+     "layer": "counter",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/theater/fx-confetti-up.webp",
+       "bytes": 1958
+      },
+      "down": {
+       "file": "assets/rooms/theater/fx-confetti-down.webp",
+       "bytes": 3420
+      }
+     },
+     "px": [
+      105,
+      93
+     ],
+     "x": 2335.33,
+     "y": 211.33,
+     "w": 70,
+     "h": 62,
+     "taps": null,
+     "pivot": null,
+     "controls": "confetti-cannon"
+    },
+    "fx-snow": {
+     "layer": "counter",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/theater/fx-snow-up.webp",
+       "bytes": 2154
+      },
+      "down": {
+       "file": "assets/rooms/theater/fx-snow-down.webp",
+       "bytes": 3518
+      }
+     },
+     "px": [
+      106,
+      93
+     ],
+     "x": 2386.67,
+     "y": 211.33,
+     "w": 70.67,
+     "h": 62,
+     "taps": null,
+     "pivot": null,
+     "controls": "snow-machine"
+    },
+    "fx-thunder": {
+     "layer": "counter",
+     "default": "up",
+     "variants": {
+      "up": {
+       "file": "assets/rooms/theater/fx-thunder-up.webp",
+       "bytes": 1916
+      },
+      "down": {
+       "file": "assets/rooms/theater/fx-thunder-down.webp",
+       "bytes": 3366
+      }
+     },
+     "px": [
+      105,
+      93
+     ],
+     "x": 2438.67,
+     "y": 211.33,
+     "w": 70,
+     "h": 62,
+     "taps": null,
+     "pivot": null,
+     "controls": "thunder-sheet"
+    },
+    "trunk": {
+     "layer": "mid",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/theater/trunk-closed.webp",
+       "bytes": 5450
+      },
+      "open": {
+       "file": "assets/rooms/theater/trunk-open.webp",
+       "bytes": 10270
+      }
+     },
+     "px": [
+      301,
+      343
+     ],
+     "x": 48.67,
+     "y": 685.33,
+     "w": 200.67,
+     "h": 228.67,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": [
+      143.5,
+      805
+     ]
+    },
+    "curtain-left": {
+     "layer": "mid",
+     "default": "open",
+     "variants": {
+      "open": {
+       "file": "assets/rooms/theater/curtain-left-open.webp",
+       "bytes": 18896
+      },
+      "half": {
+       "file": "assets/rooms/theater/curtain-left-half.webp",
+       "bytes": 32520
+      },
+      "closed": {
+       "file": "assets/rooms/theater/curtain-left-closed.webp",
+       "bytes": 12022
+      }
+     },
+     "px": [
+      679,
+      1041
+     ],
+     "x": 1013.33,
+     "y": 80,
+     "w": 452.67,
+     "h": 694,
+     "taps": null,
+     "pivot": [
+      1022,
+      105
+     ]
+    },
+    "curtain-right": {
+     "layer": "mid",
+     "default": "open",
+     "variants": {
+      "open": {
+       "file": "assets/rooms/theater/curtain-right-open.webp",
+       "bytes": 18752
+      },
+      "half": {
+       "file": "assets/rooms/theater/curtain-right-half.webp",
+       "bytes": 31480
+      },
+      "closed": {
+       "file": "assets/rooms/theater/curtain-right-closed.webp",
+       "bytes": 12098
+      }
+     },
+     "px": [
+      679,
+      1041
+     ],
+     "x": 1446,
+     "y": 80,
+     "w": 452.67,
+     "h": 694,
+     "taps": null,
+     "pivot": [
+      1890,
+      105
+     ]
+    },
+    "valance": {
+     "layer": "mid",
+     "default": "open",
+     "variants": {
+      "open": {
+       "file": "assets/rooms/theater/valance-open.webp",
+       "bytes": 26830
+      },
+      "half": {
+       "file": "assets/rooms/theater/valance-half.webp",
+       "bytes": 27458
+      },
+      "closed": {
+       "file": "assets/rooms/theater/valance-closed.webp",
+       "bytes": 27994
+      }
+     },
+     "px": [
+      1408,
+      475
+     ],
+     "x": 986.67,
+     "y": 56,
+     "w": 938.67,
+     "h": 316.67,
+     "taps": null,
+     "pivot": null
+    },
+    "fog-machine": {
+     "layer": "mid",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/theater/fog-machine-off.webp",
+       "bytes": 3176
+      },
+      "on": {
+       "file": "assets/rooms/theater/fog-machine-on.webp",
+       "bytes": 5938
+      }
+     },
+     "px": [
+      464,
+      156
+     ],
+     "x": 1046,
+     "y": 728,
+     "w": 309.33,
+     "h": 104,
+     "taps": null,
+     "pivot": null
+    },
+    "confetti-cannon": {
+     "layer": "mid",
+     "default": "idle",
+     "variants": {
+      "idle": {
+       "file": "assets/rooms/theater/confetti-cannon-idle.webp",
+       "bytes": 7064
+      },
+      "fire": {
+       "file": "assets/rooms/theater/confetti-cannon-fire.webp",
+       "bytes": 22220
+      }
+     },
+     "px": [
+      466,
+      643
+     ],
+     "x": 1610.67,
+     "y": 417.33,
+     "w": 310.67,
+     "h": 428.67,
+     "taps": null,
+     "pivot": [
+      1827,
+      777
+     ]
+    },
+    "piano": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/theater/piano-still.webp",
+       "bytes": 7498
+      }
+     },
+     "px": [
+      307,
+      412
+     ],
+     "x": 1038.67,
+     "y": 790.67,
+     "w": 204.67,
+     "h": 274.67,
+     "taps": null,
+     "pivot": null
+    },
+    "drums": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/theater/drums-still.webp",
+       "bytes": 12646
+      }
+     },
+     "px": [
+      321,
+      297
+     ],
+     "x": 1298,
+     "y": 803.33,
+     "w": 214,
+     "h": 198,
+     "taps": null,
+     "pivot": null
+    },
+    "xylophone": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/theater/xylophone-still.webp",
+       "bytes": 7464
+      }
+     },
+     "px": [
+      309,
+      233
+     ],
+     "x": 1508,
+     "y": 828.67,
+     "w": 206,
+     "h": 155.33,
+     "taps": null,
+     "pivot": null
+    },
+    "guitar": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/theater/guitar-still.webp",
+       "bytes": 7696
+      }
+     },
+     "px": [
+      166,
+      401
+     ],
+     "x": 1736.67,
+     "y": 716.67,
+     "w": 110.67,
+     "h": 267.33,
+     "taps": null,
+     "pivot": [
+      1792,
+      931
+     ]
+    },
+    "spotlight": {
+     "layer": "front",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/theater/spotlight-off.webp",
+       "bytes": 3414
+      },
+      "white": {
+       "file": "assets/rooms/theater/spotlight-white.webp",
+       "bytes": 11532
+      },
+      "pink": {
+       "file": "assets/rooms/theater/spotlight-pink.webp",
+       "bytes": 12484
+      },
+      "blue": {
+       "file": "assets/rooms/theater/spotlight-blue.webp",
+       "bytes": 12738
+      },
+      "gold": {
+       "file": "assets/rooms/theater/spotlight-gold.webp",
+       "bytes": 14006
+      }
+     },
+     "px": [
+      432,
+      1077
+     ],
+     "x": 1060,
+     "y": 110.67,
+     "w": 288,
+     "h": 718,
+     "taps": [
+      "off",
+      "white",
+      "pink",
+      "blue",
+      "gold"
+     ],
+     "pivot": [
+      1204,
+      123.2
+     ],
+     "copies": [
+      [
+       1060,
+       110.67
+      ],
+      [
+       1312,
+       110.67
+      ],
+      [
+       1564,
+       110.67
+      ]
+     ]
+    },
+    "mic-stand": {
+     "layer": "front",
+     "default": "idle",
+     "variants": {
+      "idle": {
+       "file": "assets/rooms/theater/mic-stand-idle.webp",
+       "bytes": 7466
+      },
+      "rec": {
+       "file": "assets/rooms/theater/mic-stand-rec.webp",
+       "bytes": 8842
+      }
+     },
+     "px": [
+      296,
+      409
+     ],
+     "x": 1396,
+     "y": 559.33,
+     "w": 197.33,
+     "h": 272.67,
+     "taps": null,
+     "pivot": [
+      1456,
+      816.2
+     ]
+    },
+    "snow-machine": {
+     "layer": "front",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/theater/snow-machine-off.webp",
+       "bytes": 3082
+      },
+      "on": {
+       "file": "assets/rooms/theater/snow-machine-on.webp",
+       "bytes": 4746
+      }
+     },
+     "px": [
+      191,
+      786
+     ],
+     "x": 1724.67,
+     "y": 126,
+     "w": 127.33,
+     "h": 524,
+     "taps": null,
+     "pivot": null
+    }
+   },
+   "slots": [
+    {
+     "id": "curtain-rope",
+     "kind": "rope",
+     "layer": "back",
+     "at": [
+      1921.5,
+      630
+     ],
+     "box": [
+      1900.5,
+      490,
+      42,
+      280
+     ],
+     "piece": "curtain-left"
+    },
+    {
+     "id": "trapdoor",
+     "kind": "trapdoor",
+     "layer": "back",
+     "at": [
+      1694,
+      795.2
+     ],
+     "box": [
+      1624,
+      772.8,
+      140,
+      42
+     ],
+     "piece": "trapdoor"
+    },
+    {
+     "id": "bow-spot",
+     "kind": "bow",
+     "layer": "mid",
+     "at": [
+      1456,
+      805
+     ],
+     "box": null
+    },
+    {
+     "id": "rose-land",
+     "kind": "throw-target",
+     "layer": "back",
+     "at": [
+      1456,
+      798
+     ],
+     "box": [
+      1078,
+      777,
+      756,
+      42
+     ]
+    },
+    {
+     "id": "behind-screen",
+     "kind": "change",
+     "layer": "mid",
+     "at": [
+      840,
+      728
+     ],
+     "box": [
+      749,
+      560,
+      189,
+      322
+     ]
+    },
+    {
+     "id": "vanity-mirror",
+     "kind": "mirror",
+     "layer": "back",
+     "at": [
+      399,
+      532
+     ],
+     "box": [
+      294,
+      182,
+      210,
+      231
+     ]
+    },
+    {
+     "id": "wig-stand",
+     "kind": "wig",
+     "layer": "counter",
+     "at": [
+      525,
+      532
+     ],
+     "box": null
+    },
+    {
+     "id": "ticket-spot",
+     "kind": "queue",
+     "layer": "mid",
+     "at": [
+      2606.8,
+      840
+     ],
+     "box": null
+    },
+    {
+     "id": "snack-spot",
+     "kind": "queue",
+     "layer": "mid",
+     "at": [
+      2786,
+      840
+     ],
+     "box": null
+    },
+    {
+     "id": "booth-operator",
+     "kind": "staff",
+     "layer": "back",
+     "at": [
+      2401,
+      378
+     ],
+     "box": null
+    },
+    {
+     "id": "fog-out",
+     "kind": "fx",
+     "layer": "mid",
+     "at": [
+      1176,
+      777
+     ],
+     "piece": "fog-machine",
+     "box": null
+    },
+    {
+     "id": "confetti-out",
+     "kind": "fx",
+     "layer": "mid",
+     "at": [
+      1736,
+      686
+     ],
+     "piece": "confetti-cannon",
+     "box": null
+    },
+    {
+     "id": "snow-out",
+     "kind": "fx",
+     "layer": "front",
+     "at": [
+      1792,
+      280
+     ],
+     "piece": "snow-machine",
+     "box": null
+    }
+   ],
+   "spawners": [
+    {
+     "id": "rack-a",
+     "at": [
+      689.5,
+      343
+     ],
+     "box": [
+      574,
+      329,
+      231,
+      210
+     ],
+     "items": [
+      "gown",
+      "royal-coat",
+      "fairy-tutu",
+      "wizard-robe",
+      "pirate-coat",
+      "star-dress",
+      "tuxedo",
+      "knight-tunic"
+     ]
+    },
+    {
+     "id": "rack-b",
+     "at": [
+      577.5,
+      595
+     ],
+     "box": [
+      483,
+      581,
+      189,
+      182
+     ],
+     "items": [
+      "hero-cape",
+      "lightning-cape",
+      "hero-suit",
+      "hero-mask",
+      "sparkle-mask",
+      "fairy-wings",
+      "feather-boa"
+     ]
+    },
+    {
+     "id": "props-shelf",
+     "surfaces": [
+      "props-shelf-1",
+      "props-shelf-2",
+      "props-shelf-3",
+      "props-shelf-4"
+     ],
+     "items": [
+      "crown",
+      "top-hat",
+      "masquerade-mask",
+      "wand",
+      "microphone",
+      "bouquet",
+      "foam-sword",
+      "tambourine",
+      "maracas",
+      "tape",
+      "program"
+     ]
+    },
+    {
+     "id": "trunk",
+     "piece": "trunk",
+     "when": "open",
+     "surfaces": [
+      "trunk-inside"
+     ],
+     "items": [
+      "pirate-hat",
+      "wizard-hat",
+      "cat-ears",
+      "bunny-ears",
+      "lion-mane",
+      "tiara",
+      "sunglasses"
+     ]
+    },
+    {
+     "id": "wig-stand",
+     "at": [
+      525,
+      532
+     ],
+     "items": [
+      "lion-mane",
+      "tiara"
+     ]
+    },
+    {
+     "id": "popcorn",
+     "at": [
+      2758,
+      551.6
+     ],
+     "items": [
+      "popcorn"
+     ]
+    },
+    {
+     "id": "lemonade",
+     "at": [
+      2835,
+      551.6
+     ],
+     "items": [
+      "lemonade-cup"
+     ]
+    },
+    {
+     "id": "tickets",
+     "at": [
+      2564.8,
+      554.4
+     ],
+     "items": [
+      "ticket"
+     ]
+    },
+    {
+     "id": "roses",
+     "at": [
+      1456,
+      798
+     ],
+     "items": [
+      "rose"
+     ],
+     "note": "thrown onto the stage (rose-land) by the audience at a bow"
+    }
+   ],
+   "zones": [
+    {
+     "id": "backstage",
+     "x0": 0,
+     "x1": 959,
+     "camera": 0
+    },
+    {
+     "id": "stage",
+     "x0": 959,
+     "x1": 1953,
+     "camera": 736
+    },
+    {
+     "id": "audience",
+     "x0": 1953,
+     "x1": 2879.8,
+     "camera": 1440
+    }
+   ],
+   "stations": [
+    {
+     "id": "mic",
+     "kind": "mic",
+     "layer": "front",
+     "at": [
+      1500.8,
+      783.3
+     ],
+     "box": [
+      1465.8,
+      750.4,
+      70,
+      65.8
+     ],
+     "piece": "mic-stand",
+     "singer": [
+      1456,
+      791
+     ],
+     "head": [
+      1444.1,
+      582.4
+     ]
+    },
+    {
+     "id": "piano",
+     "kind": "instrument",
+     "instrument": "piano",
+     "layer": "mid",
+     "at": [
+      1141,
+      907.2
+     ],
+     "box": [
+      1064,
+      891.8,
+      154,
+      37.8
+     ],
+     "piece": "piano",
+     "keys": [
+      [
+       1064,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1083.3,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1102.5,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1121.8,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1141,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1160.3,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1179.5,
+       891.8,
+       19.3,
+       37.8
+      ],
+      [
+       1198.8,
+       891.8,
+       19.3,
+       37.8
+      ]
+     ],
+     "seat": "piano-bench"
+    },
+    {
+     "id": "drums",
+     "kind": "instrument",
+     "instrument": "drums",
+     "layer": "mid",
+     "at": [
+      1393,
+      910
+     ],
+     "box": [
+      1295,
+      805,
+      217,
+      154
+     ],
+     "piece": "drums",
+     "pads": {
+      "kick": [
+       1334.2,
+       879.2,
+       117.6,
+       77
+      ],
+      "snare": [
+       1302,
+       865.2,
+       57.4,
+       44.8
+      ],
+      "tom": [
+       1423.8,
+       849.8,
+       44.8,
+       39.2
+      ],
+      "cymbal": [
+       1432.2,
+       805,
+       75.6,
+       21
+      ]
+     }
+    },
+    {
+     "id": "xylophone",
+     "kind": "instrument",
+     "instrument": "xylophone",
+     "layer": "mid",
+     "at": [
+      1603,
+      893.2
+     ],
+     "box": [
+      1519,
+      856.8,
+      168,
+      72.8
+     ],
+     "piece": "xylophone",
+     "keys": [
+      [
+       1519,
+       856.8,
+       21,
+       72.8
+      ],
+      [
+       1540,
+       859.6,
+       21,
+       67.2
+      ],
+      [
+       1561,
+       862.4,
+       21,
+       61.6
+      ],
+      [
+       1582,
+       865.2,
+       21,
+       56
+      ],
+      [
+       1603,
+       868,
+       21,
+       50.4
+      ],
+      [
+       1624,
+       870.8,
+       21,
+       44.8
+      ],
+      [
+       1645,
+       873.6,
+       21,
+       39.2
+      ],
+      [
+       1666,
+       876.4,
+       21,
+       33.6
+      ]
+     ]
+    },
+    {
+     "id": "guitar",
+     "kind": "instrument",
+     "instrument": "guitar",
+     "layer": "mid",
+     "at": [
+      1792,
+      910
+     ],
+     "box": [
+      1729,
+      721,
+      126,
+      252
+     ],
+     "piece": "guitar",
+     "strings": [
+      1783.6,
+      753.2,
+      16.8,
+      187.6
+     ]
+    },
+    {
+     "id": "fx-fog",
+     "kind": "fx-button",
+     "effect": "fog",
+     "layer": "counter",
+     "at": [
+      2318.4,
+      236.6
+     ],
+     "box": [
+      2294.6,
+      217,
+      47.6,
+      42
+     ],
+     "piece": "fx-fog",
+     "machine": "fog-machine"
+    },
+    {
+     "id": "fx-confetti",
+     "kind": "fx-button",
+     "effect": "confetti",
+     "layer": "counter",
+     "at": [
+      2370.2,
+      236.6
+     ],
+     "box": [
+      2346.4,
+      217,
+      47.6,
+      42
+     ],
+     "piece": "fx-confetti",
+     "machine": "confetti-cannon"
+    },
+    {
+     "id": "fx-snow",
+     "kind": "fx-button",
+     "effect": "snow",
+     "layer": "counter",
+     "at": [
+      2422,
+      236.6
+     ],
+     "box": [
+      2398.2,
+      217,
+      47.6,
+      42
+     ],
+     "piece": "fx-snow",
+     "machine": "snow-machine"
+    },
+    {
+     "id": "fx-thunder",
+     "kind": "fx-button",
+     "effect": "thunder",
+     "layer": "counter",
+     "at": [
+      2473.8,
+      236.6
+     ],
+     "box": [
+      2450,
+      217,
+      47.6,
+      42
+     ],
+     "piece": "fx-thunder",
+     "machine": "thunder-sheet"
+    },
+    {
+     "id": "spotlight-rail",
+     "kind": "rail",
+     "layer": "front",
+     "at": [
+      1456,
+      123.2
+     ],
+     "box": [
+      1036,
+      109.2,
+      840,
+      105
+     ],
+     "piece": "spotlight",
+     "rail": [
+      1036,
+      1876
+     ],
+     "rest": [
+      1204,
+      1456,
+      1708
+     ],
+     "colors": [
+      "off",
+      "white",
+      "pink",
+      "blue",
+      "gold"
+     ]
+    },
+    {
+     "id": "backdrop-hook",
+     "kind": "fly",
+     "layer": "back",
+     "at": [
+      1456,
+      133
+     ],
+     "box": [
+      1050,
+      116.2,
+      812,
+      84
+     ],
+     "piece": "backdrop",
+     "scenes": [
+      "stars",
+      "castle",
+      "sea",
+      "city"
+     ]
+    },
+    {
+     "id": "boombox",
+     "kind": "tape-deck",
+     "layer": "counter",
+     "at": [
+      2394,
+      207.2
+     ],
+     "box": [
+      2310,
+      175,
+      168,
+      72.8
+     ],
+     "piece": "boombox",
+     "tapeSlot": [
+      2394,
+      207.2
+     ]
+    },
+    {
+     "id": "curtain",
+     "kind": "curtain",
+     "layer": "mid",
+     "at": [
+      1456,
+      448
+     ],
+     "box": [
+      1022,
+      105,
+      868,
+      659.4
+     ],
+     "pieces": [
+      "curtain-left",
+      "curtain-right",
+      "valance"
+     ],
+     "states": [
+      "open",
+      "half",
+      "closed"
+     ]
+    },
+    {
+     "id": "ticket-window",
+     "kind": "ticket",
+     "layer": "counter",
+     "at": [
+      2606.8,
+      554.4
+     ],
+     "box": [
+      2555,
+      406,
+      103.6,
+      147
+     ],
+     "piece": "ticket-window",
+     "stamp": [
+      2634.8,
+      546
+     ]
+    },
+    {
+     "id": "snack-counter",
+     "kind": "snack",
+     "layer": "counter",
+     "at": [
+      2758,
+      551.6
+     ],
+     "box": [
+      2702,
+      350,
+      168,
+      210
+     ]
+    },
+    {
+     "id": "marquee",
+     "kind": "poster",
+     "layer": "back",
+     "at": [
+      2607.5,
+      294
+     ],
+     "box": [
+      2541,
+      105,
+      133,
+      189
+     ],
+     "piece": "poster"
+    },
+    {
+     "id": "vanity",
+     "kind": "makeup",
+     "layer": "counter",
+     "at": [
+      371,
+      532
+     ],
+     "box": [
+      266,
+      490,
+      210,
+      42
+     ],
+     "mirror": [
+      294,
+      182,
+      210,
+      231
+     ]
+    },
+    {
+     "id": "thunder-sheet",
+     "kind": "fx",
+     "effect": "thunder",
+     "layer": "counter",
+     "at": [
+      875,
+      392
+     ],
+     "box": [
+      826,
+      252,
+      98,
+      280
+     ],
+     "piece": "thunder-sheet"
+    }
+   ],
+   "rigs": {
+    "curtain": {
+     "pieces": {
+      "left": "curtain-left",
+      "right": "curtain-right",
+      "valance": "valance"
+     },
+     "states": [
+      "open",
+      "half",
+      "closed"
+     ],
+     "opening": [
+      1022,
+      105,
+      868,
+      659.4
+     ],
+     "line": 764.4,
+     "note": "Swap the three pieces' variants together (open/half/closed). A tween between states can scaleX each half about its outer edge (pivot) while swapping. Characters upstage of `line` (y < line) are hidden by the closed curtain (it is in the mid layer, baseline = line); the apron in front of it (line..lip) is where bows happen."
+    },
+    "stage": {
+     "lip": 826,
+     "upstage": 707,
+     "x0": 1022,
+     "x1": 1890,
+     "bow": [
+      1456,
+      805
+     ],
+     "note": "The stage deck is the floor band between upstage and lip inside x0..x1 (same wall foot as the rest of the strip). The orchestra pit is in front of the lip, behind the pit rail (front layer)."
+    },
+    "spotlights": {
+     "piece": "spotlight",
+     "rail": {
+      "x0": 1086,
+      "x1": 1826,
+      "y": 123.2
+     },
+     "rest": [
+      1204,
+      1456,
+      1708
+     ],
+     "pool": 795.2,
+     "colors": [
+      "off",
+      "white",
+      "pink",
+      "blue",
+      "gold"
+     ],
+     "hex": {
+      "white": "#FFF6DE",
+      "pink": "#F7B9C6",
+      "blue": "#BCDDF3",
+      "gold": "#FFD27A"
+     },
+     "note": "One piece, three copies (manifest pieces.spotlight.copies). Drag a copy along x (translate only); tap cycles colours. The cone pools on the stage at y = pool; a character whose x is within ~120 of a lit copy is \"in the light\"."
+    },
+    "backdrop": {
+     "piece": "backdrop",
+     "scenes": [
+      "stars",
+      "castle",
+      "sea",
+      "city"
+     ],
+     "hook": [
+      1456,
+      133
+     ],
+     "fly": -352.8,
+     "note": "Swap by flying: translateY the piece up out of sight (to fly), swap the variant, drop it back with a thud and a dust puff at the deck."
+    },
+    "trapdoor": {
+     "piece": "trapdoor",
+     "hole": [
+      1631,
+      778.4,
+      126,
+      33.6
+     ]
+    },
+    "effects": {
+     "fog": {
+      "machine": "fog-machine",
+      "out": [
+       1176,
+       777
+      ]
+     },
+     "confetti": {
+      "machine": "confetti-cannon",
+      "out": [
+       1736,
+       686
+      ]
+     },
+     "snow": {
+      "machine": "snow-machine",
+      "out": [
+       1792,
+       280
+      ]
+     },
+     "thunder": {
+      "machine": "thunder-sheet",
+      "pivot": [
+       875,
+       252
+      ]
+     }
+    },
+    "mic": {
+     "piece": "mic-stand",
+     "button": [
+      1500.8,
+      783.3
+     ],
+     "singer": [
+      1456,
+      791
+     ],
+     "head": [
+      1444.1,
+      582.4
+     ]
+    }
+   }
+  },
+  "school": {
+   "id": "school",
+   "width": 3200,
+   "height": 1000,
+   "canvas": {
+    "x": -100,
+    "y": -100,
+    "w": 3400,
+    "h": 1200
+   },
+   "pxPerUnit": 1.5,
+   "layers": [
+    {
+     "id": "back",
+     "file": "assets/rooms/school/back.webp",
+     "baseline": 0,
+     "opaque": true,
+     "x": -100,
+     "y": -100,
+     "w": 3400,
+     "h": 1200,
+     "px": [
+      5100,
+      1800
+     ],
+     "bytes": 323890,
+     "tiles": [
+      {
+       "file": "assets/rooms/school/tiles/back-0.webp",
+       "x": -100,
+       "y": -100,
+       "w": 927.33,
+       "h": 1200,
+       "px": [
+        1391,
+        1800
+       ],
+       "bytes": 73266
+      },
+      {
+       "file": "assets/rooms/school/tiles/back-1.webp",
+       "x": 826,
+       "y": -100,
+       "w": 735.33,
+       "h": 1200,
+       "px": [
+        1103,
+        1800
+       ],
+       "bytes": 106768
+      },
+      {
+       "file": "assets/rooms/school/tiles/back-2.webp",
+       "x": 1560,
+       "y": -100,
+       "w": 81.33,
+       "h": 1200,
+       "px": [
+        122,
+        1800
+       ],
+       "bytes": 9512
+      },
+      {
+       "file": "assets/rooms/school/tiles/back-3.webp",
+       "x": 1640,
+       "y": -100,
+       "w": 867.33,
+       "h": 1200,
+       "px": [
+        1301,
+        1800
+       ],
+       "bytes": 81554
+      },
+      {
+       "file": "assets/rooms/school/tiles/back-4.webp",
+       "x": 2506,
+       "y": -100,
+       "w": 794,
+       "h": 1200,
+       "px": [
+        1191,
+        1800
+       ],
+       "bytes": 58320
+      }
+     ]
+    },
+    {
+     "id": "counter",
+     "file": "assets/rooms/school/counter.webp",
+     "baseline": 728,
+     "opaque": false,
+     "x": 638,
+     "y": 192,
+     "w": 2586,
+     "h": 646.67,
+     "px": [
+      3879,
+      970
+     ],
+     "bytes": 127508,
+     "tiles": [
+      {
+       "file": "assets/rooms/school/tiles/counter-0.webp",
+       "x": 638,
+       "y": 192,
+       "w": 189.33,
+       "h": 646.67,
+       "px": [
+        284,
+        970
+       ],
+       "bytes": 14258
+      },
+      {
+       "file": "assets/rooms/school/tiles/counter-1.webp",
+       "x": 826,
+       "y": 192,
+       "w": 735.33,
+       "h": 646.67,
+       "px": [
+        1103,
+        970
+       ],
+       "bytes": 34866
+      },
+      {
+       "file": "assets/rooms/school/tiles/counter-2.webp",
+       "x": 1560,
+       "y": 192,
+       "w": 81.33,
+       "h": 646.67,
+       "px": [
+        122,
+        970
+       ],
+       "bytes": 792
+      },
+      {
+       "file": "assets/rooms/school/tiles/counter-3.webp",
+       "x": 1640,
+       "y": 192,
+       "w": 867.33,
+       "h": 646.67,
+       "px": [
+        1301,
+        970
+       ],
+       "bytes": 41130
+      },
+      {
+       "file": "assets/rooms/school/tiles/counter-4.webp",
+       "x": 2506,
+       "y": 192,
+       "w": 718,
+       "h": 646.67,
+       "px": [
+        1077,
+        970
+       ],
+       "bytes": 42178
+      }
+     ]
+    },
+    {
+     "id": "mid",
+     "file": "assets/rooms/school/mid.webp",
+     "baseline": 903,
+     "opaque": false,
+     "x": 1162,
+     "y": 584,
+     "w": 1614,
+     "h": 396,
+     "px": [
+      2421,
+      594
+     ],
+     "bytes": 27420,
+     "tiles": [
+      {
+       "file": "assets/rooms/school/tiles/mid-0.webp",
+       "x": 1162,
+       "y": 584,
+       "w": 399.33,
+       "h": 396,
+       "px": [
+        599,
+        594
+       ],
+       "bytes": 14362
+      },
+      {
+       "file": "assets/rooms/school/tiles/mid-1.webp",
+       "x": 1560,
+       "y": 584,
+       "w": 81.33,
+       "h": 396,
+       "px": [
+        122,
+        594
+       ],
+       "bytes": 1084
+      },
+      {
+       "file": "assets/rooms/school/tiles/mid-2.webp",
+       "x": 1640,
+       "y": 584,
+       "w": 867.33,
+       "h": 396,
+       "px": [
+        1301,
+        594
+       ],
+       "bytes": 11104
+      },
+      {
+       "file": "assets/rooms/school/tiles/mid-3.webp",
+       "x": 2506,
+       "y": 584,
+       "w": 270,
+       "h": 396,
+       "px": [
+        405,
+        594
+       ],
+       "bytes": 4092
+      }
+     ]
+    },
+    {
+     "id": "front",
+     "file": "assets/rooms/school/front.webp",
+     "baseline": 1000,
+     "opaque": false,
+     "x": 1078,
+     "y": 832.67,
+     "w": 1486,
+     "h": 267.33,
+     "px": [
+      2229,
+      401
+     ],
+     "bytes": 20156,
+     "tiles": [
+      {
+       "file": "assets/rooms/school/tiles/front-0.webp",
+       "x": 1078,
+       "y": 832.67,
+       "w": 483.33,
+       "h": 267.33,
+       "px": [
+        725,
+        401
+       ],
+       "bytes": 9762
+      },
+      {
+       "file": "assets/rooms/school/tiles/front-1.webp",
+       "x": 1560,
+       "y": 832.67,
+       "w": 81.33,
+       "h": 267.33,
+       "px": [
+        122,
+        401
+       ],
+       "bytes": 664
+      },
+      {
+       "file": "assets/rooms/school/tiles/front-2.webp",
+       "x": 1640,
+       "y": 832.67,
+       "w": 867.33,
+       "h": 267.33,
+       "px": [
+        1301,
+        401
+       ],
+       "bytes": 10064
+      },
+      {
+       "file": "assets/rooms/school/tiles/front-3.webp",
+       "x": 2506,
+       "y": 832.67,
+       "w": 58,
+       "h": 267.33,
+       "px": [
+        87,
+        401
+       ],
+       "bytes": 1902
+      }
+     ]
+    }
+   ],
+   "floor": {
+    "y0": 707,
+    "y1": 999.6
+   },
+   "surfaces": [
+    {
+     "id": "cubby-top",
+     "layer": "counter",
+     "x0": 651,
+     "x1": 945,
+     "y": 438.2
+    },
+    {
+     "id": "cubby-1-shelf",
+     "layer": "counter",
+     "x0": 656.6,
+     "x1": 694.4,
+     "y": 553
+    },
+    {
+     "id": "cubby-1-floor",
+     "layer": "counter",
+     "x0": 656.6,
+     "x1": 694.4,
+     "y": 716.8
+    },
+    {
+     "id": "cubby-2-shelf",
+     "layer": "counter",
+     "x0": 705.6,
+     "x1": 743.4,
+     "y": 553
+    },
+    {
+     "id": "cubby-2-floor",
+     "layer": "counter",
+     "x0": 705.6,
+     "x1": 743.4,
+     "y": 716.8
+    },
+    {
+     "id": "cubby-3-shelf",
+     "layer": "counter",
+     "x0": 754.6,
+     "x1": 792.4,
+     "y": 553
+    },
+    {
+     "id": "cubby-3-floor",
+     "layer": "counter",
+     "x0": 754.6,
+     "x1": 792.4,
+     "y": 716.8
+    },
+    {
+     "id": "cubby-4-shelf",
+     "layer": "counter",
+     "x0": 803.6,
+     "x1": 841.4,
+     "y": 553
+    },
+    {
+     "id": "cubby-4-floor",
+     "layer": "counter",
+     "x0": 803.6,
+     "x1": 841.4,
+     "y": 716.8
+    },
+    {
+     "id": "cubby-5-shelf",
+     "layer": "counter",
+     "x0": 852.6,
+     "x1": 890.4,
+     "y": 553
+    },
+    {
+     "id": "cubby-5-floor",
+     "layer": "counter",
+     "x0": 852.6,
+     "x1": 890.4,
+     "y": 716.8
+    },
+    {
+     "id": "cubby-6-shelf",
+     "layer": "counter",
+     "x0": 901.6,
+     "x1": 939.4,
+     "y": 553
+    },
+    {
+     "id": "cubby-6-floor",
+     "layer": "counter",
+     "x0": 901.6,
+     "x1": 939.4,
+     "y": 716.8
+    },
+    {
+     "id": "sink-top",
+     "layer": "counter",
+     "x0": 946.4,
+     "x1": 1034.6,
+     "y": 606.2
+    },
+    {
+     "id": "block-shelf",
+     "layer": "counter",
+     "x0": 1316,
+     "x1": 1512,
+     "y": 592.2
+    },
+    {
+     "id": "window-sill",
+     "layer": "back",
+     "x0": 1400,
+     "x1": 1589,
+     "y": 442.4
+    },
+    {
+     "id": "whiteboard-tray",
+     "layer": "back",
+     "x0": 1631,
+     "x1": 1869,
+     "y": 434
+    },
+    {
+     "id": "easel-tray",
+     "layer": "mid",
+     "x0": 1169,
+     "x1": 1295,
+     "y": 774.2
+    },
+    {
+     "id": "kid-table",
+     "layer": "front",
+     "x0": 1330,
+     "x1": 1533,
+     "y": 837.2
+    },
+    {
+     "id": "book-shelf",
+     "layer": "counter",
+     "x0": 1932,
+     "x1": 2079,
+     "y": 592.2
+    },
+    {
+     "id": "cot-stack",
+     "layer": "counter",
+     "x0": 2093,
+     "x1": 2170,
+     "y": 617.4
+    },
+    {
+     "id": "show-stool",
+     "layer": "mid",
+     "x0": 1645,
+     "x1": 1687,
+     "y": 912.8
+    },
+    {
+     "id": "hatch",
+     "layer": "counter",
+     "x0": 2219,
+     "x1": 2422,
+     "y": 560
+    },
+    {
+     "id": "lunch-table",
+     "layer": "mid",
+     "x0": 2198,
+     "x1": 2415,
+     "y": 756
+    },
+    {
+     "id": "tower-deck",
+     "layer": "counter",
+     "x0": 2667,
+     "x1": 2793,
+     "y": 546
+    },
+    {
+     "id": "sandbox",
+     "layer": "mid",
+     "x0": 2233,
+     "x1": 2422,
+     "y": 924
+    }
+   ],
+   "seats": [
+    {
+     "id": "bus-seat-1",
+     "layer": "counter",
+     "at": [
+      15.4,
+      805
+     ]
+    },
+    {
+     "id": "bus-seat-2",
+     "layer": "counter",
+     "at": [
+      89.6,
+      805
+     ]
+    },
+    {
+     "id": "bus-seat-3",
+     "layer": "counter",
+     "at": [
+      163.8,
+      805
+     ]
+    },
+    {
+     "id": "beanbag",
+     "layer": "counter",
+     "at": [
+      1081.5,
+      770
+     ]
+    },
+    {
+     "id": "rug-1",
+     "layer": "counter",
+     "at": [
+      1792,
+      805
+     ]
+    },
+    {
+     "id": "rug-2",
+     "layer": "counter",
+     "at": [
+      1918,
+      798
+     ]
+    },
+    {
+     "id": "rug-3",
+     "layer": "counter",
+     "at": [
+      2044,
+      805
+     ]
+    },
+    {
+     "id": "rug-4",
+     "layer": "counter",
+     "at": [
+      1729,
+      889
+     ]
+    },
+    {
+     "id": "rug-5",
+     "layer": "counter",
+     "at": [
+      1855,
+      898.8
+     ]
+    },
+    {
+     "id": "rug-6",
+     "layer": "counter",
+     "at": [
+      1981,
+      898.8
+     ]
+    },
+    {
+     "id": "rug-7",
+     "layer": "counter",
+     "at": [
+      2093,
+      886.2
+     ]
+    },
+    {
+     "id": "rocking-chair",
+     "layer": "mid",
+     "at": [
+      1603,
+      791
+     ]
+    },
+    {
+     "id": "chair-1",
+     "layer": "mid",
+     "at": [
+      1368.5,
+      875
+     ]
+    },
+    {
+     "id": "chair-2",
+     "layer": "mid",
+     "at": [
+      1431.5,
+      875
+     ]
+    },
+    {
+     "id": "chair-3",
+     "layer": "mid",
+     "at": [
+      1494.5,
+      875
+     ]
+    },
+    {
+     "id": "show-stool",
+     "layer": "mid",
+     "at": [
+      1666,
+      914.2
+     ]
+    },
+    {
+     "id": "reading-cushion",
+     "layer": "counter",
+     "at": [
+      1960,
+      742
+     ]
+    },
+    {
+     "id": "lunch-bench-1",
+     "layer": "counter",
+     "at": [
+      2240,
+      779.8
+     ]
+    },
+    {
+     "id": "lunch-bench-2",
+     "layer": "counter",
+     "at": [
+      2306.5,
+      779.8
+     ]
+    },
+    {
+     "id": "lunch-bench-3",
+     "layer": "counter",
+     "at": [
+      2373,
+      779.8
+     ]
+    },
+    {
+     "id": "slide-top",
+     "layer": "counter",
+     "at": [
+      2786,
+      546
+     ]
+    },
+    {
+     "id": "swing-1",
+     "layer": "counter",
+     "at": [
+      3062.5,
+      679
+     ]
+    },
+    {
+     "id": "swing-2",
+     "layer": "counter",
+     "at": [
+      3143,
+      679
+     ]
+    },
+    {
+     "id": "seesaw-l",
+     "layer": "mid",
+     "at": [
+      2527,
+      901.6
+     ]
+    },
+    {
+     "id": "seesaw-r",
+     "layer": "mid",
+     "at": [
+      2737,
+      901.6
+     ]
+    }
+   ],
+   "pieces": {
+    "school-bell": {
+     "layer": "back",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/school-bell-still.webp",
+       "bytes": 2326
+      },
+      "ring": {
+       "file": "assets/rooms/school/school-bell-ring.webp",
+       "bytes": 2992
+      }
+     },
+     "px": [
+      121,
+      121
+     ],
+     "x": 461.33,
+     "y": 40.67,
+     "w": 80.67,
+     "h": 80.67,
+     "taps": null,
+     "pivot": [
+      504,
+      56
+     ]
+    },
+    "front-door": {
+     "layer": "back",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/school/front-door-closed.webp",
+       "bytes": 5854
+      },
+      "open": {
+       "file": "assets/rooms/school/front-door-open.webp",
+       "bytes": 3400
+      }
+     },
+     "px": [
+      316,
+      614
+     ],
+     "x": 398.67,
+     "y": 312,
+     "w": 210.67,
+     "h": 409.33,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": null
+    },
+    "light-switch": {
+     "layer": "back",
+     "default": "on",
+     "variants": {
+      "on": {
+       "file": "assets/rooms/school/light-switch-on.webp",
+       "bytes": 1298
+      },
+      "off": {
+       "file": "assets/rooms/school/light-switch-off.webp",
+       "bytes": 1276
+      }
+     },
+     "px": [
+      46,
+      64
+     ],
+     "x": 1090.67,
+     "y": 468.67,
+     "w": 30.67,
+     "h": 42.67,
+     "taps": [
+      "on",
+      "off"
+     ],
+     "pivot": null
+    },
+    "weather-today": {
+     "layer": "back",
+     "default": "blank",
+     "variants": {
+      "blank": {
+       "file": "assets/rooms/school/weather-today-blank.webp",
+       "bytes": 1874
+      },
+      "sun": {
+       "file": "assets/rooms/school/weather-today-sun.webp",
+       "bytes": 4690
+      },
+      "cloud": {
+       "file": "assets/rooms/school/weather-today-cloud.webp",
+       "bytes": 2630
+      },
+      "rain": {
+       "file": "assets/rooms/school/weather-today-rain.webp",
+       "bytes": 3156
+      },
+      "snow": {
+       "file": "assets/rooms/school/weather-today-snow.webp",
+       "bytes": 4026
+      }
+     },
+     "px": [
+      122,
+      122
+     ],
+     "x": 1190,
+     "y": 182,
+     "w": 81.33,
+     "h": 81.33,
+     "taps": null,
+     "pivot": null
+    },
+    "class-window": {
+     "layer": "back",
+     "default": "sun",
+     "variants": {
+      "sun": {
+       "file": "assets/rooms/school/class-window-sun.webp",
+       "bytes": 12870
+      },
+      "cloud": {
+       "file": "assets/rooms/school/class-window-cloud.webp",
+       "bytes": 11674
+      },
+      "rain": {
+       "file": "assets/rooms/school/class-window-rain.webp",
+       "bytes": 12258
+      },
+      "snow": {
+       "file": "assets/rooms/school/class-window-snow.webp",
+       "bytes": 10988
+      }
+     },
+     "px": [
+      370,
+      464
+     ],
+     "x": 1360.67,
+     "y": 150,
+     "w": 246.67,
+     "h": 309.33,
+     "taps": null,
+     "pivot": null
+    },
+    "bus-inside": {
+     "layer": "counter",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/bus-inside-still.webp",
+       "bytes": 4392
+      }
+     },
+     "px": [
+      547,
+      390
+     ],
+     "x": -100,
+     "y": 570,
+     "w": 364.67,
+     "h": 260,
+     "taps": null,
+     "pivot": null
+    },
+    "sink-tap": {
+     "layer": "counter",
+     "default": "off",
+     "variants": {
+      "off": {
+       "file": "assets/rooms/school/sink-tap-off.webp",
+       "bytes": 1398
+      },
+      "on": {
+       "file": "assets/rooms/school/sink-tap-on.webp",
+       "bytes": 2292
+      }
+     },
+     "px": [
+      88,
+      90
+     ],
+     "x": 958,
+     "y": 558.67,
+     "w": 58.67,
+     "h": 60,
+     "taps": [
+      "off",
+      "on"
+     ],
+     "pivot": null
+    },
+    "fish-bowl": {
+     "layer": "counter",
+     "default": "swim-a",
+     "variants": {
+      "swim-a": {
+       "file": "assets/rooms/school/fish-bowl-swim-a.webp",
+       "bytes": 4326
+      },
+      "swim-b": {
+       "file": "assets/rooms/school/fish-bowl-swim-b.webp",
+       "bytes": 4114
+      },
+      "fed": {
+       "file": "assets/rooms/school/fish-bowl-fed.webp",
+       "bytes": 4458
+      }
+     },
+     "px": [
+      123,
+      111
+     ],
+     "x": 1940,
+     "y": 522.67,
+     "w": 82,
+     "h": 74,
+     "taps": [
+      "swim-a",
+      "swim-b"
+     ],
+     "pivot": null
+    },
+    "swing-1-seat": {
+     "layer": "counter",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/swing-1-seat-still.webp",
+       "bytes": 1836
+      }
+     },
+     "px": [
+      118,
+      41
+     ],
+     "x": 3023.33,
+     "y": 671.33,
+     "w": 78.67,
+     "h": 27.33,
+     "taps": null,
+     "pivot": [
+      3062.5,
+      406
+     ]
+    },
+    "swing-2-seat": {
+     "layer": "counter",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/swing-2-seat-still.webp",
+       "bytes": 1810
+      }
+     },
+     "px": [
+      117,
+      41
+     ],
+     "x": 3104,
+     "y": 671.33,
+     "w": 78,
+     "h": 27.33,
+     "taps": null,
+     "pivot": [
+      3143,
+      406
+     ]
+    },
+    "bus": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/bus-still.webp",
+       "bytes": 18400
+      }
+     },
+     "px": [
+      681,
+      584
+     ],
+     "x": -100,
+     "y": 537.33,
+     "w": 454,
+     "h": 389.33,
+     "taps": null,
+     "pivot": null
+    },
+    "bus-door": {
+     "layer": "mid",
+     "default": "closed",
+     "variants": {
+      "closed": {
+       "file": "assets/rooms/school/bus-door-closed.webp",
+       "bytes": 3010
+      },
+      "open": {
+       "file": "assets/rooms/school/bus-door-open.webp",
+       "bytes": 2376
+      }
+     },
+     "px": [
+      89,
+      433
+     ],
+     "x": 204,
+     "y": 576.67,
+     "w": 59.33,
+     "h": 288.67,
+     "taps": [
+      "closed",
+      "open"
+     ],
+     "pivot": null
+    },
+    "rocking-chair": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/rocking-chair-still.webp",
+       "bytes": 8160
+      }
+     },
+     "px": [
+      231,
+      466
+     ],
+     "x": 1526,
+     "y": 626,
+     "w": 154,
+     "h": 310.67,
+     "taps": null,
+     "pivot": [
+      1603,
+      922.6
+     ]
+    },
+    "swing-1-chains": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/swing-1-chains-still.webp",
+       "bytes": 6362
+      }
+     },
+     "px": [
+      105,
+      438
+     ],
+     "x": 3027.33,
+     "y": 400,
+     "w": 70,
+     "h": 292,
+     "taps": null,
+     "pivot": [
+      3062.5,
+      406
+     ]
+    },
+    "swing-2-chains": {
+     "layer": "mid",
+     "default": "still",
+     "variants": {
+      "still": {
+       "file": "assets/rooms/school/swing-2-chains-still.webp",
+       "bytes": 6416
+      }
+     },
+     "px": [
+      105,
+      438
+     ],
+     "x": 3108,
+     "y": 400,
+     "w": 70,
+     "h": 292,
+     "taps": null,
+     "pivot": [
+      3143,
+      406
+     ]
+    },
+    "seesaw": {
+     "layer": "mid",
+     "default": "level",
+     "variants": {
+      "level": {
+       "file": "assets/rooms/school/seesaw-level.webp",
+       "bytes": 3212
+      },
+      "left": {
+       "file": "assets/rooms/school/seesaw-left.webp",
+       "bytes": 6796
+      },
+      "right": {
+       "file": "assets/rooms/school/seesaw-right.webp",
+       "bytes": 6650
+      }
+     },
+     "px": [
+      426,
+      160
+     ],
+     "x": 2490,
+     "y": 842.67,
+     "w": 284,
+     "h": 106.67,
+     "taps": [
+      "left",
+      "right"
+     ],
+     "pivot": [
+      2632,
+      910
+     ]
+    },
+    "sand": {
+     "layer": "mid",
+     "default": "full",
+     "variants": {
+      "full": {
+       "file": "assets/rooms/school/sand-full.webp",
+       "bytes": 3362
+      }
+     },
+     "px": [
+      341,
+      139
+     ],
+     "x": 2214,
+     "y": 856.67,
+     "w": 227.33,
+     "h": 92.67,
+     "taps": null,
+     "pivot": null
+    }
+   },
+   "slots": [
+    {
+     "id": "bus-door",
+     "kind": "door",
+     "layer": "mid",
+     "at": [
+      233.8,
+      865.2
+     ],
+     "piece": "bus-door",
+     "box": null
+    },
+    {
+     "id": "front-door",
+     "kind": "door",
+     "layer": "back",
+     "at": [
+      504,
+      721
+     ],
+     "box": [
+      434,
+      329,
+      140,
+      378
+     ],
+     "piece": "front-door"
+    },
+    {
+     "id": "school-bell",
+     "kind": "bell",
+     "layer": "back",
+     "at": [
+      504,
+      91
+     ],
+     "piece": "school-bell",
+     "box": null
+    },
+    {
+     "id": "hook-1",
+     "kind": "hook",
+     "layer": "counter",
+     "at": [
+      682.5,
+      583.8
+     ],
+     "label": "cat",
+     "box": null
+    },
+    {
+     "id": "hook-2",
+     "kind": "hook",
+     "layer": "counter",
+     "at": [
+      731.5,
+      583.8
+     ],
+     "label": "dog",
+     "box": null
+    },
+    {
+     "id": "hook-3",
+     "kind": "hook",
+     "layer": "counter",
+     "at": [
+      780.5,
+      583.8
+     ],
+     "label": "fish",
+     "box": null
+    },
+    {
+     "id": "hook-4",
+     "kind": "hook",
+     "layer": "counter",
+     "at": [
+      829.5,
+      583.8
+     ],
+     "label": "bird",
+     "box": null
+    },
+    {
+     "id": "hook-5",
+     "kind": "hook",
+     "layer": "counter",
+     "at": [
+      878.5,
+      583.8
+     ],
+     "label": "bunny",
+     "box": null
+    },
+    {
+     "id": "hook-6",
+     "kind": "hook",
+     "layer": "counter",
+     "at": [
+      927.5,
+      583.8
+     ],
+     "label": "bear",
+     "box": null
+    },
+    {
+     "id": "label-1",
+     "kind": "label",
+     "layer": "counter",
+     "at": [
+      675.5,
+      470.4
+     ],
+     "box": [
+      655.9,
+      450.8,
+      39.2,
+      39.2
+     ],
+     "label": "cat"
+    },
+    {
+     "id": "label-2",
+     "kind": "label",
+     "layer": "counter",
+     "at": [
+      724.5,
+      470.4
+     ],
+     "box": [
+      704.9,
+      450.8,
+      39.2,
+      39.2
+     ],
+     "label": "dog"
+    },
+    {
+     "id": "label-3",
+     "kind": "label",
+     "layer": "counter",
+     "at": [
+      773.5,
+      470.4
+     ],
+     "box": [
+      753.9,
+      450.8,
+      39.2,
+      39.2
+     ],
+     "label": "fish"
+    },
+    {
+     "id": "label-4",
+     "kind": "label",
+     "layer": "counter",
+     "at": [
+      822.5,
+      470.4
+     ],
+     "box": [
+      802.9,
+      450.8,
+      39.2,
+      39.2
+     ],
+     "label": "bird"
+    },
+    {
+     "id": "label-5",
+     "kind": "label",
+     "layer": "counter",
+     "at": [
+      871.5,
+      470.4
+     ],
+     "box": [
+      851.9,
+      450.8,
+      39.2,
+      39.2
+     ],
+     "label": "bunny"
+    },
+    {
+     "id": "label-6",
+     "kind": "label",
+     "layer": "counter",
+     "at": [
+      920.5,
+      470.4
+     ],
+     "box": [
+      900.9,
+      450.8,
+      39.2,
+      39.2
+     ],
+     "label": "bear"
+    },
+    {
+     "id": "line-1",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      672,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "line-2",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      733.6,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "line-3",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      795.2,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "line-4",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      856.8,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "line-5",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      918.4,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "line-6",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      980,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "line-7",
+     "kind": "line",
+     "layer": "back",
+     "at": [
+      1041.6,
+      833
+     ],
+     "box": null
+    },
+    {
+     "id": "sink",
+     "kind": "sink",
+     "layer": "counter",
+     "at": [
+      990.5,
+      611.8
+     ],
+     "box": [
+      952,
+      553,
+      77,
+      63
+     ],
+     "piece": "sink-tap"
+    },
+    {
+     "id": "feeling-happy",
+     "kind": "feeling",
+     "layer": "back",
+     "at": [
+      1064,
+      392
+     ],
+     "box": [
+      1045.8,
+      373.8,
+      36.4,
+      36.4
+     ],
+     "feeling": "happy"
+    },
+    {
+     "id": "feeling-sad",
+     "kind": "feeling",
+     "layer": "back",
+     "at": [
+      1113,
+      392
+     ],
+     "box": [
+      1094.8,
+      373.8,
+      36.4,
+      36.4
+     ],
+     "feeling": "sad"
+    },
+    {
+     "id": "feeling-mad",
+     "kind": "feeling",
+     "layer": "back",
+     "at": [
+      1064,
+      434
+     ],
+     "box": [
+      1045.8,
+      415.8,
+      36.4,
+      36.4
+     ],
+     "feeling": "mad"
+    },
+    {
+     "id": "feeling-scared",
+     "kind": "feeling",
+     "layer": "back",
+     "at": [
+      1113,
+      434
+     ],
+     "box": [
+      1094.8,
+      415.8,
+      36.4,
+      36.4
+     ],
+     "feeling": "scared"
+    },
+    {
+     "id": "feeling-calm",
+     "kind": "feeling",
+     "layer": "back",
+     "at": [
+      1088.5,
+      479.5
+     ],
+     "box": [
+      1070.3,
+      461.3,
+      36.4,
+      36.4
+     ],
+     "feeling": "calm"
+    },
+    {
+     "id": "light-switch",
+     "kind": "switch",
+     "layer": "back",
+     "at": [
+      1106,
+      490
+     ],
+     "box": [
+      1085,
+      462,
+      42,
+      56
+     ],
+     "piece": "light-switch"
+    },
+    {
+     "id": "weather-board",
+     "kind": "weather",
+     "layer": "back",
+     "at": [
+      1230.6,
+      222.6
+     ],
+     "box": [
+      1194.2,
+      186.2,
+      72.8,
+      72.8
+     ],
+     "piece": "weather-today",
+     "window": "class-window"
+    },
+    {
+     "id": "easel",
+     "kind": "canvas",
+     "layer": "mid",
+     "box": [
+      1183,
+      630,
+      98,
+      133
+     ],
+     "at": null
+    },
+    {
+     "id": "whiteboard",
+     "kind": "canvas",
+     "layer": "back",
+     "box": [
+      1603,
+      231,
+      294,
+      196
+     ],
+     "at": null
+    },
+    {
+     "id": "fish-bowl",
+     "kind": "pet",
+     "layer": "counter",
+     "at": [
+      1981,
+      529.2
+     ],
+     "box": [
+      1941.8,
+      527.8,
+      78.4,
+      64.4
+     ],
+     "piece": "fish-bowl"
+    },
+    {
+     "id": "show-and-tell",
+     "kind": "spotlight",
+     "layer": "mid",
+     "at": [
+      1666,
+      914.2
+     ],
+     "box": null
+    },
+    {
+     "id": "teacher-spot",
+     "kind": "teacher",
+     "layer": "mid",
+     "at": [
+      1708,
+      931
+     ],
+     "box": null
+    },
+    {
+     "id": "sandbox",
+     "kind": "dig",
+     "layer": "mid",
+     "box": [
+      2219,
+      862.4,
+      217,
+      82.6
+     ],
+     "piece": "sand",
+     "at": null
+    },
+    {
+     "id": "treasure-1",
+     "kind": "treasure",
+     "layer": "mid",
+     "at": [
+      2268,
+      924
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-2",
+     "kind": "treasure",
+     "layer": "mid",
+     "at": [
+      2331,
+      907.2
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-3",
+     "kind": "treasure",
+     "layer": "mid",
+     "at": [
+      2387,
+      928.2
+     ],
+     "box": null
+    },
+    {
+     "id": "treasure-4",
+     "kind": "treasure",
+     "layer": "mid",
+     "at": [
+      2296,
+      889
+     ],
+     "box": null
+    },
+    {
+     "id": "slide",
+     "kind": "slide",
+     "layer": "counter",
+     "at": [
+      2793,
+      557.2
+     ],
+     "box": null
+    },
+    {
+     "id": "monkey-bars",
+     "kind": "bars",
+     "layer": "counter",
+     "at": [
+      2527,
+      434
+     ],
+     "box": null
+    },
+    {
+     "id": "lights",
+     "kind": "lights",
+     "layer": "back",
+     "box": [
+      1148,
+      0,
+      1036,
+      1000
+     ],
+     "note": "light switch dims this zone (nap time)",
+     "at": null
+    }
+   ],
+   "spawners": [
+    {
+     "id": "art-caddy",
+     "at": [
+      1421,
+      560
+     ],
+     "items": [
+      "crayon",
+      "crayon-box",
+      "marker",
+      "glue-stick",
+      "scissors",
+      "paper-sheet",
+      "stamp"
+     ]
+    },
+    {
+     "id": "block-bin",
+     "at": [
+      1366.4,
+      637
+     ],
+     "items": [
+      "unit-block",
+      "blocks"
+     ]
+    },
+    {
+     "id": "toy-bin",
+     "at": [
+      1461.6,
+      637
+     ],
+     "items": [
+      "toy-car",
+      "puzzle"
+     ]
+    },
+    {
+     "id": "crayon-bin",
+     "at": [
+      1366.4,
+      693
+     ],
+     "items": [
+      "crayon",
+      "chalk"
+     ]
+    },
+    {
+     "id": "plush-bin",
+     "at": [
+      1461.6,
+      693
+     ],
+     "items": [
+      "plush-bunny",
+      "teddy"
+     ]
+    },
+    {
+     "id": "books",
+     "surfaces": [
+      "book-shelf"
+     ],
+     "at": [
+      2005.5,
+      672
+     ],
+     "items": [
+      "picture-book",
+      "book"
+     ]
+    },
+    {
+     "id": "weather-cards",
+     "at": [
+      1288,
+      455
+     ],
+     "items": [
+      "weather-card"
+     ]
+    },
+    {
+     "id": "paint",
+     "surfaces": [
+      "easel-tray"
+     ],
+     "at": [
+      1232,
+      774.2
+     ],
+     "items": [
+      "paint-cup"
+     ]
+    },
+    {
+     "id": "markers",
+     "surfaces": [
+      "whiteboard-tray"
+     ],
+     "at": [
+      1750,
+      434
+     ],
+     "items": [
+      "marker"
+     ]
+    },
+    {
+     "id": "cots",
+     "surfaces": [
+      "cot-stack"
+     ],
+     "at": [
+      2131.5,
+      686
+     ],
+     "items": [
+      "nap-cot",
+      "nap-blanket"
+     ]
+    },
+    {
+     "id": "lunch-hatch",
+     "surfaces": [
+      "hatch"
+     ],
+     "at": [
+      2320.5,
+      448
+     ],
+     "items": [
+      "lunch-tray",
+      "milk-carton",
+      "juice-box",
+      "snack-cup",
+      "apple",
+      "school-lunchbox"
+     ]
+    },
+    {
+     "id": "recess-bin",
+     "at": [
+      2453.5,
+      686
+     ],
+     "items": [
+      "playground-ball",
+      "jump-rope",
+      "chalk",
+      "sand-pail",
+      "spade",
+      "sun-hat"
+     ]
+    }
+   ],
+   "zones": [
+    {
+     "id": "arrival",
+     "x0": 0,
+     "x1": 1148,
+     "camera": 0
+    },
+    {
+     "id": "classroom",
+     "x0": 1148,
+     "x1": 2184,
+     "camera": 946
+    },
+    {
+     "id": "recess",
+     "x0": 2184,
+     "x1": 3199.7,
+     "camera": 1760
+    }
+   ],
+   "rigs": {
+    "bus": {
+     "pieces": {
+      "body": "bus",
+      "door": "bus-door",
+      "inside": "bus-inside"
+     },
+     "seats": [
+      "bus-seat-1",
+      "bus-seat-2",
+      "bus-seat-3"
+     ],
+     "door": [
+      233.8,
+      865.2
+     ],
+     "stop": [
+      261.8,
+      882
+     ],
+     "note": "Arrival: translate bus, bus-door and bus-inside together from off-screen left to rest; open the door; riders hop from bus seats to the kerb at stop. The bus is the travel vehicle (design 2.4)."
+    },
+    "letters": [
+     {
+      "ch": "A",
+      "box": [
+       1190,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "B",
+      "box": [
+       1262.8,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "C",
+      "box": [
+       1335.6,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "D",
+      "box": [
+       1408.4,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "E",
+      "box": [
+       1481.2,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "F",
+      "box": [
+       1554,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "G",
+      "box": [
+       1626.8,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "H",
+      "box": [
+       1699.6,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "I",
+      "box": [
+       1772.4,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "J",
+      "box": [
+       1845.2,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "K",
+      "box": [
+       1918,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "L",
+      "box": [
+       1990.8,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "M",
+      "box": [
+       2063.6,
+       9.8,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "N",
+      "box": [
+       1190,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "O",
+      "box": [
+       1262.8,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "P",
+      "box": [
+       1335.6,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "Q",
+      "box": [
+       1408.4,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "R",
+      "box": [
+       1481.2,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "S",
+      "box": [
+       1554,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "T",
+      "box": [
+       1626.8,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "U",
+      "box": [
+       1699.6,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "V",
+      "box": [
+       1772.4,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "W",
+      "box": [
+       1845.2,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "X",
+      "box": [
+       1918,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "Y",
+      "box": [
+       1990.8,
+       75.6,
+       65.8,
+       58.8
+      ]
+     },
+     {
+      "ch": "Z",
+      "box": [
+       2063.6,
+       75.6,
+       65.8,
+       58.8
+      ]
+     }
+    ],
+    "sightWords": {
+     "cards": [
+      [
+       1947.4,
+       193.2,
+       84,
+       40.6
+      ],
+      [
+       2058,
+       193.2,
+       84,
+       40.6
+      ],
+      [
+       1947.4,
+       254.8,
+       84,
+       40.6
+      ],
+      [
+       2058,
+       254.8,
+       84,
+       40.6
+      ],
+      [
+       1947.4,
+       316.4,
+       84,
+       40.6
+      ],
+      [
+       2058,
+       316.4,
+       84,
+       40.6
+      ],
+      [
+       1947.4,
+       378,
+       84,
+       40.6
+      ],
+      [
+       2058,
+       378,
+       84,
+       40.6
+      ]
+     ],
+     "note": "Blank cards: the engine writes SCHOOL.sightWords[i] into cards[i] (text layer + speech)."
+    },
+    "schedule": [
+     {
+      "id": "arrive",
+      "box": [
+       1610,
+       168,
+       39.2,
+       44.8
+      ]
+     },
+     {
+      "id": "circle",
+      "box": [
+       1653.4,
+       168,
+       39.2,
+       44.8
+      ]
+     },
+     {
+      "id": "play",
+      "box": [
+       1696.8,
+       168,
+       39.2,
+       44.8
+      ]
+     },
+     {
+      "id": "snack",
+      "box": [
+       1740.2,
+       168,
+       39.2,
+       44.8
+      ]
+     },
+     {
+      "id": "recess",
+      "box": [
+       1783.6,
+       168,
+       39.2,
+       44.8
+      ]
+     },
+     {
+      "id": "story",
+      "box": [
+       1827,
+       168,
+       39.2,
+       44.8
+      ]
+     },
+     {
+      "id": "home",
+      "box": [
+       1870.4,
+       168,
+       39.2,
+       44.8
+      ]
+     }
+    ],
+    "calendar": {
+     "today": [
+      1194.2,
+      186.2,
+      72.8,
+      72.8
+     ],
+     "weekDots": [
+      [
+       1206.8,
+       280
+      ],
+      [
+       1233.4,
+       280
+      ],
+      [
+       1260,
+       280
+      ],
+      [
+       1286.6,
+       280
+      ],
+      [
+       1313.2,
+       280
+      ],
+      [
+       1339.8,
+       280
+      ],
+      [
+       1366.4,
+       280
+      ]
+     ],
+     "monthDots": [
+      [
+       1206.8,
+       312.2
+      ],
+      [
+       1233.4,
+       312.2
+      ],
+      [
+       1260,
+       312.2
+      ],
+      [
+       1286.6,
+       312.2
+      ],
+      [
+       1313.2,
+       312.2
+      ],
+      [
+       1339.8,
+       312.2
+      ],
+      [
+       1366.4,
+       312.2
+      ],
+      [
+       1206.8,
+       336
+      ],
+      [
+       1233.4,
+       336
+      ],
+      [
+       1260,
+       336
+      ],
+      [
+       1286.6,
+       336
+      ],
+      [
+       1313.2,
+       336
+      ],
+      [
+       1339.8,
+       336
+      ],
+      [
+       1366.4,
+       336
+      ],
+      [
+       1206.8,
+       359.8
+      ],
+      [
+       1233.4,
+       359.8
+      ],
+      [
+       1260,
+       359.8
+      ],
+      [
+       1286.6,
+       359.8
+      ],
+      [
+       1313.2,
+       359.8
+      ],
+      [
+       1339.8,
+       359.8
+      ],
+      [
+       1366.4,
+       359.8
+      ],
+      [
+       1206.8,
+       383.6
+      ],
+      [
+       1233.4,
+       383.6
+      ],
+      [
+       1260,
+       383.6
+      ],
+      [
+       1286.6,
+       383.6
+      ],
+      [
+       1313.2,
+       383.6
+      ],
+      [
+       1339.8,
+       383.6
+      ],
+      [
+       1366.4,
+       383.6
+      ],
+      [
+       1206.8,
+       407.4
+      ],
+      [
+       1233.4,
+       407.4
+      ],
+      [
+       1260,
+       407.4
+      ],
+      [
+       1286.6,
+       407.4
+      ],
+      [
+       1313.2,
+       407.4
+      ],
+      [
+       1339.8,
+       407.4
+      ],
+      [
+       1366.4,
+       407.4
+      ]
+     ],
+     "dotRadius": 8.4,
+     "doneThrough": 11,
+     "note": "weather-today piece variants blank/sun/cloud/rain/snow; set class-window to the same weather. monthDots[0..11] are drawn with stars (days done), [12] is \"today\"."
+    },
+    "feelings": [
+     {
+      "id": "happy",
+      "at": [
+       1064,
+       392
+      ],
+      "r": 18.2
+     },
+     {
+      "id": "sad",
+      "at": [
+       1113,
+       392
+      ],
+      "r": 18.2
+     },
+     {
+      "id": "mad",
+      "at": [
+       1064,
+       434
+      ],
+      "r": 18.2
+     },
+     {
+      "id": "scared",
+      "at": [
+       1113,
+       434
+      ],
+      "r": 18.2
+     },
+     {
+      "id": "calm",
+      "at": [
+       1088.5,
+       479.5
+      ],
+      "r": 18.2
+     }
+    ],
+    "cubbies": [
+     {
+      "animal": "cat",
+      "label": [
+       675.5,
+       470.4
+      ],
+      "labelR": 18.2,
+      "hook": [
+       682.5,
+       583.8
+      ],
+      "shelf": "cubby-1-shelf",
+      "floor": "cubby-1-floor"
+     },
+     {
+      "animal": "dog",
+      "label": [
+       724.5,
+       470.4
+      ],
+      "labelR": 18.2,
+      "hook": [
+       731.5,
+       583.8
+      ],
+      "shelf": "cubby-2-shelf",
+      "floor": "cubby-2-floor"
+     },
+     {
+      "animal": "fish",
+      "label": [
+       773.5,
+       470.4
+      ],
+      "labelR": 18.2,
+      "hook": [
+       780.5,
+       583.8
+      ],
+      "shelf": "cubby-3-shelf",
+      "floor": "cubby-3-floor"
+     },
+     {
+      "animal": "bird",
+      "label": [
+       822.5,
+       470.4
+      ],
+      "labelR": 18.2,
+      "hook": [
+       829.5,
+       583.8
+      ],
+      "shelf": "cubby-4-shelf",
+      "floor": "cubby-4-floor"
+     },
+     {
+      "animal": "bunny",
+      "label": [
+       871.5,
+       470.4
+      ],
+      "labelR": 18.2,
+      "hook": [
+       878.5,
+       583.8
+      ],
+      "shelf": "cubby-5-shelf",
+      "floor": "cubby-5-floor"
+     },
+     {
+      "animal": "bear",
+      "label": [
+       920.5,
+       470.4
+      ],
+      "labelR": 18.2,
+      "hook": [
+       927.5,
+       583.8
+      ],
+      "shelf": "cubby-6-shelf",
+      "floor": "cubby-6-floor"
+     }
+    ],
+    "canvases": {
+     "easel": [
+      1183,
+      630,
+      98,
+      133
+     ],
+     "whiteboard": [
+      1603,
+      231,
+      294,
+      196
+     ],
+     "note": "Paint/draw into a canvas over these boxes (blob save, P2d.3). The art underneath is blank paper / board."
+    },
+    "rug": {
+     "spots": [
+      [
+       1792,
+       805
+      ],
+      [
+       1918,
+       798
+      ],
+      [
+       2044,
+       805
+      ],
+      [
+       1729,
+       889
+      ],
+      [
+       1855,
+       898.8
+      ],
+      [
+       1981,
+       898.8
+      ],
+      [
+       2093,
+       886.2
+      ]
+     ],
+     "colors": [
+      "#DC6B6E",
+      "#EE9A55",
+      "#DFB050",
+      "#79A86D",
+      "#8CBDB8",
+      "#7F9FC4",
+      "#9A7A98"
+     ],
+     "seats": [
+      "rug-1",
+      "rug-2",
+      "rug-3",
+      "rug-4",
+      "rug-5",
+      "rug-6",
+      "rug-7"
+     ],
+     "note": "Seat ids start with rug: characters use the sit-cross pose. Each spot plays a note; a full rug plays a tune."
+    },
+    "line": {
+     "spots": [
+      [
+       672,
+       833
+      ],
+      [
+       733.6,
+       833
+      ],
+      [
+       795.2,
+       833
+      ],
+      [
+       856.8,
+       833
+      ],
+      [
+       918.4,
+       833
+      ],
+      [
+       980,
+       833
+      ],
+      [
+       1041.6,
+       833
+      ]
+     ],
+     "leader": 0,
+     "note": "line-1 (by the door) is the leader; march right toward recess."
+    },
+    "slide": {
+     "path": [
+      [
+       2793,
+       546
+      ],
+      [
+       2815.8,
+       550.2
+      ],
+      [
+       2838.5,
+       563
+      ],
+      [
+       2861.3,
+       584.2
+      ],
+      [
+       2884,
+       613.9
+      ],
+      [
+       2906.8,
+       643.6
+      ],
+      [
+       2929.5,
+       664.8
+      ],
+      [
+       2952.3,
+       677.6
+      ],
+      [
+       2975,
+       681.8
+      ],
+      [
+       3017,
+       695.8
+      ]
+     ],
+     "top": "slide-top",
+     "note": "Slide a seated character along path (world points, top to bottom), land sitting at the last point."
+    },
+    "swings": [
+     {
+      "seat": "swing-1",
+      "pieces": {
+       "chains": "swing-1-chains",
+       "seat": "swing-1-seat"
+      },
+      "pivot": [
+       3062.5,
+       406
+      ],
+      "length": 280,
+      "note": "Rotate chains and seat (and the seated character) together about pivot; push = bigger amplitude."
+     },
+     {
+      "seat": "swing-2",
+      "pieces": {
+       "chains": "swing-2-chains",
+       "seat": "swing-2-seat"
+      },
+      "pivot": [
+       3143,
+       406
+      ],
+      "length": 280,
+      "note": "Rotate chains and seat (and the seated character) together about pivot; push = bigger amplitude."
+     }
+    ],
+    "seesaw": {
+     "piece": "seesaw",
+     "pivot": [
+      2632,
+      910
+     ],
+     "halfLength": 133,
+     "tilt": {
+      "level": 0,
+      "left": -12,
+      "right": 12
+     },
+     "seats": [
+      "seesaw-l",
+      "seesaw-r"
+     ],
+     "note": "Variants are pre-rotated about pivot (degrees). Or rotate the level piece continuously; seats ride the plank ends."
+    },
+    "monkeyBars": {
+     "grips": [
+      [
+       2527,
+       434
+      ],
+      [
+       2550.8,
+       434
+      ],
+      [
+       2574.6,
+       434
+      ],
+      [
+       2598.4,
+       434
+      ],
+      [
+       2622.2,
+       434
+      ],
+      [
+       2646,
+       434
+      ]
+     ],
+     "hangFeet": 280,
+     "note": "Hand-over-hand from grips[0] to the tower; the \"made it\" cheer on the deck (tower-deck surface)."
+    },
+    "rockingChair": {
+     "piece": "rocking-chair",
+     "pivot": [
+      1603,
+      922.6
+     ],
+     "seat": "rocking-chair",
+     "note": "Rock a few degrees about pivot, with the seated teacher."
+    },
+    "sandbox": {
+     "piece": "sand",
+     "box": [
+      2219,
+      862.4,
+      217,
+      82.6
+     ],
+     "treasures": [
+      "treasure-1",
+      "treasure-2",
+      "treasure-3",
+      "treasure-4"
+     ],
+     "note": "Same as the dig pit (site.js): draw the sand piece into a canvas, erase with a round brush; toys in treasure slots are drawn under it. A flipped full pail leaves a sand-castle prop."
+    },
+    "hopscotch": [
+     {
+      "dots": 1,
+      "at": [
+       2793,
+       938
+      ]
+     },
+     {
+      "dots": 2,
+      "at": [
+       2849,
+       938
+      ]
+     },
+     {
+      "dots": 3,
+      "at": [
+       2905,
+       938
+      ]
+     },
+     {
+      "dots": 4,
+      "at": [
+       2961,
+       910
+      ]
+     },
+     {
+      "dots": 5,
+      "at": [
+       2961,
+       966
+      ]
+     },
+     {
+      "dots": 6,
+      "at": [
+       3017,
+       938
+      ]
+     },
+     {
+      "dots": 7,
+      "at": [
+       3073,
+       910
+      ]
+     },
+     {
+      "dots": 8,
+      "at": [
+       3073,
+       966
+      ]
+     },
+     {
+      "dots": 0,
+      "at": [
+       3136,
+       938
+      ]
+     }
+    ],
+    "lights": {
+     "switch": "light-switch",
+     "zone": "classroom",
+     "note": "off = dim the classroom (nap time), lullaby."
     }
    }
   }
@@ -13431,6 +18468,4192 @@
    "set": "site",
    "prep": null,
    "leaves": null
+  },
+  "crown": {
+   "label": "crown",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "prop"
+   ],
+   "default": "gold",
+   "variants": {
+    "gold": {
+     "file": "assets/sprites/props/crown-gold.webp",
+     "px": [
+      172,
+      126
+     ],
+     "bytes": 5528,
+     "size": [
+      86,
+      63
+     ],
+     "anchor": [
+      43,
+      59.5
+     ]
+    },
+    "silver": {
+     "file": "assets/sprites/props/crown-silver.webp",
+     "px": [
+      172,
+      126
+     ],
+     "bytes": 5314,
+     "size": [
+      86,
+      63
+     ],
+     "anchor": [
+      43,
+      59.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "crown",
+    "slot": "hat",
+    "colors": {
+     "gold": {
+      "hat": "#DFB050",
+      "hat-sh": "#C4933A",
+      "hat-2": "#DC6B6E"
+     },
+     "silver": {
+      "hat": "#D8DADC",
+      "hat-sh": "#B2B6BA",
+      "hat-2": "#8CBDB8"
+     }
+    }
+   }
+  },
+  "tiara": {
+   "label": "tiara",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/tiara.webp",
+     "px": [
+      154,
+      113
+     ],
+     "bytes": 4282,
+     "size": [
+      77,
+      56.5
+     ],
+     "anchor": [
+      38.5,
+      47
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -7
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "tiara",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#D8DADC",
+      "hat-sh": "#B2B6BA",
+      "hat-2": "#E9AFAE"
+     }
+    }
+   }
+  },
+  "wand": {
+   "label": "magic wand",
+   "tags": [
+    "theater",
+    "prop",
+    "wand"
+   ],
+   "default": "still",
+   "variants": {
+    "still": {
+     "file": "assets/sprites/props/wand-still.webp",
+     "px": [
+      163,
+      281
+     ],
+     "bytes": 4952,
+     "size": [
+      81.5,
+      140.5
+     ],
+     "anchor": [
+      25.5,
+      131.5
+     ]
+    },
+    "sparkle": {
+     "file": "assets/sprites/props/wand-sparkle.webp",
+     "px": [
+      202,
+      326
+     ],
+     "bytes": 6678,
+     "size": [
+      101,
+      163
+     ],
+     "anchor": [
+      45,
+      154
+     ]
+    }
+   },
+   "taps": [
+    "still",
+    "sparkle"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    1.4,
+    -28
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "foam-sword": {
+   "label": "foam sword",
+   "tags": [
+    "theater",
+    "prop",
+    "toy",
+    "sword"
+   ],
+   "default": "blue",
+   "variants": {
+    "blue": {
+     "file": "assets/sprites/props/foam-sword-blue.webp",
+     "px": [
+      215,
+      391
+     ],
+     "bytes": 7744,
+     "size": [
+      107.5,
+      195.5
+     ],
+     "anchor": [
+      65,
+      178
+     ]
+    },
+    "pink": {
+     "file": "assets/sprites/props/foam-sword-pink.webp",
+     "px": [
+      215,
+      391
+     ],
+     "bytes": 7698,
+     "size": [
+      107.5,
+      195.5
+     ],
+     "anchor": [
+      65,
+      178
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -2.8,
+    -22.4
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "bouquet": {
+   "label": "flower bouquet",
+   "tags": [
+    "theater",
+    "prop",
+    "flowers"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/bouquet.webp",
+     "px": [
+      154,
+      281
+     ],
+     "bytes": 8086,
+     "size": [
+      77,
+      140.5
+     ],
+     "anchor": [
+      38.5,
+      137
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -23.8
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "microphone": {
+   "label": "microphone",
+   "tags": [
+    "theater",
+    "prop",
+    "mic",
+    "sing"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/microphone.webp",
+     "px": [
+      98,
+      227
+     ],
+     "bytes": 3788,
+     "size": [
+      49,
+      113.5
+     ],
+     "anchor": [
+      24.5,
+      110
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -30.8
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "top-hat": {
+   "label": "top hat",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/top-hat.webp",
+     "px": [
+      204,
+      176
+     ],
+     "bytes": 2908,
+     "size": [
+      102,
+      88
+     ],
+     "anchor": [
+      51,
+      87
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -42
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "top-hat",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#433E46",
+      "hat-sh": "#57515A",
+      "hat-2": "#DC6B6E"
+     }
+    }
+   }
+  },
+  "masquerade-mask": {
+   "label": "masquerade mask",
+   "tags": [
+    "wear",
+    "wearable:face",
+    "theater",
+    "costume"
+   ],
+   "default": "teal",
+   "variants": {
+    "teal": {
+     "file": "assets/sprites/props/masquerade-mask-teal.webp",
+     "px": [
+      266,
+      168
+     ],
+     "bytes": 6908,
+     "size": [
+      133,
+      84
+     ],
+     "anchor": [
+      55.5,
+      80.5
+     ]
+    },
+    "berry": {
+     "file": "assets/sprites/props/masquerade-mask-berry.webp",
+     "px": [
+      266,
+      168
+     ],
+     "bytes": 6598,
+     "size": [
+      133,
+      84
+     ],
+     "anchor": [
+      55.5,
+      80.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "masquerade",
+    "slot": "face",
+    "colors": {
+     "teal": {
+      "face": "#8CBDB8",
+      "face-sh": "#679E9C"
+     },
+     "berry": {
+      "face": "#DC6B6E",
+      "face-sh": "#B9575B"
+     }
+    }
+   }
+  },
+  "gown": {
+   "label": "princess gown",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "pink",
+   "variants": {
+    "pink": {
+     "file": "assets/sprites/props/gown-pink.webp",
+     "px": [
+      256,
+      366
+     ],
+     "bytes": 12530,
+     "size": [
+      128,
+      183
+     ],
+     "anchor": [
+      64,
+      174.5
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/gown-blue.webp",
+     "px": [
+      256,
+      366
+     ],
+     "bytes": 13090,
+     "size": [
+      128,
+      183
+     ],
+     "anchor": [
+      64,
+      174.5
+     ]
+    },
+    "gold": {
+     "file": "assets/sprites/props/gown-gold.webp",
+     "px": [
+      256,
+      366
+     ],
+     "bytes": 13078,
+     "size": [
+      128,
+      183
+     ],
+     "anchor": [
+      64,
+      174.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -144.2
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "gown",
+    "slot": "top",
+    "colors": {
+     "pink": {
+      "top": "#E9AFAE",
+      "top-sh": "#D48C8E",
+      "top-2": "#F4DC98"
+     },
+     "blue": {
+      "top": "#CBE6F1",
+      "top-sh": "#A5D0E3",
+      "top-2": "#F4DC98"
+     },
+     "gold": {
+      "top": "#F4DC98",
+      "top-sh": "#DFB050",
+      "top-2": "#FBF3E8"
+     }
+    }
+   }
+  },
+  "royal-coat": {
+   "label": "prince coat",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/royal-coat.webp",
+     "px": [
+      282,
+      329
+     ],
+     "bytes": 13308,
+     "size": [
+      141,
+      164.5
+     ],
+     "anchor": [
+      70.5,
+      162
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -131.6
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "royal-coat",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#A3BEDC",
+      "top-sh": "#7F9FC4",
+      "top-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "knight-tunic": {
+   "label": "knight tunic",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/knight-tunic.webp",
+     "px": [
+      272,
+      348
+     ],
+     "bytes": 11444,
+     "size": [
+      136,
+      174
+     ],
+     "anchor": [
+      68,
+      174.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -144.2
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "knight-tunic",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#D8DADC",
+      "top-sh": "#B2B6BA",
+      "top-2": "#A3BEDC"
+     }
+    }
+   }
+  },
+  "pirate-hat": {
+   "label": "pirate hat",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/pirate-hat.webp",
+     "px": [
+      284,
+      154
+     ],
+     "bytes": 6992,
+     "size": [
+      142,
+      77
+     ],
+     "anchor": [
+      71,
+      73.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -28
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "pirate-hat",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#433E46",
+      "hat-sh": "#57515A",
+      "hat-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "pirate-coat": {
+   "label": "pirate coat",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/pirate-coat.webp",
+     "px": [
+      284,
+      346
+     ],
+     "bytes": 12728,
+     "size": [
+      142,
+      173
+     ],
+     "anchor": [
+      71,
+      170.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -140
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "pirate-coat",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#6886AE",
+      "top-sh": "#55739A",
+      "top-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "cat-ears": {
+   "label": "cat ears",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/cat-ears.webp",
+     "px": [
+      188,
+      135
+     ],
+     "bytes": 5104,
+     "size": [
+      94,
+      67.5
+     ],
+     "anchor": [
+      47,
+      62.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "cat-ears",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#D98B64",
+      "hat-sh": "#BC6E4C",
+      "hat-2": "#F6D3CF"
+     }
+    }
+   }
+  },
+  "bunny-ears": {
+   "label": "bunny ears",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/bunny-ears.webp",
+     "px": [
+      205,
+      205
+     ],
+     "bytes": 6616,
+     "size": [
+      102.5,
+      102.5
+     ],
+     "anchor": [
+      47,
+      97.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "bunny-ears",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#FFFFFF",
+      "hat-sh": "#EFE4D6",
+      "hat-2": "#F6D3CF"
+     }
+    }
+   }
+  },
+  "lion-mane": {
+   "label": "lion mane",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/lion-mane.webp",
+     "px": [
+      218,
+      174
+     ],
+     "bytes": 9264,
+     "size": [
+      109,
+      87
+     ],
+     "anchor": [
+      54.5,
+      80
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -36.4
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "lion-mane",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#DFB050",
+      "hat-sh": "#C4933A",
+      "hat-2": "#D98B64"
+     }
+    }
+   }
+  },
+  "star-dress": {
+   "label": "star dress",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/star-dress.webp",
+     "px": [
+      222,
+      356
+     ],
+     "bytes": 9410,
+     "size": [
+      111,
+      178
+     ],
+     "anchor": [
+      55.5,
+      174.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -144.2
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "star-dress",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#7F9FC4",
+      "top-sh": "#6886AE",
+      "top-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "tuxedo": {
+   "label": "tuxedo jacket",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/tuxedo.webp",
+     "px": [
+      272,
+      343
+     ],
+     "bytes": 7776,
+     "size": [
+      136,
+      171.5
+     ],
+     "anchor": [
+      68,
+      169
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -138.6
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "tuxedo",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#433E46",
+      "top-sh": "#57515A",
+      "top-2": "#DC6B6E"
+     }
+    }
+   }
+  },
+  "fairy-tutu": {
+   "label": "fairy tutu",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/fairy-tutu.webp",
+     "px": [
+      280,
+      304
+     ],
+     "bytes": 9734,
+     "size": [
+      140,
+      152
+     ],
+     "anchor": [
+      70,
+      152
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -121.8
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "fairy-tutu",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#F6D3CF",
+      "top-sh": "#E9AFAE",
+      "top-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "fairy-wings": {
+   "label": "fairy wings",
+   "tags": [
+    "wear",
+    "wearable:back",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/fairy-wings.webp",
+     "px": [
+      286,
+      142
+     ],
+     "bytes": 5806,
+     "size": [
+      143,
+      71
+     ],
+     "anchor": [
+      71.5,
+      69.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -30.8
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "wings",
+    "slot": "back",
+    "colors": {
+     "default": {
+      "back": "#D5C8E3",
+      "back-sh": "#CBE6F1",
+      "back-2": "#FFFFFF"
+     }
+    }
+   }
+  },
+  "wizard-hat": {
+   "label": "wizard hat",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/wizard-hat.webp",
+     "px": [
+      216,
+      237
+     ],
+     "bytes": 5656,
+     "size": [
+      108,
+      118.5
+     ],
+     "anchor": [
+      54,
+      115
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -28
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "wizard-hat",
+    "slot": "hat",
+    "colors": {
+     "default": {
+      "hat": "#9A7A98",
+      "hat-sh": "#7E6180",
+      "hat-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "wizard-robe": {
+   "label": "wizard robe",
+   "tags": [
+    "wear",
+    "wearable:top",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/wizard-robe.webp",
+     "px": [
+      308,
+      356
+     ],
+     "bytes": 9910,
+     "size": [
+      154,
+      178
+     ],
+     "anchor": [
+      77,
+      174.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -144.2
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "wizard-robe",
+    "slot": "top",
+    "colors": {
+     "default": {
+      "top": "#9A7A98",
+      "top-sh": "#7E6180",
+      "top-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "sunglasses": {
+   "label": "sunglasses",
+   "tags": [
+    "wear",
+    "wearable:face",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/sunglasses.webp",
+     "px": [
+      228,
+      68
+     ],
+     "bytes": 2092,
+     "size": [
+      114,
+      34
+     ],
+     "anchor": [
+      57,
+      30.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -19.6
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "sunglasses",
+    "slot": "face",
+    "colors": {
+     "default": {
+      "face": "#433E46",
+      "face-sh": "#57515A"
+     }
+    }
+   }
+  },
+  "feather-boa": {
+   "label": "feather boa",
+   "tags": [
+    "wear",
+    "wearable:over",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/feather-boa.webp",
+     "px": [
+      286,
+      118
+     ],
+     "bytes": 7046,
+     "size": [
+      143,
+      59
+     ],
+     "anchor": [
+      71.5,
+      50.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "feather-boa",
+    "slot": "over",
+    "colors": {
+     "default": {
+      "over": "#E9AFAE",
+      "over-sh": "#D48C8E",
+      "over-2": "#F6D3CF"
+     }
+    }
+   }
+  },
+  "sparkle-mask": {
+   "label": "sparkly hero mask",
+   "tags": [
+    "wear",
+    "wearable:face",
+    "theater",
+    "costume"
+   ],
+   "default": "pink",
+   "variants": {
+    "pink": {
+     "file": "assets/sprites/props/sparkle-mask-pink.webp",
+     "px": [
+      256,
+      75
+     ],
+     "bytes": 5576,
+     "size": [
+      128,
+      37.5
+     ],
+     "anchor": [
+      64,
+      34
+     ]
+    },
+    "teal": {
+     "file": "assets/sprites/props/sparkle-mask-teal.webp",
+     "px": [
+      256,
+      75
+     ],
+     "bytes": 5676,
+     "size": [
+      128,
+      37.5
+     ],
+     "anchor": [
+      64,
+      34
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "sparkle-mask",
+    "slot": "face",
+    "colors": {
+     "pink": {
+      "face": "#E9AFAE",
+      "face-sh": "#D48C8E"
+     },
+     "teal": {
+      "face": "#8CBDB8",
+      "face-sh": "#679E9C"
+     }
+    }
+   }
+  },
+  "lightning-cape": {
+   "label": "lightning cape",
+   "tags": [
+    "wear",
+    "wearable:back",
+    "theater",
+    "costume"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/lightning-cape.webp",
+     "px": [
+      244,
+      250
+     ],
+     "bytes": 8330,
+     "size": [
+      122,
+      125
+     ],
+     "anchor": [
+      40,
+      122.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -105
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "lightning-cape",
+    "slot": "back",
+    "colors": {
+     "default": {
+      "back": "#7F9FC4",
+      "back-sh": "#6886AE",
+      "back-2": "#F4DC98"
+     }
+    }
+   }
+  },
+  "popcorn": {
+   "label": "popcorn",
+   "tags": [
+    "food",
+    "snack",
+    "theater",
+    "sweet"
+   ],
+   "default": "full",
+   "variants": {
+    "full": {
+     "file": "assets/sprites/props/popcorn-full.webp",
+     "px": [
+      147,
+      207
+     ],
+     "bytes": 6952,
+     "size": [
+      73.5,
+      103.5
+     ],
+     "anchor": [
+      37.5,
+      100
+     ]
+    },
+    "half": {
+     "file": "assets/sprites/props/popcorn-half.webp",
+     "px": [
+      126,
+      185
+     ],
+     "bytes": 5518,
+     "size": [
+      63,
+      92.5
+     ],
+     "anchor": [
+      31.5,
+      89
+     ]
+    },
+    "empty": {
+     "file": "assets/sprites/props/popcorn-empty.webp",
+     "px": [
+      126,
+      143
+     ],
+     "bytes": 4174,
+     "size": [
+      63,
+      71.5
+     ],
+     "anchor": [
+      31.5,
+      68
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "full",
+    "half",
+    "empty"
+   ],
+   "grip": [
+    0,
+    -32.2
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "lemonade-cup": {
+   "label": "lemonade",
+   "tags": [
+    "drink",
+    "theater",
+    "sweet"
+   ],
+   "default": "full",
+   "variants": {
+    "full": {
+     "file": "assets/sprites/props/lemonade-cup-full.webp",
+     "px": [
+      124,
+      224
+     ],
+     "bytes": 4016,
+     "size": [
+      62,
+      112
+     ],
+     "anchor": [
+      34.5,
+      108.5
+     ]
+    },
+    "empty": {
+     "file": "assets/sprites/props/lemonade-cup-empty.webp",
+     "px": [
+      124,
+      224
+     ],
+     "bytes": 3578,
+     "size": [
+      62,
+      112
+     ],
+     "anchor": [
+      34.5,
+      108.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "full",
+    "empty"
+   ],
+   "grip": [
+    0,
+    -39.2
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "ticket": {
+   "label": "ticket",
+   "tags": [
+    "theater",
+    "ticket",
+    "paper"
+   ],
+   "default": "blank",
+   "variants": {
+    "blank": {
+     "file": "assets/sprites/props/ticket-blank.webp",
+     "px": [
+      206,
+      109
+     ],
+     "bytes": 4736,
+     "size": [
+      103,
+      54.5
+     ],
+     "anchor": [
+      53.5,
+      46
+     ]
+    },
+    "stamped": {
+     "file": "assets/sprites/props/ticket-stamped.webp",
+     "px": [
+      206,
+      109
+     ],
+     "bytes": 5502,
+     "size": [
+      103,
+      54.5
+     ],
+     "anchor": [
+      53.5,
+      46
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": true,
+   "bites": null,
+   "grip": [
+    0,
+    -18.9
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "rose": {
+   "label": "rose",
+   "tags": [
+    "theater",
+    "flowers",
+    "throw"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/rose.webp",
+     "px": [
+      148,
+      221
+     ],
+     "bytes": 3808,
+     "size": [
+      74,
+      110.5
+     ],
+     "anchor": [
+      55,
+      100
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -28
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "program": {
+   "label": "show program",
+   "tags": [
+    "theater",
+    "paper",
+    "text"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/program.webp",
+     "px": [
+      138,
+      168
+     ],
+     "bytes": 2884,
+     "size": [
+      69,
+      84
+     ],
+     "anchor": [
+      34.5,
+      80.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -38.5
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "tape": {
+   "label": "tape",
+   "tags": [
+    "theater",
+    "tape",
+    "recording"
+   ],
+   "default": "pink",
+   "variants": {
+    "pink": {
+     "file": "assets/sprites/props/tape-pink.webp",
+     "px": [
+      182,
+      121
+     ],
+     "bytes": 3474,
+     "size": [
+      91,
+      60.5
+     ],
+     "anchor": [
+      45.5,
+      57
+     ]
+    },
+    "teal": {
+     "file": "assets/sprites/props/tape-teal.webp",
+     "px": [
+      182,
+      121
+     ],
+     "bytes": 3524,
+     "size": [
+      91,
+      60.5
+     ],
+     "anchor": [
+      45.5,
+      57
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/tape-yellow.webp",
+     "px": [
+      182,
+      121
+     ],
+     "bytes": 3480,
+     "size": [
+      91,
+      60.5
+     ],
+     "anchor": [
+      45.5,
+      57
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -26.6
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "tambourine": {
+   "label": "tambourine",
+   "tags": [
+    "theater",
+    "instrument"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/tambourine.webp",
+     "px": [
+      138,
+      138
+     ],
+     "bytes": 6504,
+     "size": [
+      69,
+      69
+     ],
+     "anchor": [
+      34.5,
+      65.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -26.6,
+    -30.8
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "maracas": {
+   "label": "maracas",
+   "tags": [
+    "theater",
+    "instrument"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/maracas.webp",
+     "px": [
+      214,
+      193
+     ],
+     "bytes": 6392,
+     "size": [
+      107,
+      96.5
+     ],
+     "anchor": [
+      51.5,
+      88.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -12.6,
+    -14
+   ],
+   "surface": null,
+   "set": "theater",
+   "prep": null,
+   "leaves": null
+  },
+  "crayon": {
+   "label": "crayon",
+   "tags": [
+    "school",
+    "art",
+    "draw",
+    "crayon"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/crayon-red.webp",
+     "px": [
+      118,
+      51
+     ],
+     "bytes": 1962,
+     "size": [
+      59,
+      25.5
+     ],
+     "anchor": [
+      31.5,
+      18
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/crayon-yellow.webp",
+     "px": [
+      118,
+      51
+     ],
+     "bytes": 2004,
+     "size": [
+      59,
+      25.5
+     ],
+     "anchor": [
+      31.5,
+      18
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/crayon-blue.webp",
+     "px": [
+      118,
+      51
+     ],
+     "bytes": 1980,
+     "size": [
+      59,
+      25.5
+     ],
+     "anchor": [
+      31.5,
+      18
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/crayon-green.webp",
+     "px": [
+      118,
+      51
+     ],
+     "bytes": 1964,
+     "size": [
+      59,
+      25.5
+     ],
+     "anchor": [
+      31.5,
+      18
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/crayon-purple.webp",
+     "px": [
+      118,
+      51
+     ],
+     "bytes": 1908,
+     "size": [
+      59,
+      25.5
+     ],
+     "anchor": [
+      31.5,
+      18
+     ]
+    },
+    "pink": {
+     "file": "assets/sprites/props/crayon-pink.webp",
+     "px": [
+      118,
+      51
+     ],
+     "bytes": 1916,
+     "size": [
+      59,
+      25.5
+     ],
+     "anchor": [
+      31.5,
+      18
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -4.2,
+    -5.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "crayon-box": {
+   "label": "crayon box",
+   "tags": [
+    "school",
+    "art",
+    "container"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/crayon-box-closed.webp",
+     "px": [
+      132,
+      112
+     ],
+     "bytes": 2642,
+     "size": [
+      66,
+      56
+     ],
+     "anchor": [
+      33,
+      52.5
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/crayon-box-open.webp",
+     "px": [
+      126,
+      126
+     ],
+     "bytes": 3606,
+     "size": [
+      63,
+      63
+     ],
+     "anchor": [
+      31.5,
+      59.5
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "marker": {
+   "label": "marker",
+   "tags": [
+    "school",
+    "art",
+    "draw",
+    "marker",
+    "whiteboard"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/marker-red.webp",
+     "px": [
+      126,
+      54
+     ],
+     "bytes": 2240,
+     "size": [
+      63,
+      27
+     ],
+     "anchor": [
+      30,
+      20
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/marker-blue.webp",
+     "px": [
+      126,
+      54
+     ],
+     "bytes": 2298,
+     "size": [
+      63,
+      27
+     ],
+     "anchor": [
+      30,
+      20
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/marker-green.webp",
+     "px": [
+      126,
+      54
+     ],
+     "bytes": 2276,
+     "size": [
+      63,
+      27
+     ],
+     "anchor": [
+      30,
+      20
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/marker-purple.webp",
+     "px": [
+      126,
+      54
+     ],
+     "bytes": 2200,
+     "size": [
+      63,
+      27
+     ],
+     "anchor": [
+      30,
+      20
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -7,
+    -6.3
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "glue-stick": {
+   "label": "glue stick",
+   "tags": [
+    "school",
+    "art",
+    "glue"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/glue-stick-closed.webp",
+     "px": [
+      54,
+      118
+     ],
+     "bytes": 1968,
+     "size": [
+      27,
+      59
+     ],
+     "anchor": [
+      13.5,
+      55.5
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/glue-stick-open.webp",
+     "px": [
+      93,
+      103
+     ],
+     "bytes": 2616,
+     "size": [
+      46.5,
+      51.5
+     ],
+     "anchor": [
+      13.5,
+      46.5
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -18.2
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "scissors": {
+   "label": "safety scissors",
+   "tags": [
+    "school",
+    "art",
+    "cut"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/scissors.webp",
+     "px": [
+      135,
+      62
+     ],
+     "bytes": 3036,
+     "size": [
+      67.5,
+      31
+     ],
+     "anchor": [
+      33,
+      28
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -18.2,
+    -12.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "paper-sheet": {
+   "label": "paper",
+   "tags": [
+    "school",
+    "art",
+    "paper",
+    "stampable"
+   ],
+   "default": "blank",
+   "variants": {
+    "blank": {
+     "file": "assets/sprites/props/paper-sheet-blank.webp",
+     "px": [
+      122,
+      140
+     ],
+     "bytes": 1916,
+     "size": [
+      61,
+      70
+     ],
+     "anchor": [
+      30.5,
+      66.5
+     ]
+    },
+    "drawing": {
+     "file": "assets/sprites/props/paper-sheet-drawing.webp",
+     "px": [
+      122,
+      140
+     ],
+     "bytes": 3924,
+     "size": [
+      61,
+      70
+     ],
+     "anchor": [
+      30.5,
+      66.5
+     ]
+    },
+    "stars": {
+     "file": "assets/sprites/props/paper-sheet-stars.webp",
+     "px": [
+      122,
+      140
+     ],
+     "bytes": 4552,
+     "size": [
+      61,
+      70
+     ],
+     "anchor": [
+      30.5,
+      66.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -30.8
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "paint-cup": {
+   "label": "paint cup",
+   "tags": [
+    "school",
+    "art",
+    "paint"
+   ],
+   "default": "red",
+   "variants": {
+    "red": {
+     "file": "assets/sprites/props/paint-cup-red.webp",
+     "px": [
+      76,
+      129
+     ],
+     "bytes": 2090,
+     "size": [
+      38,
+      64.5
+     ],
+     "anchor": [
+      19,
+      61
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/paint-cup-yellow.webp",
+     "px": [
+      76,
+      129
+     ],
+     "bytes": 2102,
+     "size": [
+      38,
+      64.5
+     ],
+     "anchor": [
+      19,
+      61
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/paint-cup-blue.webp",
+     "px": [
+      76,
+      129
+     ],
+     "bytes": 2124,
+     "size": [
+      38,
+      64.5
+     ],
+     "anchor": [
+      19,
+      61
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/paint-cup-green.webp",
+     "px": [
+      76,
+      129
+     ],
+     "bytes": 2090,
+     "size": [
+      38,
+      64.5
+     ],
+     "anchor": [
+      19,
+      61
+     ]
+    },
+    "purple": {
+     "file": "assets/sprites/props/paint-cup-purple.webp",
+     "px": [
+      76,
+      129
+     ],
+     "bytes": 2042,
+     "size": [
+      38,
+      64.5
+     ],
+     "anchor": [
+      19,
+      61
+     ]
+    },
+    "pink": {
+     "file": "assets/sprites/props/paint-cup-pink.webp",
+     "px": [
+      76,
+      129
+     ],
+     "bytes": 2064,
+     "size": [
+      38,
+      64.5
+     ],
+     "anchor": [
+      19,
+      61
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "stamp": {
+   "label": "stamp",
+   "tags": [
+    "school",
+    "art",
+    "stamp",
+    "teacher"
+   ],
+   "default": "star",
+   "variants": {
+    "star": {
+     "file": "assets/sprites/props/stamp-star.webp",
+     "px": [
+      76,
+      112
+     ],
+     "bytes": 2234,
+     "size": [
+      38,
+      56
+     ],
+     "anchor": [
+      19,
+      52.5
+     ]
+    },
+    "smile": {
+     "file": "assets/sprites/props/stamp-smile.webp",
+     "px": [
+      76,
+      112
+     ],
+     "bytes": 2518,
+     "size": [
+      38,
+      56
+     ],
+     "anchor": [
+      19,
+      52.5
+     ]
+    },
+    "check": {
+     "file": "assets/sprites/props/stamp-check.webp",
+     "px": [
+      76,
+      112
+     ],
+     "bytes": 2322,
+     "size": [
+      38,
+      56
+     ],
+     "anchor": [
+      19,
+      52.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -36.4
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "picture-book": {
+   "label": "picture book",
+   "tags": [
+    "school",
+    "book",
+    "story"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/picture-book-closed.webp",
+     "px": [
+      124,
+      135
+     ],
+     "bytes": 2970,
+     "size": [
+      62,
+      67.5
+     ],
+     "anchor": [
+      31.5,
+      62.5
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/picture-book-open.webp",
+     "px": [
+      234,
+      116
+     ],
+     "bytes": 6596,
+     "size": [
+      117,
+      58
+     ],
+     "anchor": [
+      58.5,
+      53
+     ]
+    },
+    "closed-blue": {
+     "file": "assets/sprites/props/picture-book-closed-blue.webp",
+     "px": [
+      124,
+      135
+     ],
+     "bytes": 3040,
+     "size": [
+      62,
+      67.5
+     ],
+     "anchor": [
+      31.5,
+      62.5
+     ]
+    },
+    "open-blue": {
+     "file": "assets/sprites/props/picture-book-open-blue.webp",
+     "px": [
+      234,
+      116
+     ],
+     "bytes": 6762,
+     "size": [
+      117,
+      58
+     ],
+     "anchor": [
+      58.5,
+      53
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -28
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "puzzle": {
+   "label": "puzzle",
+   "tags": [
+    "school",
+    "toy",
+    "puzzle"
+   ],
+   "default": "pieces",
+   "variants": {
+    "pieces": {
+     "file": "assets/sprites/props/puzzle-pieces.webp",
+     "px": [
+      232,
+      123
+     ],
+     "bytes": 5004,
+     "size": [
+      116,
+      61.5
+     ],
+     "anchor": [
+      57,
+      55.5
+     ]
+    },
+    "done": {
+     "file": "assets/sprites/props/puzzle-done.webp",
+     "px": [
+      154,
+      118
+     ],
+     "bytes": 3764,
+     "size": [
+      77,
+      59
+     ],
+     "anchor": [
+      38.5,
+      55.5
+     ]
+    }
+   },
+   "taps": [
+    "pieces",
+    "done"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -25.2
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "unit-block": {
+   "label": "wooden block",
+   "tags": [
+    "school",
+    "toy",
+    "block",
+    "build"
+   ],
+   "default": "square",
+   "variants": {
+    "square": {
+     "file": "assets/sprites/props/unit-block-square.webp",
+     "px": [
+      76,
+      76
+     ],
+     "bytes": 1166,
+     "size": [
+      38,
+      38
+     ],
+     "anchor": [
+      19,
+      34.5
+     ]
+    },
+    "long": {
+     "file": "assets/sprites/props/unit-block-long.webp",
+     "px": [
+      138,
+      51
+     ],
+     "bytes": 1266,
+     "size": [
+      69,
+      25.5
+     ],
+     "anchor": [
+      34.5,
+      22
+     ]
+    },
+    "arch": {
+     "file": "assets/sprites/props/unit-block-arch.webp",
+     "px": [
+      138,
+      70
+     ],
+     "bytes": 1636,
+     "size": [
+      69,
+      35
+     ],
+     "anchor": [
+      34.5,
+      31.5
+     ]
+    },
+    "cylinder": {
+     "file": "assets/sprites/props/unit-block-cylinder.webp",
+     "px": [
+      56,
+      108
+     ],
+     "bytes": 1518,
+     "size": [
+      28,
+      54
+     ],
+     "anchor": [
+      14,
+      50.5
+     ]
+    },
+    "triangle": {
+     "file": "assets/sprites/props/unit-block-triangle.webp",
+     "px": [
+      98,
+      76
+     ],
+     "bytes": 1704,
+     "size": [
+      49,
+      38
+     ],
+     "anchor": [
+      24.5,
+      34.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "hand-bell": {
+   "label": "hand bell",
+   "tags": [
+    "school",
+    "teacher",
+    "bell",
+    "sound"
+   ],
+   "default": "still",
+   "variants": {
+    "still": {
+     "file": "assets/sprites/props/hand-bell-still.webp",
+     "px": [
+      94,
+      147
+     ],
+     "bytes": 2736,
+     "size": [
+      47,
+      73.5
+     ],
+     "anchor": [
+      23.5,
+      65.5
+     ]
+    },
+    "ring": {
+     "file": "assets/sprites/props/hand-bell-ring.webp",
+     "px": [
+      138,
+      165
+     ],
+     "bytes": 3858,
+     "size": [
+      69,
+      82.5
+     ],
+     "anchor": [
+      33,
+      70
+     ]
+    }
+   },
+   "taps": [
+    "still",
+    "ring"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -46.2
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "globe": {
+   "label": "globe",
+   "tags": [
+    "school",
+    "teacher",
+    "globe",
+    "spin"
+   ],
+   "default": "still",
+   "variants": {
+    "still": {
+     "file": "assets/sprites/props/globe-still.webp",
+     "px": [
+      115,
+      146
+     ],
+     "bytes": 5172,
+     "size": [
+      57.5,
+      73
+     ],
+     "anchor": [
+      27.5,
+      69.5
+     ]
+    },
+    "spin": {
+     "file": "assets/sprites/props/globe-spin.webp",
+     "px": [
+      115,
+      146
+     ],
+     "bytes": 5020,
+     "size": [
+      57.5,
+      73
+     ],
+     "anchor": [
+      27.5,
+      69.5
+     ]
+    }
+   },
+   "taps": [
+    "still",
+    "spin"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "school-backpack": {
+   "label": "backpack",
+   "tags": [
+    "wear",
+    "wearable:back",
+    "container",
+    "school",
+    "bag"
+   ],
+   "default": "teal",
+   "variants": {
+    "teal": {
+     "file": "assets/sprites/props/school-backpack-teal.webp",
+     "px": [
+      138,
+      146
+     ],
+     "bytes": 4184,
+     "size": [
+      69,
+      73
+     ],
+     "anchor": [
+      34.5,
+      69.5
+     ]
+    },
+    "rose": {
+     "file": "assets/sprites/props/school-backpack-rose.webp",
+     "px": [
+      138,
+      146
+     ],
+     "bytes": 4096,
+     "size": [
+      69,
+      73
+     ],
+     "anchor": [
+      34.5,
+      69.5
+     ]
+    },
+    "butter": {
+     "file": "assets/sprites/props/school-backpack-butter.webp",
+     "px": [
+      138,
+      146
+     ],
+     "bytes": 4416,
+     "size": [
+      69,
+      73
+     ],
+     "anchor": [
+      34.5,
+      69.5
+     ]
+    },
+    "lav": {
+     "file": "assets/sprites/props/school-backpack-lav.webp",
+     "px": [
+      138,
+      146
+     ],
+     "bytes": 4136,
+     "size": [
+      69,
+      73
+     ],
+     "anchor": [
+      34.5,
+      69.5
+     ]
+    },
+    "sage": {
+     "file": "assets/sprites/props/school-backpack-sage.webp",
+     "px": [
+      138,
+      146
+     ],
+     "bytes": 4220,
+     "size": [
+      69,
+      73
+     ],
+     "anchor": [
+      34.5,
+      69.5
+     ]
+    },
+    "orange": {
+     "file": "assets/sprites/props/school-backpack-orange.webp",
+     "px": [
+      138,
+      146
+     ],
+     "bytes": 4470,
+     "size": [
+      69,
+      73
+     ],
+     "anchor": [
+      34.5,
+      69.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -64.4
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "school-backpack",
+    "slot": "back",
+    "colors": {
+     "teal": {
+      "back": "#8CBDB8",
+      "back-sh": "#679E9C",
+      "back-2": "#F4DC98"
+     },
+     "rose": {
+      "back": "#E9AFAE",
+      "back-sh": "#D48C8E",
+      "back-2": "#FBF3E8"
+     },
+     "butter": {
+      "back": "#F4DC98",
+      "back-sh": "#DFB050",
+      "back-2": "#8CBDB8"
+     },
+     "lav": {
+      "back": "#D5C8E3",
+      "back-sh": "#9A7A98",
+      "back-2": "#F4DC98"
+     },
+     "sage": {
+      "back": "#B9CDA4",
+      "back-sh": "#93AE85",
+      "back-2": "#DC6B6E"
+     },
+     "orange": {
+      "back": "#EE9A55",
+      "back-sh": "#BC6E4C",
+      "back-2": "#FBF3E8"
+     }
+    }
+   }
+  },
+  "school-lunchbox": {
+   "label": "lunchbox",
+   "tags": [
+    "school",
+    "container",
+    "lunch",
+    "lunchbox"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/school-lunchbox-closed.webp",
+     "px": [
+      144,
+      105
+     ],
+     "bytes": 2872,
+     "size": [
+      72,
+      52.5
+     ],
+     "anchor": [
+      36,
+      49
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/school-lunchbox-open.webp",
+     "px": [
+      148,
+      117
+     ],
+     "bytes": 3144,
+     "size": [
+      74,
+      58.5
+     ],
+     "anchor": [
+      38.5,
+      55
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -44.8
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "lunch-tray": {
+   "label": "lunch tray",
+   "tags": [
+    "school",
+    "lunch",
+    "tray",
+    "container"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/lunch-tray-empty.webp",
+     "px": [
+      210,
+      42
+     ],
+     "bytes": 1570,
+     "size": [
+      105,
+      21
+     ],
+     "anchor": [
+      52.5,
+      17.5
+     ]
+    },
+    "lunch": {
+     "file": "assets/sprites/props/lunch-tray-lunch.webp",
+     "px": [
+      210,
+      71
+     ],
+     "bytes": 2992,
+     "size": [
+      105,
+      35.5
+     ],
+     "anchor": [
+      52.5,
+      32
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -7
+   ],
+   "surface": [
+    -42,
+    42,
+    -14
+   ],
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "milk-carton": {
+   "label": "milk",
+   "tags": [
+    "school",
+    "drink",
+    "lunch",
+    "milk"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/milk-carton-closed.webp",
+     "px": [
+      66,
+      115
+     ],
+     "bytes": 2046,
+     "size": [
+      33,
+      57.5
+     ],
+     "anchor": [
+      16.5,
+      54
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/milk-carton-open.webp",
+     "px": [
+      71,
+      149
+     ],
+     "bytes": 2556,
+     "size": [
+      35.5,
+      74.5
+     ],
+     "anchor": [
+      16.5,
+      71
+     ]
+    },
+    "spilled": {
+     "file": "assets/sprites/props/milk-carton-spilled.webp",
+     "px": [
+      246,
+      81
+     ],
+     "bytes": 3686,
+     "size": [
+      123,
+      40.5
+     ],
+     "anchor": [
+      53.5,
+      34
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "juice-box": {
+   "label": "juice box",
+   "tags": [
+    "school",
+    "drink",
+    "lunch",
+    "snack"
+   ],
+   "default": "full",
+   "variants": {
+    "full": {
+     "file": "assets/sprites/props/juice-box-full.webp",
+     "px": [
+      66,
+      138
+     ],
+     "bytes": 2072,
+     "size": [
+      33,
+      69
+     ],
+     "anchor": [
+      16.5,
+      65.5
+     ]
+    },
+    "empty": {
+     "file": "assets/sprites/props/juice-box-empty.webp",
+     "px": [
+      66,
+      138
+     ],
+     "bytes": 2468,
+     "size": [
+      33,
+      69
+     ],
+     "anchor": [
+      16.5,
+      65.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "full",
+    "empty"
+   ],
+   "grip": [
+    0,
+    -19.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "snack-cup": {
+   "label": "snack cup",
+   "tags": [
+    "school",
+    "food",
+    "snack",
+    "lunch"
+   ],
+   "default": "full",
+   "variants": {
+    "full": {
+     "file": "assets/sprites/props/snack-cup-full.webp",
+     "px": [
+      88,
+      100
+     ],
+     "bytes": 3076,
+     "size": [
+      44,
+      50
+     ],
+     "anchor": [
+      22,
+      46.5
+     ]
+    },
+    "half": {
+     "file": "assets/sprites/props/snack-cup-half.webp",
+     "px": [
+      88,
+      80
+     ],
+     "bytes": 2140,
+     "size": [
+      44,
+      40
+     ],
+     "anchor": [
+      22,
+      36.5
+     ]
+    },
+    "empty": {
+     "file": "assets/sprites/props/snack-cup-empty.webp",
+     "px": [
+      88,
+      76
+     ],
+     "bytes": 2010,
+     "size": [
+      44,
+      38
+     ],
+     "anchor": [
+      22,
+      34.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "full",
+    "half",
+    "empty"
+   ],
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "nap-cot": {
+   "label": "nap cot",
+   "tags": [
+    "school",
+    "nap",
+    "bed",
+    "furniture"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/nap-cot.webp",
+     "px": [
+      350,
+      79
+     ],
+     "bytes": 1998,
+     "size": [
+      175,
+      39.5
+     ],
+     "anchor": [
+      87.5,
+      36
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -14
+   ],
+   "surface": [
+    -77,
+    77,
+    -21
+   ],
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "nap-blanket": {
+   "label": "nap blanket",
+   "tags": [
+    "school",
+    "nap",
+    "blanket",
+    "cloth"
+   ],
+   "default": "folded",
+   "variants": {
+    "folded": {
+     "file": "assets/sprites/props/nap-blanket-folded.webp",
+     "px": [
+      136,
+      73
+     ],
+     "bytes": 1780,
+     "size": [
+      68,
+      36.5
+     ],
+     "anchor": [
+      34,
+      33
+     ]
+    },
+    "spread": {
+     "file": "assets/sprites/props/nap-blanket-spread.webp",
+     "px": [
+      327,
+      56
+     ],
+     "bytes": 3400,
+     "size": [
+      163.5,
+      28
+     ],
+     "anchor": [
+      82,
+      24.5
+     ]
+    }
+   },
+   "taps": [
+    "folded",
+    "spread"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -12.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "plush-bunny": {
+   "label": "stuffed bunny",
+   "tags": [
+    "school",
+    "toy",
+    "plush",
+    "hug",
+    "nap"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/plush-bunny.webp",
+     "px": [
+      118,
+      184
+     ],
+     "bytes": 5652,
+     "size": [
+      59,
+      92
+     ],
+     "anchor": [
+      29.5,
+      87.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -28
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "show-tell-box": {
+   "label": "show-and-tell box",
+   "tags": [
+    "school",
+    "container",
+    "show-and-tell"
+   ],
+   "default": "closed",
+   "variants": {
+    "closed": {
+     "file": "assets/sprites/props/show-tell-box-closed.webp",
+     "px": [
+      150,
+      124
+     ],
+     "bytes": 3516,
+     "size": [
+      75,
+      62
+     ],
+     "anchor": [
+      37.5,
+      58.5
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/show-tell-box-open.webp",
+     "px": [
+      239,
+      151
+     ],
+     "bytes": 4748,
+     "size": [
+      119.5,
+      75.5
+     ],
+     "anchor": [
+      34.5,
+      68
+     ]
+    }
+   },
+   "taps": [
+    "closed",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -23.8
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "sticker-sheet": {
+   "label": "stickers",
+   "tags": [
+    "school",
+    "reward",
+    "sticker",
+    "teacher"
+   ],
+   "default": "full",
+   "variants": {
+    "full": {
+     "file": "assets/sprites/props/sticker-sheet-full.webp",
+     "px": [
+      135,
+      121
+     ],
+     "bytes": 6032,
+     "size": [
+      67.5,
+      60.5
+     ],
+     "anchor": [
+      31.5,
+      57
+     ]
+    },
+    "some": {
+     "file": "assets/sprites/props/sticker-sheet-some.webp",
+     "px": [
+      135,
+      121
+     ],
+     "bytes": 4770,
+     "size": [
+      67.5,
+      60.5
+     ],
+     "anchor": [
+      31.5,
+      57
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": [
+    "full",
+    "some"
+   ],
+   "grip": [
+    0,
+    -26.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "star-chart": {
+   "label": "star chart",
+   "tags": [
+    "school",
+    "reward",
+    "chart",
+    "teacher"
+   ],
+   "default": "few",
+   "variants": {
+    "few": {
+     "file": "assets/sprites/props/star-chart-few.webp",
+     "px": [
+      182,
+      154
+     ],
+     "bytes": 6408,
+     "size": [
+      91,
+      77
+     ],
+     "anchor": [
+      45.5,
+      71
+     ]
+    },
+    "many": {
+     "file": "assets/sprites/props/star-chart-many.webp",
+     "px": [
+      182,
+      154
+     ],
+     "bytes": 8338,
+     "size": [
+      91,
+      77
+     ],
+     "anchor": [
+      45.5,
+      71
+     ]
+    }
+   },
+   "taps": [
+    "few",
+    "many"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -33.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "weather-card": {
+   "label": "weather card",
+   "tags": [
+    "school",
+    "weather",
+    "card",
+    "calendar"
+   ],
+   "default": "sun",
+   "variants": {
+    "sun": {
+     "file": "assets/sprites/props/weather-card-sun.webp",
+     "px": [
+      112,
+      121
+     ],
+     "bytes": 4678,
+     "size": [
+      56,
+      60.5
+     ],
+     "anchor": [
+      28,
+      57
+     ]
+    },
+    "cloud": {
+     "file": "assets/sprites/props/weather-card-cloud.webp",
+     "px": [
+      112,
+      121
+     ],
+     "bytes": 2612,
+     "size": [
+      56,
+      60.5
+     ],
+     "anchor": [
+      28,
+      57
+     ]
+    },
+    "rain": {
+     "file": "assets/sprites/props/weather-card-rain.webp",
+     "px": [
+      112,
+      121
+     ],
+     "bytes": 3348,
+     "size": [
+      56,
+      60.5
+     ],
+     "anchor": [
+      28,
+      57
+     ]
+    },
+    "snow": {
+     "file": "assets/sprites/props/weather-card-snow.webp",
+     "px": [
+      110,
+      121
+     ],
+     "bytes": 4192,
+     "size": [
+      55,
+      60.5
+     ],
+     "anchor": [
+      27.5,
+      57
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -26.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "playground-ball": {
+   "label": "playground ball",
+   "tags": [
+    "school",
+    "toy",
+    "ball",
+    "recess",
+    "throw"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/playground-ball.webp",
+     "px": [
+      110,
+      110
+     ],
+     "bytes": 3306,
+     "size": [
+      55,
+      55
+     ],
+     "anchor": [
+      27.5,
+      51.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -23.8
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "jump-rope": {
+   "label": "jump rope",
+   "tags": [
+    "school",
+    "toy",
+    "recess",
+    "rope"
+   ],
+   "default": "coiled",
+   "variants": {
+    "coiled": {
+     "file": "assets/sprites/props/jump-rope-coiled.webp",
+     "px": [
+      187,
+      71
+     ],
+     "bytes": 4188,
+     "size": [
+      93.5,
+      35.5
+     ],
+     "anchor": [
+      46,
+      27.5
+     ]
+    },
+    "open": {
+     "file": "assets/sprites/props/jump-rope-open.webp",
+     "px": [
+      290,
+      106
+     ],
+     "bytes": 4326,
+     "size": [
+      145,
+      53
+     ],
+     "anchor": [
+      72.5,
+      47.5
+     ]
+    }
+   },
+   "taps": [
+    "coiled",
+    "open"
+   ],
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -21,
+    -9.8
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "chalk": {
+   "label": "sidewalk chalk",
+   "tags": [
+    "school",
+    "recess",
+    "draw",
+    "chalk"
+   ],
+   "default": "pink",
+   "variants": {
+    "pink": {
+     "file": "assets/sprites/props/chalk-pink.webp",
+     "px": [
+      96,
+      50
+     ],
+     "bytes": 1590,
+     "size": [
+      48,
+      25
+     ],
+     "anchor": [
+      25,
+      18
+     ]
+    },
+    "blue": {
+     "file": "assets/sprites/props/chalk-blue.webp",
+     "px": [
+      96,
+      50
+     ],
+     "bytes": 1658,
+     "size": [
+      48,
+      25
+     ],
+     "anchor": [
+      25,
+      18
+     ]
+    },
+    "yellow": {
+     "file": "assets/sprites/props/chalk-yellow.webp",
+     "px": [
+      96,
+      50
+     ],
+     "bytes": 1730,
+     "size": [
+      48,
+      25
+     ],
+     "anchor": [
+      25,
+      18
+     ]
+    },
+    "green": {
+     "file": "assets/sprites/props/chalk-green.webp",
+     "px": [
+      96,
+      50
+     ],
+     "bytes": 1638,
+     "size": [
+      48,
+      25
+     ],
+     "anchor": [
+      25,
+      18
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -5.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "sand-pail": {
+   "label": "sand pail",
+   "tags": [
+    "school",
+    "recess",
+    "sand",
+    "container",
+    "bucket"
+   ],
+   "default": "empty",
+   "variants": {
+    "empty": {
+     "file": "assets/sprites/props/sand-pail-empty.webp",
+     "px": [
+      94,
+      104
+     ],
+     "bytes": 2696,
+     "size": [
+      47,
+      52
+     ],
+     "anchor": [
+      23.5,
+      48.5
+     ]
+    },
+    "full": {
+     "file": "assets/sprites/props/sand-pail-full.webp",
+     "px": [
+      96,
+      104
+     ],
+     "bytes": 2868,
+     "size": [
+      48,
+      52
+     ],
+     "anchor": [
+      24,
+      48.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -42
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "spade": {
+   "label": "sand spade",
+   "tags": [
+    "school",
+    "recess",
+    "sand",
+    "dig",
+    "tool"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/spade.webp",
+     "px": [
+      99,
+      122
+     ],
+     "bytes": 2228,
+     "size": [
+      49.5,
+      61
+     ],
+     "anchor": [
+      37.5,
+      52.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    -21,
+    -35
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "sand-castle": {
+   "label": "sand castle",
+   "tags": [
+    "school",
+    "recess",
+    "sand",
+    "build"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/sand-castle.webp",
+     "px": [
+      126,
+      126
+     ],
+     "bytes": 2500,
+     "size": [
+      63,
+      63
+     ],
+     "anchor": [
+      31.5,
+      59.5
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null
+  },
+  "lanyard": {
+   "label": "teacher lanyard",
+   "tags": [
+    "wear",
+    "wearable:over",
+    "school",
+    "teacher"
+   ],
+   "default": "default",
+   "variants": {
+    "default": {
+     "file": "assets/sprites/props/lanyard.webp",
+     "px": [
+      92,
+      191
+     ],
+     "bytes": 4794,
+     "size": [
+      46,
+      95.5
+     ],
+     "anchor": [
+      23,
+      92
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -84
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "lanyard",
+    "slot": "over"
+   }
+  },
+  "smock": {
+   "label": "art smock",
+   "tags": [
+    "wear",
+    "wearable:over",
+    "school",
+    "art"
+   ],
+   "default": "sky",
+   "variants": {
+    "sky": {
+     "file": "assets/sprites/props/smock-sky.webp",
+     "px": [
+      188,
+      143
+     ],
+     "bytes": 4230,
+     "size": [
+      94,
+      71.5
+     ],
+     "anchor": [
+      47,
+      68
+     ]
+    },
+    "butter": {
+     "file": "assets/sprites/props/smock-butter.webp",
+     "px": [
+      188,
+      143
+     ],
+     "bytes": 4232,
+     "size": [
+      94,
+      71.5
+     ],
+     "anchor": [
+      47,
+      68
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -61.6
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "smock",
+    "slot": "over",
+    "colors": {
+     "sky": {
+      "over": "#CBE6F1",
+      "over-sh": "#A5D0E3",
+      "over-2": "#A3BEDC"
+     },
+     "butter": {
+      "over": "#F4DC98",
+      "over-sh": "#DFB050",
+      "over-2": "#C4933A"
+     }
+    }
+   }
+  },
+  "sun-hat": {
+   "label": "sun hat",
+   "tags": [
+    "wear",
+    "wearable:hat",
+    "school",
+    "recess"
+   ],
+   "default": "butter",
+   "variants": {
+    "butter": {
+     "file": "assets/sprites/props/sun-hat-butter.webp",
+     "px": [
+      202,
+      94
+     ],
+     "bytes": 4332,
+     "size": [
+      101,
+      47
+     ],
+     "anchor": [
+      50.5,
+      40
+     ]
+    },
+    "rose": {
+     "file": "assets/sprites/props/sun-hat-rose.webp",
+     "px": [
+      202,
+      94
+     ],
+     "bytes": 4076,
+     "size": [
+      101,
+      47
+     ],
+     "anchor": [
+      50.5,
+      40
+     ]
+    },
+    "mint": {
+     "file": "assets/sprites/props/sun-hat-mint.webp",
+     "px": [
+      202,
+      94
+     ],
+     "bytes": 4204,
+     "size": [
+      101,
+      47
+     ],
+     "anchor": [
+      50.5,
+      40
+     ]
+    }
+   },
+   "taps": null,
+   "oneWay": false,
+   "bites": null,
+   "grip": [
+    0,
+    -21
+   ],
+   "surface": null,
+   "set": "school",
+   "prep": null,
+   "leaves": null,
+   "wear": {
+    "piece": "sun-hat",
+    "slot": "hat",
+    "colors": {
+     "butter": {
+      "hat": "#F4DC98",
+      "hat-sh": "#DFB050",
+      "hat-2": "#8CBDB8"
+     },
+     "rose": {
+      "hat": "#F6D3CF",
+      "hat-sh": "#E9AFAE",
+      "hat-2": "#79A86D"
+     },
+     "mint": {
+      "hat": "#CFE5DA",
+      "hat-sh": "#8CBDB8",
+      "hat-2": "#E9AFAE"
+     }
+    }
+   }
   }
  },
  "site": {
@@ -13476,6 +22699,187 @@
    "house",
    "tower",
    "bridge"
+  ]
+ },
+ "theater": {
+  "costumes": [
+   "gown",
+   "royal-coat",
+   "knight-tunic",
+   "pirate-coat",
+   "star-dress",
+   "tuxedo",
+   "fairy-tutu",
+   "wizard-robe",
+   "fairy-wings",
+   "feather-boa",
+   "lightning-cape"
+  ],
+  "hats": [
+   "crown",
+   "tiara",
+   "top-hat",
+   "pirate-hat",
+   "cat-ears",
+   "bunny-ears",
+   "lion-mane",
+   "wizard-hat"
+  ],
+  "faces": [
+   "masquerade-mask",
+   "sparkle-mask",
+   "sunglasses"
+  ],
+  "shelf": [
+   "crown",
+   "wand",
+   "foam-sword",
+   "bouquet",
+   "microphone",
+   "top-hat",
+   "masquerade-mask"
+  ],
+  "heroReuse": [
+   "hero-cape",
+   "hero-mask",
+   "hero-suit"
+  ],
+  "snacks": [
+   "popcorn",
+   "lemonade-cup"
+  ],
+  "show": [
+   "ticket",
+   "rose",
+   "program",
+   "tape",
+   "tambourine",
+   "maracas"
+  ],
+  "rack": [
+   0,
+   -206
+  ],
+  "note": "Costumes hang on the racks by their hanger hook (grip). Wear pieces: props[id].wear (rig piece, slot, colours per variant). The site hero set (hero-cape, hero-mask, hero-suit) is reused in the closet."
+ },
+ "school": {
+  "weather": [
+   "sun",
+   "cloud",
+   "rain",
+   "snow"
+  ],
+  "feelings": [
+   "happy",
+   "sad",
+   "mad",
+   "scared",
+   "calm"
+  ],
+  "cubbyAnimals": [
+   "cat",
+   "dog",
+   "fish",
+   "bird",
+   "bunny",
+   "bear"
+  ],
+  "schedule": [
+   "arrive",
+   "circle",
+   "play",
+   "snack",
+   "recess",
+   "story",
+   "home"
+  ],
+  "scheduleWords": {
+   "arrive": "arrive",
+   "circle": "circle time",
+   "play": "centers",
+   "snack": "snack",
+   "recess": "recess",
+   "story": "story",
+   "home": "home"
+  },
+  "letters": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "E",
+   "F",
+   "G",
+   "H",
+   "I",
+   "J",
+   "K",
+   "L",
+   "M",
+   "N",
+   "O",
+   "P",
+   "Q",
+   "R",
+   "S",
+   "T",
+   "U",
+   "V",
+   "W",
+   "X",
+   "Y",
+   "Z"
+  ],
+  "letterWords": {
+   "A": "apple",
+   "B": "ball",
+   "C": "cat",
+   "D": "dog",
+   "E": "egg",
+   "F": "fish",
+   "G": "goat",
+   "H": "hat",
+   "I": "igloo",
+   "J": "jam",
+   "K": "kite",
+   "L": "leaf",
+   "M": "moon",
+   "N": "nest",
+   "O": "octopus",
+   "P": "pig",
+   "Q": "queen",
+   "R": "rain",
+   "S": "sun",
+   "T": "tree",
+   "U": "umbrella",
+   "V": "van",
+   "W": "whale",
+   "X": "fox",
+   "Y": "yo-yo",
+   "Z": "zebra"
+  },
+  "sightWords": [
+   "the",
+   "I",
+   "a",
+   "see",
+   "can",
+   "go",
+   "like",
+   "is"
+  ],
+  "paints": {
+   "red": "#E4846F",
+   "yellow": "#F2C75C",
+   "blue": "#8FB1DC",
+   "green": "#96C47F",
+   "purple": "#B69BD3",
+   "pink": "#EFA3B4"
+  },
+  "stamps": [
+   "star",
+   "smile",
+   "check"
   ]
  },
  "cafe": {

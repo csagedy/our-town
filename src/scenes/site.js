@@ -13,10 +13,10 @@
 //   after its layer, and answers a tap. The portable toilet door opens and
 //   shuts (and flushes, loudly), the crane lever flips up and down; their
 //   state is props of one `site-fixtures` entity (room 'construction/fixtures'),
-//   set with store ops. The crane, the wrecking ball, the dig pit, the
+//   set with store ops. The TOWER CRANE (trolley, hook, lever) and the
+//   WRECKING BALL are src/scenes/site-rigs.js (P2c.2). The dig pit, the
 //   excavator, the truck and the mixer only wobble and make a sound for now:
-//   they come alive in P2c.2 (crane, ball), P2c.3 (dig, excavator, truck) and
-//   P2c.4 (workshop, mixer).
+//   they come alive in P2c.3 (dig, excavator, truck) and P2c.4 (workshop, mixer).
 // - BUILD GRID (src/core/buildgrid.js): build pieces (blocks, planks, beams,
 //   roofs, windows, doors, stairs, flags, chimneys) dropped over the build
 //   deck snap to its 40-unit grid, onto the per-column height map, with a
@@ -57,6 +57,8 @@ import { mountCharacters, seedCharacters, CHAR_KIND } from '../engine/characters
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
 import { shapeOf, cellOf, snapDrop, settleGrid, topSurfaces, wobbly, towerOf, heightMap, overGrid } from '../core/buildgrid.js';
+import { createSiteRigs, RIG_PIECES } from './site-rigs.js';   // P2c.2: the tower crane and the wrecking ball
+import { HOOK_KIND } from '../core/crane.js';
 
 export const SITE_ID = 'construction/yard';
 export const FIXTURES_KIND = 'site-fixtures';
@@ -151,14 +153,12 @@ export const PIECES = {
     fx: { open: 'sparkle', closed: 'puff' },
   },
   'crane-lever': { toggle: ['up', 'down'], sound: { down: ['knock', { pitch: 0.8 }], up: ['knock', { pitch: 1.25 }] }, fx: { down: 'sparkle', up: 'sparkle' } },
-  'crane-jib': { react: 'wobble', sound: ['knock', { pitch: 0.7 }], later: 'P2c.2' },
-  'crane-cab': { react: 'wobble', sound: ['whistle'], later: 'P2c.2' },
-  'crane-trolley': { react: 'wobble', sound: ['knock', { pitch: 1.3 }], later: 'P2c.2' },
-  'crane-cable': { react: 'wobble', sound: ['squeak', { pitch: 0.6 }], later: 'P2c.2' },
-  'crane-hook': { react: 'wobble', sound: ['clink'], later: 'P2c.2' },
-  'wreck-boom': { react: 'wobble', sound: ['knock', { pitch: 0.6 }], later: 'P2c.2' },
-  'wreck-chain': { react: 'wobble', sound: ['clink', { pitch: 0.8 }], later: 'P2c.2' },
-  'wreck-ball': { react: 'wobble', sound: ['thud', { pitch: 0.8 }], later: 'P2c.2' },
+  // P2c.2: the trolley, cable, hook, chain and ball are driven by site-rigs.js (RIG_PIECES); these only react.
+  'crane-jib': { react: 'wobble', sound: ['knock', { pitch: 0.7 }] },
+  'crane-cab': { react: 'wobble', sound: ['whistle'] },
+  'wreck-boom': { react: 'wobble', sound: ['knock', { pitch: 0.6 }] },
+  'crane-trolley': { rig: true }, 'crane-cable': { rig: true }, 'crane-hook': { rig: true },
+  'wreck-chain': { rig: true }, 'wreck-ball': { rig: true },
   dirt: { react: 'squish', sound: ['thud', { pitch: 0.7 }], fx: 'puff', later: 'P2c.3' },
   'dump-truck': { react: 'wobble', sound: ['honk'], later: 'P2c.3' },
   'truck-bed': { react: 'wobble', sound: ['knock', { pitch: 0.7 }], later: 'P2c.3' },
@@ -435,9 +435,13 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
     el.dataset.piece = pid;
     const rec = { el, body: el.firstChild, img: el.querySelector('img'), shown: null, gen: 0 };
     pieces.set(pid, rec);
-    input.register(el, { onTap: () => tapPiece(pid), pan: true });
+    if (!RIG_PIECES.includes(pid)) input.register(el, { onTap: () => tapPiece(pid), pan: true });
   }
-  view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: hooks, labels: textLabels(catalog, manifest) });
+  const rigs = createSiteRigs({
+    stage, store, input, room, fx, manifest, catalog, pieces, later,
+    site: { FIXTURES_KIND, fixtures, placed: () => placed(), isBuild, shapeOfKind, gridSpot, settleNow: () => settleNow() },
+  });
+  view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: rigs.hooks(hooks), labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -472,6 +476,7 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
   }
   firstVisit = false;
   applySurfaces();
+  rigs.bind(view, chars);
 
   // ---- the build grid ----
   const viewOf = (id) => (view ? view.viewOf(id) : null);
@@ -582,7 +587,7 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
       // character, a hot spot or something in a finger.
       const f = room.def.floor;
       for (const e of inRoom(store.state, SITE_ID)) {
-        if (held.has(e.id) || placementOf(e) || (e.props && e.props.seat) || catalog.hasTag(e.kind, 'hotspot')) continue;
+        if (held.has(e.id) || placementOf(e) || (e.props && e.props.seat) || catalog.hasTag(e.kind, 'hotspot') || e.kind === HOOK_KIND) continue;
         if (e.x < grid.x0 - 60 || e.x > grid.x1 + 60) continue;
         if (surfaceUnder(room.def, e.x, e.y) || (e.y >= f.top - 0.5 && e.y <= f.bottom + 0.5)) continue;
         const v = viewOf(e.id);
@@ -710,6 +715,7 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
       const next = nextToggle(pid, state(pid));
       const f = fixtures();
       if (f) store.dispatch('set', { id: f.id, path: 'props.' + pid, value: next });
+      if (pid === 'crane-lever') rigs.lever(next);
       playS(spec.sound && spec.sound[next]);
       if (spec.fx && spec.fx[next]) burstAt(pid, spec.fx[next]);
       const then = spec.then && spec.then[next];
@@ -746,7 +752,7 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
     prevState = st;
     applySurfaces();
     renderPieces();
-    if (!env || env.device !== store.device || settling || pending || !MOVES_THINGS.has(env.op)) return;
+    if (!env || env.device !== store.device || settling || pending || rigs.quiet() || !MOVES_THINGS.has(env.op)) return;
     const ids = env.args.ids || (env.args.id ? [env.args.id] : []);
     const wasOnGrid = ids.some((id) => { const e = prev && prev.entities[id]; return e && placementOf(getEntity(prev, id) || e); });
     if (!wasOnGrid) return;
@@ -781,13 +787,17 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
       tops: () => tops.map((t) => ({ id: t.id, x0: t.x0, x1: t.x1, y: t.y })),
       settle: settleNow,
     },
-    stats: () => ({ ...stats, taps: { ...stats.taps }, timers: timers.size }),
+    stats: () => ({ ...stats, taps: { ...stats.taps }, timers: timers.size, rigs: rigs.stats() }),
+    /** P2c.2: the tower crane and the wrecking ball (site-rigs.js; tests, debugging). */
+    crane: rigs.crane,
+    wreck: rigs.wreck,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: in front of the build yard, in a row. */
     arrivalSpot(i) { return { x: Math.round(1290 - i * 115), y: Math.round(905 + (i % 2) * 35) }; },
     destroy() {
       unsubscribe();
+      rigs.destroy();
       offStage();
       clearTimeout(camTimer);
       for (const t of timers) clearTimeout(t);

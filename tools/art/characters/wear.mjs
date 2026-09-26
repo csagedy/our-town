@@ -564,7 +564,7 @@ Object.assign(WEAR, {
     slot: 'top', label: 'knight tunic', costume: true, colors: { top: P.steel, 'top-sh': P.steelDeep, 'top-2': P.blue },
     gen: (b) => {
       const { t, h, T } = tee(b), k = TK(b);
-      const mail = [...Array(6)].map((_, i) => { const y = t + 14 + i * ((h - t) / 6); return `M${f(-T.bw)} ${f(y)} ${[...Array(8)].map((__, j) => { const x = -T.bw + (2 * T.bw) * (j + 1) / 8; return `Q${f(x - T.bw / 8)} ${f(y + 8)} ${f(x)} ${f(y)}`; }).join(' ')}`; }).join(' ');
+      const mail = [...Array(4)].map((_, i) => { const y = t + 16 + i * ((h - t) / 4.4); return `M${f(-T.bw)} ${f(y)} ${[...Array(6)].map((__, j) => { const x = -T.bw + (2 * T.bw) * (j + 1) / 6; return `Q${f(x - T.bw / 6)} ${f(y + 9)} ${f(x)} ${f(y)}`; }).join(' ')}`; }).join(' ');
       const tw = T.tw * .78, bw = T.bw * .7, y1 = f(h + b.thigh * .5 + 4);
       const tab = `M${f(-tw)} ${f(t - 2)} L${f(tw)} ${f(t - 2)} L${f(bw)} ${f(y1 - 14)} L0 ${f(y1)} L${f(-bw)} ${f(y1 - 14)}Z`;
       const cy = f(t + (h - t) * .42), R = f(Math.min(20, T.tw * .44));
@@ -698,7 +698,7 @@ Object.assign(WEAR, {
       strand(-T.tw * .5, t - 6, -T.tw * .75, h + 6, -T.tw * .35, 8);
       strand(T.tw * .5, t - 6, T.tw * .55, h - (h - t) * .1, T.tw * .4, 7);
       const across = [...Array(5)].map((_, i) => [-T.tw * .5 + (T.tw * i) / 4, t - 8 + Math.sin((i / 4) * Math.PI) * 4]);
-      const fluff = ([x, y], i) => `<path class="${i % 3 === 1 ? 'over-sh' : 'over'}" d="${scallop(f(x), f(y), R, R * .9, 8, 4 * k)}"/>`;
+      const fluff = ([x, y], i) => `<circle class="${i % 3 === 1 ? 'over-sh' : 'over'}" cx="${f(x)}" cy="${f(y)}" r="${R}"/>`;
       return {
         torso: across.map(fluff).join('') + pts.map(fluff).join('')
           + `<g class="n" style="fill:var(--over-2)">${pts.filter((_, i) => i % 2).map(([x, y]) => `<circle cx="${f(x - 2)}" cy="${f(y - 3)}" r="${f(3 * k)}"/>`).join('')}</g>`,
@@ -807,12 +807,12 @@ Object.assign(WEAR, {
     slot: 'hat', label: 'lion mane', hides: ['top', 'hair'], colors: { hat: P.mustard, 'hat-sh': P.mustardDeep, 'hat-2': P.terra },
     gen: (b) => {
       const { rx, ry } = b.head, k = rx / 80, cy = f(ry * .1);
-      const outer = scallop(0, 4, rx + 34 * k, ry + 32 * k, 16, 13 * k);
+      const outer = scallop(0, 4, rx + 34 * k, ry + 32 * k, 13, 15 * k);
       const hole = ellPath(0, cy, rx * .84, ry * .86);
       const ear = (s) => `<circle class="hat" cx="${f(s * rx * .7)}" cy="${f(-ry * 1.12)}" r="${f(19 * k)}"/><circle class="hat-2 n" cx="${f(s * rx * .7)}" cy="${f(-ry * 1.1)}" r="${f(9 * k)}"/>`;
-      const curls = [...Array(10)].map((_, i) => { const a = (i / 10) * Math.PI * 2 + .3, x = Math.cos(a) * (rx + 12 * k), y = 4 + Math.sin(a) * (ry + 10 * k); return `M${f(x)} ${f(y)} q${f(Math.cos(a + 1.2) * 10 * k)} ${f(Math.sin(a + 1.2) * 10 * k)} ${f(Math.cos(a + 2) * 4 * k)} ${f(Math.sin(a + 2) * 12 * k)}`; }).join(' ');
+      const curls = [...Array(7)].map((_, i) => { const a = (i / 7) * Math.PI * 2 + .3, x = Math.cos(a) * (rx + 12 * k), y = 4 + Math.sin(a) * (ry + 10 * k); return `M${f(x)} ${f(y)} q${f(Math.cos(a + 1.2) * 10 * k)} ${f(Math.sin(a + 1.2) * 10 * k)} ${f(Math.cos(a + 2) * 4 * k)} ${f(Math.sin(a + 2) * 12 * k)}`; }).join(' ');
       const tuft = (x, s) => `<path class="hat" d="M${f(x - 16 * k)} ${f(-ry * .78)} Q${f(x + s * 4 * k)} ${f(-ry * .5)} ${f(x + s * 14 * k)} ${f(-ry * .44)} Q${f(x + s * 4 * k)} ${f(-ry * .62)} ${f(x + 16 * k)} ${f(-ry * .78)}Z"/>`;
-      const outer2 = scallop(0, 8, rx + 44 * k, ry + 40 * k, 18, 12 * k);
+      const outer2 = scallop(0, 8, rx + 44 * k, ry + 40 * k, 14, 14 * k);
       return {
         head: `<path class="hat-sh" fill-rule="evenodd" d="${outer2} ${hole}"/>`
           + `<path class="hat" fill-rule="evenodd" d="${outer} ${hole}"/><path ${tl('var(--hat-sh)', 'stroke-width:4')} d="${curls}"/>`
@@ -846,6 +846,16 @@ Object.assign(WEAR, {
   },
 });
 
+// The theater pieces round their coordinates to whole art units (0.7 world
+// units: invisible) to keep rig.json small; stroke widths keep their decimals.
+const roundAll = (o) => (typeof o === 'string' ? o.replace(/(?<!stroke-width:)-?\d+\.\d+/g, (m) => String(Math.round(+m)))
+  : o && typeof o === 'object' ? Object.fromEntries(Object.entries(o).map(([k, v]) => [k, roundAll(v)])) : o);
+for (const id of ['gown', 'royal-coat', 'knight-tunic', 'pirate-coat', 'star-dress', 'tuxedo', 'fairy-tutu', 'wizard-robe', 'feather-boa', 'lightning-cape',
+  'pirate-hat', 'wizard-hat', 'top-hat', 'tiara', 'cat-ears', 'bunny-ears', 'lion-mane', 'masquerade', 'sparkle-mask']) {
+  const gen = WEAR[id].gen;
+  WEAR[id].gen = (b) => roundAll(gen(b));
+}
+
 export const SLOTS = ['back', 'bottom', 'top', 'over', 'belt', 'shoes', 'hands', 'face', 'hat'];
 /** Pieces per slot in the Character Maker's order. */
 export const WEAR_ORDER = {
@@ -877,3 +887,75 @@ export const OUTFIT_COLORS = {
   belt: [C3('wood', 'woodDeep', 'mustard'), C3('woodDark', 'woodDeep', 'steel'), C3('terra', 'terraDeep', 'butter'), C3('sage', 'sageDeep', 'mustard')],
   hands: [C3('butter', 'mustardDeep', '#EE9A55'), C3('#EE9A55', 'terraDeep', 'butter'), C3('sky', 'blueDeep', 'blue'), C3('rose', 'roseDeep', 'berry'), C3('sage', 'sageDeep', 'leaf')],
 };
+
+// ---------------------------------------------------------------------------
+// P2d: SCHOOL wearables (props/school.mjs `wear`): a kid's backpack (slot
+// `back`: the bag shows either side of the body, the straps go over the top),
+// the teacher's lanyard and an art smock (slot `over`), and a sun hat for
+// recess (slot `hat`). No new slots.
+// ---------------------------------------------------------------------------
+Object.assign(WEAR, {
+  'school-backpack': {
+    slot: 'back', label: 'backpack', colors: { back: P.teal, 'back-sh': P.tealDeep, 'back-2': P.butter },
+    gen: (b) => {
+      const { t, h, T } = tee(b), k = TK(b);
+      const w = f(T.bw + 26 * k), top = f(t - 4), bot = f(h - 4), mid = f(t + (h - t) * .52);
+      const loop = f(top - 14 * k);
+      const sx0 = T.tw * .62, sx1 = T.bw * .62, sw = 6 * k + 2;
+      const strap = (s) => `<path class="back" d="M${f(s * (sx0 - sw))} ${f(t - 3)} L${f(s * (sx0 + sw))} ${f(t - 3)} L${f(s * (sx1 + sw))} ${f(mid + 14)} L${f(s * (sx1 - sw))} ${f(mid + 14)}Z"/>`
+        + `<rect class="back-2 thin" x="${f(s * sx1 - 6 * k)}" y="${f(mid - 2)}" width="${f(12 * k)}" height="${f(10 * k)}" rx="2"/>`;
+      return {
+        back: `<path class="d" style="stroke-width:5" d="M${f(-10 * k)} ${top} Q0 ${loop} ${f(10 * k)} ${top}"/>`
+          + `<path class="back" d="${rrect(-w, top, w * 2, bot - top, 18 * k)}"/>`
+          + `<path class="back-sh fo" d="M${f(-w + 4)} ${f(bot - 16 * k)} L${f(w - 4)} ${f(bot - 16 * k)} L${f(w - 4)} ${f(bot - 10)} Q${f(w - 4)} ${f(bot - 3)} ${f(w - 14)} ${f(bot - 3)} L${f(-w + 14)} ${f(bot - 3)} Q${f(-w + 4)} ${f(bot - 3)} ${f(-w + 4)} ${f(bot - 10)}Z"/>`
+          + `<path class="back-2 thin" d="${star(f(-w + 10 * k), f(mid), f(7 * k), f(3.2 * k))}"/>`,
+        torso: strap(-1) + strap(1),
+      };
+    },
+  },
+  lanyard: {
+    slot: 'over', label: 'teacher lanyard', colors: { over: P.teal, 'over-sh': P.tealDeep, 'over-2': P.butter },
+    gen: (b) => {
+      const { t, h, T } = tee(b), k = TK(b);
+      const by = f(t + (h - t) * .5), bw = f(18 * k), bh = f(22 * k);
+      const cord = `M${f(-T.tw * .42)} ${f(t - 2)} Q${f(-T.tw * .4)} ${f(by - 14 * k)} ${f(-3 * k)} ${f(by - 2)} M${f(T.tw * .42)} ${f(t - 2)} Q${f(T.tw * .4)} ${f(by - 14 * k)} ${f(3 * k)} ${f(by - 2)}`;
+      return {
+        torso: `<path fill="none" style="stroke:${P.ink};stroke-width:${f(6 * k + 3)}" d="${cord}"/><path fill="none" style="stroke:var(--over);stroke-width:${f(6 * k)}" class="n" d="${cord}"/>`
+          + `<rect class="over-sh thin" x="${f(-4 * k)}" y="${f(by - 4)}" width="${f(8 * k)}" height="${f(7 * k)}" rx="2"/>`
+          + `<rect fill="#fff" x="${-bw}" y="${f(by + 2)}" width="${bw * 2}" height="${bh}" rx="${f(3 * k)}"/>`
+          + `<circle class="over-2 thin" cx="${f(-bw * .45)}" cy="${f(by + 2 + bh / 2)}" r="${f(5 * k)}"/>`
+          + `<path class="tl" style="stroke:${P.warmGrey};stroke-width:3" d="M${f(bw * .05)} ${f(by + 2 + bh * .35)} L${f(bw * .7)} ${f(by + 2 + bh * .35)} M${f(bw * .05)} ${f(by + 2 + bh * .7)} L${f(bw * .7)} ${f(by + 2 + bh * .7)}"/>`,
+      };
+    },
+  },
+  smock: {
+    slot: 'over', label: 'art smock', colors: { over: P.sky, 'over-sh': P.skyDeep, 'over-2': P.blue },
+    gen: (b) => {
+      const { t, h, T } = tee(b), k = TK(b);
+      const sw = T.bw + 6, top = f(t - 2), bot = f(h + (h - t) * .22);
+      const body = `M${f(-T.tw - 6)} ${top} Q0 ${f(t + 16 * k)} ${f(T.tw + 6)} ${top} Q${f(sw + 4)} ${f(t + 10)} ${f(sw + 2)} ${f(t + 30)} L${f(sw + 8)} ${f(bot - 8)} Q${f(sw + 8)} ${bot} ${f(sw)} ${bot} L${f(-sw)} ${bot} Q${f(-sw - 8)} ${bot} ${f(-sw - 8)} ${f(bot - 8)} L${f(-sw - 2)} ${f(t + 30)} Q${f(-sw - 4)} ${f(t + 10)} ${f(-T.tw - 6)} ${top}Z`;
+      const splats = [[-.55, .32, 6, CRAYONS_W.red], [.5, .22, 5, CRAYONS_W.yellow], [.35, .7, 6.5, CRAYONS_W.green], [-.4, .82, 5, CRAYONS_W.purple]]
+        .map(([x, y, r, c]) => `<path class="n" fill="${c}" d="${scallop(f(x * sw), f(t + (bot - t) * y), f(r * k), f(r * k * .85), 6, 2.5 * k)}"/>`).join('');
+      const pw = f(Math.min(22, T.tw * .5)), py = f(bot - (bot - t) * .28);
+      return {
+        torso: `<path class="over" d="${body}"/>${splats}`
+          + `<path class="over-2 thin" d="M${f(-T.tw * .5)} ${f(t + 2)} Q0 ${f(t + 20 * k)} ${f(T.tw * .5)} ${f(t + 2)} Q0 ${f(t + 12 * k)} ${f(-T.tw * .5)} ${f(t + 2)}Z"/>`
+          + `<rect class="over-sh thin" x="${-pw}" y="${f(py - pw * .6)}" width="${pw * 2}" height="${f(pw * 1.1)}" rx="6"/>`,
+      };
+    },
+  },
+  'sun-hat': {
+    slot: 'hat', label: 'sun hat', hides: ['top'], colors: { hat: P.butter, 'hat-sh': P.mustard, 'hat-2': P.teal },
+    gen: (b) => {
+      const { rx, ry } = b.head, by = f(-ry * .5), k = rx / 80;
+      const crown = `M${f(-rx * .78)} ${by} C${f(-rx * .82)} ${f(-ry * 1.28)} ${f(-rx * .4)} ${f(-ry * 1.4)} 0 ${f(-ry * 1.4)} C${f(rx * .4)} ${f(-ry * 1.4)} ${f(rx * .82)} ${f(-ry * 1.28)} ${f(rx * .78)} ${by}Z`;
+      const brim = `M${f(-rx - 44 * k)} ${f(by + 14)} Q${f(-rx - 50 * k)} ${f(by - 12)} ${f(-rx * .7)} ${f(by - 14)} Q0 ${f(by - 24)} ${f(rx * .7)} ${f(by - 14)} Q${f(rx + 50 * k)} ${f(by - 12)} ${f(rx + 44 * k)} ${f(by + 14)} Q0 ${f(by + 28)} ${f(-rx - 44 * k)} ${f(by + 14)}Z`;
+      return {
+        head: `<path class="hat" d="${crown}"/><path class="hat-2" d="M${f(-rx * .8)} ${f(by - 4)} Q0 ${f(by - 16)} ${f(rx * .8)} ${f(by - 4)} L${f(rx * .8)} ${f(by - 22)} Q0 ${f(by - 34)} ${f(-rx * .8)} ${f(by - 22)}Z"/>`
+          + `<path class="hat" d="${brim}"/><path class="tl" style="stroke:var(--hat-sh);stroke-width:3" d="M${f(-rx - 26 * k)} ${f(by + 8)} Q0 ${f(by + 20)} ${f(rx + 26 * k)} ${f(by + 8)}"/>`
+          + `<circle fill="#fff" class="thin" cx="${f(rx * .5)}" cy="${f(by - 22)}" r="${f(10 * k)}"/><circle class="n" fill="${P.butter}" cx="${f(rx * .5)}" cy="${f(by - 22)}" r="${f(4 * k)}"/>`,
+      };
+    },
+  },
+});
+const CRAYONS_W = { red: '#E4846F', yellow: '#F2C75C', green: '#96C47F', purple: '#B69BD3' };

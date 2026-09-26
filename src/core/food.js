@@ -287,3 +287,103 @@ export function cupFill(kind, drink) {
   if (kind === 'mug') return { key: 'fill', value: 1 };
   return null;
 }
+
+// ---------------------------------------------------------------------------
+// Heat (P2a.3): the stove, the oven and what they do to food. Toca rules:
+// nothing ever burns, catches fire or is ruined; doneness stops at 3,
+// "extra toasty". The cafe's heat loop (src/scenes/cafe-heat.js) decides
+// WHEN (a pan on a lit burner, a tray in the shut oven) and dispatches the
+// ops; these pure helpers decide WHAT.
+//
+// Heat state is props of the heated top-level thing (the pan, the saucepan,
+// the baking tray, a mixing bowl, or a food straight on the oven rack):
+//   heatAt  set   wall-clock ms this run of heat started (0 / absent: not heating)
+//   heatMs  set   progress toward the next step banked by an earlier run
+//                 (the oven door opened mid-bake, the burner turned off)
+// and of what it cooked:
+//   cooked  inc   doneness (above); method set once (fried, boiled, baked)
+//   hotAt   set   wall-clock ms heat last cooked it: warm (steam, and "hot
+//                 hot hot!" when a character eats it) for HEAT.warmMs
+// Time is read, never ticked per frame: progress = heatMs + (now - heatAt),
+// so a reload (or a trip to the map) mid-cook picks up where it was, and
+// the steps are the same whatever the frame rate.
+//   saucepan props: water set 1 once filled at the sink (then it boils)
+//   baking-tray props: dough set: the batter look poured on (raw cookies)
+
+export const HEAT = { stepMs: 3000, ovenMs: 5000, warmMs: 20000 };
+
+/** Is it heating now? Pure. */
+export const isHeating = (props = {}) => num(props.heatAt) > 0;
+
+/** ms of progress toward the next step at `now`. Pure. */
+export function heatProgress(props = {}, now = 0) {
+  return Math.max(0, num(props.heatMs)) + (isHeating(props) ? Math.max(0, now - props.heatAt) : 0);
+}
+
+/** Whole steps due at `now` and the ms until the next one: {steps, next, rest}. Pure. */
+export function heatDue(props = {}, stepMs = HEAT.stepMs, now = 0) {
+  const p = heatProgress(props, now);
+  const steps = Math.floor(p / stepMs);
+  const rest = p - steps * stepMs;
+  return { steps, rest, next: stepMs - rest };
+}
+
+/** Is it still warm from the heat (steam, "hot hot hot!")? Pure. */
+export const isWarm = (props = {}, now = 0, warmMs = HEAT.warmMs) => num(props.hotAt) > 0 && now - props.hotAt < warmMs;
+
+// What a done batter turns into, by where it is poured or baked.
+export const POUR_INTO = { pan: 'pancake', 'baking-tray': 'dough' };
+export const BAKE_BATTER = 'cupcake';      // a mixing bowl of batter in the oven
+export const TRAY_DISH = 'cookies';        // a baked tray of dough, tipped off
+
+/**
+ * One step of heat on a heated thing: what cooks. thing: {kind, props};
+ * kids: its child entities [{id, kind, props}]. opts.oven: in the oven (a
+ * bowl of batter bakes into cupcakes); opts.paramsOf(kind): the food
+ * behavior's params, or null for things that are not food. Pure.
+ * Returns { self, foods: [ids], bake: {ids, kind} | null, method }.
+ */
+export function cookPlan(thing, kids = [], { oven = false, paramsOf = () => null } = {}) {
+  const p = paramsOf(thing.kind);
+  const props = thing.props || {};
+  const self = (!!p || !!props.dough) && donenessOf(props) < DONENESS_MAX;
+  const list = (kids || []).filter((k) => paramsOf(k.kind));
+  const method = oven ? 'baked' : props.water ? 'boiled' : null;
+  const items = list.map((k) => ({ kind: k.kind, props: k.props || {} }));
+  if (oven && list.length && mixState(items).done) {
+    return { self: false, foods: [], bake: { ids: list.map((k) => k.id).sort(), kind: BAKE_BATTER }, method };
+  }
+  const foods = list.filter((k) => !isMixed(k.props || {}) && donenessOf(k.props) < DONENESS_MAX).map((k) => k.id).sort();
+  return { self, foods, bake: null, method };
+}
+
+/**
+ * A mixing bowl of done batter poured onto `targetKind`: what it makes, or
+ * null (not batter yet, or nothing to pour into). kids: the bowl's children. Pure.
+ */
+export function pourOf(kids, targetKind) {
+  const items = (kids || []).map((k) => ({ kind: k.kind, props: k.props || {} }));
+  if (!items.length || !mixState(items).done || !POUR_INTO[targetKind]) return null;
+  return { into: POUR_INTO[targetKind], batter: batterOf(items) };
+}
+
+/**
+ * The ladle dipped in a saucepan: the dish it scoops, or null. A pot of
+ * water that has cooked pasta gives spaghetti; with other cooked food, or
+ * hot water on its own, soup. take: the ids scooped out with it. Pure.
+ */
+export function scoopOf(potProps = {}, kids = [], now = 0) {
+  if (!potProps.water) return null;
+  const cooked = (kids || []).filter((k) => donenessOf(k.props) >= 1);
+  if (cooked.some((k) => k.kind === 'pasta')) return { dish: 'spaghetti', take: cooked.map((k) => k.id).sort() };
+  if (cooked.length) return { dish: 'soup', take: cooked.map((k) => k.id).sort() };
+  if (isHeating(potProps) || isWarm(potProps, now)) return { dish: 'soup', take: [] };
+  return null;
+}
+
+/** The saucepan's look: empty (default) | water | boiling | pasta. Pure. */
+export function potLook(props = {}, kids = []) {
+  if (!props.water) return null;
+  if ((kids || []).some((k) => k.kind === 'pasta' && donenessOf(k.props) >= 1)) return 'pasta';
+  return isHeating(props) ? 'boiling' : 'water';
+}

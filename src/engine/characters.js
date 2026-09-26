@@ -700,6 +700,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     }
     const cur = entityOf(item.id) || item;
     const taste = tasteOf(tagsOf(item.kind));
+    const hot = !!(base.hotOf && base.hotOf(cur));     // P2a.3: fresh off the stove or out of the oven
     const r = biteOf(rec, cur);
     stats.bites++;
     stats.lastTaste = r.ate ? taste : 'none';
@@ -707,6 +708,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     const v = viewOf(e.id);
     if (v) tween.squish(v.body, { amount: 0.35, duration: 300 });
     if (!r.ate) { faces(rec, [['cheeky', 900]]); play('boing', { pitch: 1.3 }); return true; }
+    if (hot) { hotHotHot(rec, chomp); return true; }
     if (taste === 'sweet') {
       faces(rec, chomp.concat([['yum', 1300]]));
       later(rec, 500, () => { const p = worldAnchor(rec, 'head'); if (fx && p) fx.burst('heart', p.x, p.y - 40, { count: 3, spread: 60 }); });
@@ -715,6 +717,34 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       later(rec, 1000, () => play('giggle'));
     } else faces(rec, chomp.concat([['happy', 1000]]));
     return true;
+  }
+
+  // Hot food (P2a.3): "hot hot hot!", tongue out, fanning the mouth with a
+  // free hand, a puff of steam; then yum. Never scary, never hurt.
+  function hotHotHot(rec, chomp) {
+    stats.lastTaste = 'hot';
+    const fan = [];
+    for (let i = 0; i < 6; i++) fan.push([{ eyes: i % 2 ? 'closed' : 'wide', brows: 'worried', mouth: i % 2 ? 'oh' : 'tongue', extras: 'sweat' }, 170]);
+    faces(rec, chomp.slice(0, 2).concat(fan, [['yum', 1300]]));
+    const allowed = talk !== false && store.state.settings.talk !== false;
+    if (allowed && speech) speech.say('hot hot hot!', { interrupt: true });
+    for (let i = 0; i < 3; i++) later(rec, 250 + i * 230, () => play('whistle', { pitch: 1.5 + i * 0.15, gain: allowed ? 0.25 : 0.5 }));
+    const m = worldAnchor(rec, 'mouth');
+    if (fx && m) fx.burst('steam', m.x, m.y - 30, { count: 2, spread: 40, scale: 0.7, angle: -90, arc: 70 });
+    const free = !rec.held.R ? 'R' : !rec.held.L ? 'L' : null;
+    if (free) {
+      let k = 0;
+      const flap = () => {
+        if (!alive(rec) || rec.dragging) return;
+        if (k >= 6) { tweenTo(rec, rec.basePose, 200); return; }
+        const w = rig.poses[k % 2 ? 'wave2' : 'wave'];
+        const p = Object.assign({}, rec.basePose, { head: w.head });
+        if (free === 'R') p.armR = w.armR; else p.armL = w.armR;
+        tweenTo(rec, p, 110, () => { k++; later(rec, 20, flap); });
+      };
+      later(rec, 240, flap);
+    }
+    later(rec, 1500, () => { const p = worldAnchor(rec, 'head'); if (fx && p) fx.burst('heart', p.x, p.y - 40, { count: 3, spread: 60 }); play('chime'); });
   }
 
   // ---- lifting and dropping a character ----
@@ -984,7 +1014,8 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       if (wearSlotOf(rig, e.kind)) {
         // The construction site's belt, gloves and hero suit lie around as their
         // prop art (assets/art-manifest.json) when there is one.
-        if (DROP_ART[rig.wear[e.kind].slot] || rig.wear[e.kind].costume) { const s = base.spriteOf ? base.spriteOf(e) : null; if (s) return s; }
+        // P2b.1: so do the theater's costume pieces (their catalog kinds have art).
+        if (DROP_ART[rig.wear[e.kind].slot] || rig.wear[e.kind].costume || (catalog && catalog.hasArt(e.kind))) { const s = base.spriteOf ? base.spriteOf(e) : null; if (s) return s; }
         return wearSprite(e);
       }
       return base.spriteOf ? base.spriteOf(e) : null;
@@ -1050,6 +1081,26 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
         anchors: Object.fromEntries(['head', 'mouth', 'handL', 'handR', 'feet', 'seat'].map((k) => [k, worldAnchor(rec, k)])),
         visible: rec.visible,
       };
+    },
+    /** Show faces in sequence on a character ([[expr, ms], ...]), then back to its own expression (P2c.2: the wrecking ball's giggle). */
+    face(id, seq) { const rec = recs.get(id); if (!rec || !alive(rec) || rec.dragging) return false; faces(rec, seq); return true; },
+    /**
+     * Play a short joint sequence over the character's base pose, then ease
+     * back: frames = [[partial pose (armL, armR, head, root...), ms], ...]
+     * (P2b.1: a bow, the audience cheering). Local only (no store op).
+     */
+    gesture(id, frames, { face = null } = {}) {
+      const rec = recs.get(id);
+      if (!rec || !alive(rec) || rec.dragging || !frames.length) return false;
+      if (face) faces(rec, face);
+      let at = 0;
+      frames.forEach(([pose, ms], i) => {
+        const go = () => { if (!rec.dragging) tweenTo(rec, Object.assign({}, rec.basePose, pose), Math.min(220, ms)); };
+        if (i === 0) go(); else later(rec, at, go);
+        at += ms;
+      });
+      later(rec, at, () => { if (!rec.dragging) tweenTo(rec, rec.basePose, 260); });
+      return true;
     },
     /** Screen-independent world anchor of a character (mouth, handL, head...). */
     anchor: (id, name) => { const rec = recs.get(id); return rec ? worldAnchor(rec, name) : null; },

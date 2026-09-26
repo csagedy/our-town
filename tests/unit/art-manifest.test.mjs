@@ -197,3 +197,42 @@ test('the construction site strip: pieces, rigs, stations, spawners, snap-ready 
   assert.equal(Object.keys(manifest.props['hero-cape'].variants).length, 3, 'three cape colours');
   assert.equal(Object.keys(manifest.props['hero-mask'].variants).length, 3, 'three mask colours');
 });
+
+test('the theater strip: curtain, backdrops, spotlights, stations, seats, spawners, costumes (P2b.1)', () => {
+  const th = manifest.rooms.theater;
+  assert.ok(th, 'rooms.theater');
+  assert.equal(th.width, 2880);
+  for (const L of th.layers) for (const t of L.tiles || []) checkFile(t.file, t.bytes);
+  for (const [id, pc] of Object.entries(th.pieces)) {
+    assert.ok(pc.variants[pc.default], `${id}: default variant`);
+    for (const v of Object.values(pc.variants)) checkFile(v.file, v.bytes);
+    assert.ok(th.layers.some((L) => L.id === pc.layer), `${id}: layer`);
+  }
+  for (const id of ['curtain-left', 'curtain-right', 'valance']) assert.deepEqual(Object.keys(th.pieces[id].variants).sort(), ['closed', 'half', 'open'], `${id}: open/half/closed`);
+  assert.deepEqual(Object.keys(th.pieces.backdrop.variants).sort(), ['castle', 'city', 'sea', 'stars']);
+  assert.deepEqual(Object.keys(th.pieces.spotlight.variants), ['off', 'white', 'pink', 'blue', 'gold']);
+  assert.equal(th.pieces.spotlight.copies.length, 3, 'three spotlights on the rail');
+  for (const id of ['trapdoor', 'trunk', 'ticket-window', 'mic-stand', 'boombox', 'poster']) assert.ok(Object.keys(th.pieces[id].variants).length >= 2, `${id}: state variants`);
+  assert.ok(th.pieces.poster.textArea, 'poster text area for the text layer');
+  const seats = new Set(th.seats.map((s) => s.id));
+  for (const id of ['piano-bench', 'vanity-stool', 'balcony-1', 'seat-A1', 'seat-C4']) assert.ok(seats.has(id), `seat ${id}`);
+  assert.ok(th.seats.filter((s) => s.id.startsWith('seat-')).length >= 12, 'three rows of audience seats');
+  const st = Object.fromEntries(th.stations.map((s) => [s.id, s]));
+  for (const id of ['mic', 'piano', 'drums', 'xylophone', 'guitar', 'fx-fog', 'fx-confetti', 'fx-snow', 'fx-thunder', 'spotlight-rail', 'backdrop-hook', 'boombox']) {
+    assert.ok(st[id] && isPt(st[id].at) && st[id].box.length === 4, `station ${id}`);
+    if (st[id].piece) assert.ok(th.pieces[st[id].piece], `station ${id}: piece ${st[id].piece}`);
+  }
+  assert.equal(st.piano.keys.length, 8);
+  assert.equal(st.xylophone.keys.length, 8);
+  const surfaces = new Set(th.surfaces.map((s) => s.id));
+  for (const s of th.spawners) {
+    for (const sid of s.surfaces || []) assert.ok(surfaces.has(sid), `spawner ${s.id}: surface ${sid}`);
+    for (const item of s.items) assert.ok(manifest.props[item], `spawner ${s.id}: prop ${item}`);
+  }
+  assert.deepEqual(th.zones.map((z) => z.id), ['backstage', 'stage', 'audience']);
+  for (const id of [...manifest.theater.costumes, ...manifest.theater.hats, ...manifest.theater.faces]) {
+    const p = manifest.props[id];
+    assert.ok(p && p.wear && rig.wear[p.wear.piece], `costume ${id}: rig piece`);
+  }
+  for (const id of ['gown', 'royal-coat', 'knight-tunic', 'pirate-coat', 'star-dress', 'tuxedo', 'fairy-tutu', 'wizard-robe']) assert.ok(rig.wear[id].costume && rig.wear[id].slot === 'top', `${id}: costume top`);
+});

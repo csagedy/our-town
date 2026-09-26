@@ -237,6 +237,7 @@ body {
 .fx-bubble { width: 26px; height: 26px; }
 .fx-swirl { width: 36px; height: 36px; color: #FFFFFF; }
 .fx-chick { width: 46px; height: 46px; }
+.fx-steam { width: 34px; height: 34px; }
 
 /* ---- P1.7 test room placeholder art (src/scenes/test-room.js), temporary ---- */
 .art i { position: absolute; display: block; }

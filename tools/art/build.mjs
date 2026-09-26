@@ -27,6 +27,10 @@ import { CITY } from './rooms/city.mjs';
 import { PROPS } from './props/starter.mjs';
 import { ROOM as SITE, SITE_RIGS, BUILD_GRID } from './rooms/site.mjs';
 import { SITE_PROPS, SITE_META } from './props/site.mjs';
+import { ROOM as THEATER, THEATER_RIGS } from './rooms/theater.mjs';
+import { THEATER_PROPS, THEATER_META } from './props/theater.mjs';
+import { ROOM as SCHOOL, SCHOOL_RIGS } from './rooms/school.mjs';
+import { SCHOOL_PROPS, SCHOOL_META } from './props/school.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -97,7 +101,21 @@ export async function buildRoom(page, room, written) {
   }
   if (room.spawners) out.spawners = room.spawners.map((s) => ({ ...s, ...(s.at ? { at: toWorld(s.at[0], s.at[1]) } : {}) }));
   if (room.zones) out.zones = room.zones.map((z) => ({ id: z.id, x0: toWorld(z.x0, 0)[0], x1: toWorld(z.x1, 0)[0], camera: z.camera }));
+  // P2b.1 (theater): spawner tap boxes, and STATIONS (interactive spots with nested points/boxes, all converted to world units)
+  if (room.spawners) out.spawners = out.spawners.map((s) => (s.box ? { ...s, box: boxW(s.box) } : s));
+  if (room.stations) out.stations = room.stations.map((s) => stationW(s, toWorld, boxW));
   return out;
+}
+
+/** A room station (rooms/theater.mjs) in world units: points (at, singer, head, tapeSlot, stamp), boxes (box, strings, mirror), box lists (keys), box maps (pads), x lists (rail, rest). */
+function stationW(s, toWorld, boxW) {
+  const o = { ...s };
+  for (const k of ['at', 'singer', 'head', 'tapeSlot', 'stamp']) if (s[k]) o[k] = toWorld(s[k][0], s[k][1]);
+  for (const k of ['box', 'strings', 'mirror']) if (s[k]) o[k] = boxW(s[k]);
+  if (s.keys) o.keys = s.keys.map(boxW);
+  if (s.pads) o.pads = Object.fromEntries(Object.entries(s.pads).map(([k, b]) => [k, boxW(b)]));
+  for (const k of ['rail', 'rest']) if (s[k]) o[k] = s[k].map((x) => toWorld(x, 0)[0]);
+  return o;
 }
 
 // ---- column tiles for panning rooms (P2a.1; docs/perf.md "Cafe strip memory") ----
@@ -177,6 +195,8 @@ async function buildRoomPieces(page, room, place, toWorld, boxW, written) {
       taps: pc.taps || null, pivot: pc.pivot ? toWorld(...pc.pivot) : null,
       ...(pc.controls ? { controls: pc.controls } : {}),
       ...(pc.textArea ? { textArea: boxW(pc.textArea) } : {}),
+      // one art drawn at several spots (the theater's spotlights): each copy's box top-left, world
+      ...(pc.copies ? { copies: pc.copies.map(([x, y]) => [round(box[0] + (x - pc.copies[0][0]) * ART_SCALE, 2), round(box[1] + (y - pc.copies[0][1]) * ART_SCALE, 2)]) } : {}),
     };
   }
   return out;
@@ -287,7 +307,9 @@ async function buildProps(page, written) {
     const ext = CAFE_EXTEND[id];
     return [id, ext ? { ...p, variants: { ...p.variants, ...ext.variants }, prep: ext.prep, set: 'starter' } : { ...p, set: 'starter' }];
   }).concat(Object.entries(CAFE_PROPS).map(([id, p]) => [id, { ...p, set: 'cafe' }]))
-    .concat(Object.entries(SITE_PROPS).map(([id, p]) => [id, { ...p, set: 'site' }]));
+    .concat(Object.entries(SITE_PROPS).map(([id, p]) => [id, { ...p, set: 'site' }]))
+    .concat(Object.entries(THEATER_PROPS).map(([id, p]) => [id, { ...p, set: 'theater' }]))
+    .concat(Object.entries(SCHOOL_PROPS).map(([id, p]) => [id, { ...p, set: 'school' }]));
   for (const [id, p] of all) {
     const variants = {};
     for (const [vname, art] of Object.entries(p.variants)) {
@@ -356,6 +378,8 @@ export async function build({ sheet = true } = {}) {
     const cafe = await buildRoom(page, CAFE, written);
     const booth = await buildRoom(page, BOOTH, written);
     const site = { ...(await buildRoom(page, SITE, written)), grid: BUILD_GRID, rigs: SITE_RIGS };
+    const theater = { ...(await buildRoom(page, THEATER, written)), rigs: THEATER_RIGS };
+    const school = { ...(await buildRoom(page, SCHOOL, written)), rigs: SCHOOL_RIGS };
     const city = await buildMap(page, CITY, written);
     const props = await buildProps(page, written);
     const manifest = {
@@ -372,10 +396,12 @@ export async function build({ sheet = true } = {}) {
         poses: Object.keys(rig.poses), expressions: Object.keys(rig.expressions),
         wear: Object.fromEntries(Object.entries(rig.wear).map(([id, w]) => [id, w.slot])),
       },
-      rooms: { kitchen, cafe, booth, site },
+      rooms: { kitchen, cafe, booth, site, theater, school },
       map: city,
       props,
       site: SITE_META,
+      theater: THEATER_META,
+      school: SCHOOL_META,
       cafe: { ...CAFE_META, mystery: { ...CAFE_META.mystery, at: Object.fromEntries(Object.entries(CAFE_META.mystery.at).map(([k, v]) => [k, v.map((n) => round(n * ART_SCALE, 2))])) } },
     };
     const mFile = path.join(ASSETS, 'art-manifest.json');

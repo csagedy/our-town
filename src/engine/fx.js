@@ -32,6 +32,8 @@ Object.assign(SHAPES, {
   swirl: '<svg viewBox="0 0 20 20"><path d="M10 10 m-1.2 0 a1.2 1.2 0 1 1 2.4 0 a3 3 0 1 1 -6 0 a5 5 0 1 1 10 0 a7 7 0 1 1 -14 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
   chick: `<svg viewBox="0 0 20 20"><circle cx="10" cy="9" r="6.5" fill="#F4DC98" ${INK}/><circle cx="8" cy="8" r="0.9" fill="#3D2C29"/><circle cx="12" cy="8" r="0.9" fill="#3D2C29"/><path d="M9 10 L11 10 L10 11.6 Z" fill="#DFB050" ${INK}/><path d="M3 13 L5 11.5 L7 13 L9 11.5 L11 13 L13 11.5 L15 13 L17 11.5 L17 17 Q10 20 3 17 Z" fill="#FFFDF6" ${INK}/></svg>`,
 });
+// Heat (P2a.3): a soft steam curl rising off hot food, pots and the oven.
+SHAPES.steam = '<svg viewBox="0 0 20 20"><path d="M9 19 C4 15 14 12 9 8 C6 5.5 9 2.5 11 1" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.6" stroke-linecap="round"/></svg>';
 export const FX_TYPES = Object.keys(SHAPES);
 
 // Per type: base size (units), lifetime (ms), rise (units, negative = up), spin (deg).
@@ -44,6 +46,7 @@ const LOOK = {
   bubble: { size: 26, life: 1000, rise: -80, spin: 0 },
   swirl: { size: 36, life: 700, rise: -14, spin: 300 },
   chick: { size: 46, life: 1500, rise: -34, spin: 0 },
+  steam: { size: 34, life: 1400, rise: -70, spin: 30 },
 };
 
 export function createFx(layer, { cap = FX_CAP, random = Math.random } = {}) {

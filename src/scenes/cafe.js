@@ -31,6 +31,9 @@
 //   toaster and sink (spawned on every mount if missing), the coffee machine
 //   filling the cup under its spout; prep.pieceVariant() colours the blender
 //   jug, prep.onPieceTap() lets a station answer for its piece.
+// - HEAT (P2a.3, cafe-heat.js): pans and pots on lit burners cook, the pan
+//   flips, batter pours, the saucepan boils and the ladle serves; the oven
+//   bakes with the door shut and dings; warm food steams.
 // - FIRST VISIT: the stock, cookware and dishes on the shelves and tables,
 //   the kitchen cast and two customers at the tables.
 
@@ -49,6 +52,7 @@ import { mountCharacters, seedCharacters, CHAR_KIND } from '../engine/characters
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
 import { createPrep, ensureStations } from './cafe-prep.js';
+import { createHeat } from './cafe-heat.js';
 
 export const CAFE_ID = 'cafe/kitchen';
 export const FIXTURES_KIND = 'cafe-fixtures';
@@ -368,6 +372,15 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     },
   });
   const prepHooks = prep.wrap(hooks);
+  // P2a.3 heat: the stove, the oven, flipping, pouring, boiling and ladling.
+  const heat = createHeat({
+    store, catalog, behaviors, m, room, fx,
+    pieceApi: { state: (pid) => state(pid), tap: (pid) => tapPiece(pid, { raw: true }) },
+    isGuest: () => typeof window !== 'undefined' && !!(window.__together && window.__together.session && window.__together.session.role === 'guest'),
+  });
+  // Characters ask whether food is hot ("hot hot hot!").
+  behaviors.hotOf = (e) => heat.isHot(e);
+  const heatHooks = heat.wrap(prepHooks);
   // Pieces take touches (registered before the entity views, so where a
   // padded hit box is a tie the thing in front of the fixture wins).
   const pieces = new Map();          // id -> {el, body, img, shown, gen}
@@ -379,7 +392,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     pieces.set(pid, rec);
     input.register(el, { onTap: () => tapPiece(pid), pan: true });
   }
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: prepHooks, labels: textLabels(catalog, manifest) });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: heatHooks, labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -408,7 +421,13 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   firstVisit = false;
   // The prep stations over the blender, toaster and sink (older saves get them too).
   ensureStations(store, m, CAFE_ID);
+  // P2a.3: the soup ladle by the sink (older saves get one too).
+  if (!Object.keys(store.state.entities).some((id) => store.state.entities[id].kind === 'ladle' && getEntity(store.state, id))) {
+    const cs = allSurfaces.find((q) => q.id === 'counter-sink');
+    if (cs) store.dispatch('spawn', { id: store.newId(), kind: 'ladle', room: CAFE_ID, x: 735, y: cs.y, z: 0 });
+  }
   prep.bind(view);
+  heat.bind(view);
 
   // ---- pieces ----
   const overrides = new Map();       // id -> variant shown for a moment (a bell press)
@@ -497,7 +516,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       playS(spec.sound || ['pop']);
       burstAt(pid, 'sparkle', { count: 4 });
     }
-    if (!raw) prep.afterPieceTap(pid);
+    if (!raw) { prep.afterPieceTap(pid); heat.afterPieceTap(pid); }
   }
 
   applyInside();
@@ -534,6 +553,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     },
     hidden: () => [...hidden],
     prep,
+    heat,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: inside the front door, in a row. */
@@ -549,6 +569,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       for (const t of timers) clearTimeout(t);
       timers.clear();
       prep.destroy();
+      heat.destroy();
       for (const p of pieces.values()) input.unregister(p.el);
       tiles.destroy();
       view.destroy();

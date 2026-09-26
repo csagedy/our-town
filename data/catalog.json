@@ -147,8 +147,8 @@
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
         { "use": "mix" },
-        { "use": "container", "accepts": ["ingredient"], "capacity": 2, "look": "egg", "sound": "sizzle" },
-        { "use": "spill", "on": "tap" }
+        { "use": "container", "accepts": ["food"], "capacity": 2, "sound": "sizzle", "layout": "plate", "area": [0.04, 0.3, 0.62, 0.66], "scale": 0.9 },
+        { "use": "spill", "on": "longPress" }
       ],
       "label": "Frying Pan",
       "home": { "room": "cafe/kitchen" }
@@ -219,7 +219,7 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Crown",
-      "home": { "room": "theater/closet" }
+      "home": { "room": "theater/stage" }
     },
     "beanie": {
       "ph": { "shape": "blob", "fill": "#8CBDB8" },
@@ -255,7 +255,7 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Hero Mask",
-      "home": { "room": "theater/closet" }
+      "home": { "room": "theater/stage" }
     },
     "apron": {
       "ph": { "shape": "box", "fill": "#F6D3CF" },
@@ -273,7 +273,7 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Towel Cape",
-      "home": { "room": "theater/closet" }
+      "home": { "room": "theater/stage" }
     },
     "hero-cape": {
       "ph": { "shape": "blob", "fill": "#DC6B6E" },
@@ -282,7 +282,7 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Hero Cape",
-      "home": { "room": "theater/closet" }
+      "home": { "room": "theater/stage" }
     },
     "hard-hat": {
       "ph": { "shape": "blob", "fill": "#DFB050" },
@@ -354,7 +354,7 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Fairy Wings",
-      "home": { "room": "theater/closet" }
+      "home": { "room": "theater/stage" }
     },
     "tool-belt": {
       "art": { "sprite": "tool-belt" },
@@ -384,7 +384,7 @@
       "sounds": { "tap": "plink", "drop": "tap" },
       "behaviors": [],
       "label": "Hero Suit",
-      "home": { "room": "theater/closet" }
+      "home": { "room": "theater/stage" }
     },
     "tray": {
       "ph": { "shape": "flat", "fill": "#e9c46a" },
@@ -908,6 +908,7 @@
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
         { "use": "mix" },
+        { "use": "pot" },
         { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "heap", "area": [0.08, 0.2, 0.6, 1], "scale": 0.75, "peek": 0.5 },
         { "use": "spill", "on": "longPress" }
       ],
@@ -936,6 +937,7 @@
       "tags": ["cookware", "container", "oven"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
+        { "use": "tray" },
         { "use": "container", "accepts": ["food"], "capacity": 4, "layout": "row", "area": [0.08, 0.2, 0.92, 0.6], "scale": 0.8 },
         { "use": "spill", "on": "longPress" }
       ],
@@ -1889,6 +1891,13 @@
       "label": "Hose",
       "home": { "room": "construction/yard" }
     },
+    "crane-hook": {
+      "ph": { "shape": "box", "fill": "#E9C46A" },
+      "size": [110, 96],
+      "tags": ["construction", "crane"],
+      "sounds": { "tap": "clink", "drop": "clunk" },
+      "behaviors": []
+    },
     "lunchbox": {
       "art": { "sprite": "lunchbox" },
       "ph": { "shape": "box", "fill": "#E4846F" },
@@ -2067,6 +2076,690 @@
       ],
       "fixed": true,
       "home": { "room": "construction/yard" }
+    },
+    "gown": {
+      "art": { "sprite": "gown", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [96, 137],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Princess Gown",
+      "home": { "room": "theater/stage" }
+    },
+    "royal-coat": {
+      "art": { "sprite": "royal-coat", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#8FB4DA" },
+      "size": [106, 123],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Royal Coat",
+      "home": { "room": "theater/stage" }
+    },
+    "knight-tunic": {
+      "art": { "sprite": "knight-tunic", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [102, 131],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Knight Tunic",
+      "home": { "room": "theater/stage" }
+    },
+    "pirate-coat": {
+      "art": { "sprite": "pirate-coat", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#6B8DB5" },
+      "size": [107, 130],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Pirate Coat",
+      "home": { "room": "theater/stage" }
+    },
+    "star-dress": {
+      "art": { "sprite": "star-dress", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#8FB4DA" },
+      "size": [83, 134],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Star Dress",
+      "home": { "room": "theater/stage" }
+    },
+    "tuxedo": {
+      "art": { "sprite": "tuxedo", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#433E46" },
+      "size": [102, 129],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Tuxedo",
+      "home": { "room": "theater/stage" }
+    },
+    "fairy-tutu": {
+      "art": { "sprite": "fairy-tutu", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#F6D3CF" },
+      "size": [105, 114],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Fairy Tutu",
+      "home": { "room": "theater/stage" }
+    },
+    "wizard-robe": {
+      "art": { "sprite": "wizard-robe", "scale": 0.75 },
+      "ph": { "shape": "box", "fill": "#9A7A98" },
+      "size": [116, 134],
+      "tags": ["wear", "wearable:top", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Wizard Robe",
+      "home": { "room": "theater/stage" }
+    },
+    "pirate-hat": {
+      "art": { "sprite": "pirate-hat", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#433E46" },
+      "size": [114, 62],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Pirate Hat",
+      "home": { "room": "theater/stage" }
+    },
+    "wizard-hat": {
+      "art": { "sprite": "wizard-hat", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#9A7A98" },
+      "size": [86, 95],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Wizard Hat",
+      "home": { "room": "theater/stage" }
+    },
+    "top-hat": {
+      "art": { "sprite": "top-hat", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#433E46" },
+      "size": [82, 70],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Top Hat",
+      "home": { "room": "theater/stage" }
+    },
+    "tiara": {
+      "art": { "sprite": "tiara", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#D8DADC" },
+      "size": [62, 45],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Tiara",
+      "home": { "room": "theater/stage" }
+    },
+    "cat-ears": {
+      "art": { "sprite": "cat-ears", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#C39068" },
+      "size": [75, 54],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Cat Ears",
+      "home": { "room": "theater/stage" }
+    },
+    "bunny-ears": {
+      "art": { "sprite": "bunny-ears", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#FBF3E8" },
+      "size": [82, 82],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Bunny Ears",
+      "home": { "room": "theater/stage" }
+    },
+    "lion-mane": {
+      "art": { "sprite": "lion-mane", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#DFB050" },
+      "size": [87, 70],
+      "tags": ["wear", "wearable:hat", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Lion Mane",
+      "home": { "room": "theater/stage" }
+    },
+    "masquerade": {
+      "art": { "sprite": "masquerade-mask", "scale": 0.8 },
+      "ph": { "shape": "flat", "fill": "#8CBDB8" },
+      "size": [106, 67],
+      "tags": ["wear", "wearable:face", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Masquerade Mask",
+      "home": { "room": "theater/stage" }
+    },
+    "sparkle-mask": {
+      "art": { "sprite": "sparkle-mask", "scale": 0.8 },
+      "ph": { "shape": "flat", "fill": "#E9AFAE" },
+      "size": [102, 30],
+      "tags": ["wear", "wearable:face", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Sparkle Mask",
+      "home": { "room": "theater/stage" }
+    },
+    "feather-boa": {
+      "art": { "sprite": "feather-boa", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#E9AFAE" },
+      "size": [114, 47],
+      "tags": ["wear", "wearable:over", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Feather Boa",
+      "home": { "room": "theater/stage" }
+    },
+    "lightning-cape": {
+      "art": { "sprite": "lightning-cape", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#8FB4DA" },
+      "size": [98, 100],
+      "tags": ["wear", "wearable:back", "theater", "costume"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Lightning Cape",
+      "home": { "room": "theater/stage" }
+    },
+    "wand": {
+      "art": { "sprite": "wand", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#DFB050" },
+      "size": [65, 112],
+      "tags": ["theater", "prop", "wand"],
+      "sounds": { "tap": "sparkle", "drop": "tap" },
+      "behaviors": [
+        { "use": "cycle", "key": "frame", "looks": ["still", "sparkle"], "sound": "sparkle" }
+      ],
+      "label": "Magic Wand",
+      "home": { "room": "theater/stage" }
+    },
+    "foam-sword": {
+      "art": { "sprite": "foam-sword", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#8FB4DA" },
+      "size": [86, 156],
+      "tags": ["theater", "prop", "toy"],
+      "sounds": { "tap": "boing", "drop": "squish" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Foam Sword",
+      "home": { "room": "theater/stage" }
+    },
+    "bouquet": {
+      "art": { "sprite": "bouquet", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#E9AFAE" },
+      "size": [62, 112],
+      "tags": ["theater", "prop", "flowers"],
+      "sounds": { "tap": "plink", "drop": "squish" },
+      "behaviors": [],
+      "label": "Bouquet",
+      "home": { "room": "theater/stage" }
+    },
+    "microphone": {
+      "art": { "sprite": "microphone", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#B9B4BD" },
+      "size": [39, 91],
+      "tags": ["theater", "prop", "mic"],
+      "sounds": { "tap": "tap", "drop": "knock" },
+      "behaviors": [],
+      "label": "Microphone",
+      "home": { "room": "theater/stage" }
+    },
+    "tambourine": {
+      "art": { "sprite": "tambourine", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#DFB050" },
+      "size": [55, 55],
+      "tags": ["theater", "prop", "instrument"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [],
+      "label": "Tambourine",
+      "home": { "room": "theater/stage" }
+    },
+    "maracas": {
+      "art": { "sprite": "maracas", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#DC6B6E" },
+      "size": [86, 77],
+      "tags": ["theater", "prop", "instrument"],
+      "sounds": { "tap": "squish", "drop": "knock" },
+      "behaviors": [],
+      "label": "Maracas",
+      "home": { "room": "theater/stage" }
+    },
+    "program": {
+      "art": { "sprite": "program", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#F6D3CF" },
+      "size": [55, 67],
+      "tags": ["theater", "prop", "paper"],
+      "sounds": { "tap": "tap", "drop": "tap" },
+      "behaviors": [],
+      "label": "Show Program",
+      "home": { "room": "theater/stage" }
+    },
+    "tape": {
+      "art": { "sprite": "tape", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#E9AFAE" },
+      "size": [73, 48],
+      "tags": ["theater", "prop", "tape"],
+      "sounds": { "tap": "clink", "drop": "knock" },
+      "behaviors": [
+        { "use": "variant", "key": "color" }
+      ],
+      "label": "Tape",
+      "home": { "room": "theater/stage" }
+    },
+    "rose": {
+      "art": { "sprite": "rose", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#DC6B6E" },
+      "size": [59, 88],
+      "tags": ["theater", "flowers", "throw"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Rose",
+      "home": { "room": "theater/stage" }
+    },
+    "ticket": {
+      "art": { "sprite": "ticket", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#F4DC98" },
+      "size": [82, 44],
+      "tags": ["theater", "ticket", "paper"],
+      "sounds": { "tap": "tap", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "stamp" }
+      ],
+      "label": "Ticket",
+      "home": { "room": "theater/stage" }
+    },
+    "popcorn": {
+      "art": { "sprite": "popcorn", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#F4DC98" },
+      "size": [59, 83],
+      "tags": ["food", "snack", "theater", "sweet"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["full", "half", "empty"], "then": "stay" }
+      ],
+      "label": "Popcorn",
+      "home": { "room": "theater/stage" }
+    },
+    "lemonade-cup": {
+      "art": { "sprite": "lemonade-cup", "scale": 0.8 },
+      "ph": { "shape": "blob", "fill": "#F4DC98" },
+      "size": [50, 90],
+      "tags": ["drink", "theater", "sweet", "cup"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["full", "empty"], "then": "stay", "sound": "bubble" }
+      ],
+      "label": "Lemonade",
+      "home": { "room": "theater/stage" }
+    },
+    "rack-gown": {
+      "art": { "sprite": "gown", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [90, 128],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["gown"], "sound": "plink", "vary": { "color": ["pink", "blue", "gold"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-royal-coat": {
+      "art": { "sprite": "royal-coat", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [99, 115],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["royal-coat"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-fairy-tutu": {
+      "art": { "sprite": "fairy-tutu", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [98, 106],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["fairy-tutu"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-wizard-robe": {
+      "art": { "sprite": "wizard-robe", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [108, 125],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["wizard-robe"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-pirate-coat": {
+      "art": { "sprite": "pirate-coat", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [99, 121],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["pirate-coat"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-star-dress": {
+      "art": { "sprite": "star-dress", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [78, 125],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["star-dress"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-tuxedo": {
+      "art": { "sprite": "tuxedo", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [95, 120],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["tuxedo"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-knight-tunic": {
+      "art": { "sprite": "knight-tunic", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [95, 122],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["knight-tunic"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-hero-cape": {
+      "art": { "sprite": "hero-cape", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [85, 88],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["hero-cape"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-lightning-cape": {
+      "art": { "sprite": "lightning-cape", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [85, 88],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lightning-cape"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-hero-suit": {
+      "art": { "sprite": "hero-suit", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [111, 83],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["hero-suit"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-hero-mask": {
+      "art": { "sprite": "hero-mask", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [90, 26],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["hero-mask"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-sparkle-mask": {
+      "art": { "sprite": "sparkle-mask", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [90, 26],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["sparkle-mask"], "sound": "plink", "vary": { "color": ["pink", "teal"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-wings": {
+      "art": { "sprite": "fairy-wings", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [100, 50],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["wings"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "rack-feather-boa": {
+      "art": { "sprite": "feather-boa", "scale": 0.7 },
+      "ph": { "shape": "box", "fill": "#E9AFAE" },
+      "size": [100, 41],
+      "tags": ["spawner", "stock", "theater", "rack"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["feather-boa"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-crown": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [60, 54],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["crown"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-top-hat": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [56, 54],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["top-hat"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-masquerade": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [60, 44],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["masquerade"], "sound": "pop", "vary": { "color": ["teal", "berry"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-wand": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [44, 80],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["wand"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-microphone": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [44, 70],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["microphone"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-bouquet": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [50, 76],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["bouquet"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-foam-sword": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [60, 40],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["foam-sword"], "sound": "pop", "vary": { "color": ["blue", "pink"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-tambourine": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [50, 50],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["tambourine"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-maracas": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [56, 60],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["maracas"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-tape": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [50, 40],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["tape"], "sound": "pop", "vary": { "color": ["pink", "teal", "yellow"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "shelf-program": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [48, 60],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["program"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "trunk-hats": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [140, 90],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["pirate-hat", "wizard-hat", "cat-ears", "bunny-ears", "lion-mane", "tiara", "sunglasses"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "wig-hats": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [80, 110],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lion-mane", "tiara"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "snack-popcorn": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [70, 90],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["popcorn"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "snack-lemonade": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [56, 80],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["lemonade-cup"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
+    },
+    "ticket-roll": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [70, 50],
+      "tags": ["spawner", "stock", "hotspot", "theater"],
+      "sounds": { "tap": "pop", "drop": "tap" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["ticket"], "sound": "pop" }
+      ],
+      "fixed": true,
+      "home": { "room": "theater/stage" }
     }
   }
 }
