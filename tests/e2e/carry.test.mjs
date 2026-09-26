@@ -147,6 +147,8 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
         window.__stage.camera.panTo(2300 - 720);
       }, ids.car);
       await page.waitFor(() => !window.__stage.camera.moving);
+      // The long move slides the car over: wait until it is drawn there.
+      await page.waitFor(`window.__town.scene.view.viewOf(${JSON.stringify(ids.car)}).el.getAnimations().length === 0`);
       await page.frames(4);
       const car = await at(page, ids.car);
       await page.tap(car.x, car.y);

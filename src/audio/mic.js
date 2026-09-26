@@ -257,6 +257,56 @@ export function playBuffer(core, buffer, { filter = null, gain = 1, onEnded = nu
   };
 }
 
+/**
+ * Safety net when decodeAudioData can't read a take (some WebKit builds and
+ * their own MediaRecorder mp4): play the Blob in an <audio> element (a local
+ * blob: URL, nothing leaves the device) routed through the same filter.
+ * Same handle shape as playBuffer, or null.
+ */
+export function playBlob(core, blob, { filter = null, gain = 1, onEnded = null, doc = globalThis.document } = {}) {
+  const a = core.get(true);
+  if (!a || !blob || !doc || !globalThis.URL || !URL.createObjectURL) return null;
+  const { ctx } = a;
+  const url = URL.createObjectURL(blob);
+  const el = doc.createElement('audio');
+  el.src = url;
+  el.preservesPitch = false;          // the chipmunk / giant pitch comes from the rate
+  el.webkitPreservesPitch = false;
+  const fl = buildFilter(ctx, filter, a.clips);
+  el.playbackRate = fl.rate;
+  let src = null;
+  try {
+    src = ctx.createMediaElementSource(el);
+    const g = ctx.createGain();
+    g.gain.value = gain;
+    src.connect(g);
+    g.connect(fl.input);
+  } catch (e) { /* plays unfiltered */ }
+  let finished = false;
+  let resolveDone;
+  const done = new Promise((r) => { resolveDone = r; });
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    try { el.pause(); } catch { /* ok */ }
+    setTimeout(() => { fl.stop(); if (src) { try { src.disconnect(); } catch { /* ok */ } } URL.revokeObjectURL(url); }, 200);
+    if (onEnded) { try { onEnded(); } catch (e) { console.warn(e); } }
+    resolveDone();
+  };
+  el.onended = finish;
+  el.onerror = finish;
+  const p = el.play();
+  if (p && p.catch) p.catch(finish);
+  return {
+    duration: isFinite(el.duration) ? el.duration / fl.rate : 0,
+    rate: fl.rate,
+    filter: fl.name,
+    time: () => el.currentTime || 0,
+    stop: finish,
+    done,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // The built-in singer: "la la la" (the mic's shrug, far-away tapes, blank tapes)
 

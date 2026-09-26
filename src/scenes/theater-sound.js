@@ -42,11 +42,11 @@
 //   soundArt()  -> the extra art items (the red-dot hit box, the six filter boxes)
 
 import { audio } from '../audio/index.js';
-import { createMic, playBuffer, singLaLa, lalaEnv, FILTERS } from '../audio/mic.js';
+import { createMic, playBuffer, playBlob, singLaLa, lalaEnv, FILTERS } from '../audio/mic.js';
 import { decode } from '../audio/clips.js';
 import { getEntity } from '../engine/world.js';
 import * as tween from '../engine/tween.js';
-import { isTape, isRecorded, levelAt, MOUTH_OPEN, MAX_SEC, HOP, FILTER_NAMES, TAPE_COLORS, recordedTapeProps } from '../core/tapes.js';
+import { isTape, isRecorded, levelAt, MOUTH_OPEN, MAX_SEC, FILTER_NAMES, TAPE_COLORS, recordedTapeProps } from '../core/tapes.js';
 
 // ---- geometry (world units, the theater strip; manifest rigs.mic / stations.boombox) ----
 export const REC_BUTTON = [1458, 744, 86, 80];          // the red dot (grown to a kid-sized target)
@@ -317,8 +317,9 @@ export function createSound({ store, room, fx, chars, input, persist = null, m, 
   }
 
   // ---- playing tapes ----
-  async function bufferOf(id) {
-    if (buffers.has(id)) return buffers.get(id);
+  /** The voice of tape `id` on this iPad: {buffer} (decoded), {blob} (undecodable: an <audio> plays it), or null (not here). */
+  async function voiceOf(id) {
+    if (buffers.has(id)) return { buffer: buffers.get(id) };
     if (!persist || !persist.getBlob) return null;
     let blob = null;
     try { blob = await persist.getBlob(id); } catch { blob = null; }
@@ -329,8 +330,8 @@ export function createSound({ store, room, fx, chars, input, persist = null, m, 
     try {
       const buf = await decode(a.ctx, await blob.arrayBuffer());
       buffers.set(id, buf);
-      return buf;
-    } catch (e) { console.warn('tape: could not decode', e && e.message); return null; }
+      return { buffer: buf };
+    } catch (e) { console.warn('tape: could not decode, playing it as a file', e && e.message); return { blob }; }
   }
 
   /** Play tape `id` (where: 'boombox' or a filter name; filter: override). */
@@ -342,18 +343,18 @@ export function createSound({ store, room, fx, chars, input, persist = null, m, 
     const token = {};
     playing = { id, token, handle: { time: () => 0, stop() {} }, env: '', where, how: 'loading' };
     if (!isRecorded(e)) { stats.blank++; return play({ id, env: lalaEnv(), filter: fl, where, how: 'lala', token }); }
-    const buf = await bufferOf(id);
+    const voice = await voiceOf(id);
     if (!playing || playing.token !== token || destroyed) return null;
-    if (!buf) { stats.far++; return play({ id, env: e.props.env, filter: fl, where, how: 'lala', token }); }
-    return play({ id, env: e.props.env, filter: fl, where, how: 'voice', buffer: buf, token });
+    if (!voice) { stats.far++; return play({ id, env: e.props.env, filter: fl, where, how: 'lala', token }); }
+    return play({ id, env: e.props.env, filter: fl, where, how: 'voice', buffer: voice.buffer || null, blob: voice.blob || null, token });
   }
 
-  function play({ id, env, filter, where, how, buffer = null, token = {} }) {
+  function play({ id, env, filter, where, how, buffer = null, blob = null, token = {} }) {
     if (playing && playing.token !== token) stopPlaying(false);
     const end = () => ended(token);
-    const handle = how === 'voice'
-      ? playBuffer(audio, buffer, { filter, onEnded: end })
-      : singLaLa(audio, { env, filter, onEnded: end });
+    const handle = how !== 'voice' ? singLaLa(audio, { env, filter, onEnded: end })
+      : buffer ? playBuffer(audio, buffer, { filter, onEnded: end })
+        : playBlob(audio, blob, { filter, onEnded: end, doc });
     if (!handle) { playing = null; return null; }
     playing = { id, token, handle, env, where, how, filter };
     stats.plays++;

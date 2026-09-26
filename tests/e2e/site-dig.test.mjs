@@ -317,6 +317,24 @@ describe('construction site dig pit (ipad-air, landscape, touch)', () => {
     S.kid = kid;
   });
 
+  it('a full spade carried over the wheelbarrow fills it; tap the wheelbarrow: it tips out a pile', async () => {
+    const wb0 = await ent(page, S.barrow);
+    assert.equal(wb0.props.load, 'empty');
+    const sp = await ent(page, S.spade);
+    // Dig where there is still dirt (the far left of the pit), then over the wheelbarrow's tray.
+    await dragFeetAlong(page, S.spade, [[sp.x + 20, sp.y - 30], ...scribble(2060, 760, 2150, 800, 4, 6), [2300, 935], [wb0.x - 10, wb0.y - 30], [wb0.x - 5, wb0.y - 32]]);
+    await page.waitFor(calm);
+    assert.equal((await ent(page, S.barrow)).props.load, 'dirt', 'the wheelbarrow is full of dirt');
+    assert.equal((await ent(page, S.spade)).props.load, 'empty');
+    await page.screenshot('dig-7b-wheelbarrow');
+    const piles0 = (await dig(page, (d) => d.piles())).length;
+    const w = await entPoint(page, S.barrow);
+    await page.tap(w.x, w.y);
+    await page.waitFor(calm);
+    assert.equal((await ent(page, S.barrow)).props.load, 'empty', 'tipped out');
+    assert.equal((await dig(page, (d) => d.piles())).length, piles0 + 1, 'a pile in front of it');
+  });
+
   it('at rest nothing runs: no frames, no canvas draws', async () => {
     await page.waitFor(calm);
     const r = await page.eval(async () => {

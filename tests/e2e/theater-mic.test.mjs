@@ -265,7 +265,17 @@ describe('theater mic, tapes and voice filters (ipad-air, landscape, touch)', ()
     assert.ok(at, 'the tape on the robot box');
     await page.tap(at.x, at.y);
     await page.waitFor((() => { const p = window.__town.scene.sound.state().playing; return p && p.how === 'voice' && p.filter === 'robot'; }), { timeout: 10000 });
-    await page.waitFor(() => !window.__town.scene.sound.state().playing, { timeout: 15000 });
+    await page.waitFor(() => !window.__town.scene.sound.state().playing, { timeout: 15000 });    // The safety net for a take decodeAudioData can't read: an <audio> element (local blob: URL) through the filter.
+    const el = await page.eval(async (id) => {
+      const [{ playBlob }, { audio }] = await Promise.all([import('./src/audio/mic.js'), import('./src/audio/index.js')]);
+      const h = playBlob(audio, await window.__persist.getBlob(id), { filter: 'robot' });
+      await new Promise((r) => setTimeout(r, 700));
+      const t = h.time();
+      h.stop();
+      await h.done;
+      return { t, filter: h.filter };
+    }, S.tape);
+    assert.ok(el.t > 0.2 && el.filter === 'robot', `the <audio> fallback plays: ${JSON.stringify(el)}`);
   });
 
   it('a tape from the other iPad (no voice here): a far-away cloud, and it sings the built-in melody with lip-sync', async () => {
@@ -317,7 +327,8 @@ describe('theater mic, tapes and voice filters (ipad-air, landscape, touch)', ()
 
   it('nothing went over the network while recording and playing', async () => {
     assert.deepEqual(await page.eval(() => window.__net.calls.filter((c) => !/^fetch (\.?\/?)?(assets|data|src)\//.test(c.replace(location.origin + '/', '')))), [], 'no fetch/XHR/beacon/socket/WebRTC except the app\'s own files');
-    const after = page.requests.slice(S.req0);
+    // blob: URLs are in-memory (the <audio> fallback plays the voice Blob from one); not the network.
+    const after = page.requests.slice(S.req0).filter((u) => !u.startsWith('blob:' + page.baseUrl));
     const odd = after.filter((u) => !u.startsWith(page.baseUrl) || !/\/(assets|src|data)\/|index\.html|sw\.js|manifest\.webmanifest|\/$|\.css$/.test(u.replace(page.baseUrl, '/')));
     assert.deepEqual(odd, [], 'only the app\'s own static files');
     assert.deepEqual(page.externalRequests(), []);

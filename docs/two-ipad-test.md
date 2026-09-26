@@ -75,6 +75,10 @@ iPads. Tap it to pair.
   permission Safari hides the iPad's real address, so the connection is less reliable.
 - **Taps land on both iPads at the same moment:** one tap can be lost. The count stays equal on both.
 
+- **Theater tapes:** a song recorded on one iPad shows up on the other as a tape with a small cloud on it.
+  That is on purpose: the voice itself never leaves the iPad that recorded it. On the other iPad the tape
+  sings a built-in "la la la" tune in the same rhythm, and the characters still mouth along.
+
 ## Developer notes
 - **Code:** `src/net/transport.js` (compact SDP code, data-channel link with heartbeat and chunking),
   `src/net/session.js` (host/guest, snapshot on join, stash and restore, leases), `src/net/pairing.js`
