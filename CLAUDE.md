@@ -83,8 +83,25 @@ A Toca Boca-style open-ended pretend-play game for two kids:
 
 ## Build & Test
 
-_To be filled in once the engine exists._
+No npm install, no runtime dependencies. Tools need only `python3` (stdlib), `node` (22+, for its built-in test runner and WebSocket) and Google Chrome.
+
+```bash
+python3 tools/serve.py              # dev server: http://127.0.0.1:8124/ (no-cache; --lan for an iPad on Wi-Fi, --port N)
+python3 tools/build.py              # build steps: icons (real), art (P1.12 stub), precache (P1.2 stub)
+node --test "tests/**/*.test.mjs"   # all tests, about 4s; one file: node --test tests/e2e/boot.test.mjs
+```
+
+- **Unit tests** (`tests/unit/*.test.mjs`) run in Node with `node:test` and import `src/` modules directly, so keep DOM access out of module top level. `runtime-sources.test.mjs` is a tripwire: it fails on any `http(s)://` in runtime files and on common features newer than Safari 16.0 (extend its `TOO_NEW` list when you learn of one).
+- **E2E tests** (`tests/e2e/*.test.mjs`) use `tools/harness.mjs`: it starts `serve.py` on a free port, launches headless Chrome, and drives it over the DevTools protocol with an iPad landscape viewport (`ipad-air` 1180x820 default, `ipad-pro-9.7` 1024x768, `ipad-pro-12.9` 1366x1024), touch emulation and an iPad Safari 16 user agent. `page.tap/drag/longPress/tapElement` send trusted touch input, which the page sees as `pointerType: "touch"` pointer events. `page.errors` collects exceptions, `console.error` and failed loads; `page.externalRequests()` must stay empty. `page.screenshot(name)` writes `test-results/<name>.png` (git-ignored); look at it. API reference is the header comment of `tools/harness.mjs`; `tests/e2e/boot.test.mjs` is the example to copy. `HEADFUL=1` shows the browser.
+- The page sets `body[data-boot="ready"]` when booted (`"error"` if boot threw); `openPage()`/`goto()` wait for it.
+- **Limits:** Chrome is Blink, not WebKit, so the harness can't catch Safari-only bugs. Safari's WebDriver (`safaridriver`) is installed but "Allow remote automation" is off in Safari's Developer settings, so there's no automated Safari run yet (and desktop Safari is not Safari 16 anyway). Real iPad checks: `python3 tools/serve.py --lan` and open the Mac's LAN address (no service worker there: it needs localhost or https).
 
 ## Architecture Overview
 
-_To be filled in once the engine exists. Design doc: `docs/design.md`._
+Static PWA: `index.html` loads `src/app.css` and the ES module `src/main.js`; no framework, bundler or build step needed to run. Full design: `docs/design.md` (section 6 is the architecture, section 7 the task plan).
+
+- `src/main.js` boots: blocks browser gestures (pinch, double-tap zoom, callouts), creates the stage, mounts the current scene, calls the service-worker hook.
+- `src/engine/stage.js`: the logical 1440x1000 stage, scaled to fit and centered (P1.5 extends it with bleed and camera).
+- `src/scenes/boot.js`: temporary placeholder buddy that squishes on tap; delete once the city map (P1.13) exists.
+- `src/pwa.js`: service worker registration (off until P1.2 sets `SW_ENABLED` and adds `sw.js`), `installedVersion()` and `updateNow()` mirroring kids-arcade (cache name `ourtown-<version>` is the displayed version).
+- Empty folders from the design layout wait for their beads: `src/core` (store, ops, persist), `src/audio`, `src/data`, `assets/{rooms,sprites,audio}`, `tools/art` (Python art generators; `tools/art/icons.py` draws the placeholder icons into `assets/icons/`).

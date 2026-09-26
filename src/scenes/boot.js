@@ -6,7 +6,7 @@
 // under 250ms); P1.6 replaces this with the shared input module.
 
 const TAP_SLOP = 10;    // CSS px (= iPad points)
-const TAP_MS = 0;
+const TAP_MS = 250;
 
 const BUDDY_SVG = `
 <svg viewBox="0 0 360 380" aria-hidden="true">

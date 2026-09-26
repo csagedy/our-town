@@ -62,7 +62,7 @@ Status: v1 design, the source of truth for Phase 1 to 3 beads. Hard requirements
 
 ### 2.7 Autosave
 - State is saved automatically in IndexedDB (§6.4): an op log appended on every committed action, and a snapshot compacted every 200 ops or on `visibilitychange` → hidden. There is no save button.
-- **Parent menu:** a small gear icon in the top-right corner needs a 2-second press (kid-proof). It has sound on/off, text layer on/off, a "reset a location" option (with a confirm), and export/import of the world as a file (a backup, and the future path for two-iPad seeding).
+- **Parent menu:** a small gear icon in the top-right corner needs a 2-second press (kid-proof). It has sound on/off, text layer on/off, a "reset a location" option (with a confirm), and export/import of the world as a file (a backup, and the future path for two-iPad seeding). On iPadOS 16 in home-screen mode, `<a download>` of a Blob is unreliable and Safari has no `showSaveFilePicker()`: export through `navigator.share({files})` (Safari 15+, check `navigator.canShare`) with `<a download>` as the fallback, and import with `<input type="file">`.
 
 ---
 
@@ -210,7 +210,7 @@ School exists so Ian can rehearse kindergarten: morning routine, cubbies, circle
 | Spoken words (letters, card words, text tap-to-hear) | **`speechSynthesis`** with a locally available voice (`localService === true`) | On iOS the voices are on-device and work offline. It must be first triggered inside a user gesture. Pick an en-US voice once and cache the choice. If none is available, fall back to a picture flash plus chime (no crash) |
 | Mic recording and filters | `getUserMedia` → `MediaRecorder` (Safari: `audio/mp4`) → decoded to an `AudioBuffer`; filters are WebAudio graphs: chipmunk/giant (`playbackRate` 1.6 / 0.65), robot (ring mod 50Hz plus bitcrush via `WaveShaper`), echo (feedback `DelayNode`), stage reverb (`ConvolverNode` with a generated impulse), underwater (lowpass plus LFO wobble) | Recordings stored as Blobs in IndexedDB **only on this device**; never in the sync op stream (§6.5); max 30 tapes, the oldest untouched ones get auto-removed only with parent-menu consent |
 
-- One global `AudioContext`, created and resumed on the first touch (iOS unlock). The mute switch (ringer) silences WebAudio on iOS, so the parent menu notes "turn the ringer on".
+- One global `AudioContext`, created and resumed on the first touch (iOS unlock: call `resume()` from a `pointerup`/`touchend` or `click` handler and retry on later gestures, since iOS also moves the context to `interrupted` after calls or backgrounding). The mute switch (ringer) silences WebAudio on iOS, so the parent menu notes "turn the ringer on".
 - Master bus with a compressor (limits loud mashing) and a global volume at about 70%. No sudden loud sounds: every clip is normalized to -16 LUFS and every synth has a ≥5ms attack.
 - Mic permission prompt: shown only when the record button is first tapped. If denied, the record dot shows a microphone-with-slash icon, and a tap plays a sample tape instead.
 
@@ -219,10 +219,10 @@ School exists so Ian can rehearse kindergarten: morning routine, cubbies, circle
 ## 6. Technical architecture
 
 ### 6.1 Platform
-- **Static PWA**: `index.html` plus ES modules, `manifest.webmanifest` (`display: standalone`, `orientation: landscape`), icons, `apple-touch-icon`, `apple-mobile-web-app-capable`.
-- **No framework, no bundler, no runtime dependencies.** Plain ES modules (Safari 14+ is fine). Build tooling is **Python 3 stdlib**, consistent with the prototype: it generates art, the asset manifest and the service worker precache list. Tests run in headless Chrome/WebKit (Playwright is optional, dev-only).
-- **Service worker** (`sw.js`): on install, precaches every file listed in the generated `precache-manifest.json` (versioned by content hash). Fetch strategy is cache-first, falling back to the network only for same-origin files. The update flow: a new SW waits, and activates on the next cold launch (never mid-play). There are no CDN or runtime network calls, and a CI check greps for `http(s)://` in the runtime sources.
-- **Min target:** iPad 6th gen / iPadOS 15. Test on the oldest iPad available.
+- **Static PWA**: `index.html` plus ES modules, `manifest.webmanifest` (`display: standalone`, `orientation: landscape`), icons, `apple-touch-icon`, `apple-mobile-web-app-capable`. iPadOS ignores the manifest `orientation` and Safari has no `screen.orientation.lock()`, so the stage must still letterbox sensibly in portrait.
+- **No framework, no bundler, no runtime dependencies.** Plain ES modules, with **Safari 16.0 as the floor** (see CLAUDE.md): no import maps (16.4), no JSON/CSS module imports (`import ... with {type: 'json'}`, 17.2; load `data/*.json` with `fetch()`), no class static blocks (16.4), no CSS nesting (16.5) or `color-mix()` (16.2). `tests/unit/runtime-sources.test.mjs` greps for the common ones. Build tooling is **Python 3 stdlib**, consistent with the prototype: it generates art, the asset manifest and the service worker precache list. Tests run in headless Chrome driven over the DevTools protocol by `tools/harness.mjs` (Node built-ins only, no Playwright); see CLAUDE.md. That engine is Blink, so WebKit-specific behavior still needs a real iPad check.
+- **Service worker** (`sw.js`, a classic script, not `type: 'module'`): on install, precaches every file listed in the generated `precache-manifest.json` (versioned by content hash). Fetch strategy is cache-first, falling back to the network only for same-origin files. The update flow: a new SW waits, and activates on the next cold launch (never mid-play). There are no CDN or runtime network calls, and a CI check greps for `http(s)://` in the runtime sources.
+- **Min target:** Safari 16.0 / iPadOS 16 on the original iPad Pro (A9X, 2 to 4GB RAM), per CLAUDE.md. Test on that iPad.
 
 ### 6.2 Rendering: DOM + CSS transforms (recommended)
 
@@ -285,7 +285,7 @@ Entity = {
 - **Conflict rules:** **last-writer-wins per field**, using `(lamport, deviceId)` ordering. An op applies to a field only if its stamp is newer than `entity.v[field]`. `spawn` of an existing id is ignored. Any op on a removed entity is ignored (tombstones kept for 1000 ops). `attach` to a parent that no longer exists drops the child to the floor of the parent's last room.
 - **Ownership (for two iPads):** while a finger holds an entity, the device broadcasts a transient `grab {id, device}` lease (not persisted, 5s TTL, renewed while dragging). Another device can't grab a leased entity; it wobbles "busy". This avoids most LWW surprises in real play. Characters inside a room that the *other* device is viewing still move freely (LWW settles it).
 - **Persistence:** IndexedDB store `ops` (append-only) plus store `snapshot` (the full state plus the last op id). On boot: load the snapshot, replay the ops after it. Compact every 200 ops. Blobs (tapes, paintings) are in store `blobs`, keyed by entity id. Writes are batched per animation frame.
-- **Future networking (not built now):** because every change is already an op with a stable id and a clock, sync is "exchange op logs you haven't seen" (version vectors per device). Transport candidates for offline two-iPad play: WebRTC data channel over the local network with a QR-code manual signaling exchange (works with no internet on a hotspot or car Wi-Fi), or the export/import world file for seeding. Blobs sync lazily and only on explicit share. **Phase 1 must include a test that replays two interleaved op logs in different orders and gets identical state** (convergence test), so the model is proven before any network code exists.
+- **Future networking (not built now):** because every change is already an op with a stable id and a clock, sync is "exchange op logs you haven't seen" (version vectors per device). Transport candidates for offline two-iPad play: WebRTC data channel over the local network with a QR-code manual signaling exchange (works with no internet on a hotspot or car Wi-Fi) (Safari has no `BarcodeDetector`, so reading the QR code needs a vendored JS decoder fed from `getUserMedia` frames, or the Camera app opening a link), or the export/import world file for seeding. Blobs sync lazily and only on explicit share. **Phase 1 must include a test that replays two interleaved op logs in different orders and gets identical state** (convergence test), so the model is proven before any network code exists.
 
 ### 6.5 Module layout
 ```
@@ -333,7 +333,7 @@ Dependencies are in brackets. IDs are proposed and get mapped to bd ids when fil
 | P1.13 | City map hub: buildings, travel transitions, map button, night toggle, lots (empty), Lost & Found | P1.7, P1.12 |
 | P1.14 | Carrying: pocket tray, travel op, vehicles as containers, bags | P1.9, P1.13 |
 | P1.15 | Character Maker booth plus 12-character starter cast | P1.10, P1.12 |
-| P1.16 | Parent menu (2s press): sound, text layer, reset location, export/import; perf harness page (FPS/memory overlay) and a first old-iPad perf check | P1.4, P1.13 |
+| P1.16 | Parent menu (2s press): sound, text layer, reset location, export/import; perf harness page (FPS overlay; memory is measured with Safari Web Inspector's Timelines on the device, since Safari has no `performance.memory`) and a first old-iPad perf check | P1.4, P1.13 |
 
 ### Phase 2a: Cafe
 | ID | Task | Deps |
@@ -380,7 +380,7 @@ Dependencies are in brackets. IDs are proposed and get mapped to bd ids when fil
 | P3.2 | Juice pass: squash/stretch tuning, idle life (look-at, blink variety), background hot spots in every room | Phase 2 |
 | P3.3 | Old-iPad perf pass: profile each room, rasterize sprite atlases if needed, trim DOM, memory under 150MB | Phase 2 |
 | P3.4 | Zero-text audit: play every flow with the text layer off; fix any flow needing reading | Phase 2 |
-| P3.5 | Offline and install hardening: home-screen install, airplane-mode full session, SW update path, storage-eviction resilience (`navigator.storage.persist()`) | Phase 2 |
+| P3.5 | Offline and install hardening: home-screen install, airplane-mode full session, SW update path, storage-eviction resilience (`navigator.storage.persist()`, feature-detected; `navigator.storage.estimate()` needs Safari 17, so don't rely on it) | Phase 2 |
 | P3.6 | Playtest kit plus iteration round 1: a parent checklist (what to watch for), then fix the top issues from the Zoe/Ian sessions | P3.1 to P3.5 |
 | P3.7 | Stretch spike: two-iPad sync prototype (WebRTC plus QR signaling, op-log exchange) using the existing op model | P1.3, P1.4 |
 

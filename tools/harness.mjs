@@ -92,8 +92,9 @@ class Cdp {
     ws.addEventListener('message', (ev) => {
       const msg = JSON.parse(typeof ev.data === 'string' ? ev.data : ev.data.toString());
       if (msg.id && this.pending.has(msg.id)) {
-        const { resolve, reject, method } = this.pending.get(msg.id);
+        const { resolve, reject, method, timer } = this.pending.get(msg.id);
         this.pending.delete(msg.id);
+        clearTimeout(timer);
         if (msg.error) reject(new Error(`${method}: ${msg.error.message}`));
         else resolve(msg.result);
       } else if (msg.method) {
@@ -107,11 +108,11 @@ class Cdp {
     const msg = { id, method, params };
     if (sessionId) msg.sessionId = sessionId;
     return new Promise((resolve, reject) => {
-      this.pending.set(id, { resolve, reject, method });
-      this.ws.send(JSON.stringify(msg));
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         if (this.pending.delete(id)) reject(new Error(`${method}: no reply in 15s`));
       }, 15000);
+      this.pending.set(id, { resolve, reject, method, timer });
+      this.ws.send(JSON.stringify(msg));
     });
   }
 

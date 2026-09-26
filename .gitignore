@@ -9,3 +9,6 @@ __pycache__/
 .beads/proxieddb/
 *.gate.lock*
 test-results/
+
+# Test harness screenshots
+test-results/
