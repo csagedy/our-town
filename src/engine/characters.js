@@ -58,6 +58,11 @@ import {
 import { getEntity, childrenOf, inRoom } from './world.js';
 import { settle, DEPTH_SCALE } from './surfaces.js';
 import { touchedIds } from './ops.js';
+
+// Worn pieces pulled off only by a downward drag (an upward one lifts the character).
+const PULL_DOWN = { over: true, top: true, belt: true };
+// Worn slots whose pieces lie around as their prop art rather than the rig fragment.
+const DROP_ART = { belt: true, hands: true };
 import { spriteFor } from './sprites.js';
 import * as tween from './tween.js';
 
@@ -166,7 +171,8 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
   function wearFragment(kind) {
     const piece = rig.bodies.kid9.wear[kind];
     const slot = rig.wear[kind].slot;
-    return (slot === 'back' ? piece.back : slot === 'over' ? piece.torso : piece.head) || '';
+    if (slot === 'hands') return piece.hand ? `<g transform="translate(-24 0)">${piece.hand}</g><g transform="translate(24 0) scale(-1 1)">${piece.hand}</g>` : '';
+    return (slot === 'back' ? piece.back : slot === 'over' || slot === 'belt' || slot === 'top' ? piece.torso : piece.head) || '';
   }
   /** A wear piece lying around: its fragment drawn alone (kid9 size), bottom centre on the feet point. */
   function wearSprite(e) {
@@ -348,6 +354,17 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
   /** One idle-life animation (transform/opacity on an HTML layer box: composited). */
   function idleAnim(rec, el, keyframes, opts, move = false) {
     tween.checkKeyframes(keyframes);
+    // A new move on a box replaces the one still playing there: Blink can't
+    // composite two transform (or opacity) animations on one element
+    // (compositeFailed kTargetHasIncompatibleAnimations), so it would run the
+    // new one on the main thread, a style recalc every frame for 1.3-1.7 s
+    // (bead mhf.19). The shared timer never overlaps them; chars.idle() can.
+    if (rec.idleAnims) {
+      for (let i = rec.idleAnims.length - 1; i >= 0; i--) {
+        const old = rec.idleAnims[i];
+        if (old.effect && old.effect.target === el) { rec.idleAnims.splice(i, 1); old.cancel(); }
+      }
+    }
     const a = el.animate(keyframes, Object.assign({ id: IDLE_ANIM }, opts));
     a.__move = move;
     (rec.idleAnims || (rec.idleAnims = [])).push(a);
@@ -453,7 +470,12 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
       add(rec.bob.querySelector(`[data-f="hand${s}"]`), 'held', s);   // the mitten over it grabs it too
     }
     for (const slot of Object.keys(rec.worn)) {
-      for (const el of rec.bob.querySelectorAll(`[data-w="${slot}"]`)) add(el, 'wear', slot);
+      for (const el of rec.bob.querySelectorAll(`[data-w="${slot}"]`)) {
+        // A gloved hand holding something grabs the held thing, not the glove.
+        const f = el.getAttribute('data-f');
+        if (f && f.indexOf('hand') === 0 && rec.held[f.slice(4)]) continue;
+        add(el, 'wear', slot);
+      }
     }
   }
 
@@ -480,7 +502,7 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
         const e = entityOf(rec.id);
         if (!e || !view) return false;
         // A long press lifts the whole character; so does an upward pull on an apron.
-        if (info.longPress || (type === 'wear' && key === 'over' && !(info.dy > Math.abs(info.dx)))) {
+        if (info.longPress || (type === 'wear' && PULL_DOWN[key] && !(info.dy > Math.abs(info.dx)))) {
           proxy = view.handoff(rec.id, info);
           return !!proxy;
         }
@@ -628,8 +650,8 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     if (fx && p) fx.burst('sparkle', p.x, p.y - (slot === 'hat' ? 50 : 0), { count: 8, spread: 90 });
     play('sparkle');
     if (v) tween.squish(v.body, { amount: 0.5 });
-    if (slot === 'back' && (e.props.pose || 'stand') === 'stand') {
-      // A cape: a quick hero pose.
+    if ((slot === 'back' || rig.wear[item.kind].costume) && (e.props.pose || 'stand') === 'stand') {
+      // A cape or a hero suit: a quick hero pose.
       play('cheer', { gain: 0.6 });
       faces(rec, [['wheee', 1300]]);
       const c = rig.poses.cheer;
@@ -880,8 +902,9 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
   };
 
   let idleDue = 0;
+  let idleHeld = false;     // chars.idleHold(true): no shared-timer idle life (tests measuring chars.idle)
   function scheduleIdle() {
-    if (destroyed || document.hidden) return;
+    if (destroyed || document.hidden || idleHeld) return;
     const n = idleRecs().length;
     if (!n) return;
     // Each character gets a turn every ~3.6 s on average, however many there are.
@@ -958,7 +981,12 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
   const hooks = Object.assign({}, base, {
     spriteOf(e) {
       if (isChar(e)) return charSprite(e);
-      if (wearSlotOf(rig, e.kind)) return wearSprite(e);
+      if (wearSlotOf(rig, e.kind)) {
+        // The construction site's belt, gloves and hero suit lie around as their
+        // prop art (assets/art-manifest.json) when there is one.
+        if (DROP_ART[rig.wear[e.kind].slot] || rig.wear[e.kind].costume) { const s = base.spriteOf ? base.spriteOf(e) : null; if (s) return s; }
+        return wearSprite(e);
+      }
       return base.spriteOf ? base.spriteOf(e) : null;
     },
     canDrag: (e) => (isChar(e) ? true : base.canDrag ? base.canDrag(e) : true),
@@ -1004,6 +1032,11 @@ export function createCharacters({ store, input, rig, behaviors: base, room, sfx
     rig, seats, hooks, stats: () => Object.assign({}, stats, { chars: [...recs.values()].filter(alive).length, idleTimer: !!idleTimer }),
     /** Play one bit of idle life now ('blink' | 'glance' | 'tilt') on a character (tests, dev). */
     idle(id, what) { const rec = recs.get(id); return rec ? idleLife(rec, what) : false; },
+    /** Hold (true) or resume (false) the shared idle timer, so a test can measure only the idle life it plays with idle() (tests, dev). */
+    idleHold(on) {
+      idleHeld = !!on;
+      if (idleHeld) { clearTimeout(idleTimer); idleTimer = 0; } else scheduleIdle();
+    },
     /** Use this view and fx (after createRoomView). */
     bind(v, f = null) { view = v; fx = f; scheduleIdle(); },
     /** What a character looks like right now (tests, debugging). */

@@ -217,6 +217,54 @@ describe('characters in the cast room (ipad-air)', () => {
     await page.waitFor(`window.__store.state.entities[${JSON.stringify(cape.id)}].slot === 'wear-back'`);
   });
 
+  it('construction wearables: a tool belt, gloves and a hero suit dropped on go on; gloves and suit come off again', async () => {
+    await page.waitFor(idleChars);
+    const kinds = ['tool-belt', 'gloves', 'hero-suit'];
+    await page.eval((ks) => {
+      const s = window.__store, room = window.__scene.room.id;
+      ks.forEach((kind, i) => s.dispatch('spawn', { id: s.newId(), kind, room, x: 220 + i * 110, y: 965 }));
+    }, kinds);
+    const girl = await char(page, 'girl9');
+    const baseTop = girl.props.wear.top;
+    const slotOf = { 'tool-belt': 'belt', gloves: 'hands', 'hero-suit': 'top' };
+    for (const kind of kinds) {
+      await page.waitFor(idleChars);
+      const it = await thing(page, kind);
+      assert.ok(it.h > 20, `${kind} lies on the floor with its sprite`);
+      const c = await char(page, 'girl9');
+      const seat = c.look.anchors.seat;
+      await touchDrag(page, await toScreen(page, it.x, it.y - it.h / 2), await toScreen(page, seat.x, seat.y - 40));
+      await page.waitFor(`window.__store.state.entities[${JSON.stringify(it.id)}].slot === 'wear-${slotOf[kind]}'`);
+      await page.waitFor(`window.__scene.chars.inspect(${JSON.stringify(girl.id)}).worn[${JSON.stringify(slotOf[kind])}] === ${JSON.stringify(kind)}`);
+      assert.ok(await page.eval(([id, w]) => document.querySelectorAll(`.ent[data-id="${id}"] [data-w="${w}"]`).length > 0, [girl.id, slotOf[kind]]), `${kind} drawn on her`);
+    }
+    let c = await char(page, 'girl9');
+    assert.equal(c.props.wear.top, baseTop, 'her own top is still hers under the suit');
+    await page.waitFor(idleChars);
+    await page.screenshot('chars-site-wear');
+    // Pull a glove off (sideways), and the suit off by a sleeve (downwards).
+    const grab = (w, f) => page.eval(([id, w2, f2]) => {
+      const el = document.querySelector(`.ent[data-id="${id}"] [data-w="${w2}"][data-f^="${f2}"]`);
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }, [girl.id, w, f]);
+    const gloves = await thing(page, 'gloves');
+    const g = await grab('hands', 'hand');
+    await touchDrag(page, g, { x: g.x + 220, y: g.y + 30 });
+    await page.waitFor(`window.__store.state.entities[${JSON.stringify(gloves.id)}].parent == null`);
+    await page.waitFor(idleChars);
+    const suit = await thing(page, 'hero-suit');
+    const sl = await grab('top', 'armU');
+    await touchDrag(page, sl, { x: sl.x + 20, y: sl.y + 200 });
+    await page.waitFor(`window.__store.state.entities[${JSON.stringify(suit.id)}].parent == null`);
+    c = await char(page, 'girl9');
+    assert.equal(c.look.worn.hands, undefined);
+    assert.equal(c.look.worn.top, undefined);
+    assert.equal(c.look.worn.belt, 'tool-belt', 'the belt stays on');
+    await page.waitFor(idleChars);
+    await page.screenshot('chars-site-wear-off');
+  });
+
   it('tap a character: an inc op, and it plays the next reaction', async () => {
     await page.waitFor(idleChars);
     const g = await char(page, 'grandpa');
@@ -337,30 +385,68 @@ describe('characters: 8 on screen stay idle-cheap (ipad-pro-9.7)', () => {
     await page.screenshot('chars-8-idle');
   });
 
-  it('every kind of idle life costs no layout (lm8 regression): blinks, glances, tilts on all 8', async () => {
-    await page.waitFor(idleChars);
-    await page.send('Performance.enable', {});
-    const metric = async () => Object.fromEntries((await page.send('Performance.getMetrics', {})).metrics.map((m) => [m.name, m.value]));
-    const m0 = await metric();
-    const r = await page.eval(() => {
-      const ids = Object.values(window.__store.state.entities).filter((e) => e.kind === 'char' && !e.deleted && e.room === 'test/cast').map((e) => e.id);
-      let n = 0;
-      for (const id of ids) for (const what of ['blink', 'glance', 'tilt']) if (window.__scene.chars.idle(id, what)) n++;
-      return { n, running: document.getAnimations().filter((a) => a.id === 'char-idle').length };
-    });
-    assert.equal(r.n, 24, 'blink + glance + tilt on each of the 8');
-    assert.ok(r.running >= 8 * 4, `idle animations running: ${r.running}`);
-    // A fixed window (not a poll: getAnimations() itself recalcs style) long
-    // enough for the longest (a 1.7 s tilt) to play out.
+  // Deterministic (bead mhf.19): the shared idle timer is held, so the window
+  // holds exactly the idle life the test plays with chars.idle(), and it
+  // starts with none running. Each event's animations start and end in a few
+  // batched recalcs (~16 for 24 events); an animation Blink can't composite
+  // (e.g. a second transform animation on a box still playing one) runs on
+  // the main thread: a recalc every frame of its 1.3-1.7 s, ~80-100 more.
+  const castIds = () => Object.values(window.__store.state.entities).filter((e) => e.kind === 'char' && !e.deleted && e.room === 'test/cast').map((e) => e.id);
+  const noIdleAnims = () => document.getAnimations().filter((a) => a.id === 'char-idle').length === 0;
+  const metrics = async () => Object.fromEntries((await page.send('Performance.getMetrics', {})).metrics.map((m) => [m.name, m.value]));
+  /** Recalcs and layouts over a fixed 2.2 s window (not a poll: getAnimations() itself recalcs style), long enough for a 1.7 s tilt to play out. */
+  async function measure(play) {
+    const m0 = await metrics();
+    const r = await page.eval(play);
     await sleep(2200);
-    const m1 = await metric();
-    const layouts = m1.LayoutCount - m0.LayoutCount;
-    const recalcs = m1.RecalcStyleCount - m0.RecalcStyleCount;
-    console.log(`  24 idle events on 8 characters: layouts ${layouts}, style recalcs ${recalcs}`);
-    // Before lm8 (SVG class toggles + WAAPI on SVG groups): ~2 layouts per blink
-    // and one per frame of a glance/tilt, hundreds here.
-    assert.ok(layouts <= 2, `layouts: ${layouts}`);
-    assert.ok(recalcs <= 60, `style recalcs: ${recalcs}`);
+    const m1 = await metrics();
+    return Object.assign(r, { layouts: m1.LayoutCount - m0.LayoutCount, recalcs: m1.RecalcStyleCount - m0.RecalcStyleCount });
+  }
+
+  it('every kind of idle life costs no layout (lm8 regression): blinks, glances, tilts on all 8', async () => {
+    await page.send('Performance.enable', {});
+    await page.eval(() => window.__scene.chars.idleHold(true));
+    try {
+      await page.waitFor(idleChars);
+      await page.waitFor(noIdleAnims);
+      await page.frames(2);
+      const r = await measure(`(() => {
+        let n = 0;
+        for (const id of (${castIds})()) for (const what of ['blink', 'glance', 'tilt']) if (window.__scene.chars.idle(id, what)) n++;
+        return { n, running: document.getAnimations().filter((a) => a.id === 'char-idle').length };
+      })()`);
+      console.log(`  24 idle events on 8 characters: layouts ${r.layouts}, style recalcs ${r.recalcs}`);
+      assert.equal(r.n, 24, 'blink + glance + tilt on each of the 8');
+      assert.equal(r.running, 8 * 5, 'blink: 2 layers, glance: the eyes box, tilt: 2 head boxes');
+      // Before lm8 (SVG class toggles + WAAPI on SVG groups): ~2 layouts per blink
+      // and one per frame of a glance/tilt, hundreds here.
+      assert.ok(r.layouts <= 2, `layouts: ${r.layouts}`);
+      assert.ok(r.recalcs <= 24 * 1.5, `style recalcs for 24 events: ${r.recalcs} (at most 1.5 per event; ~0.7 when all composite)`);
+    } finally {
+      await page.eval(() => window.__scene.chars.idleHold(false));
+    }
+  });
+
+  it('a glance or tilt started over a running one replaces it and stays composited (mhf.19)', async () => {
+    await page.send('Performance.enable', {});
+    await page.eval(() => window.__scene.chars.idleHold(true));
+    try {
+      await page.waitFor(noIdleAnims);
+      await page.eval(`(() => { for (const id of (${castIds})()) { window.__scene.chars.idle(id, 'glance'); window.__scene.chars.idle(id, 'tilt'); } })()`);
+      await page.frames(3);
+      const r = await measure(`(() => {
+        for (const id of (${castIds})()) { window.__scene.chars.idle(id, 'glance'); window.__scene.chars.idle(id, 'tilt'); }
+        return { running: document.getAnimations().filter((a) => a.id === 'char-idle').length };
+      })()`);
+      console.log(`  16 overlapping glances/tilts on 8 characters: layouts ${r.layouts}, style recalcs ${r.recalcs}`);
+      assert.equal(r.running, 8 * 3, 'the new moves replaced the running ones (one animation per box)');
+      assert.ok(r.layouts <= 2, `layouts: ${r.layouts}`);
+      // Two transform animations on one box: Blink runs the new one on the
+      // main thread (kTargetHasIncompatibleAnimations): ~80-100 recalcs here.
+      assert.ok(r.recalcs <= 16 * 1.5, `style recalcs for 16 overlapping events: ${r.recalcs}`);
+    } finally {
+      await page.eval(() => window.__scene.chars.idleHold(false));
+    }
   });
 
   it('pauses when the page is hidden: no idle timer, breathing paused', async () => {

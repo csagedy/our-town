@@ -53,8 +53,8 @@ Back to front, as `renderCharacter()` emits them:
 3. hair back (`data-p="hair-back"`) in the head frame, unless a worn hat `hides: ['top']` and the style's back is a top puff or bun
 4. legs, L then R, each: skin limb layer, `bottom` slot leg layer, then the foot (the `shoes` fragment, or the bare foot). **Sitting (`pose.legsFront`) moves the legs to after step 6** so the knees cover the lap.
 5. pelvis (skin), then the `bottom` slot `pelvis` fragment (waistband, shorts top, skirt)
-6. torso (skin with neck), then `top` `torso`, `over` `torso` (apron), `back` `torso` (cape tie)
-7. arms not listed in `pose.front`, L then R, each: skin limb layer, `top` arm layer (sleeve), the held item, the hand
+6. torso (skin with neck), then `top` `torso`, `over` `torso` (apron, vest), `belt` `torso` (tool belt, over the top and any vest or apron), `back` `torso` (cape tie)
+7. arms not listed in `pose.front`, L then R, each: skin limb layer, `top` arm layer (sleeve), the `hands` `cuff` (forearm frame), the held item, the hand (the `hands` `hand` glove instead of the bare mitten)
 8. head (`data-p="head"`): ears, head, nose, face slots `eyes`, `brows`, `mouth`, `extras`, facial hair, hair front, `face` slot accessory, `hat` slot
 9. arms listed in `pose.front` (in front of the head: hands at the mouth, holding a cupcake up close)
 
@@ -68,14 +68,18 @@ Back to front, as `renderCharacter()` emits them:
 |---|---|---|
 | `hat` | `head` | `beanie`, `chef-hat`, `crown`, `headband`, `hard-hat`, `cap`, `bow`, `hijab` (a headscarf: `hides: ['top', 'hair']`, it covers all the hair) |
 | `face` | `head` | `glasses`, `square-glasses`, `sunglasses`, `hero-mask` |
-| `top` | `torso`, `arm` | `tee-star`, `tee-stripe`, `tee-dots`, `hoodie`, `cardigan`, `chef-coat`, `sparkle-top` |
+| `top` | `torso`, `arm` | `tee-star`, `tee-stripe`, `tee-dots`, `hoodie`, `cardigan`, `chef-coat`, `sparkle-top`, `hero-suit` (a **costume**: see below) |
 | `over` | `torso` | `apron`, `safety-vest` |
+| `belt` | `torso` | `tool-belt` (P2c: band, buckle, two pouches with a hammer and a wrench, at the top's hem) |
+| `hands` | `hand`, `cuff` | `gloves` (P2c: `hand` replaces the bare mitten in the hand frame, authored for the right hand; `cuff` is in the forearm (`armL*`) frame, so both follow the 2-segment arm in every pose) |
 | `bottom` | `pelvis`, `leg` | `pants`, `leggings`, `shorts`, `skirt`, `tutu` |
 | `shoes` | `foot` | `sneakers`, `boots`, `sandals` |
 | `back` | `back`, `torso` | `towel-cape`, `hero-cape`, `wings` |
 | held L / R | an SVG string per hand (`opts.held`) | any prop: see below |
 
-`rig.wear.<piece>` = `{slot, label, hides, colors}`. One piece per slot. A worn piece's `colors` are its defaults; the character's `colors` override them.
+`rig.wear.<piece>` = `{slot, label, hides, colors, costume?}`. One piece per slot. A worn piece's `colors` are its defaults; the character's `colors` override them. `costume: true` (the `hero-suit`, original design: teal body, orange side panels and sleeves with teal cuffs, an orange disc with a butter star, tealDeep swirls; no web or spider motif) marks a `top` that can also be worn as a removable child over the character's own top (section 10).
+
+The `belt` and `hands` slots were added in P2c for the construction site's wearables (`tools/art/props/site.mjs` `wear`): the belt so it goes on together with a vest or an apron (it could not share `over`), the gloves because nothing else draws on the hands. Adding a slot means: a `WEAR` piece with that `slot`, its colour classes in `palette.mjs` `css()`, its fragments placed in `renderCharacter()`'s draw order (section 3), `SLOTS`, and (for a worn entity) `WORN` in `char-model.js`.
 
 **Recolour** = CSS custom properties on the character's root `<g>` (set by `charVars()`; change them at runtime with `el.style.setProperty`). No `color-mix()` on Safari 16, so every shade is its own variable:
 
@@ -91,6 +95,8 @@ Back to front, as `renderCharacter()` emits them:
 | `--shoe --shoe-sh` | shoes |
 | `--hat --hat-sh --hat-2` | hat |
 | `--face --face-sh` | face accessory |
+| `--belt --belt-sh --belt-2` | tool belt (pouches, band, buckle) |
+| `--hands --hands-sh --hands-2` | gloves (glove, stitching, cuff) |
 
 **Held items**: `renderCharacter(rig, spec, {held: {L: svg, R: svg}})` draws the SVG upright at that hand, *under* the mitten, so the hand overlaps it. The item's own origin goes on the hand centre: for a prop sprite that is `<image href=... x=-(anchor+grip)/artScale y=... width=size/artScale ...>` (props' `grip` is in `assets/art-manifest.json`; see `held()` in `tools/art/contact-sheet/index.html`). At runtime a held prop can also be its own element positioned at `anchors.handL/R` (world = feet position + anchor × artScale × depth scale).
 
@@ -187,7 +193,7 @@ Hair styles (13): `short, buzz, tufts, coily, puff, curly, bob, long, ponytail, 
 
 ## 10. Characters in rooms (P1.10 runtime)
 
-- **Entity** `kind: 'char'` (`src/engine/char-model.js`, pure): `props` = the spec's appearance (`body, skin, hair, facialHair, lashes, blush, sock`, `wear: {top, bottom, shoes}`, `colors`) plus `expr`, `pose` (`stand | sit | lie`), `seat` (seat id), `raise` (`'L' | 'R' | null`: a held item shown off) and `taps` (an `inc` counter). Held items are children in slot `hand-l` / `hand-r`; removable pieces (slots `hat, face, over, back`) are children in slot `wear-<slot>` whose kind is the rig wear piece (`data/catalog.json` has them as kinds with tags `wear`, `wearable:<slot>`). `castProps(rig, castId)`, `spawnCharacter(store, rig, castId, where)` and `seedCharacters(store, rig, {room, seats, placements, items})` build them with store ops.
+- **Entity** `kind: 'char'` (`src/engine/char-model.js`, pure): `props` = the spec's appearance (`body, skin, hair, facialHair, lashes, blush, sock`, `wear: {top, bottom, shoes}`, `colors`) plus `expr`, `pose` (`stand | sit | lie`), `seat` (seat id), `raise` (`'L' | 'R' | null`: a held item shown off) and `taps` (an `inc` counter). Held items are children in slot `hand-l` / `hand-r`; removable pieces (slots `hat, face, over, back`, plus `belt` and `hands`: `WORN` in char-model.js, and any `costume` top) are children in slot `wear-<slot>` whose kind is the rig wear piece (`data/catalog.json` has them as kinds with tags `wear`, `wearable:<slot>`; the tool belt, gloves and hero suit use their site prop art via `art.sprite` while they lie around). A worn child overrides `props.wear[slot]` while it is on (so a hero suit covers the character's own top, which comes back when the suit is pulled off) and brings its own colours (the character's overrides for that slot are ignored meanwhile). Worn apron, vest, belt and suit come off with a downward pull (an upward drag lifts the character); a gloved hand that holds something grabs the held thing, not the glove. `castProps(rig, castId)`, `spawnCharacter(store, rig, castId, where)` and `seedCharacters(store, rig, {room, seats, placements, items})` build them with store ops.
 - **View** (`src/engine/characters.js`): `mountCharacters({store, input, behaviors, room, sfx, speech})` → `chars` (or null without the rig); pass `chars.hooks` as the room view's behaviors, then `chars.bind(view, fx)`. Characters are ordinary view entities with a `custom` sprite (a box whose bottom centre is the pose anchor) and a live SVG body; view.js hooks `sortKeyOf, onRender, onDragStart, onDragMove, dropSpot, onDrop` and `view.repaint(id)`, `view.handoff(id, info)` serve them. `renderCharacter(..., {marks: true})` tags removable pieces with `data-w`; held items (`[data-f=heldX]`, and the mitten over them) and worn pieces are their own touch targets.
 - **Seats**: a room def's `seats: [{id, x, y, depth, lie?, half?}]` (the kitchen's come from the manifest); ids starting with `bed/sofa/couch/mat/nap` are for lying. A character whose seat point is within 70 units snaps onto a free one.
 - **Idle life**: a CSS `char-breathe` animation on the `.char-bob` wrapper (composited, random delay), and ONE shared timer for blinks, glances and head tilts. None of it touches the SVG (bead lm8): a character is drawn as a stack of same-size `<svg>` layers (`renderCharacter(..., {layers: true})` → `layers.base, hairBack, body, headUnder, eyes, blink, headOver, front`), with the head pieces in `.char-tilt` boxes and the eyes in a `.char-eyes` box. A blink is an opacity step on the `eyes`/`blink` layers, a glance a translate of `.char-eyes`, a tilt a rotate of the `.char-tilt` boxes about the chin: WAAPI (`id: 'char-idle'`) on HTML boxes, composited, no layout (the wrappers keep an identity transform and the eye layers `z-index: 0` at rest so starting one changes no stacking context). `chars.idle(id, 'blink'|'glance'|'tilt')` plays one now. A pose tween eases a running glance/tilt back; a rebuild cancels it. Offscreen (IntersectionObserver) and hidden pages pause both. Measured (docs/perf.md, "Idle characters"): 12 characters idle for 10 s at x6 throttle: 0 layouts, ~5 style recalcs per idle event, under 7 ms script.
@@ -199,4 +205,6 @@ Hair styles (13): `short, buzz, tufts, coily, puff, curly, bob, long, ponytail, 
 - **The character being made** is an ordinary `char` entity in the room `booth/mirror`, which no room view shows; the booth draws it big on its stage. Every choice is a store op on it (`chooseOps`: `set` on props, `spawn`/`remove` of worn children for hat, face, over and back), so it survives a reload and is shared. `props.fresh` is true until the first change.
 - **Done** (the photo-frame button): a camera flash, it `move`s onto the booth floor (a normal character from then on: drag it, sit it, pocket it) and a new random one (`randomLook`) takes the stage. **Shuffle** (the die): `lookOps` from the current look to a random one. **Restyle**: drop a character on the stage: it goes up; the one there hops down onto the floor (or is deleted if still fresh).
 - **Zero text**: 15 category tabs with white icons, options as little renders of the character wearing each choice; tapping the chosen outfit piece again steps its colour.
+- The `hero-suit` is a plain `top` option there. `rig.maker.wear` also lists `belt` and `hands` (and `outfitColors.belt/hands`), but the booth has no tabs for them yet (they need a `CATEGORIES` entry and an icon in `booth.js`), and shuffle/Done leave any worn belt or gloves alone (`REMOVABLE` is still the four Maker slots).
+- **Thumbnails** show the choice, not what covers it: per tab they leave off occluding worn slots (`THUMB_HIDE` / `thumbSpec` in char-maker.js: hair tabs drop the hat and cape, eyes/brows the mask/glasses and hat, top the apron and cape, ...; the real character keeps everything) and zoom to the region (`cropFor` in booth.js: face, head, torso, legs/feet, whole body). Each is an `<img>` of a data-URL SVG (one DOM node, not ~100), redrawn when the tab opens or the look changes. The booth e2e puts on a hat, mask, apron and cape and checks every tab's thumbnails differ pixel-wise.
 - Tests: `tests/unit/char-maker.test.mjs`, `tests/e2e/booth.test.mjs`.

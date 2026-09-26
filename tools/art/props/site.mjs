@@ -180,7 +180,7 @@ function paintCan(c, rainbow = false) {
 }
 function cone(down) {
   const body = `${R(-38, -12, 76, 12, HAZD, ' rx="3"')}<path fill="${HAZ}" d="M-30 -12 L-9 -112 Q0 -120 9 -112 L30 -12Z"/><path fill="${P.cream}" class="n" d="M-21 -54 L21 -54 L17 -74 L-17 -74Z"/><path fill="${P.cream}" class="n" d="M-14 -88 L14 -88 L12 -98 L-12 -98Z"/><path fill="none" d="M-30 -12 L-9 -112 Q0 -120 9 -112 L30 -12Z"/>`;
-  return down ? `<g transform="translate(-10 -38) rotate(-90)">${body}</g>` : body;
+  return down ? `<g transform="translate(60 -38) rotate(-90)">${body}</g>` : body;
 }
 function wheelbarrow(full) {
   const load = full ? `<path fill="${DIRT}" d="M-60 -64 ${scallop(-6, -64, 56, 30, 8, 7, 180, 360, false).replace(/^M[^Q]*/, '')} L50 -64Z"/><circle class="thin" fill="${P.warmGrey}" cx="-20" cy="-80" r="7"/><path ${tl(DIRTD, 'stroke-width:3.5')} d="M4 -78 q6 -6 12 0"/>` : '';
@@ -254,7 +254,7 @@ function mask([c, d]) {
   return `<path fill="${c}" fill-rule="evenodd" d="M-66 -44 C-56 -58 -12 -54 0 -46 C12 -54 56 -58 66 -44 C70 -24 60 -10 38 -10 C22 -10 8 -22 0 -20 C-8 -22 -22 -10 -38 -10 C-60 -10 -70 -24 -66 -44Z ${hole(-32)} ${hole(32)}"/>
   <path fill="${c}" d="M64 -38 L86 -48 L82 -30Z M-64 -38 L-86 -48 L-82 -30Z"/><path class="n" fill="${d}" d="M-56 -24 Q-44 -14 -30 -16 L-30 -12 Q-46 -10 -58 -20Z"/>${glint('M-54 -44 Q-46 -50 -36 -50', 3.5)}`;
 }
-/** The web-slinger style suit top: teal body, orange sleeves and side panels, a star emblem, swirl lines. */
+/** The hero suit top (original, no web or spider): teal body, orange sleeves and side panels, a star emblem, swirl lines. */
 function heroSuit() {
   const T = P.teal, TD = P.tealDeep, O = HAZ, OD = HAZD;
   const body = 'M-44 -150 L-18 -158 Q0 -146 18 -158 L44 -150 L50 -4 Q50 0 46 0 L-46 0 Q-50 0 -50 -4Z';
@@ -336,14 +336,14 @@ export const SITE_PROPS = {
   'hard-hat': { label: 'hard hat', tags: ['wear', 'wearable:hat', 'construction'], variants: { yellow: hardHat(P.mustard, P.mustardDeep, P.butter), orange: hardHat(HAZ, HAZD, '#F6C08E') },
     wear: { piece: 'hard-hat', slot: 'hat', colors: { yellow: { hat: P.mustard, 'hat-sh': P.mustardDeep, 'hat-2': P.butter }, orange: { hat: HAZ, 'hat-sh': HAZD, 'hat-2': '#F6C08E' } } } },
   'safety-vest': { label: 'safety vest', tags: ['wear', 'wearable:over', 'construction'], variants: { default: vest() }, wear: { piece: 'safety-vest', slot: 'over' } },
-  'tool-belt': { label: 'tool belt', tags: ['wear', 'wearable:over', 'construction'], variants: { default: toolBelt() }, wear: { piece: 'tool-belt', slot: 'over', pending: true } },
-  gloves: { label: 'work gloves', tags: ['wear', 'wearable:hands', 'construction'], variants: { default: gloves() }, wear: { piece: 'gloves', slot: 'hands', pending: true } },
+  'tool-belt': { label: 'tool belt', tags: ['wear', 'wearable:belt', 'construction'], variants: { default: toolBelt() }, wear: { piece: 'tool-belt', slot: 'belt' } },
+  gloves: { label: 'work gloves', tags: ['wear', 'wearable:hands', 'construction'], variants: { default: gloves() }, wear: { piece: 'gloves', slot: 'hands' } },
   'hero-cape': { label: 'hero cape', tags: ['wear', 'wearable:back', 'hero'], variants: Object.fromEntries(Object.entries(HERO).map(([k, c]) => [k, cape(c)])),
     wear: { piece: 'hero-cape', slot: 'back', colors: Object.fromEntries(Object.entries(HERO).map(([k, c]) => [k, { back: c[0], 'back-sh': c[1], 'back-2': c[2] }])) } },
-  'hero-mask': { label: 'hero mask', tags: ['wear', 'wearable:face', 'hero'], variants: Object.fromEntries(Object.entries(HERO).map(([k, c]) => [k, mask(c)])),
+  'hero-mask': { label: 'hero mask', tags: ['wear', 'wearable:face', 'hero'], variants: Object.fromEntries(Object.entries(HERO).map(([k, c]) => [k, at(0, 10, 1, mask(c))])),
     wear: { piece: 'hero-mask', slot: 'face', colors: Object.fromEntries(Object.entries(HERO).map(([k, c]) => [k, { face: c[0], 'face-sh': c[1] }])) } },
   'hero-suit': { label: 'hero suit', tags: ['wear', 'wearable:top', 'hero'], variants: { default: heroSuit() },
-    wear: { piece: 'hero-suit', slot: 'top', pending: true, colors: { default: { top: P.teal, 'top-sh': P.tealDeep, 'top-2': HAZ } },
+    wear: { piece: 'hero-suit', slot: 'top', colors: { default: { top: P.teal, 'top-sh': P.tealDeep, 'top-2': HAZ } },
       design: 'teal long-sleeve top; orange sleeves and side panels; an orange disc with a butter star on the chest; tealDeep swirl tone lines' } },
 
   // ---- treasures ----

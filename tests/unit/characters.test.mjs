@@ -34,6 +34,36 @@ test('castProps: clothes stay props, removable pieces become worn children with 
   assert.equal(wearSlotOf(rig, 'cupcake'), null);
 });
 
+test('P2c wearables: tool belt, gloves and the hero suit are worn children that draw on every body and pose', () => {
+  assert.equal(wearSlotOf(rig, 'tool-belt'), 'belt');
+  assert.equal(wearSlotOf(rig, 'gloves'), 'hands');
+  assert.equal(wearSlotOf(rig, 'hero-suit'), 'top', 'a costume top is worn over the base top');
+  const { props } = castProps(rig, 'dad');
+  const withTop = Object.assign({}, props, { colors: Object.assign({}, props.colors, { top: '#123456', 'top-2': '#654321' }) });
+  const kids = [
+    { id: 'a', kind: 'tool-belt', slot: 'wear-belt', props: {} },
+    { id: 'b', kind: 'gloves', slot: 'wear-hands', props: {} },
+    { id: 'c', kind: 'hero-suit', slot: 'wear-top', props: {} },
+    { id: 'd', kind: 'cupcake', slot: 'hand-l', props: {} },
+  ];
+  const { held, worn } = partsOf(kids, rig);
+  assert.deepEqual(Object.keys(worn).sort(), ['belt', 'hands', 'top']);
+  const spec = specOf(withTop, worn);
+  assert.equal(spec.wear.top, 'hero-suit');
+  assert.equal(spec.colors.top, undefined, 'the suit keeps its own teal, not the tee colour');
+  assert.equal(specOf(withTop, {}).wear.top, props.wear.top, 'off again: the own top is back');
+  for (const body of Object.keys(rig.bodies)) {
+    for (const pose of Object.keys(rig.poses)) {
+      const out = renderCharacter(rig, Object.assign({}, spec, { body }), { pose: composePose(rig, pose, held), held: { L: '<circle r="10"/>' }, marks: true });
+      for (const w of ['belt', 'hands', 'top']) assert.ok(out.svg.includes(`data-w="${w}"`), `${body} ${pose}: ${w} tagged`);
+      assert.equal((out.svg.match(/data-f="hand[LR]"/g) || []).length, 2, 'one glove per hand, in the hand frames');
+      assert.ok(!/NaN|undefined/.test(out.svg), `${body} ${pose}: clean svg`);
+    }
+  }
+  const plain = renderCharacter(rig, specOf(props, {}), { marks: true });
+  assert.ok(!plain.svg.includes('data-w="top"'), 'an ordinary top is not a removable piece');
+});
+
 test('partsOf / specOf: held items by hand, worn pieces merged into the rig spec', () => {
   const { props } = castProps(rig, 'girl9');
   const kids = [

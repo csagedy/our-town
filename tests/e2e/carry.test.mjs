@@ -39,6 +39,13 @@ const drag = (page, from, to) => page.drag(from, to, { steps: 16, durationMs: 52
 async function goKitchen(page) {
   if (await page.eval(() => window.__town.at) !== 'cafe/kitchen') await page.eval(() => window.__town.go('cafe/kitchen'));
   await page.waitFor(IDLE);
+  await showCounter(page);
+}
+// P2a.1: the cafe is a panning strip; its counter stop shows the cook, her
+// backpack and the fruit and cupcake on the order counter.
+async function showCounter(page) {
+  await page.eval(() => window.__stage.camera.panTo(900));
+  await page.frames(2);
 }
 
 for (const name of ['ipad-air', 'ipad-pro-9.7']) {
@@ -77,7 +84,9 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
       // The character goes on the tray (it peeks open while she is carried).
       const kid0 = await ent(page, ids.kid);
       const g = page.gesture();
-      const from = await at(page, ids.kid);
+      // By her head: in the cafe strip she stands near the tray, and a mostly
+      // downward pull on her apron would take the apron off instead.
+      const from = await at(page, ids.kid, 0.2);
       const to = { x: pk.cx + pk.w * 2.5, y: pk.cy };
       await g('touchStart', [{ x: from.x, y: from.y }], 0);
       for (let k = 1; k <= 14; k++) await g('touchMove', [{ x: from.x + (to.x - from.x) * k / 14, y: from.y + (to.y - from.y) * k / 14 }], k * 30);
@@ -150,6 +159,7 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
     });
 
     it('a backpack carries its contents in the pocket, and the pocket survives a reload', async () => {
+      await showCounter(page);
       await drag(page, await at(page, ids.apple), await at(page, ids.bag));
       await page.waitFor(`window.__store.state.entities[${JSON.stringify(ids.apple)}].parent === ${JSON.stringify(ids.bag)}`);
       assert.equal((await ent(page, ids.apple)).parent, ids.bag, 'apple in the bag');

@@ -9,7 +9,8 @@
 //         them around, sit them down, carry them off in the pocket).
 //   right: the maker panel: two columns of category tabs (body, skin, hair,
 //         hair colour, eyes, brows, facial hair, cheeks, hat, glasses, top,
-//         apron/vest, bottom, shoes, cape/wings), a grid of picture options
+//         apron/vest, tool belt, gloves, bottom, shoes, cape/wings), a grid
+//         of picture options
 //         (each one a little render of the character wearing it), the
 //         shuffle die and the photo-frame "done" button.
 //
@@ -20,6 +21,9 @@
 // into the booth), and a new random one appears. Restyle: drag a character
 // onto the stage: it goes up (the old one hops down, or disappears if
 // nobody touched it yet).
+//
+// A costume (the hero suit dropped onto a character) comes off when a top is
+// picked or the die is rolled: it hops off onto the floor with a sparkle.
 //
 // Reactions: every change makes the preview wiggle with a happy face; the die
 // makes it giggle; tapping it giggles or waves.
@@ -34,10 +38,10 @@ import { loadCatalog } from '../core/catalog.js';
 import { createBehaviors } from '../core/behaviors/index.js';
 import { useArtSprites } from './art.js';
 import { mountCharacters, seedCharacters } from '../engine/characters.js';
-import { renderCharacter, bodyBox, faceSlot, resolveExpr } from '../engine/rig-svg.js';
+import { renderCharacter, bodyBox, faceSlot, resolveExpr, svgWrap } from '../engine/rig-svg.js';
 import { CHAR_KIND, partsOf, specOf, wearSlotName } from '../engine/char-model.js';
 import {
-  MIRROR_ROOM, CATEGORIES, optionsOf, isChosen, chooseOps, randomLook, lookOps, patchFor, isRemovableCat,
+  MIRROR_ROOM, CATEGORIES, optionsOf, isChosen, chooseOps, randomLook, lookOps, patchFor, isRemovableCat, thumbSpec,
 } from '../engine/char-maker.js';
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
@@ -49,8 +53,10 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 const PANEL_X = 880;                                  // world x where the maker panel starts
 export const PREVIEW = { x: 444, y: 872, h: 560 };    // the stage: preview feet point and target height (world)
 const ZONE = { x0: 250, x1: 640, y0: 790, y1: 1000 }; // drop a character here to restyle it
-const TAB = { x: [945, 1047], y0: 112, dy: 108, d: 92 };
+const COSTUME_OFF = [{ x: 700, y: 950 }, { x: 180, y: 955 }, { x: 790, y: 940 }];   // where a costume taken off lands
+const TAB = { x: [945, 1047], y0: 104, dy: 100, d: 92 };  // 17 tabs: 9 rows, the last at y 904
 const OPT = { x: [1152, 1261, 1370], y0: 150, dy: 112, d: 100 };
+const THUMB_PX = OPT.d - 12;                          // a thumbnail picture inside its 6px white border
 const DICE = { x: 1200, y: 880, d: 132 };
 const DONE = { x: 1360, y: 880, d: 132 };
 const TAB_COLORS = ['#F79A4B', '#62B96B', '#4AA6E0', '#FFD552', '#A77BD6'];
@@ -102,6 +108,8 @@ const ICONS = {
   over: '<path d="M17 5 L31 5 L31 16 L40 18 L37 43 L11 43 L8 18 L17 16Z"/>',
   bottom: '<path d="M11 5 L37 5 L40 43 L28 43 L24 18 L20 43 L8 43Z"/>',
   shoes: '<path d="M6 20 L18 20 Q20 28 30 29 L40 31 Q45 32 45 37 L45 40 L6 40Z"/>',
+  belt: '<rect x="3" y="11" width="42" height="10" rx="4"/><rect x="17" y="7" width="14" height="18" rx="4"/><rect x="21" y="12" width="6" height="8" rx="1.5" fill="#F79A4B"/><path d="M6 23 H19 V36 Q19 42 13 42 H12 Q6 42 6 36Z M29 23 H42 V36 Q42 42 36 42 H35 Q29 42 29 36Z"/><rect x="9" y="27" width="7" height="3" rx="1.5" fill="#F79A4B"/><rect x="32" y="27" width="7" height="3" rx="1.5" fill="#F79A4B"/>',
+  hands: '<path d="M14 45 L14 33 C10 31 4 26 4 21 C4 17 8 16 11 19 L15 23 L15 12 C15 5 23 5 23 12 L23 9 C23 3 31 3 31 9 L31 12 C31 6 39 6 39 12 L39 33 L38 45Z"/><rect x="12" y="35" width="28" height="5" rx="2.5" fill="#62B96B"/>',
   back: '<path d="M16 5 L32 5 Q36 22 44 42 Q34 38 24 43 Q14 38 4 42 Q12 22 16 5Z"/>',
   dice: '<rect x="5" y="5" width="38" height="38" rx="9"/><g fill="#4AA6E0"><circle cx="15" cy="15" r="4"/><circle cx="33" cy="15" r="4"/><circle cx="24" cy="24" r="4"/><circle cx="15" cy="33" r="4"/><circle cx="33" cy="33" r="4"/></g>',
   done: '<rect x="4" y="7" width="40" height="34" rx="5"/><rect x="10" y="13" width="28" height="22" rx="2" fill="#62B96B"/><circle cx="24" cy="21" r="4.5"/><path d="M15 35 Q24 25 33 35Z"/>',
@@ -121,7 +129,7 @@ const CSS = `
 .mk-opt .mk-face{background:#fff;border:6px solid #fff}
 .mk-opt.is-on .mk-face{border-color:#FFD552;border-width:8px}
 .mk-opt .mk-face::after{display:none}
-.mk-opt svg.mk-thumb{position:absolute;left:0;top:0;width:100%;height:100%}
+.mk-opt img.mk-thumb{position:absolute;left:0;top:0;width:100%;height:100%;display:block;pointer-events:none;-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
 .mk-stage{position:absolute;left:0;top:0;width:1440px;height:1000px;pointer-events:none}
 .mk-preview{position:absolute;left:0;top:0;pointer-events:none;touch-action:none}
 .mk-preview svg *{pointer-events:auto}
@@ -146,7 +154,7 @@ export async function mountBooth(stage, { input, store, manifest, carry = null, 
   const fx = createFx(room.fxLayer);
   const behaviors = createBehaviors({ catalog, store });
   const chars = await mountCharacters({ store, input, behaviors, room, sfx, speech });
-  const stats = { changes: 0, shuffles: 0, done: 0, restyled: 0, renders: 0, reactions: 0 };
+  const stats = { changes: 0, shuffles: 0, done: 0, restyled: 0, renders: 0, reactions: 0, costumesOff: 0 };
   const isChar = (e) => e && e.kind === CHAR_KIND;
   const inZone = (x, y) => x >= ZONE.x0 && x <= ZONE.x1 && y >= ZONE.y0 && y <= ZONE.y1;
   let maker = null;
@@ -281,20 +289,54 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
       worn = Object.assign({}, worn);
       if (value) worn[cat] = worn[cat] && worn[cat].kind === value ? worn[cat] : { kind: value, props: {} };
       else delete worn[cat];
-    } else props = Object.assign({}, props, patchFor(cat, value, props));
-    return specOf(props, worn);
+    } else {
+      props = Object.assign({}, props, patchFor(cat, value, props));
+      // Picking another top takes a worn costume off (chooseOps), so its
+      // thumbnail shows that top, not the costume still covering it.
+      if (cat === 'top' && worn.top && worn.top.kind !== value) { worn = Object.assign({}, worn); delete worn.top; }
+    }
+    // Take off what would cover the choice (a hat over the hair): thumbnail only.
+    return thumbSpec(specOf(props, worn), cat);
   }
+  // Each tab zooms to its region: the face (eyes, brows, cheeks), the head
+  // (hair, facial hair, glasses, hat, skin), the torso (top, apron), the legs
+  // and feet (bottom, shoes), the whole body (body type, cape).
   function cropFor(cat, spec, res) {
     const b = rig.bodies[spec.body];
     const hd = b.head, sk = b.skeleton;
     const [hx, hy] = res.anchors.head;
-    if (cat === 'eyes' || cat === 'brows') return [hx - hd.rx * 0.8, hy - hd.ry * 0.62, hd.rx * 1.6, hd.ry * 1.25];
-    if (cat === 'body') { const h = rig.bodies.adult.skeleton.height; return [-h * 0.42, -h * 1.06, h * 0.84, h * 1.12]; }
-    if (cat === 'top' || cat === 'over' || cat === 'back') { const h = sk.height; return [-h * 0.5, -h * 1.04, h, h * 1.1]; }
-    if (cat === 'bottom' || cat === 'shoes') { const top = sk.hipY - sk.legR * 2.5; const w = -top * 1.25; return [-w / 2, top, w, -top + 40]; }
-    const up = cat === 'hat' ? 1.7 : 1.35;
-    return [hx - hd.rx - 50, hy - hd.ry * up, hd.rx * 2 + 100, hd.ry * (up + 1.25)];
+    const box = (cx, cy, d) => [cx - d / 2, cy - d / 2, d, d];   // a square around a centre
+    switch (cat) {
+      case 'eyes': return box(hx, hy + 6, hd.rx * 1.35);
+      case 'brows': return box(hx, hy - 6, hd.rx * 1.45);
+      case 'cheeks': return box(hx, hy + 18, hd.rx * 1.8);
+      case 'facial': return box(hx, hy + hd.ry * 0.5, hd.rx * 1.8);
+      case 'face': return box(hx, hy - 4, hd.rx * 2.15);
+      case 'hat': return box(hx, hy - hd.ry * 0.42, hd.ry * 2.9);
+      case 'hair': case 'hairColor': case 'skin': return box(hx, hy + hd.ry * 0.05, Math.max(hd.rx, hd.ry) * 2.75);
+      case 'top': case 'over': {
+        // Chin to a little below the hips, arms and sleeves included.
+        const y0 = sk.hipY + sk.chin[1] - 16, y1 = sk.hipY + 34;
+        return box(0, (y0 + y1) / 2, Math.max(y1 - y0, (sk.shoulder[0] + sk.armR * 2 + 34) * 2));
+      }
+      case 'belt': {
+        // The waist with the pouches and the hands beside them.
+        const y0 = sk.hipY - sk.legR * 2 - 20, y1 = sk.hipY + sk.legR * 3 + 12;
+        return box(0, (y0 + y1) / 2, Math.max(y1 - y0, (sk.halfW + sk.handR) * 2 + 24));
+      }
+      case 'hands': {
+        // One hand (the right one, the glove's authored side) and its cuff.
+        const [x, y] = res.anchors.handR;
+        return box(x, y - sk.handR * 0.9, sk.handR * 5.2);
+      }
+      case 'bottom': { const top = sk.hipY - sk.legR * 2.5; return box(0, top / 2 + 10, Math.max(-top + 40, sk.halfW * 2 + 60)); }
+      case 'shoes': { const knee = sk.hipY + sk.thigh; return box(0, knee / 2 + 6, Math.max(-knee + 50, sk.hip[0] * 2 + 120)); }
+      case 'back': { const h = sk.height; return box(0, -h * 0.5, h * 1.08); }
+      default: { const h = rig.bodies.adult.skeleton.height; return box(0, -h * 0.5, h * 1.1); }   // body: all at one scale, so sizes compare
+    }
   }
+  /** Grow the short side of a crop [x, y, w, h] about its centre so it fits the square button. */
+  const square = ([x, y, w, h]) => { const d = Math.max(w, h); return [x - (d - w) / 2, y - (d - h) / 2, d, d]; };
   const optEls = [];
   function renderOptions() {
     const d = draft();
@@ -307,8 +349,11 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
       const x = OPT.x[i % 3], y = OPT.y0 + Math.floor(i / 3) * OPT.dy;
       const spec = specFor(tab, value, look);
       const res = renderCharacter(rig, spec, { pose: 'stand', expr: 'happy', shadow: false });
-      const vb = cropFor(tab, spec, res).map((n) => Math.round(n));
-      const thumb = `<svg class="mk-thumb" xmlns="${SVGNS}" viewBox="${vb.join(' ')}" preserveAspectRatio="xMidYMid meet" overflow="hidden">${res.svg}</svg>`;
+      const vb = square(cropFor(tab, spec, res)).map((n) => Math.round(n));
+      // A picture, not live SVG: one <img> node instead of ~100 per thumbnail
+      // (a tab has up to 21), and the page's style recalcs never touch it.
+      const svg = svgWrap(rig, res, { viewBox: vb, clip: true, scale: THUMB_PX / Math.max(vb[2], vb[3]) });
+      const thumb = `<img class="mk-thumb" alt="" draggable="false" decoding="async" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}">`;
       const el = button('mk-opt', x, y, OPT.d, '#fff', thumb, { mkOpt: String(i) }, (b) => choose(value, b));
       el.classList.toggle('is-on', isChosen(tab, value, look.props, look.worn));
       optEls.push(el);
@@ -405,18 +450,35 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
   }
 
   // ---- choices ----
+  let offN = 0;
+  /** Where a costume taken off lands: the booth floor beside the stage. */
+  function offSpot() { const p = COSTUME_OFF[offN++ % COSTUME_OFF.length]; return { room: BOOTH_ID, x: p.x, y: p.y }; }
+  /** After ops that took a costume off: it hops from the character to the floor, sparkling. */
+  function costumeHop(ops) {
+    for (const [op, args] of ops) {
+      if (op !== 'detach') continue;
+      stats.costumesOff++;
+      view.animateFrom(args.id, PREVIEW.x, PREVIEW.y - PREVIEW.h * 0.55);
+      later(360, () => {
+        fx.burst('sparkle', args.x, args.y - 60, { count: 8, spread: 90 });
+        sfx.play('sparkle', { pitch: 1.25 });
+      });
+    }
+  }
   function choose(value, el) {
     const d = draft();
     if (!d || busy) return;
     const look = lookOf(d);
-    const ops = chooseOps(rig, d.id, look.props, look.worn, tab, value, () => store.newId());
+    const ops = chooseOps(rig, d.id, look.props, look.worn, tab, value, () => store.newId(), { offTo: look.worn.top ? offSpot() : null });
     tween.squish(el.firstChild, { amount: 0.6 });
     if (!ops.length) { sfx.play('tap'); wiggle(); return; }
     stats.changes++;
     touch(d);
     run(ops);
+    costumeHop(ops);
     sfx.play(isRemovableCat(tab) || ['top', 'bottom', 'shoes'].includes(tab) ? 'sparkle' : 'plink', { pitch: 0.9 + random() * 0.3 });
-    fx.burst('sparkle', PREVIEW.x, PREVIEW.y - PREVIEW.h * (tab === 'shoes' || tab === 'bottom' ? 0.2 : 0.7), { count: 6, spread: 90 });
+    const at = tab === 'shoes' || tab === 'bottom' ? 0.2 : tab === 'belt' || tab === 'hands' ? 0.4 : 0.7;
+    fx.burst('sparkle', PREVIEW.x, PREVIEW.y - PREVIEW.h * at, { count: 6, spread: 90 });
     wiggle();
   }
   function shuffle(el) {
@@ -427,7 +489,9 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
     sfx.play('boing', { pitch: 1.2 });
     const look = lookOf(d);
     touch(d);
-    run(lookOps(d.id, look.props, look.worn, randomLook(rig, random), () => store.newId()));
+    const ops = lookOps(d.id, look.props, look.worn, randomLook(rig, random), () => store.newId(), { offTo: look.worn.top ? offSpot() : null });
+    run(ops);
+    costumeHop(ops);
     fx.burst('sparkle', PREVIEW.x, PREVIEW.y - PREVIEW.h * 0.5, { count: 10, spread: 160 });
     giggle();
   }

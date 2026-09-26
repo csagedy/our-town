@@ -76,7 +76,9 @@ export function css(k = 1) {
 .hat{fill:var(--hat)}.hat-sh{fill:var(--hat-sh)}.hat-2{fill:var(--hat-2)}
 .back{fill:var(--back)}.back-sh{fill:var(--back-sh)}.back-2{fill:var(--back-2)}
 .over{fill:var(--over)}.over-sh{fill:var(--over-sh)}.over-2{fill:var(--over-2)}
-.face{fill:var(--face)}.face-sh{fill:var(--face-sh)}`;
+.face{fill:var(--face)}.face-sh{fill:var(--face-sh)}
+.belt{fill:var(--belt)}.belt-sh{fill:var(--belt-sh)}.belt-2{fill:var(--belt-2)}
+.hands{fill:var(--hands)}.hands-sh{fill:var(--hands-sh)}.hands-2{fill:var(--hands-2)}`;
 }
 
 /** Scale every inline stroke-width in authored SVG text by k (see css()). */

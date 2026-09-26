@@ -257,6 +257,9 @@ body {
 .art-img img { display: block; width: 100%; height: 100%; }
 /* A tile that is not loaded (engine/tiles.js) shows nothing, not a broken image. */
 .art-img img:not([src]), .art-piece img:not([src]) { visibility: hidden; }
+/* Cafe layer tiles are pure picture: a touch goes through their transparent
+   parts to whatever is behind (hit testing, src/engine/input.js). */
+.art-tile { pointer-events: none; }
 /* Cafe state pieces (src/scenes/cafe.js): the body squishes/swings about its pivot. */
 .art-piece .piece-body { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
 .art-piece img { display: block; width: 100%; height: 100%; }

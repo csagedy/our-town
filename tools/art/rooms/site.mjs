@@ -691,7 +691,7 @@ export const ROOM = {
   ],
   seats: [
     { id: 'excavator-cab', layer: 'mid', at: [EX.x0 + 86, MB - 110] },
-    { id: 'crane-cab', layer: 'front', at: [TC.x + 90, TC.cabY + 96] },
+    { id: 'crane-cab', layer: 'front', at: [TC.x + 86, TC.cabY - 4] },
     { id: 'truck-cab', layer: 'mid', at: [TR.x0 + 80, MB - 110] },
     { id: 'wreck-cab', layer: 'mid', at: [WR.x0 + 102, MB - 110] },
     { id: 'bench-1', layer: 'front', at: [BENCHSEAT.x0 + 80, BENCHSEAT.y - 8] }, { id: 'bench-2', layer: 'front', at: [BENCHSEAT.x1 - 80, BENCHSEAT.y - 8] },

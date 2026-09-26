@@ -353,6 +353,36 @@
       "label": "Fairy Wings",
       "home": { "room": "theater/closet" }
     },
+    "tool-belt": {
+      "art": { "sprite": "tool-belt" },
+      "ph": { "shape": "flat", "fill": "#C39068" },
+      "size": [90, 42],
+      "tags": ["wear", "wearable:belt", "construction"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Tool Belt",
+      "home": { "room": "construction/yard" }
+    },
+    "gloves": {
+      "art": { "sprite": "gloves" },
+      "ph": { "shape": "blob", "fill": "#F4DC98" },
+      "size": [80, 60],
+      "tags": ["wear", "wearable:hands", "construction"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Work Gloves",
+      "home": { "room": "construction/yard" }
+    },
+    "hero-suit": {
+      "art": { "sprite": "hero-suit", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#8CBDB8" },
+      "size": [110, 100],
+      "tags": ["wear", "wearable:top", "hero"],
+      "sounds": { "tap": "plink", "drop": "tap" },
+      "behaviors": [],
+      "label": "Hero Suit",
+      "home": { "room": "theater/closet" }
+    },
     "tray": {
       "ph": { "shape": "flat", "fill": "#e9c46a" },
       "size": [176, 24],

@@ -401,16 +401,108 @@ Object.assign(WEAR, {
   },
 });
 
-export const SLOTS = ['back', 'bottom', 'top', 'over', 'shoes', 'face', 'hat'];
+// ---------------------------------------------------------------------------
+// P2c: the construction site's wearables (props/site.mjs `wear`): a tool
+// belt (new slot `belt`: worn at the waist, over the top AND a vest or
+// apron), work gloves (new slot `hands`: a mitten over each hand plus a cuff
+// on the forearm, so they follow the 2-segment arms in every pose) and the
+// hero suit (a `top`, but a costume: dropped on a character it is a worn
+// child that covers its own top until it is pulled off; docs/rig.md 4).
+// ---------------------------------------------------------------------------
+const HAZ = '#EE9A55';
+Object.assign(WEAR, {
+  'tool-belt': {
+    slot: 'belt', label: 'tool belt', colors: { belt: P.wood, 'belt-sh': P.woodDeep, 'belt-2': P.mustard },
+    gen: (b) => {
+      const { h, T } = tee(b);
+      const k = Math.min(1.15, T.bw / 58), w = T.bw + 4, bh = f(14 * k + 2), y0 = f(h - bh + 2);
+      const pw = f(15 * k), px = f(T.bw - pw - 2), ph = f(30 * k + 6), py = f(y0 + bh - 4);
+      const pouch = (s) => {
+        const x = s * px;
+        return `<path class="belt" d="M${f(x - pw)} ${py} L${f(x + pw)} ${py} L${f(x + pw - 2)} ${f(py + ph - 8)} Q${f(x + pw - 2)} ${f(py + ph)} ${f(x + pw - 10)} ${f(py + ph)} L${f(x - pw + 10)} ${f(py + ph)} Q${f(x - pw + 2)} ${f(py + ph)} ${f(x - pw + 2)} ${f(py + ph - 8)}Z"/>`
+          + `<path class="d" d="M${f(x - pw + 5)} ${f(py + ph * .38)} L${f(x + pw - 5)} ${f(py + ph * .38)}"/>`;
+      };
+      // a hammer in the screen-left pouch, a wrench in the right one (fixed toy colours)
+      const hx = -px - pw * .3, wx = px + pw * .3, top = f(py - 26 * k);
+      const hammer = `<rect fill="${P.woodDark}" x="${f(hx - 4 * k)}" y="${top}" width="${f(8 * k)}" height="${f(py - top + 4)}" rx="3"/>`
+        + `<rect fill="${P.steelDeep}" x="${f(hx - 13 * k)}" y="${f(top - 9 * k)}" width="${f(24 * k)}" height="${f(11 * k)}" rx="3"/>`;
+      const wrench = `<rect fill="${P.steel}" x="${f(wx - 4 * k)}" y="${f(top + 4)}" width="${f(8 * k)}" height="${f(py - top)}" rx="3"/>`
+        + `<path fill="${P.steel}" d="M${f(wx - 10 * k)} ${f(top + 8)} Q${f(wx - 12 * k)} ${f(top - 8 * k)} ${f(wx - 4 * k)} ${f(top - 9 * k)} L${f(wx - 3 * k)} ${f(top - 1)} L${f(wx + 3 * k)} ${f(top - 1)} L${f(wx + 4 * k)} ${f(top - 9 * k)} Q${f(wx + 12 * k)} ${f(top - 8 * k)} ${f(wx + 10 * k)} ${f(top + 8)}Z"/>`;
+      const bk = f(11 * k + 2);
+      return {
+        torso: hammer + wrench + pouch(-1) + pouch(1)
+          + `<rect class="belt-sh" x="${-w}" y="${y0}" width="${w * 2}" height="${bh}" rx="${f(bh / 2)}"/>`
+          + `<rect class="belt-2 thin" x="${-bk}" y="${f(y0 - 3)}" width="${bk * 2}" height="${f(bh + 6)}" rx="4"/>`
+          + `<rect class="belt-sh thin" x="${f(-bk * .38)}" y="${f(y0 + 2)}" width="${f(bk * .76)}" height="${f(bh - 4)}" rx="2"/>`
+          + `<rect class="n" fill="${P.berry}" x="${f(-px + pw * .15)}" y="${f(py + ph * .52)}" width="${f(pw * .55)}" height="${f(ph * .3)}" rx="3"/>`,
+      };
+    },
+  },
+  gloves: {
+    slot: 'hands', label: 'work gloves', colors: { hands: P.butter, 'hands-sh': P.mustardDeep, 'hands-2': HAZ },
+    gen: (b) => {
+      // hand frame (origin = hand centre, authored for the right hand: the
+      // thumb faces the body at -x), plus a flared cuff in the forearm frame.
+      const r = b.handR + 2, L = b.lower, a = b.armR;
+      const cuff = `<path class="hands-2" d="M${-a - 1} ${f(L - r - 14)} L${a + 1} ${f(L - r - 14)} L${a + 6} ${f(L - r * .35)} L${-a - 6} ${f(L - r * .35)}Z"/>`
+        + `<path ${tl('var(--hands-sh)', 'stroke-width:3.5')} d="M${-a + 1} ${f(L - r - 6)} L${a - 1} ${f(L - r - 6)}"/>`;
+      return {
+        hand: `<circle class="hands" cx="0" cy="0" r="${r}"/>`
+          + `<path class="hands" d="M${f(-r * .62)} ${f(-r * .48)} Q${f(-r * 1.32)} ${f(-r * .2)} ${f(-r * 1.02)} ${f(r * .42)} Q${f(-r * .72)} ${f(r * .72)} ${f(-r * .38)} ${f(r * .3)}Z"/>`
+          + `<path ${tl('var(--hands-sh)', 'stroke-width:3.5')} d="M${f(-r * .1)} ${f(r * .42)} Q${f(r * .25)} ${f(r * .58)} ${f(r * .58)} ${f(r * .36)}"/>`,
+        cuff,
+      };
+    },
+  },
+  'hero-suit': {
+    slot: 'top', label: 'hero suit', costume: true, colors: { top: P.teal, 'top-sh': P.tealDeep, 'top-2': HAZ },
+    gen: (b) => {
+      // Original design (no web or spider): a teal top, orange side panels
+      // and sleeves with teal cuffs, an orange disc with a butter star, and
+      // tealDeep swirl tone lines.
+      const { t, h: h0, T } = tee(b);
+      const h = h0 + 4, bw = T.bw + 2, sw = T.tw + (bw - T.tw) * 0.18 + 14;
+      const k = T.tw / 44;
+      const y0 = t + 18, y1 = h - 12;
+      const edge = (y) => sw + (bw - sw) * (y - y0) / (y1 - y0);   // the torso's side edge
+      const pw = f(bw * .3), ys = f(t + 30);
+      const panel = (s) => `<path class="top-2 n" d="M${f(s * edge(ys))} ${ys} L${f(s * bw)} ${y1} Q${f(s * bw)} ${h} ${f(s * (bw - 12))} ${h} L${f(s * (bw - 12 - pw * .5))} ${h} L${f(s * (edge(ys) - pw))} ${f(ys + 6)}Z"/>`;
+      const body = torsoPath(t, h, T.tw, bw);
+      const cy = f(t + (h - t) * .4), R = f(Math.min(22, T.tw * .5));
+      let sw2 = '';
+      for (const [x, y, r] of [[-.56, .2, 8.5], [.58, .18, 7.5], [-.5, .74, 8], [.46, .8, 9]]) {
+        const X = f(x * T.tw), Y = f(t + (h - t) * y), rr = f(r * k);
+        sw2 += `M${f(X + rr)} ${Y} A${rr} ${rr} 0 1 0 ${X} ${f(Y + rr)} A${f(rr * .6)} ${f(rr * .6)} 0 1 1 ${f(X + rr * .5)} ${f(Y - rr * .2)}`;
+      }
+      const arm = sleeveLong(b, 'top-2', 'top');
+      const r = b.armR + 5;
+      arm.upper += `<path ${tl('var(--top-sh)', 'stroke-width:3.5')} d="M${-r + 4} ${f(b.upper * .55)} Q0 ${f(b.upper * .55 + 6)} ${r - 4} ${f(b.upper * .55)}"/>`;
+      return {
+        torso: `<path class="top" d="${body}"/>` + panel(-1) + panel(1)
+          + `<path class="top-sh n" d="M${-bw + 1} ${h - 11} L${bw - 1} ${h - 11} L${bw - 1} ${h - 10} Q${bw - 1} ${h - 1} ${bw - 11} ${h - 1} L${-bw + 11} ${h - 1} Q${-bw + 1} ${h - 1} ${-bw + 1} ${h - 10}Z"/>`
+          + `<path ${tl('var(--top-sh)', 'stroke-width:4')} d="${sw2}"/>`
+          + `<path fill="none" d="${body}"/><path class="d" d="M${-bw + 4} ${h - 11} L${bw - 4} ${h - 11}"/>`
+          + `<path class="d" d="M-16 ${t} Q0 ${t + 14} 16 ${t}"/>`
+          + `<circle class="top-2" cx="0" cy="${cy}" r="${R}"/><path class="thin" fill="${P.butter}" d="${star(0, cy, f(R * .72), f(R * .32))}"/>`,
+        arm,
+      };
+    },
+  },
+});
+
+export const SLOTS = ['back', 'bottom', 'top', 'over', 'belt', 'shoes', 'hands', 'face', 'hat'];
 /** Pieces per slot in the Character Maker's order. */
 export const WEAR_ORDER = {
-  top: ['tee-star', 'tee-stripe', 'tee-dots', 'hoodie', 'cardigan', 'chef-coat', 'sparkle-top'],
+  top: ['tee-star', 'tee-stripe', 'tee-dots', 'hoodie', 'cardigan', 'chef-coat', 'sparkle-top', 'hero-suit'],
   bottom: ['pants', 'leggings', 'shorts', 'skirt', 'tutu'],
   shoes: ['sneakers', 'boots', 'sandals'],
   hat: [null, 'headband', 'bow', 'beanie', 'cap', 'hijab', 'crown', 'chef-hat', 'hard-hat'],
   face: [null, 'glasses', 'square-glasses', 'sunglasses', 'hero-mask'],
   over: [null, 'apron', 'safety-vest'],
   back: [null, 'towel-cape', 'hero-cape', 'wings'],
+  // No booth tabs yet (src/scenes/booth.js); worn children like hat/face/over/back.
+  belt: [null, 'tool-belt'],
+  hands: [null, 'gloves'],
 };
 
 // Colour choices per slot variable prefix: tapping the chosen piece again in
@@ -426,4 +518,6 @@ export const OUTFIT_COLORS = {
   face: [C3('charDeep', 'char', 'white'), C3('plum', 'plumDeep', 'white'), C3('berry', '#B9575B', 'white'), C3('teal', 'tealDeep', 'white')],
   over: [C3('rose', 'roseDeep', 'cream'), C3('butter', 'mustard', 'white'), C3('sage', 'sageDeep', 'cream'), C3('#EE9A55', 'terraDeep', 'cream'), C3('blue', 'blueDeep', 'cream')],
   back: [C3('terra', 'terraDeep', 'cream'), C3('berry', '#B9575B', 'butter'), C3('lav', 'sky', 'white'), C3('teal', 'tealDeep', 'butter'), C3('mustard', 'mustardDeep', 'cream')],
+  belt: [C3('wood', 'woodDeep', 'mustard'), C3('woodDark', 'woodDeep', 'steel'), C3('terra', 'terraDeep', 'butter'), C3('sage', 'sageDeep', 'mustard')],
+  hands: [C3('butter', 'mustardDeep', '#EE9A55'), C3('#EE9A55', 'terraDeep', 'butter'), C3('sky', 'blueDeep', 'blue'), C3('rose', 'roseDeep', 'berry'), C3('sage', 'sageDeep', 'leaf')],
 };

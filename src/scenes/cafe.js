@@ -82,7 +82,7 @@ export function cafeRoom(m, { tiled = true, cameraX = 0 } = {}) {
     if (tiled && L.tiles && L.tiles.length) {
       L.tiles.forEach((t, i) => {
         const id = `${L.id}-${i}`;
-        art.push({ id, layer, depth, x: t.x, y: t.y, w: t.w, h: t.h, cls: 'art-img', html: img(null) });
+        art.push({ id, layer, depth, x: t.x, y: t.y, w: t.w, h: t.h, cls: 'art-img art-tile', html: img(null) });
         tiles.push({ id, file: t.file, x: t.x, w: t.w, px: t.px });
       });
     } else {
@@ -201,26 +201,27 @@ export const HOTSPOTS = [
 // kitchen, dishes on the cup shelves and the sideboard, food on the counter
 // and at the customers' tables.
 export const CAFE_ITEMS = [
-  ['pan', 'stovetop', 973], ['saucepan', 'stovetop', 1088],
+  ['pan', 'island-top', 610], ['saucepan', 'island-shelf', 810],
   ['knife', 'cutting-board', 846], ['mixing-bowl', 'island-top', 720], ['egg', 'island-top', 790],
-  ['tomato', 'counter-sink', 612], ['baking-tray', 'counter-right', 1318],
+  ['tomato', 'counter-sink', 612], ['baking-tray', 'island-shelf', 700],
   ['whisk', 'window-sill', 640], ['spatula', 'window-sill', 770], ['garnish-shaker', 'window-sill', 705, null, { flavor: 'herbs' }],
   ['mug', 'cup-shelf-1', 1784], ['cafe-cup', 'cup-shelf-1', 1834], ['glass', 'cup-shelf-1', 1884],
   ['bowl', 'cup-shelf-2', 1794], ['plate', 'cup-shelf-2', 1866],
+  ['banana', 'order-counter', 1450], ['apple', 'order-counter', 1508],
   ['cupcake', 'order-counter', 1560], ['cookies', 'order-counter', 1616],
-  ['tray', 'sideboard', 2320], ['sauce-bottle', 'sideboard', 2420, null, { flavor: 'tomato' }], ['plate', 'sideboard', 2500],
+  ['tray', 'sideboard', 2320], ['sauce-bottle', 'sideboard', 2410, null, { flavor: 'tomato' }], ['cookie-jar', 'sideboard', 2490],
   ['burger', 'table-1', 2300], ['sundae', 'table-2', 2560],
   ['mystery-dish', 'table-3', 2786, null, { color: 'green', eyes: 'googly', mouth: 'grin', topper: 'cherry' }],
 ];
-// The kitchen cast (the four starter characters): two at work, two customers.
+// The kitchen cast (the four starter characters): two in the kitchen, two customers.
 export const CAFE_CAST = [
   { cast: 'girl9', x: 1240, y: 930 },
-  { cast: 'grownup', x: 1610, y: 777 },
+  { cast: 'grownup', seat: 'island-stool-2' },
   { cast: 'grandpa', seat: 'window-seat-1' },
   { cast: 'boy5', seat: 'table-1-chair-l' },
 ];
-// The cook (the first of CAFE_CAST) wears the chef hat.
-export const CAFE_CAST_WEAR = [{ kind: 'chef-hat', slot: 'wear-hat' }];
+// The grown-up at the island (CAFE_CAST[1]) is the chef: the chef hat.
+export const CAFE_CAST_WEAR = [{ cast: 1, kind: 'chef-hat', slot: 'wear-hat' }];
 
 /** Spawn the stock and the loose things (store ops). room: the normalized room def (all surfaces). */
 export function seedCafe(store, room, catalog = null) {
@@ -276,6 +277,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   const room = mountRoom(stage, def);
   const fx = createFx(room.fxLayer);
   const allSurfaces = room.def.surfaces.slice();
+  const counterKey = (m.layers.find((L) => L.id === 'counter') || { baseline: 724 }).baseline + 0.5;
   const inside = insideSurfaces(m);
 
   // ---- tiles ----
@@ -329,12 +331,32 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
   const hooks = Object.assign({}, base, {
     // Painted stock (pantry, stacks, tubs): the art is in the room layer.
     spriteOf: (e) => (catalog.hasTag(e.kind, 'hotspot') ? hotSprite(e.kind) : (base.spriteOf ? base.spriteOf(e) : null)),
+    // A hot spot over painted stock that stands on no surface (the ice-cream
+    // tubs in the display, the pantry's floor baskets) sorts just in front of
+    // the counter layer, so a touch on its painted art reaches it; pieces in
+    // front (the register, the bell) still win where they cover it.
+    sortKeyOf(e) {
+      const k = base.sortKeyOf ? base.sortKeyOf(e) : null;
+      if (k != null || !catalog.hasTag(e.kind, 'hotspot')) return k;
+      return allSurfaces.some((s) => Math.abs(e.y - s.y) < ON_EPS && e.x >= s.x0 - EDGE_TOL && e.x <= s.x1 + EDGE_TOL) ? null : Math.max(e.y, counterKey);
+    },
     onRender(e, ctx) {
       if (base.onRender) base.onRender(e, ctx);
       applyHidden(e, ctx.el);
     },
     dropTarget: (item, other) => !hidden.has(other.id) && !(other.parent && shutIn(other)) && (base.dropTarget ? base.dropTarget(item, other) : false),
   });
+  // Pieces take touches (registered before the entity views, so where a
+  // padded hit box is a tie the thing in front of the fixture wins).
+  const pieces = new Map();          // id -> {el, body, img, shown, gen}
+  for (const pid of Object.keys(m.pieces || {})) {
+    const el = room.art.get('piece:' + pid);
+    if (!el) continue;
+    el.dataset.piece = pid;
+    const rec = { el, body: el.firstChild, img: el.querySelector('img'), shown: null, gen: 0 };
+    pieces.set(pid, rec);
+    input.register(el, { onTap: () => tapPiece(pid), pan: true });
+  }
   const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: hooks, labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
@@ -350,16 +372,19 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
         if (r.x !== e.x || r.y !== e.y) store.dispatch('move', { id: e.id, room: CAFE_ID, x: Math.round(r.x), y: r.y, z: e.z || 0 });
       }
       seedCafe(store, { ...room.def, surfaces: allSurfaces }, catalog);
+      // P1.14's first backpack (carry.js puts one in the cafe if the town has
+      // none): here, on the kitchen counter by the pillar, clear of the pocket tray.
+      const hasBag = Object.keys(store.state.entities).some((id) => store.state.entities[id].kind === 'backpack' && getEntity(store.state, id));
+      if (!hasBag) store.dispatch('spawn', { id: store.newId(), kind: 'backpack', room: CAFE_ID, x: 1310, y: 504 });
       if (chars && !here.some((e) => e.kind === CHAR_KIND)) {
         const ids = seedCharacters(store, chars.rig, { room: CAFE_ID, seats: chars.seats, placements: CAFE_CAST });
-        if (ids[0]) for (const w of CAFE_CAST_WEAR) store.dispatch('spawn', { id: store.newId(), kind: w.kind, parent: ids[0], slot: w.slot });
+        for (const w of CAFE_CAST_WEAR) if (ids[w.cast]) store.dispatch('spawn', { id: store.newId(), kind: w.kind, parent: ids[w.cast], slot: w.slot });
       }
     }
   }
   firstVisit = false;
 
   // ---- pieces ----
-  const pieces = new Map();          // id -> {el, body, img, shown, gen}
   const overrides = new Map();       // id -> variant shown for a moment (a bell press)
   const timers = new Set();
   const stats = { taps: {}, swaps: 0 };
@@ -441,14 +466,6 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     }
   }
 
-  for (const pid of Object.keys(m.pieces || {})) {
-    const el = room.art.get('piece:' + pid);
-    if (!el) continue;
-    el.dataset.piece = pid;
-    const rec = { el, body: el.firstChild, img: el.querySelector('img'), shown: null, gen: 0 };
-    pieces.set(pid, rec);
-    input.register(el, { onTap: () => tapPiece(pid), pan: true });
-  }
   applyInside();
   renderPieces();
   view.refresh();

@@ -17,8 +17,9 @@
 //
 // Children (attach op, slot):
 //   'hand-l' / 'hand-r'   a held item (any kind); L and R are SCREEN sides (docs/rig.md)
-//   'wear-<slot>'         a worn piece whose kind is a rig wear piece: hat, face, over, back
-//                         (a hat, glasses, an apron, a cape: drop one on, drag it off)
+//   'wear-<slot>'         a worn piece whose kind is a rig wear piece: hat, face, over, back,
+//                         belt, hands, or a costume top (the hero suit, over its own top)
+//                         (a hat, glasses, an apron, a cape, gloves: drop one on, drag it off)
 //
 // So what a character holds and wears travels with it (travel moves
 // children) and is saved and shared like everything else.
@@ -28,7 +29,9 @@ import { poseFrames, applyMatrix } from './rig-svg.js';
 export const CHAR_KIND = 'char';
 export const HANDS = { L: 'hand-l', R: 'hand-r' };
 export const SIDE_OF = { 'hand-l': 'L', 'hand-r': 'R' };
-export const REMOVABLE = ['hat', 'face', 'over', 'back'];   // wear slots that are entities
+export const REMOVABLE = ['hat', 'face', 'over', 'back'];   // wear slots that are entities (the Character Maker's worn tabs)
+// Also worn as entities, with no Maker tab yet: the tool belt and gloves (P2c).
+export const WORN = REMOVABLE.concat(['belt', 'hands']);
 export const BASE_WEAR = ['top', 'bottom', 'shoes'];         // clothes drawn from props.wear
 export const wearSlotName = (slot) => 'wear-' + slot;
 export const REACTIONS = ['giggle', 'wave', 'jump', 'happy'];
@@ -37,11 +40,17 @@ export const PHRASES = ['Hi!', 'Yay!', 'Hello, friend!', 'Let’s play!', 'I’m
 const APPEARANCE = ['body', 'skin', 'hair', 'facialHair', 'lashes', 'blush', 'freckles', 'eyes', 'brows', 'sock', 'wear', 'colors'];
 const r1 = (v) => Math.round(v * 10) / 10;
 
-/** Is this a wearable piece kind (a rig wear piece in a removable slot)? Returns its slot or null. */
+/**
+ * Is this a wearable piece kind (a rig wear piece in a worn slot, or a
+ * costume top like the hero suit)? Returns its slot or null.
+ */
 export function wearSlotOf(rig, kind) {
   const w = rig && rig.wear && rig.wear[kind];
-  return w && REMOVABLE.includes(w.slot) ? w.slot : null;
+  return w && (WORN.includes(w.slot) || w.costume) ? w.slot : null;
 }
+
+/** The colour variable prefix of a wear slot (docs/rig.md section 4). */
+export const colorKeyOf = (slot) => (slot === 'bottom' ? 'bot' : slot === 'shoes' ? 'shoe' : slot);
 
 /**
  * Props for a character from a cast spec, plus the removable pieces it
@@ -54,7 +63,7 @@ export function castProps(rig, castId) {
   const colors = Object.assign({}, c.colors || {});
   for (const slot of Object.keys(c.wear || {})) {
     const kind = c.wear[slot];
-    if (!REMOVABLE.includes(slot)) { wear[slot] = kind; continue; }
+    if (!WORN.includes(slot)) { wear[slot] = kind; continue; }
     // This piece's colour overrides go with it (--over, --over-sh, ...).
     const own = {};
     for (const k of Object.keys(colors)) if (k === slot || k.indexOf(slot + '-') === 0) { own[k] = colors[k]; delete colors[k]; }
@@ -93,6 +102,10 @@ export function specOf(props, worn = {}) {
   const colors = Object.assign({}, props.colors || {});
   for (const slot of Object.keys(worn)) {
     wear[slot] = worn[slot].kind;
+    // A worn piece brings its own colours: drop the character's overrides for
+    // that slot (a hero suit over a blue tee stays teal).
+    const key = colorKeyOf(slot);
+    for (const k of Object.keys(colors)) if (k === key || k.indexOf(key + '-') === 0) delete colors[k];
     Object.assign(colors, (worn[slot].props && worn[slot].props.colors) || {});
   }
   return {

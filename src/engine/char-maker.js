@@ -10,22 +10,42 @@
 // Categories (the tabs, in order). Each has options (the picture buttons):
 //   body skin hair hairColor eyes brows facial cheeks   -> props (set ops)
 //   top bottom shoes                                    -> props.wear (set op)
-//   hat face over back                                  -> a worn child entity (spawn / remove)
+//   hat face over belt hands back                       -> a worn child entity (spawn / remove)
 // Tapping the option that is already chosen for an outfit slot steps its
 // colour instead (rig.maker.outfitColors).
+//
+// A costume top (the hero suit, rig.wear[kind].costume) dropped onto a
+// character is a worn child in slot wear-top that covers props.wear.top.
+// On the top tab it is the chosen option (tapping it steps its colour);
+// picking any other top takes the costume off (bead mhf.20): it is detached
+// onto the floor when the caller gives a spot (opts.offTo), else removed.
+// Shuffle takes it off the same way.
 
-import { REMOVABLE, wearSlotName } from './char-model.js';
+import { WORN, wearSlotName } from './char-model.js';
 
 export const MIRROR_ROOM = 'booth/mirror';
-export const CATEGORIES = ['body', 'skin', 'hair', 'hairColor', 'eyes', 'brows', 'facial', 'cheeks', 'hat', 'face', 'top', 'over', 'bottom', 'shoes', 'back'];
+export const CATEGORIES = ['body', 'skin', 'hair', 'hairColor', 'eyes', 'brows', 'facial', 'cheeks', 'hat', 'face', 'top', 'over', 'belt', 'hands', 'bottom', 'shoes', 'back'];
 /** Colour variable prefix per wear slot (docs/rig.md section 4). */
-export const COLOR_KEY = { top: 'top', bottom: 'bot', shoes: 'shoe', hat: 'hat', face: 'face', over: 'over', back: 'back' };
-const WEAR_CATS = ['top', 'bottom', 'shoes', 'hat', 'face', 'over', 'back'];
+export const COLOR_KEY = { top: 'top', bottom: 'bot', shoes: 'shoe', hat: 'hat', face: 'face', over: 'over', belt: 'belt', hands: 'hands', back: 'back' };
+const WEAR_CATS = ['top', 'bottom', 'shoes', 'hat', 'face', 'over', 'belt', 'hands', 'back'];
+/** Worn-child slots the Maker has tabs for (all of char-model WORN, incl. the P2c belt and gloves). */
+export const MAKER_WORN = WORN.slice();
 const EYES = [null, 'big', 'small', 'almond'];
 const CHEEKS = [{ blush: false, freckles: false }, { blush: true, freckles: false }, { blush: false, freckles: true }, { blush: true, freckles: true }];
 
 export const isWearCat = (cat) => WEAR_CATS.includes(cat);
-export const isRemovableCat = (cat) => REMOVABLE.includes(cat);
+export const isRemovableCat = (cat) => MAKER_WORN.includes(cat);
+
+/**
+ * Ops that take a worn costume top off (none if there is none): detached to
+ * offTo = {room, x, y} (it lands on the floor), or removed without one. Pure.
+ */
+export function costumeOffOps(worn, offTo) {
+  const c = worn && worn.top;
+  if (!c) return [];
+  if (offTo) return [['detach', { id: c.id, room: offTo.room, x: offTo.x, y: offTo.y, z: 0 }]];
+  return [['remove', { id: c.id, hard: true }]];
+}
 
 /** The option values of a category, in button order. Pure. */
 export function optionsOf(rig, cat) {
@@ -43,6 +63,29 @@ export function optionsOf(rig, cat) {
   }
 }
 
+/**
+ * Worn slots an option thumbnail leaves off, per tab, so the thing being
+ * chosen is not covered (a hat over the hair, a mask over the eyes, an apron
+ * over the top). Thumbnails only: the real character keeps everything.
+ */
+export const THUMB_HIDE = {
+  hair: ['hat', 'back'], hairColor: ['hat', 'back'],
+  eyes: ['face', 'hat'], brows: ['face', 'hat'], cheeks: ['face'], facial: ['face'],
+  face: [], hat: [],
+  top: ['over', 'back', 'belt'], over: ['back', 'belt'], bottom: ['over', 'back', 'belt'], shoes: [],
+  belt: ['back'], hands: ['back'],
+  body: [], skin: ['face'], back: [],
+};
+
+/** A render spec (char-model specOf) for the thumbnails of `cat`: occluding wear taken off. Pure. */
+export function thumbSpec(spec, cat) {
+  const hide = THUMB_HIDE[cat] || [];
+  if (!hide.length) return spec;
+  const wear = Object.assign({}, spec.wear || {});
+  for (const slot of hide) delete wear[slot];
+  return Object.assign({}, spec, { wear });
+}
+
 /** Is `value` the current choice of `cat` for this look (props + worn {slot: entity})? Pure. */
 export function isChosen(cat, value, props, worn = {}) {
   switch (cat) {
@@ -54,6 +97,10 @@ export function isChosen(cat, value, props, worn = {}) {
     case 'brows': return (props.brows || null) === value;
     case 'facial': return (props.facialHair || 'none') === value;
     case 'cheeks': return !!props.blush === value.blush && !!props.freckles === value.freckles;
+    case 'top':
+      // A costume worn over the top is what shows, so it is the chosen one.
+      if (worn.top) return worn.top.kind === value;
+      return ((props.wear || {}).top || null) === value;
     default:
       if (isRemovableCat(cat)) return ((worn[cat] && worn[cat].kind) || null) === value;
       return ((props.wear || {})[cat] || null) === value;
@@ -125,8 +172,8 @@ export function randomLook(rig, random = Math.random) {
     sock: '#FBF3E8', wear, colors, expr: 'happy', pose: 'stand', seat: null, raise: null, taps: 0,
   };
   const pieces = [];
-  const chance = { hat: 0.45, face: 0.25, over: 0.15, back: 0.2 };
-  for (const slot of REMOVABLE) {
+  const chance = { hat: 0.45, face: 0.25, over: 0.15, back: 0.2, belt: 0.1, hands: 0.12 };
+  for (const slot of MAKER_WORN) {
     if (random() >= chance[slot]) continue;
     const kind = pick(m.wear[slot].filter(Boolean));
     pieces.push({ kind, slot, colors: slotColors(rig, slot, Math.floor(random() * 99)) });
@@ -140,17 +187,18 @@ export const LOOK_KEYS = ['body', 'skin', 'hair', 'lashes', 'blush', 'freckles',
 /**
  * Store ops (as [op, args] pairs) that turn the character `id` (props,
  * worn {slot: entity}) into `look` = {props, pieces}. newId() makes ids for
- * spawned pieces. Pure.
+ * spawned pieces. A worn costume top comes off (costumeOffOps, opts.offTo).
+ * Pure.
  */
-export function lookOps(id, props, worn, look, newId) {
-  const ops = [];
+export function lookOps(id, props, worn, look, newId, opts = {}) {
+  const ops = costumeOffOps(worn, opts.offTo);
   for (const k of LOOK_KEYS) {
     const want = look.props[k] === undefined ? null : look.props[k];
     const have = props[k] === undefined ? null : props[k];
     if (JSON.stringify(want) !== JSON.stringify(have)) ops.push(['set', { id, path: 'props.' + k, value: want }]);
   }
   const bySlot = Object.fromEntries(look.pieces.map((p) => [p.slot, p]));
-  for (const slot of REMOVABLE) {
+  for (const slot of MAKER_WORN) {
     const cur = worn[slot], next = bySlot[slot];
     if (cur && (!next || next.kind !== cur.kind)) ops.push(['remove', { id: cur.id, hard: true }]);
     if (next && (!cur || next.kind !== cur.kind)) {
@@ -165,10 +213,22 @@ export function lookOps(id, props, worn, look, newId) {
 /**
  * Store ops for choosing option `value` of `cat` (a tap on a picture
  * button). Tapping the choice that is already made steps an outfit piece's
- * colour. Returns [[op, args], ...] (empty: nothing to do). Pure.
+ * colour. Picking a top over a worn costume takes the costume off
+ * (costumeOffOps: opts.offTo = {room, x, y} drops it there). Returns
+ * [[op, args], ...] (empty: nothing to do). Pure.
  */
-export function chooseOps(rig, id, props, worn, cat, value, newId) {
+export function chooseOps(rig, id, props, worn, cat, value, newId, opts = {}) {
   const chosen = isChosen(cat, value, props, worn);
+  if (cat === 'top' && worn.top) {
+    const cur = worn.top;
+    if (chosen) {
+      const i = colorIndex(rig, cat, (cur.props && cur.props.colors) || {});
+      return [['set', { id: cur.id, path: 'props.colors', value: slotColors(rig, cat, i + 1) }]];
+    }
+    const ops = costumeOffOps(worn, opts.offTo);
+    if (((props.wear || {}).top || null) !== value) ops.push(['set', { id, path: 'props.wear', value: patchFor(cat, value, props).wear }]);
+    return ops;
+  }
   if (isRemovableCat(cat)) {
     const cur = worn[cat];
     if (chosen) {

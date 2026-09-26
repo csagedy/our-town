@@ -113,7 +113,12 @@
   {
     const exprFor = { stand: 'happy', wave: 'happy', wave2: 'laughing', hold: 'surprised', 'hold-up': 'wheee', cheer: 'laughing', sing: 'singing', sit: 'yum', 'sit-eat': 'yum', 'sit-cross': 'happy', 'walk-a': 'happy', 'walk-b': 'happy', lie: 'sleepy' };
     let h = '';
-    for (const c of rig.characters) {
+    // P2c wearables on every body: hero suit + gloves + tool belt, and a builder look (vest + belt + gloves).
+    const kit = (body, i) => ({ id: 'kit-' + body, body, skin: rig.maker.skins[(i * 3) % rig.maker.skins.length], hair: { style: ['tufts', 'puff', 'ponytail', 'short', 'bun'][i], color: rig.maker.hairColors[i] }, sock: '#FBF3E8',
+      wear: i % 2 ? { top: 'tee-stripe', bottom: 'pants', shoes: 'boots', over: 'safety-vest', belt: 'tool-belt', hands: 'gloves', hat: 'hard-hat' } : { top: 'hero-suit', bottom: 'leggings', shoes: 'sneakers', belt: 'tool-belt', hands: 'gloves', back: 'hero-cape' },
+      colors: i % 2 ? {} : { bot: '#679E9C', 'bot-sh': '#4F8583', back: '#9A7A98', 'back-sh': '#7E6180', 'back-2': '#F4DC98' } });
+    const rows = rig.characters.concat(Object.keys(rig.bodies).map(kit));
+    for (const c of rows) {
       h += '<div class="row base">';
       for (const pose of Object.keys(rig.poses)) {
         const opts = { pose, expr: exprFor[pose] || 'neutral' };

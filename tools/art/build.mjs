@@ -298,7 +298,8 @@ async function screenshotSheet(page, written) {
   };
   // The whole sheet is taller than Chrome can capture at full size, so it is
   // shot with the page itself zoomed out (same picture as a scaled clip).
-  const Z = 0.3;
+  // (capped so the shot stays about 12k device pixels tall: bigger captures crash headless Chrome as the sheet grows)
+  const Z = Math.min(0.3, 6100 / full.h);
   await page.eval((z) => { document.documentElement.style.zoom = String(z); }, Z);
   await shot('contact-sheet', { x: 0, y: 0, width: Math.floor(full.w * Z), height: Math.floor(full.h * Z) }, 1);
   await page.eval(() => { document.documentElement.style.zoom = ''; });

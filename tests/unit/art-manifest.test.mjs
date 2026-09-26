@@ -146,3 +146,54 @@ test('cafe food: 30+ ingredients with prep variants, 12+ dishes with bites, the 
   for (const col of c.mystery.colors) assert.ok(manifest.props[c.mystery.base].variants[col], `mystery colour ${col}`);
   for (const id of Object.values(c.cookware)) assert.ok(manifest.props[id], `cookware ${id}`);
 });
+
+test('the construction site strip: pieces, rigs, stations, spawners, snap-ready building pieces (P2c.1)', () => {
+  const site = manifest.rooms.site;
+  assert.ok(site, 'rooms.site');
+  assert.ok(site.width >= 2400 && site.width <= 3200, `site strip width ${site.width}`);
+  assert.deepEqual(site.layers.map((L) => L.id), ['back', 'counter', 'mid', 'front']);
+  const layerIds = new Set(site.layers.map((L) => L.id));
+  for (const [id, pc] of Object.entries(site.pieces)) {
+    assert.ok(layerIds.has(pc.layer), `${id}: layer`);
+    assert.ok([pc.x, pc.y, pc.w, pc.h].every(isNum) && pc.variants[pc.default], `${id}: box and default`);
+    for (const v of Object.values(pc.variants)) checkFile(v.file, v.bytes);
+    for (const t of pc.taps || []) assert.ok(pc.variants[t], `${id}: tap variant ${t}`);
+  }
+  for (const id of ['dirt', 'potty-door', 'crane-cab', 'crane-jib', 'crane-trolley', 'crane-cable', 'crane-hook', 'crane-lever', 'wreck-boom', 'wreck-chain', 'wreck-ball', 'excavator', 'excavator-arm', 'excavator-bucket', 'dump-truck', 'truck-bed', 'mixer-drum']) assert.ok(site.pieces[id], `piece ${id}`);
+  assert.ok(site.pieces['potty-door'].variants.open && site.pieces['crane-lever'].variants.down && site.pieces['truck-bed'].variants.up, 'state variants');
+  assert.ok(Object.keys(site.pieces['mixer-drum'].variants).length >= 4, 'mixer spin frames');
+  const slots = Object.fromEntries(site.slots.map((s) => [s.id, s]));
+  for (const id of ['crane-hook', 'crane-lever', 'mixer-mouth', 'truck-bed', 'bench-saw', 'bench-drill', 'bench-hammer', 'bench-brushes', 'dig-pit']) {
+    assert.ok(slots[id] && (isPt(slots[id].at) || (slots[id].box && slots[id].box.every(isNum))), `slot ${id}`);
+    if (slots[id].piece) assert.ok(site.pieces[slots[id].piece], `slot ${id}: piece`);
+  }
+  const surfaces = new Set(site.surfaces.map((s) => s.id));
+  for (const s of site.spawners) {
+    for (const sid of s.surfaces || []) assert.ok(surfaces.has(sid), `spawner ${s.id}: surface ${sid}`);
+    for (const item of s.items) assert.ok(manifest.props[item], `spawner ${s.id}: prop ${item}`);
+  }
+  for (const id of ['excavator-cab', 'crane-cab', 'truck-cab', 'bench-1']) assert.ok(site.seats.some((s) => s.id === id), `seat ${id}`);
+  for (const s of site.seats) assert.ok(s.at[0] >= 0 && s.at[0] <= site.width && s.at[1] <= 1000, `seat ${s.id} is on the stage`);
+  assert.deepEqual(site.zones.map((z) => z.id), ['build', 'crane', 'dig']);
+  assert.equal(site.grid.cell, 40);
+  for (const r of Object.values(site.rigs)) for (const pid of Object.values(r.pieces || { p: r.piece })) assert.ok(site.pieces[pid], `rig piece ${pid}`);
+  // building pieces: footprint and stack points line up with the grid; every paint colour has a variant
+  const paints = Object.keys(manifest.site.paints).filter((k) => k !== 'rainbow');
+  for (const id of manifest.site.buildPieces) {
+    const p = manifest.props[id];
+    assert.ok(p && p.snap && p.snap.footprint.every((n) => n > 0), `${id}: snap footprint`);
+    for (const [dx, dy] of p.snap.stack) assert.ok(Math.abs(dx) <= p.snap.footprint[0] * 20 && dy <= 0, `${id}: stack point inside`);
+    for (const k of paints) if (p.paint[k]) { const v = p.paint[k].replace('{state}', p.states ? p.states[0] : ''); assert.ok(p.variants[v.replace(/^-/, '')], `${id}: paint ${k} -> ${v}`); }
+    const v = p.variants[p.default];
+    assert.ok(Math.abs(v.size[0] - p.snap.footprint[0] * 40) < 16, `${id}: sprite width matches the footprint (${v.size[0]})`);
+  }
+  for (const id of manifest.site.treasures) assert.ok(manifest.props[id], `treasure ${id}`);
+  for (const id of ['hard-hat', 'safety-vest', 'tool-belt', 'gloves', 'hero-cape', 'hero-mask', 'hero-suit']) assert.ok(manifest.props[id] && manifest.props[id].wear, `wearable ${id}`);
+  for (const [id, p] of Object.entries(manifest.props)) {
+    if (!p.wear) continue;
+    assert.ok(!p.wear.pending, `${id}: its rig wear piece exists (not pending)`);
+    assert.equal(rig.wear[p.wear.piece] && rig.wear[p.wear.piece].slot, p.wear.slot, `${id}: rig piece ${p.wear.piece} in slot ${p.wear.slot}`);
+  }
+  assert.equal(Object.keys(manifest.props['hero-cape'].variants).length, 3, 'three cape colours');
+  assert.equal(Object.keys(manifest.props['hero-mask'].variants).length, 3, 'three mask colours');
+});

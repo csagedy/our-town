@@ -83,3 +83,21 @@ Not risky: idle characters (after lm8), drag input handling, idle city (no work 
 | kitchen text layer on, cast of 12 | 16-86 | 5 | 1746 | 1950 |
 
 Without the overlay (the real idle state), kitchen, throttle x6, 10 s windows, after: **cast of 4: 0 layouts, 64 style recalcs (8.7 ms), 4.8 ms script** for 11 idle events; **cast of 12: 0 layouts, 156 recalcs (26 ms), 6.5 ms script** for 30 events (~5 recalcs per event: its start and end, never per frame). Before, 4 characters did ~45 layouts and ~80 recalcs in 3 s. The cost is ~17 more DOM nodes per character (the layer `<svg>`s and wrappers). Regression test: `tests/e2e/characters.test.mjs` "every kind of idle life costs no layout" (24 blinks/glances/tilts on 8 characters: at most 2 layouts) and the 4 s idle test (at most 2 layouts).
+
+## Cafe strip memory (P2a.1, bead q62.1, 2026-09-26)
+
+The cafe is one 2880-wide strip (kitchen, counter, dining). Its four depth layers as whole images decode to **62.8 MB** (back 4620x1800 alone is 33 MB), about twice the old one-screen kitchen: too much for the 2 GB 9.7" iPad Pro next to the city map (46.8 MB, above).
+
+What changed:
+- **Build** (`tools/art/build.mjs` `buildRoomTiles`): a room with camera `zones` also ships every layer as column tiles in `assets/rooms/cafe/tiles/<layer>-<i>.webp`. Column edges sit `TILE_MARGIN` (120 units) outside each camera stop's 1440-wide view (edges -100, 780, 1320, 1560, 2460, 2980), so at a stop only its own columns are needed. Tiles overlap 2 px so no seam shows. The whole-layer files stay (contact sheet, `?tiles=0`).
+- **Runtime** (`src/engine/tiles.js`): a tile is loaded if it lies within 100 units of the view at rest, 420 while the camera moves (drag, fling, snap, edge auto-pan), so the next columns decode ahead of the finger. Load = `new Image()` + `img.decode()` off-screen, then the `<img>` gets its src (no half-decoded pop-in). Unload = the `<img>`'s src is dropped once the camera has been still for 350 ms. No timers or frames while nothing moves. Piece variants (fridge door, burners...) decode on demand before their in-place src swap; only the shown variant is held.
+
+Measured with `index.html?perf` (`__perf.snapshot().imageMB`, width x height x 4 per loaded image URL, a lower bound) on `ipad-pro-9.7`, headless Chrome, after settling at each camera stop; `?tiles=0` is the old whole-layer behaviour:
+
+| camera stop | whole layers (before) | tiles (after) | cafe room images only, after |
+|---|---|---|---|
+| dining (1440, where the door opens) | 64.9 MB | **39.0 MB** | 36.8 MB (tiles 34.9) |
+| counter (900) | 64.9 MB | **42.0 MB** | 39.9 MB (tiles 38.1) |
+| kitchen (0) | 64.9 MB | **37.0 MB** | 34.8 MB (tiles 32.8) |
+
+So about 23-28 MB less at rest (~40% off). While panning, the tiles decoded ahead can briefly add one or two columns (up to ~10 MB) until the settle drops them. The city -> cafe transition peak is now ~47 + ~39 MB instead of ~47 + ~65 MB. Still to check with Web Inspector on the real A9X: that WebKit actually frees a dropped `<img>` src promptly, and whether a 1352 px-wide column (the widest) decodes in time during a fast fling (if not, raise `MOVE_MARGIN`). The e2e test `tests/e2e/cafe.test.mjs` asserts at every stop that exactly the nearby tiles have a src and no whole-layer image is in the page.

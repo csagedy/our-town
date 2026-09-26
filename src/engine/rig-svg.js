@@ -151,7 +151,7 @@ export function renderCharacter(rig, spec, opts) {
   const put = (frame, svg, extra) => { if (svg) push(`<g data-f="${frame}"${extra || ''} transform="${matrixAttr(frames[frame])}">${svg}</g>`); };
   const mk = (slot) => (opts.marks ? ` data-w="${slot}"` : '');
   const wrapW = (slot, svg) => (svg && opts.marks ? `<g data-w="${slot}">${svg}</g>` : svg || '');
-  const limb = (layer, fu, fl) => { if (!layer) return; put(fu, layer.upper); put(fl, layer.lower); put(fu, layer.patch); };
+  const limb = (layer, fu, fl, extra) => { if (!layer) return; put(fu, layer.upper, extra); put(fl, layer.lower, extra); put(fu, layer.patch, extra); };
 
   if (opts.shadow !== false && pose.anchor !== 'back') push(`<ellipse class="n" data-f="shadow" fill="#3D2C29" opacity=".12" cx="${anchors.feet[0]}" cy="${pose.ground === false && pose.anchor === 'seat' ? anchors.seat[1] : 0}" rx="${sk.shadow}" ry="13"/>`);
   const back = piece('back');
@@ -180,18 +180,23 @@ export function renderCharacter(rig, spec, opts) {
   put('root', body.parts.pelvis);
   if (bottom) put('root', bottom.pelvis);
   put('torso', body.parts.torso);
-  const top = piece('top'), over = piece('over');
-  if (top) put('torso', top.torso);
+  const top = piece('top'), over = piece('over'), belt = piece('belt'), gloves = piece('hands');
+  // Only a costume top (the hero suit) is a worn piece you can pull off.
+  const topMk = wear.top && rig.wear[wear.top] && rig.wear[wear.top].costume ? mk('top') : '';
+  if (top) put('torso', top.torso, topMk);
   if (over) put('torso', over.torso, mk('over'));
+  if (belt) put('torso', belt.torso, mk('belt'));
   if (back) put('torso', back.torso, mk('back'));
   if (pose.legsFront) legs();
 
   const front = pose.front || [];
   const arm = (s) => {
     limb(body.parts.arm, 'armU' + s, 'armL' + s);
-    if (top) limb(top.arm, 'armU' + s, 'armL' + s);
+    if (top) limb(top.arm, 'armU' + s, 'armL' + s, topMk);
+    // Gloves: a cuff at the end of the forearm, and a glove instead of the bare mitten.
+    if (gloves) put('armL' + s, gloves.cuff, mk('hands'));
     if (held[s]) push(`<g data-f="held${s}" transform="translate(${anchors['hand' + s].join(' ')})">${held[s]}</g>`);
-    put('hand' + s, body.parts.hand);
+    put('hand' + s, (gloves && gloves.hand) || body.parts.hand, gloves ? mk('hands') : '');
   };
   SIDES.forEach(([s]) => { if (front.indexOf(s) < 0) arm(s); });
 

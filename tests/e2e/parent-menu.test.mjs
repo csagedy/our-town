@@ -220,7 +220,8 @@ describe('parent menu (ipad-pro-9.7, the A9X size)', () => {
     const r = await page.eval(async () => {
       const { entities } = window.__store.state;
       const live = Object.values(entities).filter((e) => !e.deleted);
-      const { KITCHEN_ITEMS, KITCHEN_CAST } = await import('./src/scenes/kitchen.js');
+      // P2a.1: the cafe strip's first-visit things and cast (src/scenes/cafe.js).
+      const { CAFE_ITEMS: KITCHEN_ITEMS, CAFE_CAST: KITCHEN_CAST } = await import('./src/scenes/cafe.js');
       return {
         ids: live.filter((e) => e.room === 'cafe/kitchen').map((e) => e.id),
         oldLive: live.filter((e) => e.room === 'cafe/kitchen' || e.parent).map((e) => e.id),
