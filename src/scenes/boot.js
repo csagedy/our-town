@@ -92,12 +92,17 @@ export function mountBoot(stage, opts = {}) {
   stage.world.appendChild(buddy);
 
   let happyTimer = 0;
-  function squish() {
+  // The squish reaction alone: also played when the other iPad squished it
+  // (two-iPad play, src/net/together.js).
+  function react() {
     sfx.play('boing');
     squishEl.animate(SQUISH, { duration: 420, easing: 'ease-out' });
     buddy.classList.add('is-happy');
     clearTimeout(happyTimer);
     happyTimer = setTimeout(() => buddy.classList.remove('is-happy'), 700);
+  }
+  function squish() {
+    react();
     buddy.dataset.squishes = String(Number(buddy.dataset.squishes) + 1);
     if (opts.onSquish) opts.onSquish(Number(buddy.dataset.squishes));
   }
@@ -105,5 +110,6 @@ export function mountBoot(stage, opts = {}) {
   input.register(buddy, { onTap: squish });
   const demo = opts.room === 'wide' ? mountBlobs(stage, input) : null;
 
-  return { el: buddy, squish, demo };
+  const setCount = (n) => { buddy.dataset.squishes = String(n); };
+  return { el: buddy, squish, react, setCount, demo };
 }

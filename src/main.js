@@ -3,6 +3,7 @@
 import { createStage } from './engine/stage.js';
 import { createInput } from './engine/input.js';
 import { mountBoot } from './scenes/boot.js';
+import { mountTestRoom } from './scenes/test-room.js';
 import { registerServiceWorker } from './pwa.js';
 import { initAudio } from './audio/index.js';
 import { openWorld } from './core/persist.js';
@@ -34,17 +35,22 @@ async function boot() {
   blockBrowserGestures();
   initAudio();                              // unlocks WebAudio on the first tap
   const stage = createStage(document.getElementById('app'));
-  const room = new URLSearchParams(location.search).get('room');   // ?room=wide: P1.5 test room
+  const room = new URLSearchParams(location.search).get('room');   // ?room=wide: P1.5 test room; ?room=test: P1.7 views
   const input = createInput(stage);         // tap / drag / long-press and background panning
   const { store, persist } = await openWorld();   // saved world (never rejects)
   window.__store = store;
   window.__persist = persist;
   const buddyId = buddyEntity(store).id;
-  const scene = mountBoot(stage, {
+  const scene = room === 'test' ? mountTestRoom(stage, { input, store }) : mountBoot(stage, {
     room, input,
     squishes: store.state.entities[buddyId].props.squishes || 0,
-    onSquish: (n) => store.dispatch('set', { id: buddyId, path: 'props.squishes', value: n }),
+    // Looked up per tap: a two-iPad guest plays with the host's buddy.
+    onSquish: (n) => store.dispatch('set', { id: buddyEntity(store).id, path: 'props.squishes', value: n }),
   });
+  // Two-iPad play (stretch, oxg.2), hidden behind ?together until the parent menu (P1.16).
+  if (new URLSearchParams(location.search).has('together')) {
+    window.__together = (await import('./net/together.js')).startTogether({ store, persist, scene });
+  }
   window.__stage = stage;                   // for e2e tests and debugging
   window.__input = input;
   window.__scene = scene;

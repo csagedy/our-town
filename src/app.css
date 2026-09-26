@@ -145,3 +145,110 @@ body {
 }
 .blob-body i:first-child { left: 30%; }
 .blob-body i:last-child { right: 30%; }
+
+/* ---- rooms and entity views (src/engine/room.js, view.js, fx.js; P1.7) ----
+   Everything is positioned with transform from (0, 0); z-index comes from
+   the depth sort (src/engine/surfaces.js). .room and .room-depth are NOT
+   stacking contexts, so art, entities and highlights share one order. */
+.room, .room-depth {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+.art, .ent, .drop-hl, .fx-p {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.room-fx {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* An entity: feet anchor at bottom center, depth scale around it. */
+.ent { transform-origin: 50% 100%; }
+.ent-lift, .ent-body {
+  position: absolute;
+  inset: 0;
+}
+.ent-body { transform-origin: 50% 100%; }
+.ent-img img { display: block; width: 100%; height: 100%; }
+/* Lift shadow: a static sprite; input.js fades its opacity in while held. */
+.ent-shadow {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -12%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(43, 45, 66, 0.35), rgba(43, 45, 66, 0));
+  opacity: 0;
+}
+
+/* Placeholder sprites (src/engine/sprites.js): a colored shape with an
+   outline and a shine, until the art pipeline's sprites drop in. */
+.ph {
+  border: 5px solid rgba(43, 45, 66, 0.85);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.ph::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  top: 12%;
+  width: 26%;
+  height: 20%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+}
+.ph-round { border-radius: 50%; }
+.ph-box { border-radius: 16%; }
+.ph-tall { border-radius: 40% 40% 18% 18% / 22% 22% 10% 10%; }
+.ph-cup { border-radius: 10% 10% 42% 42% / 10% 10% 36% 36%; }
+.ph-blob { border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%; }
+.ph-flat { border-radius: 12%; }
+
+/* Drop-target glow (pulsed with WAAPI opacity). */
+.drop-hl { pointer-events: none; }
+.drop-hl-surface {
+  border-radius: 10px;
+  background: rgba(255, 255, 190, 0.9);
+  border: 3px solid #fff;
+}
+.drop-hl-entity {
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 190, 0.95), rgba(255, 255, 190, 0));
+}
+
+/* Particles (src/engine/fx.js), sized per type; transform/opacity only. */
+.fx-p svg { display: block; width: 100%; height: 100%; }
+.fx-sparkle { width: 26px; height: 26px; fill: #fff6a8; }
+.fx-puff { width: 40px; height: 40px; fill: rgba(255, 255, 255, 0.85); }
+.fx-heart { width: 34px; height: 34px; fill: #ff5d8f; }
+
+/* ---- P1.7 test room placeholder art (src/scenes/test-room.js), temporary ---- */
+.art i { position: absolute; display: block; }
+.ph-baseboard { background: #b5703f; }
+.ph-window { background: #aee3ff; border: 14px solid #fff; border-radius: 12px; }
+.ph-shelf .plank { left: 0; top: 0; width: 100%; height: 22px; background: #a0643a; border: 4px solid #5e3a1f; border-radius: 6px; }
+.ph-shelf .bracket { top: 22px; width: 18px; height: 38px; background: #5e3a1f; }
+.ph-shelf .bracket.l { left: 40px; }
+.ph-shelf .bracket.r { right: 40px; }
+.ph-counter .top { left: 0; top: 0; width: 100%; height: 26px; background: #e9ecef; border: 4px solid #6c757d; border-radius: 6px; }
+.ph-counter .front { left: 14px; right: 14px; top: 26px; bottom: 0; background: #90be6d; border: 4px solid #4f772d; border-top: 0; }
+.ph-table .top { left: 0; top: 0; width: 100%; height: 22px; background: #bc6c25; border: 4px solid #6f3b12; border-radius: 6px; }
+.ph-table .cloth { left: 8px; right: 8px; top: 16px; height: 116px; background: #e5383b; border: 4px solid #8d0801; border-top: 0; border-radius: 0 0 26px 26px; }
+.ph-table .leg { top: 20px; width: 24px; bottom: 0; background: #6f3b12; }
+.ph-table .leg.l { left: 26px; }
+.ph-table .leg.r { right: 26px; }
+.ph-plant .pot { left: 30px; bottom: 0; width: 80px; height: 70px; background: #d62828; border: 4px solid #7f1d1d; border-radius: 6px 6px 18px 18px; }
+.ph-plant .leaf { width: 70px; height: 120px; background: #2d6a4f; border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%; border: 4px solid #1b4332; }
+.ph-plant .leaf.a { left: 10px; top: 0; transform: rotate(-20deg); }
+.ph-plant .leaf.b { left: 60px; top: 10px; transform: rotate(18deg); }
