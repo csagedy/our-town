@@ -26,7 +26,9 @@
 //   surface it would land on, or an entity that behaviors.dropTarget accepts)
 //   glows. The highlight element changes only when the target changes.
 // - onDragEnd: behaviors.onDropInto(entity, target) gets first refusal for an
-//   entity target; otherwise surfaces.settle() picks the resting spot (a
+//   entity target (if it handles the drop and the entity is still here, e.g.
+//   a container said "no", it springs back to where it was picked up);
+//   otherwise surfaces.settle() picks the resting spot (a
 //   surface, or the floor band; x clamped into the room) and ONE store
 //   `move` is dispatched. Then a tween shows it: a fall with a small bounce,
 //   or a short snap, a landing squash, and the surface's sound.
@@ -39,7 +41,13 @@
 //   dropTarget(entity, other)            -> true if `other` accepts `entity` (containers, characters)
 //   onDropInto(entity, target, ctx)      -> true if it handled the drop (it dispatches its own ops)
 //   onLanded(entity, ctx)                after a settle drop is committed
-// ctx = { view, id, el, body, room, store, fx, sfx, tween, sprite, info }
+//   landSound(entity, surfaceSound)      -> the landing sound (default: the surface's)
+// ctx = { view, id, el, body, room, store, fx, sfx, tween, sprite, info, play }
+// (play(name, opts) plays a sound and counts it in stats()).
+//
+// A container's look can depend on what is inside it, so when an op moves
+// something into or out of a parent (attach, detach, spawn into a parent,
+// ...) the parent's sprite is re-checked even though its own rev is unchanged.
 
 import { inRoom, getEntity, locate } from './world.js';
 import { settle, sortKey, zIndexFor, depthScale, stackZ, Z_DRAG, DEPTH_SCALE } from './surfaces.js';
@@ -47,7 +55,8 @@ import { spriteFor, paintSprite } from './sprites.js';
 import * as tween from './tween.js';
 
 const POOL_MAX = 64;
-const SINGLE = new Set(['spawn', 'move', 'set', 'detach']);   // ops that touch one top-level entity
+const SINGLE = new Set(['spawn', 'move', 'set', 'inc', 'detach']);   // ops that touch one top-level entity
+const MIN_TARGET = 96;       // drop-target boxes are at least this big (units), like the 64pt hit boxes
 const round1 = (v) => Math.round(v * 10) / 10;
 
 export function createRoomView({ stage, store, input, room, fx = null, sfx = null, behaviors = {} }) {
@@ -175,15 +184,46 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
     for (const v of [...views.values()]) if (!seen.has(v.id)) unmount(v);
   }
 
+  // Parents whose contents an op changed: the new parent and each moved
+  // entity's old one (read from the state before the op).
+  function parentsTouched(prev, env) {
+    const a = env.args;
+    const out = new Set();
+    if (a.parent) out.add(a.parent);
+    const ids = a.ids ? a.ids : a.id ? [a.id] : [];
+    for (const id of ids) {
+      const old = prev && prev.entities[id];
+      if (old && old.parent) out.add(old.parent);
+    }
+    return out;
+  }
+
+  // Re-check the sprite of mounted parents (a bowl that got soup in it).
+  function refreshParents(state, ids) {
+    for (const pid of ids) {
+      const v = views.get(pid);
+      const e = v && getEntity(state, pid);
+      if (e && !v.held && spriteOf(e).key !== v.spriteKey) render(v, e, false);
+    }
+  }
+
+  let prevState = store.state;
   const unsubscribe = store.subscribe((state, env) => {
+    const prev = prevState;
+    prevState = state;
     if (!env) { fullSync(state, false); return; }
-    if (SINGLE.has(env.op) && !(env.op === 'spawn' && env.args.parent)) sync(state, env.args.id);
-    else fullSync(state, true);
+    if (SINGLE.has(env.op) && !(env.op === 'spawn' && env.args.parent)) {
+      sync(state, env.args.id);
+      if (env.op === 'detach' || env.op === 'move') refreshParents(state, parentsTouched(prev, env));
+    } else {
+      fullSync(state, true);
+      refreshParents(state, parentsTouched(prev, env));
+    }
   });
 
   // ---- behaviors ----
   function ctx(v, info) {
-    return { view: api, id: v.id, el: v.el, body: v.body, room, store, fx, sfx, tween, sprite: v.sprite, info };
+    return { view: api, id: v.id, el: v.el, body: v.body, room, store, fx, sfx, tween, sprite: v.sprite, info, play };
   }
   const entityOf = (v) => (v.id ? getEntity(store.state, v.id) : null);
 
@@ -209,8 +249,8 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
       let best = null;
       for (const o of views.values()) {
         if (o === v || o.held || !o.sprite) continue;
-        const hw = (o.sprite.w * o.scale) / 2;
-        const top = o.y - o.sprite.h * o.scale;
+        const hw = Math.max(o.sprite.w * o.scale, MIN_TARGET) / 2;
+        const top = o.y - Math.max(o.sprite.h * o.scale, MIN_TARGET);
         if (info.x < o.x - hw || info.x > o.x + hw || info.y < top || info.y > o.y) continue;
         if (best && Number(best.zIndex) > Number(o.zIndex)) continue;
         const oe = getEntity(store.state, o.id);
@@ -317,7 +357,13 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
       const te = getEntity(store.state, target.id);
       if (te && behaviors.onDropInto(e, te, ctx(v, info))) {
         const still = views.get(e.id) === v && getEntity(store.state, e.id);
-        if (still) render(v, still, true);
+        if (still && v.rev === still.rev) {
+          // Not taken (a container refused it): spring back to where it was picked up.
+          const from = v.transform;
+          render(v, still, false);
+          if (v.posAnim) v.posAnim.cancel();
+          if (from !== v.transform) v.posAnim = tween.slide(v.el, from, v.transform, { duration: 380, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' });
+        } else if (still) render(v, still, true);
         return;
       }
     }
@@ -350,7 +396,7 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
       landAt = 100;
     }
     tween.squash(v.body, { delay: landAt, amount: r.fall ? Math.min(1.4, 0.6 + r.dist / 400) : 0.7 });
-    const sound = r.sound;
+    const sound = (behaviors.landSound && behaviors.landSound(now, r.sound)) || r.sound;
     if (landAt) setTimeout(() => play(sound), landAt); else play(sound);
     if (behaviors.onLanded) behaviors.onLanded(now, ctx(v, info));
   }
@@ -361,6 +407,23 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
     /** The view for an entity id (for behaviors and tests): {el, body, x, y, z, key, scale, zIndex, sprite} */
     viewOf: (id) => views.get(id) || null,
     ids: () => [...views.keys()],
+    /** Play a sound (counted in stats). */
+    play,
+    /**
+     * Animate entity `id` popping out from world point (x, y) (feet) to where
+     * it rests now: a spawner's new thing, a spilled one. False if not drawn.
+     */
+    animateFrom(id, x, y) {
+      const v = views.get(id);
+      if (!v || v.held) return false;
+      if (v.posAnim) v.posAnim.cancel();
+      const from = transformOf(v, x, y, v.scale);
+      const dist = Math.max(40, v.y - y);
+      const f = tween.fall(v.el, from, v.transform, { dist });
+      v.posAnim = f.anim;
+      tween.squash(v.body, { delay: f.landAt, amount: 0.8 });
+      return true;
+    },
     /** Resync from the store (rev-diffed). */
     refresh: () => fullSync(store.state, false),
     stats: () => ({ ...stats, views: views.size, pooled: pool.length, highlights: highlights.length }),

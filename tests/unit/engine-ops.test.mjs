@@ -12,6 +12,7 @@ const GOOD = {
   attach: { id: 'a:1', parent: 'a:2', slot: 'hand-l' },
   detach: { id: 'a:1', room: K, x: 1, y: 2 },
   set: { id: 'a:1', path: 'props.cooked', value: 2 },
+  inc: { id: 'a:1', path: 'props.squishes', by: 1 },
   combine: { ids: ['a:1', 'a:2'], resultId: 'a:3', resultKind: 'cake', room: K, x: 0, y: 0 },
   remove: { id: 'a:1' },
   travel: { ids: ['a:1'], to: 'school/classroom' },
@@ -19,7 +20,7 @@ const GOOD = {
 };
 
 test('the op list matches the design doc table', () => {
-  assert.deepEqual(OPS.slice().sort(), ['attach', 'combine', 'detach', 'mapSet', 'move', 'remove', 'set', 'spawn', 'travel']);
+  assert.deepEqual(OPS.slice().sort(), ['attach', 'combine', 'detach', 'inc', 'mapSet', 'move', 'remove', 'set', 'spawn', 'travel']);
   for (const op of OPS) checkArgs(op, GOOD[op]);
 });
 

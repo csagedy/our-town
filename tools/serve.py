@@ -46,6 +46,17 @@ class Server(http.server.ThreadingHTTPServer):
     # full queue makes macOS reset connections (net::ERR_CONNECTION_RESET on a
     # module, so boot never runs). Flaky e2e tests, bead dollhouse-game-mhf.17.
     request_queue_size = 256
+
+    def server_bind(self):
+        # HTTPServer.server_bind() calls socket.getfqdn(host), a reverse DNS
+        # lookup that can hang for 35s when the LAN's DNS is slow (seen during
+        # P1.13): the harness gives up waiting for the port line. We only ever
+        # serve 127.0.0.1 or the LAN address, so skip the lookup.
+        import socketserver
+        socketserver.TCPServer.server_bind(self)
+        host, port = self.server_address[:2]
+        self.server_name = host
+        self.server_port = port
     daemon_threads = True
 
 

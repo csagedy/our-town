@@ -48,13 +48,13 @@ export function startTogether({ store, persist, scene, doc = document }) {
     scene.el.dataset.entity = b.id;
     // A guest's own taps are in flight to the host: keep showing the count
     // it already shows, or the number would flicker back while it travels.
-    const mine = session.inflight().filter((env) => env.op === 'set' && env.args.id === b.id && env.args.path === 'props.squishes');
-    const n = mine.length ? mine[mine.length - 1].args.value : (b.props.squishes || 0);
+    const mine = session.inflight().filter((env) => env.op === 'inc' && env.args.id === b.id && env.args.path === 'props.squishes');
+    const n = (b.props.squishes || 0) + mine.reduce((sum, env) => sum + env.args.by, 0);
     if (scene.setCount) scene.setCount(n); else scene.el.dataset.squishes = String(n);
   }
   store.subscribe((state, env) => {
     showBuddy();
-    if (env && env.device !== store.device && env.op === 'set' && env.args.path === 'props.squishes' &&
+    if (env && env.device !== store.device && env.op === 'inc' && env.args.path === 'props.squishes' &&
         scene && scene.react && scene.el.dataset.entity === env.args.id) {
       scene.react();   // the other kid squished it
     }

@@ -1,0 +1,201 @@
+{
+  "schema": 1,
+  "kinds": {
+    "lamp": {
+      "ph": { "shape": "tall", "fill": "#9aa5b1", "looks": { "on": { "fill": "#ffe066" } } },
+      "size": [60, 130],
+      "tags": ["light", "furniture"],
+      "sounds": { "tap": "tap", "drop": "knock" },
+      "behaviors": [
+        { "use": "toggle", "key": "on", "looks": ["off", "on"], "sounds": ["tap", "ding"] }
+      ],
+      "label": "Lamp",
+      "home": { "room": "test/catalog" }
+    },
+    "cookie-jar": {
+      "art": { "sprite": "cookie-jar" },
+      "ph": { "shape": "box", "fill": "#f15bb5", "looks": { "open": { "h": 68 } } },
+      "size": [58, 82],
+      "tags": ["container", "dish"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["clink", "plink"] },
+        { "use": "container", "accepts": ["sweet"], "capacity": 4 },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Cookie Jar",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "mug": {
+      "art": { "sprite": "mug" },
+      "ph": { "shape": "cup", "fill": "#4cc9f0", "looks": { "full": { "fill": "#8b5a2b" } } },
+      "size": [48, 46],
+      "tags": ["dish", "cup", "drink"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "cycle", "key": "fill", "looks": ["empty", "full"], "sound": "bubble" }
+      ],
+      "label": "Mug",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "flower-pot": {
+      "art": { "sprite": "flower-pot" },
+      "ph": { "shape": "tall", "fill": "#6bcb77", "looks": { "bloom": { "fill": "#ff8fab" } } },
+      "size": [52, 94],
+      "tags": ["plant"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "cycle", "key": "grow", "looks": ["bud", "bloom"], "sound": "chime" }
+      ],
+      "label": "Flower",
+      "home": { "room": "cafe/dining" }
+    },
+    "book": {
+      "art": { "sprite": "book" },
+      "ph": { "shape": "flat", "fill": "#9b5de5", "looks": { "open": { "w": 100 } } },
+      "size": [68, 24],
+      "tags": ["book", "school"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["tap", "whoosh"] }
+      ],
+      "label": "Story Book",
+      "home": { "room": "school/classroom" }
+    },
+    "gift": {
+      "art": { "sprite": "gift" },
+      "ph": { "shape": "box", "fill": "#ff6b6b", "looks": { "open": { "fill": "#ffd6e0" } } },
+      "size": [72, 70],
+      "tags": ["toy"],
+      "sounds": { "tap": "tap", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["tap", "cheer"], "fx": "heart" }
+      ],
+      "label": "Present",
+      "home": { "room": "theater/stage" }
+    },
+    "ball": {
+      "art": { "sprite": "ball" },
+      "ph": { "shape": "round", "fill": "#ff6b6b" },
+      "size": [63, 63],
+      "tags": ["toy", "bouncy"],
+      "sounds": { "tap": "boing", "drop": "boing" },
+      "behaviors": [
+        { "use": "sound", "name": "boing", "pitches": [0.8, 1, 1.25, 1.5] }
+      ],
+      "label": "Ball",
+      "home": { "spawner": "toy-bin" }
+    },
+    "teddy": {
+      "art": { "sprite": "teddy" },
+      "ph": { "shape": "blob", "fill": "#c08552" },
+      "size": [77, 95],
+      "tags": ["toy", "soft"],
+      "sounds": { "tap": "squeak", "drop": "squish" },
+      "behaviors": [
+        { "use": "squeak" }
+      ],
+      "label": "Teddy",
+      "home": { "spawner": "toy-bin" }
+    },
+    "toy-car": {
+      "art": { "sprite": "toy-car" },
+      "ph": { "shape": "box", "fill": "#4d96ff" },
+      "size": [92, 57],
+      "tags": ["toy", "vehicle"],
+      "sounds": { "tap": "whistle", "drop": "knock" },
+      "behaviors": [
+        { "use": "sound", "name": "whistle", "pitches": [1, 1.2] },
+        { "use": "wobble", "amount": 0.6 }
+      ],
+      "label": "Toy Car",
+      "home": { "spawner": "toy-bin" }
+    },
+    "blocks": {
+      "art": { "sprite": "blocks" },
+      "ph": { "shape": "box", "fill": "#ffd93d" },
+      "size": [86, 72],
+      "tags": ["toy", "buildpiece"],
+      "sounds": { "tap": "knock", "drop": "knock" },
+      "behaviors": [
+        { "use": "wobble", "amount": 1.3, "sound": "knock" }
+      ],
+      "label": "Blocks",
+      "home": { "room": "construction/yard" }
+    },
+    "bowl": {
+      "art": { "sprite": "bowl" },
+      "ph": { "shape": "cup", "fill": "#8ecae6", "looks": { "soup": { "fill": "#f4a261", "h": 60 } } },
+      "size": [72, 40],
+      "tags": ["dish", "container"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["food"], "capacity": 3, "look": "soup" },
+        { "use": "spill", "on": "tap" }
+      ],
+      "label": "Bowl",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "pan": {
+      "art": { "sprite": "pan" },
+      "ph": { "shape": "flat", "fill": "#495057", "looks": { "egg": { "fill": "#fff3b0" } } },
+      "size": [149, 41],
+      "tags": ["cookware", "container"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "container", "accepts": ["ingredient"], "capacity": 2, "look": "egg", "sound": "sizzle" },
+        { "use": "spill", "on": "tap" }
+      ],
+      "label": "Frying Pan",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "cupcake": {
+      "art": { "sprite": "cupcake" },
+      "ph": { "shape": "blob", "fill": "#f78da7", "looks": { "bite1": { "h": 60 }, "bite2": { "h": 42 } } },
+      "size": [54, 77],
+      "tags": ["food", "sweet"],
+      "sounds": { "tap": "squish", "drop": "squish" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "bite2"], "then": "gone" }
+      ],
+      "label": "Cupcake",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "apple": {
+      "art": { "sprite": "apple" },
+      "ph": { "shape": "round", "fill": "#e63946", "looks": { "bite1": { "w": 40 }, "core": { "w": 22, "fill": "#f1faee" } } },
+      "size": [50, 55],
+      "tags": ["food", "fruit"],
+      "sounds": { "tap": "plink", "drop": "thud" },
+      "behaviors": [
+        { "use": "eatable", "looks": ["whole", "bite1", "core"], "then": "stay" }
+      ],
+      "label": "Apple",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "egg": {
+      "art": { "sprite": "egg" },
+      "ph": { "shape": "blob", "fill": "#fff8e7", "looks": { "cracked": { "fill": "#ffd166" } } },
+      "size": [50, 52],
+      "tags": ["food", "ingredient"],
+      "sounds": { "tap": "tap", "drop": "squish" },
+      "behaviors": [
+        { "use": "cycle", "key": "cracked", "looks": ["whole", "cracked"], "loop": false, "sound": "pop", "fx": "puff" }
+      ],
+      "label": "Egg",
+      "home": { "room": "cafe/kitchen" }
+    },
+    "toy-bin": {
+      "ph": { "shape": "box", "fill": "#4d96ff" },
+      "size": [160, 110],
+      "tags": ["spawner", "furniture"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["ball", "toy-car", "teddy"], "max": 5 }
+      ],
+      "label": "Toy Bin",
+      "fixed": true,
+      "home": { "room": "school/playground" }
+    }
+  }
+}

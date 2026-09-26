@@ -278,6 +278,7 @@ Entity = {
 | `attach` | `{id, parent, slot}` |
 | `detach` | `{id, room, x, y, z}` (a drop out of a parent: same fields as `move`; the dispatcher resolves where) |
 | `set` | `{id, path: "props.cooked", value}` (`props.<key>` one level deep, or `rot`/`flip`) |
+| `inc` | `{id, path: "props.coins", by}` (a counter intent; the sequencer fills in `value`, see below) |
 | `combine` | `{ids: [...], resultId, resultKind, room\|parent, x, y, props}` (result and its placement chosen by the dispatching device and included, so replay is deterministic; inputs are deleted) |
 | `remove` | `{id, hard?}` (to Lost & Found; `hard: true` is a true delete, for spawner clones returning home) |
 | `travel` | `{ids: [...], to: "school/classroom"}` (top-level things; their contents come along) |
@@ -285,6 +286,7 @@ Entity = {
 
 Implementation (P1.3): `src/engine/` `ids.js` (device ids, `<device>:<n>` ids, Lamport clock, stamps), `random.js` (seeded rng, `pick`), `world.js` (state shape, pure reducers, selectors), `ops.js` (arg shapes, envelopes, `validate`), `store.js` (`createStore`: `dispatch`, `receive`, `subscribe`, `load`), `authority.js` (host/guest routing and grab leases).
 
+- **Counters and aggregates use intent ops, never an absolute `set`** (bead oxg.3). A squish count, coins in the tip jar, applause, bites taken, a stack's height: dispatch `inc {id, path, by}`, not `set {value: n + 1}` computed from what this iPad sees. Two kids tapping at once would each write n+1 and last-writer-wins would drop one tap (the two-iPad demo showed exactly that). Whoever sequences the op resolves the intent (`resolveIntent` in `ops.js`): the store in solo play, the **host** in two-iPad play (a guest sends the bare intent and ignores its own guess). Resolving writes the result into `args.value`, so what is logged, broadcast and replayed is a plain LWW write of that value: replay stays idempotent and order-independent, and because the host resolves ops one at a time in its single order, no concurrent increment is lost (`tests/unit/engine-inc.test.mjs`). The reducer adds `by` only for an unresolved intent (a merged peer log). A future peer-to-peer merge without a host would need a real counter CRDT (per-device totals) for these fields; the host model doesn't. The same rule applies to any new aggregate: express the *intent* ("add a coin", "take a bite", "combine these") and let the sequencer compute the result. Plain state (a lamp is on, a look index, a color) stays `set`.
 - **Determinism:** any randomness (mystery dish names, customer orders, treasure picks) is resolved *before* dispatch and written into the op. Reducers are pure: `state' = apply(state, op)`.
 - **Envelope:** `{op, args, id: "<deviceId>:<seq>", lamport, device, t}`. The Lamport clock ticks on every local op and advances past any op received from elsewhere.
 - **Conflict rules:** **last-writer-wins per field**, using `(lamport, deviceId)` ordering. An op applies to a field only if its stamp is newer than `entity.v[field]`, so a replayed or duplicate op (same stamp) changes nothing, including a second `spawn` of an existing id. A hard delete sets a sticky `deleted` flag: the entity becomes an invisible tombstone that is never undeleted, but it still merges later field writes, so every device ends with the same tombstone. An op that arrives before its entity's `spawn` makes an invisible stub that the spawn completes. Rules that depend on other entities are read-time selectors (`locate`, `childrenOf`, `inRoom`), not stored: a child whose parent is gone lies on the floor of the parent's last room, and a parent loop (only possible in a merge without a host) lands in Lost & Found. This makes `apply` commutative and idempotent, which the convergence tests check. Each entity also has `rev`, the highest Lamport value that touched it: views can skip unchanged entities, and it only grows. Tombstone garbage collection happens in persistence compaction (P1.4, see *Tombstone GC* below); tombstones are tiny.
@@ -299,13 +301,15 @@ Implementation (P1.3): `src/engine/` `ids.js` (device ids, `<device>:<n>` ids, L
 ```
 index.html, manifest.webmanifest, sw.js
 src/
-  core/     persist.js (IndexedDB), catalog.js
+  core/     persist.js (IndexedDB), catalog.js (data/catalog.json loader, sprites from the art manifest or placeholders),
+            behaviors/ (registry.js, builtin.js starter set, runtime.js view hooks + universal tap fallback)
   engine/   store.js (dispatch, subscribe), world.js (state, reducers, selectors), ops.js, ids.js (ids, lamport), random.js,
             authority.js (host/guest, grab leases), stage.js (scale, camera), input.js (pointer → tap/drag/long-press), view.js (entity DOM views),
             surfaces.js, tween.js (WAAPI helpers), fx.js (pooled particles), rig.js (character poses/faces)
   audio/    context.js, sfx.js (synth recipes), clips.js, instruments.js, speech.js, mic.js (record + filters)
   scenes/   map.js, maker.js, cafe/*.js, theater/*.js, construction/*.js, school/*.js
-  data/     catalog.json (all kinds: sprite, tags, hitbox, container slots, behaviors), recipes.json, rooms/*.json
+  data/     recipes.json, rooms/*.json
+data/       catalog.json (all kinds: art ref, size/anchor, tags, sounds, behaviors + params, label, home; schema in src/core/catalog.js)
 assets/     rooms/*.svg, sprites/*.svg (atlas per location), audio/*.m4a
 tools/      build.py (art → svg, manifest, precache list), art/ (python sprite/room drawing, palette.py)
 tests/      unit (reducers, recipes, convergence), e2e (headless drive of play flows)

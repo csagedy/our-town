@@ -4,6 +4,8 @@
 // plugs in later with addSpriteSource() and nothing else changes.
 //
 //   spriteFor(kind, props) -> { key, w, h, sound, draw: 'shape' | 'img', ... }
+//     an 'img' sprite has `src` and optionally `img: {left, top, w, h}`, the
+//     image's box inside the w x h entity box (for an off-center anchor)
 //   addSpriteSource(fn)     fn(kind, props) -> sprite | null, tried before the placeholders
 //   paintSprite(bodyEl, sprite)   (re)draw a sprite into a view's body element
 //
@@ -72,6 +74,16 @@ export function paintSprite(body, sprite) {
     img.src = sprite.src;
     img.alt = '';
     img.draggable = false;
+    if (sprite.img) {
+      // The image inside the w x h box: the box's bottom center is the art's
+      // anchor (catalog.js), so the image may be offset or hang below it.
+      const s = img.style;
+      s.position = 'absolute';
+      s.left = `${sprite.img.left}px`;
+      s.top = `${sprite.img.top}px`;
+      s.width = `${sprite.img.w}px`;
+      s.height = `${sprite.img.h}px`;
+    }
     body.appendChild(img);
   } else {
     body.className = `ent-body ph ph-${sprite.shape}`;

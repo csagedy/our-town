@@ -12,6 +12,8 @@
 //   done(anim)                           -> Promise that resolves when it finishes OR is cancelled
 //   squish(el, {amount, duration})       tap reaction: squash and stretch around the feet
 //   squash(el, {amount, delay})          landing: a quick flatten
+//   wobble(el, {amount, duration})       rock side to side around the feet (a jelly wobble)
+//   shake(el, {amount, duration})        a quick "nope" head-shake (a refusal, a full spawner)
 //   fallKeyframes(from, to, bounce)      keyframes for a drop: gravity in, small bounce
 //   fall(el, fromTransform, toTransform, {dist})   -> {anim, landAt (ms)}
 //   slide(el, fromTransform, toTransform, {duration})
@@ -93,6 +95,31 @@ export function squash(el, { amount = 1, delay = 0, duration = 220 } = {}) {
     { transform: 'scale(1, 1)' },
     { transform: `scale(${1 + a}, ${1 - a})`, offset: 0.35 },
     { transform: 'scale(1, 1)' },
+  ], { duration, delay, easing: 'ease-out' });
+}
+
+/** Rock side to side around the feet, dying out. */
+export function wobble(el, { amount = 1, duration = 620, delay = 0 } = {}) {
+  const d = 9 * amount;
+  return animate(el, [
+    { transform: 'rotate(0deg)' },
+    { transform: `rotate(${-d}deg)`, offset: 0.15 },
+    { transform: `rotate(${d * 0.8}deg)`, offset: 0.35 },
+    { transform: `rotate(${-d * 0.5}deg)`, offset: 0.55 },
+    { transform: `rotate(${d * 0.25}deg)`, offset: 0.75 },
+    { transform: 'rotate(0deg)' },
+  ], { duration, delay, easing: 'ease-out' });
+}
+
+/** A quick sideways "no-no" shake. */
+export function shake(el, { amount = 1, duration = 420, delay = 0 } = {}) {
+  const d = 10 * amount;
+  return animate(el, [
+    { transform: 'translate3d(0, 0, 0)' },
+    { transform: `translate3d(${-d}px, 0, 0) rotate(-3deg)`, offset: 0.2 },
+    { transform: `translate3d(${d}px, 0, 0) rotate(3deg)`, offset: 0.45 },
+    { transform: `translate3d(${-d * 0.5}px, 0, 0) rotate(-1deg)`, offset: 0.7 },
+    { transform: 'translate3d(0, 0, 0)' },
   ], { duration, delay, easing: 'ease-out' });
 }
 
