@@ -55,7 +55,9 @@ export const LOG_MAX = 64;
 export const RECENT_MS = 30000;   // a clone placed this recently never goes home to keep the cap
 const round1 = (v) => Math.round(v * 10) / 10;
 
-export function createBehaviors({ catalog, store, random = Math.random }) {
+// random: looked up on each roll by default (not captured at mount), so a test
+// that pins Math.random for one gesture really gets that pick.
+export function createBehaviors({ catalog, store, random = () => Math.random() }) {
   const lists = new Map();      // kind -> [{name, def, p}]
   const log = [];
   let seq = 0;

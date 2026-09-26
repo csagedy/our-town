@@ -37,9 +37,14 @@
 //   optional play, never enforced).
 // - GOLDFISH: tap it and it swims to the glass; drop fish food (or any snack)
 //   on the bowl and it is fed (a happy bubble face).
-// - Everything else painted that looks tappable (letters, sight-word cards,
-//   the calendar, the easel and whiteboard, the swings, seesaw and sand)
-//   gets the fallback reaction for now: P2d.2-P2d.4 bring them alive.
+// - THE TEACHING WALL (P2d.2, school-board.js): the letter wall (name, sound,
+//   word + picture; drag out letter magnets that spell words on the
+//   whiteboard rows), the sight-word board (the classroom's one reading
+//   layer), the calendar (today's star, the day out loud) and weather slot
+//   (the window follows, rain/snow falls briefly), the teacher's picture cards.
+// - Everything else painted that looks tappable (the easel and whiteboard,
+//   the swings, seesaw and sand) gets the fallback reaction for now:
+//   P2d.3-P2d.4 bring them alive.
 // - FIRST VISIT: Ms. Noor in the rocking chair (with her lanyard), three kids
 //   on the bus (two with backpacks), Maya on the rug with her own cubby,
 //   backpacks on hooks, a lunchbox in a cubby, the stock and a few things.
@@ -63,6 +68,7 @@ import { partsOf, specOf, appearanceKey, normalizeSeats } from '../engine/char-m
 import { renderCharacter, svgWrap } from '../engine/rig-svg.js';
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
+import { createSchoolBoard } from './school-board.js';
 
 export const SCHOOL_ID = 'school/classroom';
 export const FIXTURES_KIND = 'school-fixtures';
@@ -98,17 +104,31 @@ export function hitAreas(m) {
   const rigs = m.rigs || {};
   for (const f of rigs.feelings || []) out.push({ id: 'feeling-' + f.id, box: [f.at[0] - f.r, f.at[1] - f.r, f.r * 2, f.r * 2], layer: 'back' });
   for (const c of rigs.schedule || []) out.push({ id: 'schedule-' + c.id, box: c.box, layer: 'back' });
-  for (const L of rigs.letters || []) out.push({ id: 'letter-' + L.ch, box: L.box, layer: 'back', later: 'P2d.2' });
-  ((rigs.sightWords && rigs.sightWords.cards) || []).forEach((b, i) => out.push({ id: 'sight-' + i, box: b, layer: 'back', later: 'P2d.2' }));
+  for (const L of rigs.letters || []) out.push({ id: 'letter-' + L.ch, box: L.box, layer: 'back' });
+  const cards = (rigs.sightWords && rigs.sightWords.cards) || [];
+  cards.forEach((b, i) => out.push({ id: 'sight-' + i, box: b, layer: 'back' }));
+  // P2d.2: the round turn button under the sight-word board (the other 8 words).
+  if (cards.length) {
+    const x0 = Math.min(...cards.map((b) => b[0])), x1 = Math.max(...cards.map((b) => b[0] + b[2])), y1 = Math.max(...cards.map((b) => b[1] + b[3]));
+    out.push({ id: 'sight-flip', box: [r1((x0 + x1) / 2 - 22), r1(y1 + 16), 44, 44], layer: 'back' });
+  }
   const cal = rigs.calendar;
   if (cal && cal.monthDots && cal.monthDots.length) {
     const xs = cal.monthDots.map((p) => p[0]), ys = cal.monthDots.map((p) => p[1]).concat((cal.weekDots || []).map((p) => p[1]));
     const x0 = Math.min(...xs) - 12, y0 = Math.min(...ys) - 12;
-    out.push({ id: 'calendar', box: [x0, y0, Math.max(...xs) + 12 - x0, Math.max(...ys) + 12 - y0], layer: 'back', later: 'P2d.2' });
+    out.push({ id: 'calendar', box: [x0, y0, Math.max(...xs) + 12 - x0, Math.max(...ys) + 12 - y0], layer: 'back' });
   }
   if (slot.easel && slot.easel.box) out.push({ id: 'easel', box: slot.easel.box, layer: 'mid', later: 'P2d.3' });
   if (slot.whiteboard && slot.whiteboard.box) out.push({ id: 'whiteboard', box: slot.whiteboard.box, layer: 'back', later: 'P2d.3' });
   return out;
+}
+
+/** P2d.2: letter magnets stick on two rows across the whiteboard (surfaces over the board). Pure. */
+export function whiteboardRows(m) {
+  const b = m.rigs && m.rigs.canvases && m.rigs.canvases.whiteboard;
+  if (!b) return [];
+  const [x, y, w, h] = b;
+  return [0.36, 0.71].map((f, i) => ({ id: `wb-row-${i + 1}`, layer: 'back', x0: r1(x + 8), x1: r1(x + w - 8), y: r1(y + h * f) }));
 }
 
 /** The view-layer room definition for the school strip. Pure. opts.tiled: layers as tiles (default). */
@@ -172,7 +192,7 @@ export function schoolRoom(m, { tiled = true, cameraX = 0 } = {}) {
     cameraStops: (m.zones || []).map((z) => z.camera),
     backdrop: { top: '#CDE6EE', bottom: '#EFD9B8', horizon: floorTop },
     floor: { top: floorTop, bottom: m.floor.y1, x0: 0, x1: m.width, sound: 'thud' },
-    surfaces: m.surfaces.map((s) => ({ id: s.id, x0: s.x0, x1: s.x1, y: s.y, depth: depthOf(s.layer), sound: /cubby/.test(s.id) ? 'tap' : 'knock' })),
+    surfaces: m.surfaces.concat(whiteboardRows(m)).map((s) => ({ id: s.id, x0: s.x0, x1: s.x1, y: s.y, depth: depthOf(s.layer), sound: /cubby/.test(s.id) ? 'tap' : /^wb-row/.test(s.id) ? 'clack' : 'knock' })),
     seats,
     art,
     tiles,
@@ -200,8 +220,8 @@ export const PIECES = {
   'bus-inside': { bus: true },
   'fish-bowl': { fish: true },
   'rocking-chair': { rock: true },
-  'weather-today': { later: 'P2d.2', sound: ['whoosh'] },
-  'class-window': { later: 'P2d.2', sound: ['plink'] },
+  'weather-today': { board: true },   // P2d.2 (school-board.js): cycle the weather
+  'class-window': { board: true },    // rain / snow falls again, the kids look
   'swing-1-chains': { later: 'P2d.4', sound: ['squeak', { pitch: 0.8 }] },
   'swing-1-seat': { later: 'P2d.4', sound: ['squeak', { pitch: 0.9 }] },
   'swing-2-chains': { later: 'P2d.4', sound: ['squeak', { pitch: 0.8 }] },
@@ -621,18 +641,26 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     pieces.set(pid, { el, body: el.firstChild, img: el.querySelector('img'), shown: null, gen: 0 });
     input.register(el, { onTap: () => tapPiece(pid), pan: true });
   }
-  // Tap areas over painted things.
+  // Tap areas over painted things (the letters' handlers come from the board: a drag pulls out a magnet).
+  let board = null;
+  const board0 = (id) => (id.indexOf('letter-') === 0 ? {
+    pan: false,
+    onTap: (info) => tapHit(id, info),
+    onDragStart: (info) => (board ? board.letterHandlers(id).onDragStart(info) : false),
+    onDragMove: (info) => { if (board) board.letterHandlers(id).onDragMove(info); },
+    onDragEnd: (info) => { if (board) board.letterHandlers(id).onDragEnd(info); },
+  } : null);
   const hits = new Map();
   for (const a of hitAreas(m)) {
     const el = room.art.get('hit:' + a.id);
     if (!el) continue;
     el.dataset.hit = a.id;
     hits.set(a.id, { el, a });
-    input.register(el, { onTap: () => tapHit(a.id), pan: true });
+    input.register(el, (board0 && board0(a.id)) || { onTap: (info) => tapHit(a.id, info), pan: true });
   }
 
   const hooks = Object.assign({}, base, {
-    spriteOf: (e) => (catalog.hasTag(e.kind, 'hotspot') ? hotSprite(e.kind) : (base.spriteOf ? base.spriteOf(e) : null)),
+    spriteOf: (e) => (catalog.hasTag(e.kind, 'hotspot') ? hotSprite(e.kind) : (board && board.spriteOf(e)) || (base.spriteOf ? base.spriteOf(e) : null)),
     sortKeyOf(e) {
       const k = base.sortKeyOf ? base.sortKeyOf(e) : null;
       if (k != null || !catalog.hasTag(e.kind, 'hotspot')) return k;
@@ -662,6 +690,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
       if (isChar(e)) glowCubby(headCubby(e));
     },
     onDrop(e, ctx) {
+      if (!isChar(e) && board && board.onDrop(e, ctx)) return true;
       if (!isChar(e)) return base.onDrop ? base.onDrop(e, ctx) : false;
       const cub = headCubby(e);
       glowCubby(-1);
@@ -687,6 +716,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     onTap(e, ctx) {
       if (e.kind === FISHBOWL_KIND) { tapFish(); return true; }
       if (e.kind === CUBBY_KIND) { tapCubby(e); return true; }
+      if (board && board.onTap(e)) return true;
       const r = base.onTap ? base.onTap(e, ctx) : false;
       if (isChar(e)) {
         if (e.props.seat === 'line-1') march();
@@ -716,6 +746,8 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
   }
   firstVisit = false;
   applyCots();
+  // A tap on any part of the teacher (her lanyard, her face...): a picture card.
+  behaviors.charTap = (e) => !!(board && board.onTap(e));
 
   // ---- helpers over characters ----
   const charsHere = () => inRoom(store.state, SCHOOL_ID).filter((e) => isChar(e) && !e.parent);
@@ -968,11 +1000,12 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     const b = hits.get('schedule-' + id).a.box;
     fx.burst('sparkle', b[0] + b[2] / 2, b[1] + b[3] / 2, { count: 4, spread: 40 });
   }
-  function tapHit(id) {
+  function tapHit(id, info) {
     stats.hits[id] = (stats.hits[id] || 0) + 1;
     if (id.indexOf('feeling-') === 0) return tapFeeling(id.slice(8));
     if (id.indexOf('schedule-') === 0) return tapSchedule(id.slice(9));
-    // Fallback (letters, sight words, calendar, easel, whiteboard: P2d.2-3).
+    if (board && board.tapHit(id, info)) return undefined;
+    // Fallback (easel, whiteboard: P2d.3).
     stats.fallbacks++;
     const h = hits.get(id);
     popArt(h.a.box, h.a.layer);
@@ -1061,6 +1094,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     if (spec.fish) return tapFish();
     if (spec.rock) return rock();
     if (spec.bell) return ringBell();
+    if (spec.board && board && board.tapPiece(pid)) return undefined;
     if (spec.toggle) {
       const next = nextToggle(pid, state(pid));
       setFix(pid, next);
@@ -1080,6 +1114,13 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     return undefined;
   }
 
+  // ---- the teaching wall (P2d.2) ----
+  board = createSchoolBoard({
+    stage, store, room, view, fx, chars, manifest, catalog, speech, isSpeechOn, popArt, later, setFix, fprops, charsHere, anchor, viewOf, onScreen, SCHOOL_ID, behaviors,
+    hitBox: (id) => (hits.get(id) ? hits.get(id).a.box : null),
+    now: () => new Date(),
+  });
+
   renderPieces();
   renderFaces();
   view.refresh();
@@ -1092,6 +1133,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
   const unsubscribe = store.subscribe((st, env) => {
     renderPieces();
     renderFaces();
+    board.render();
     const cotMoved = env && env.op === 'move' && env.device === store.device && env.args && (() => { const e = st.entities[env.args.id]; return e && e.kind === 'nap-cot'; })();
     const prevSeats = cotMoved ? new Map(cotSeats().filter((s) => s.id === COT_SEAT + env.args.id).map((s) => [s.id, s])) : null;
     applyCots();
@@ -1157,6 +1199,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     riders: () => riders().map((e) => e.id),
     driveIn,
     stats: () => ({ ...stats, taps: { ...stats.taps }, hits: { ...stats.hits }, said: stats.said.slice(), timers: timers.size }),
+    board,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: on the path in front of the school door, in a row. */
@@ -1164,6 +1207,7 @@ export async function mountSchool(stage, { input, store, manifest, carry = null,
     destroy() {
       unsubscribe();
       offStage();
+      board.destroy();
       clearTimeout(camTimer);
       for (const t of timers) clearTimeout(t);
       timers.clear();

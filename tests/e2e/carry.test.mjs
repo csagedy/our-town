@@ -99,6 +99,7 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
       const kid1 = await ent(page, ids.kid);
       assert.equal(kid1.room, window_pocket(await page.eval(() => window.__store.device)));
       assert.deepEqual(kid1.props.wear, kid0.props.wear, 'outfit kept');
+      ids.wear = kid0.props.wear;
       assert.deepEqual((await kidsOf(page, ids.kid)).find((k) => k.slot === 'hand-r'), { id: ids.banana, kind: 'banana', slot: 'hand-r' }, 'still holds the banana');
       assert.equal(await at(page, ids.cup), null, 'no longer in the kitchen');
       // Thumbnails: a sprite and a character portrait.
@@ -150,9 +151,18 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
       // The long move slides the car over: wait until it is drawn there.
       await page.waitFor(`window.__town.scene.view.viewOf(${JSON.stringify(ids.car)}).el.getAnimations().length === 0`);
       await page.frames(4);
+      // Every place on the street can be gone into now; with a passenger the
+      // car heads for the nearest one in its direction of travel (to the
+      // right), or around the block to the first one.
+      const doors = await page.eval(() => window.__town.scene.doors());
+      assert.deepEqual(doors.map((d) => [d.building, !!d.location]), [['cafe', true], ['theater', true], ['construction', true], ['school', true]]);
+      const ahead = doors.filter((d) => d.location && d.x > 2300);
+      const dest = (ahead[0] || doors.find((d) => d.location)).location;
+      assert.equal(dest, 'cafe/kitchen', 'past the school, the next place is the cafe');
       const car = await at(page, ids.car);
       await page.tap(car.x, car.y);
       await page.waitFor(() => window.__town.carry.stats.drives === 1);
+      assert.deepEqual(await page.eval(() => window.__town.carry.stats.lastDrive), { building: 'cafe', location: dest });
       await page.frames(8);
       await page.screenshot(`carry-${name}-driving`);
       await page.waitFor(`window.__town.at === 'cafe/kitchen' && ${IDLE}`, { timeout: 20000 });
@@ -161,6 +171,7 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
       assert.equal(kid.room, 'cafe/kitchen');
       assert.equal(kid.parent, null);
       assert.equal(kid.props.pose, 'stand');
+      assert.deepEqual(kid.props.wear, ids.wear, 'arrives in the same outfit');
       assert.ok((await kidsOf(page, ids.kid)).some((k) => k.id === ids.banana), 'still holds the banana');
       assert.ok(await at(page, ids.kid), 'drawn in the kitchen');
       // The car stayed parked at the cafe on the map.

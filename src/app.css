@@ -239,6 +239,9 @@ body {
 .fx-chick { width: 46px; height: 46px; }
 .fx-steam { width: 34px; height: 34px; }
 .fx-zzz { width: 24px; height: 24px; }   /* P2d.1 school: a napping z */
+.fx-flake { width: 18px; height: 18px; }                  /* P2b.2 theater snow */
+.fx-confetti { width: 20px; height: 20px; color: #F7B9C6; }  /* P2b.2 confetti (opts.color) */
+.fx-fog { width: 120px; height: 60px; }                      /* P2b.2 fog cloud (40x20 viewBox) */
 
 /* ---- P1.7 test room placeholder art (src/scenes/test-room.js), temporary ---- */
 .art i { position: absolute; display: block; }

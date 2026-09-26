@@ -37,6 +37,12 @@ SHAPES.steam = '<svg viewBox="0 0 20 20"><path d="M9 19 C4 15 14 12 9 8 C6 5.5 9
 // School (P2d.1): a sleepy "z" drifting up off a napping character (a drawn
 // zigzag, not text).
 SHAPES.zzz = '<svg viewBox="0 0 20 20"><path d="M4 4 L16 4 L5 16 L16 16" fill="none" stroke="#8FA3C9" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// Theater show effects (P2b.2): a snowflake, a confetti strip (opts.color,
+// drawn with currentColor) and a soft fog cloud (flat fills, no blur: its
+// softness is the opacity it fades with). Flown with fx.path().
+SHAPES.flake = '<svg viewBox="0 0 20 20"><g stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M10 1.5 V18.5 M2.6 5.75 L17.4 14.25 M2.6 14.25 L17.4 5.75"/></g><circle cx="10" cy="10" r="2.6" fill="#FFFFFF"/></svg>';
+SHAPES.confetti = '<svg viewBox="0 0 20 20"><rect x="6" y="1" width="8" height="18" rx="2" fill="currentColor"/></svg>';
+SHAPES.fog = '<svg viewBox="0 0 40 20"><path d="M4 18 C0 18 0 12 5 11.5 C5 6 12 5 14 8.5 C16 3 25 2.5 27 8 C31 5.5 37 8 35.5 12 C40 12.5 40 18 35 18 Z" fill="#FFFFFF"/></svg>';
 export const FX_TYPES = Object.keys(SHAPES);
 
 // Per type: base size (units), lifetime (ms), rise (units, negative = up), spin (deg).
@@ -51,6 +57,9 @@ const LOOK = {
   chick: { size: 46, life: 1500, rise: -34, spin: 0 },
   steam: { size: 34, life: 1400, rise: -70, spin: 30 },
   zzz: { size: 24, life: 1800, rise: -90, spin: -20 },
+  flake: { size: 18, life: 3000, rise: 0, spin: 120 },
+  confetti: { size: 20, life: 2200, rise: 0, spin: 540 },
+  fog: { size: 120, life: 3600, rise: 0, spin: 0 },
 };
 
 export function createFx(layer, { cap = FX_CAP, random = Math.random } = {}) {
@@ -138,6 +147,34 @@ export function createFx(layer, { cap = FX_CAP, random = Math.random } = {}) {
         const k = scale * (0.7 + random() * 0.6);
         launch(type, x, y, Math.cos(ang) * r, Math.sin(ang) * r * 0.7, k, i * stagger, color);
       }
+    },
+    /**
+     * One particle of `type` flown along a path (P2b.2: falling snow,
+     * confetti arcs, fog rolling). steps: [{dx, dy, s (scale), o (opacity),
+     * r (deg), at (offset 0..1), e (easing to the next step)}] relative to world point (x, y); the first
+     * step is the start. Transform and opacity only, like burst().
+     */
+    path(type, x, y, steps, { life = null, delay = 0, color = null, easing = 'linear' } = {}) {
+      if (!LOOK[type] || !steps || steps.length < 2) return;
+      const p = take();
+      const look = LOOK[type];
+      if (p.type !== type) { p.el.innerHTML = SHAPES[type]; p.el.className = `fx-p fx-${type}`; p.type = type; }
+      const el = p.el;
+      el.style.color = color || '';
+      const h = look.size / 2;
+      const frames = steps.map((q) => {
+        const f = { transform: `translate3d(${Math.round((x - h + (q.dx || 0)) * 10) / 10}px, ${Math.round((y - h + (q.dy || 0)) * 10) / 10}px, 0) scale(${q.s == null ? 1 : q.s}) rotate(${Math.round(q.r || 0)}deg)`, opacity: q.o == null ? 1 : q.o };
+        if (q.at != null) f.offset = q.at;
+        if (q.e) f.easing = q.e;   // the easing INTO the next step
+        return f;
+      });
+      el.style.visibility = '';
+      const anim = animate(el, frames, { duration: life || look.life, delay, easing, fill: 'backwards' });
+      p.anim = anim;
+      p.started = ++seq;
+      const release = () => { if (p.anim !== anim) return; p.anim = null; el.style.visibility = 'hidden'; };
+      anim.addEventListener('finish', release);
+      anim.addEventListener('cancel', release);
     },
     stats: () => ({ cap, created: pool.length, active: pool.filter((p) => p.anim).length }),
     /** Stop everything and hide (a room change). Elements stay pooled. */

@@ -29,7 +29,14 @@ const sounds = (page) => page.eval(() => window.__rec.sounds.slice());
 
 const imagesReady = () => Promise.all([...document.images].filter((i) => i.getAttribute('src'))
   .map((i) => i.decode().then(() => i.naturalWidth > 0, () => false))).then((ok) => ok.every(Boolean));
-const noText = () => document.body.innerText.trim();
+// No text on screen but the reading layer (P2d.2: the sight-word cards, marked data-reading).
+const noText = () => {
+  const els = [...document.querySelectorAll('[data-reading]')];
+  els.forEach((e) => { e.style.display = 'none'; });
+  const t = document.body.innerText.trim();
+  els.forEach((e) => { e.style.display = 'flex'; });
+  return t;
+};
 const calm = () => !window.__town.busy && !window.__stage.camera.moving && !window.__stage.camera.dragging
   && document.getAnimations().filter((a) => a.animationName !== 'char-breathe' && a.id !== 'char-idle').length === 0;
 const waitWith = (page, fn, arg, timeout = 15000) => page.waitFor(`(${fn})(${JSON.stringify(arg)})`, { timeout });
@@ -273,7 +280,7 @@ describe('school (ipad-air, landscape, touch)', () => {
     await panTo(page, 946);
     const a = await elPoint(page, { hit: 'letter-A' });
     await page.tap(a.x, a.y);
-    await page.waitFor(() => window.__town.scene.stats().hits['letter-A'] === 1 && window.__town.scene.stats().fallbacks >= 1);
+    await page.waitFor(() => window.__town.scene.stats().hits['letter-A'] === 1 && window.__town.scene.board.stats().lastLetter === 'A');
     await page.waitFor(calm, { timeout: 15000 });
     assert.equal(await page.eval(noText), '');
   });

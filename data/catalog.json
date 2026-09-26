@@ -1993,6 +1993,15 @@
       "label": "Weather Card",
       "home": { "room": "school/classroom" }
     },
+    "letter-magnet": {
+      "ph": { "shape": "box", "fill": "#F2C75C" },
+      "size": [54, 48],
+      "tags": ["school", "letter", "magnet", "toy", "reading"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [],
+      "label": "Letter",
+      "home": { "room": "school/classroom" }
+    },
     "playground-ball": {
       "art": { "sprite": "playground-ball" },
       "ph": { "shape": "box", "fill": "#EFE4D6" },
@@ -2635,6 +2644,54 @@
         { "use": "sound", "name": "bubble", "pitches": [0.8, 1] }
       ],
       "label": "Thermos",
+      "home": { "room": "construction/yard" }
+    },
+    "saw": {
+      "art": { "sprite": "saw" },
+      "ph": { "shape": "flat", "fill": "#C9CDD3" },
+      "size": [119, 43],
+      "tags": ["construction", "tool", "saw"],
+      "sounds": { "tap": "zzzt", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "zzzt", "pitches": [1, 1.12] }
+      ],
+      "label": "Saw",
+      "home": { "room": "construction/yard" }
+    },
+    "drill": {
+      "art": { "sprite": "drill" },
+      "ph": { "shape": "box", "fill": "#6FB7B0" },
+      "size": [109, 73],
+      "tags": ["construction", "tool", "drill"],
+      "sounds": { "tap": "whirr", "drop": "knock" },
+      "behaviors": [
+        { "use": "toggle", "key": "on", "looks": ["off", "on"], "sounds": ["tap", "whirr"], "fx": "sparkle" }
+      ],
+      "label": "Drill",
+      "home": { "room": "construction/yard" }
+    },
+    "wrench": {
+      "art": { "sprite": "wrench" },
+      "ph": { "shape": "tall", "fill": "#C9CDD3" },
+      "size": [73, 92],
+      "tags": ["construction", "tool", "wrench"],
+      "sounds": { "tap": "clink", "drop": "clink" },
+      "behaviors": [
+        { "use": "sound", "name": "clink", "pitches": [1, 1.2, 0.9] }
+      ],
+      "label": "Wrench",
+      "home": { "room": "construction/yard" }
+    },
+    "cement-slab": {
+      "art": { "sprite": "plank" },
+      "ph": { "shape": "box", "fill": "#B9B4BD" },
+      "size": [168, 28],
+      "tags": ["buildpiece", "construction", "paintable", "cement"],
+      "sounds": { "tap": "thud", "drop": "thud" },
+      "behaviors": [
+        { "use": "buildpiece", "sound": "thud" }
+      ],
+      "label": "Cement Slab",
       "home": { "room": "construction/yard" }
     },
     "site-lumber": {

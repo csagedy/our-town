@@ -513,6 +513,14 @@ export const RECIPES = {
       tone(v, { type: 'triangle', f: 150, sweep: [[0.1, 95]], dur: 0.12, peak: 0.08, attack: 0.006 });
     },
   },
+  // P2c.4 the workshop saw: one stroke through a plank, a buzzy rasping zzzt.
+  zzzt: {
+    dur: 0.36,
+    play(v) {
+      noise(v, { dur: 0.3, peak: 0.26, attack: 0.02, hold: 0.12, filter: { type: 'bandpass', f: 2400, q: 2.2, sweep: [[0.28, 1500]] } });
+      tone(v, { type: 'triangle', f: 150, dur: 0.3, peak: 0.1, attack: 0.02, hold: 0.1, vib: { rate: 38, depth: 25 }, filter: { type: 'lowpass', f: 1800 } });
+    },
+  },
   // The dump truck backing up and tipping: three bright beeps.
   beep: {
     dur: 0.95, tuned: true,
@@ -578,6 +586,86 @@ export const RECIPES = {
         });
       });
       noise(v, { dur: 1.0, peak: 0.03, attack: 0.2, filter: { type: 'lowpass', f: 500 } });
+    },
+  },
+  // P2b.2 theater effects and scenery ambience (src/scenes/theater-show.js).
+  // A thunder clap: a soft crack, then a low rolling rumble in lumps.
+  thunder: {
+    dur: 2.5,
+    play(v) {
+      noise(v, { dur: 0.35, peak: 0.3, attack: 0.008, filter: { type: 'lowpass', f: 1400, sweep: [[0.3, 300]] } });
+      tone(v, { f: 70, sweep: [[1.2, 47]], dur: 1.6, peak: 0.3, attack: 0.02 });
+      [0.12, 0.5, 0.95, 1.5].forEach((at, i) => {
+        noise(v, { at, dur: 0.9 - i * 0.1, peak: 0.36 - i * 0.06, attack: 0.06, filter: { type: 'lowpass', f: 420 - i * 60, q: 0.8 } });
+      });
+      tone(v, { type: 'triangle', f: 58, sweep: [[1.9, 47]], at: 0.3, dur: 2.1, peak: 0.16, attack: 0.1, filter: { type: 'lowpass', f: 260, fixed: true } });
+    },
+  },
+  // The audience gasps: a quick breathy in-take with a little "oh!".
+  gasp: {
+    dur: 0.66,
+    play(v) {
+      noise(v, { dur: 0.3, peak: 0.26, attack: 0.07, filter: { type: 'bandpass', f: 1500, q: 1.1, sweep: [[0.28, 2400]] } });
+      [262, 311, 349].forEach((f, i) => tone(v, {
+        type: 'triangle', f: f * (0.98 + v.rnd() * 0.04), sweep: [[0.18, f * 1.3]], at: 0.18 + i * 0.02, dur: 0.38, peak: 0.08, attack: 0.02,
+        filter: { type: 'lowpass', f: 900, q: 1.2 },
+      }));
+    },
+  },
+  // The audience laughs: two or three voices going "ha-ha-ha-ha", lower than a giggle.
+  laugh: {
+    dur: 1.3,
+    play(v) {
+      [[330, 0], [262, 0.05], [392, 0.1]].forEach(([f0, at0], k) => {
+        for (let i = 0; i < 5; i++) {
+          const f = f0 * (1.08 - i * 0.04) * (0.97 + v.rnd() * 0.06);
+          tone(v, {
+            type: 'triangle', f, sweep: [[0.06, f * 1.1]], at: at0 + i * 0.2 + v.rnd() * 0.02, dur: 0.12, peak: 0.18 - k * 0.04, attack: 0.012,
+            filter: { type: 'bandpass', f: 950, q: 1.1 },
+          });
+        }
+      });
+    },
+  },
+  // Scenery ambience (each about 3 s; the scene replays it a few times, then stops).
+  // Under the sea: two slow waves rolling in and hissing out.
+  waves: {
+    dur: 3.4,
+    play(v) {
+      [0, 1.55].forEach((at) => {
+        noise(v, { at, dur: 1.75, peak: 0.22, attack: 0.7, filter: { type: 'lowpass', f: 300, q: 0.7, sweep: [[0.8, 1100], [1.7, 380]] } });
+        noise(v, { at: at + 0.6, dur: 1.1, peak: 0.06, attack: 0.3, filter: { type: 'bandpass', f: 2200, q: 0.8 } });
+      });
+    },
+  },
+  // The castle: a soft breeze with two little birds.
+  breeze: {
+    dur: 3.3,
+    play(v) {
+      noise(v, { dur: 3.2, peak: 0.16, attack: 1.0, hold: 0.8, filter: { type: 'bandpass', f: 420, q: 0.9, sweep: [[1.4, 900], [3.0, 480]] } });
+      [[0.7, 2350], [0.86, 2650], [2.0, 2100], [2.14, 2500], [2.28, 2300]].forEach(([at, f]) => {
+        tone(v, { f, sweep: [[0.07, f * 1.18]], at, dur: 0.1, peak: 0.05, attack: 0.008 });
+      });
+    },
+  },
+  // The starry night: crickets (trains of tiny chirps).
+  crickets: {
+    dur: 3.3,
+    play(v) {
+      [[0.1, 3500], [0.95, 3700], [1.8, 3500], [2.6, 3650]].forEach(([at, f]) => {
+        for (let i = 0; i < 4; i++) tone(v, { f: f * (0.99 + v.rnd() * 0.02), at: at + i * 0.07, dur: 0.045, peak: 0.09, attack: 0.006 });
+      });
+      noise(v, { dur: 3.2, peak: 0.02, attack: 0.8, hold: 1.2, filter: { type: 'lowpass', f: 400 } });
+    },
+  },
+  // The city: a low traffic hum, a car going by, a far-away friendly toot.
+  traffic: {
+    dur: 3.3,
+    play(v) {
+      noise(v, { dur: 3.2, peak: 0.16, attack: 0.8, hold: 1.2, filter: { type: 'lowpass', f: 260, q: 0.7 } });
+      noise(v, { at: 0.6, dur: 1.8, peak: 0.12, attack: 0.8, filter: { type: 'bandpass', f: 380, q: 0.9, sweep: [[0.9, 700], [1.7, 300]] } });
+      tone(v, { type: 'triangle', f: 92, sweep: [[1.0, 104], [2.0, 80]], at: 0.5, dur: 2.2, peak: 0.1, attack: 0.6, filter: { type: 'lowpass', f: 400, fixed: true } });
+      for (const f of [330, 415]) tone(v, { type: 'triangle', f, at: 2.1, dur: 0.3, peak: 0.05, attack: 0.02, hold: 0.12, filter: { type: 'lowpass', f: 1200 } });
     },
   },
   // Ta-da! A little fanfare when a costume goes on (G5 then a C6 + E6 chord).

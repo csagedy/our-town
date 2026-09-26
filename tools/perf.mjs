@@ -97,6 +97,42 @@ await page.eval(() => {
 });
 console.log(`throttle x${RATE}, ${VIEWPORT}; boot ready at ${boot.ready} ms, DOMContentLoaded ${boot.dcl} ms, last file loaded at ${boot.lastResource} ms`);
 const vw = await page.eval(() => ({ w: innerWidth, h: innerHeight }));
+// `--scene theater` (P2b.2): only the theater show effects, then exit.
+if (arg('scene', '') === 'theater') {
+  await page.eval(() => window.__town.go('theater/stage'));
+  await page.waitFor(() => window.__town.at === 'theater/stage' && !window.__town.busy, { timeout: 30000 });
+  await page.waitFor(() => window.__town.scene.show, { timeout: 30000 });
+  await sleep(1500);
+  await measure('theater idle, stage (3 s)', () => sleep(3000));
+  // Real taps on the three machines, back to back: fog + confetti + snow at once.
+  const panTo = async (x) => { await page.eval((x) => window.__stage.camera.panTo(x), x); await page.waitFor(() => !window.__stage.camera.moving); await sleep(300); };
+  const tapPiece = async (pid) => {
+    const p = await page.eval((pid) => { const r = window.__town.scene.pieces.el(pid).getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }, pid);
+    await page.tap(p.x, p.y);
+  };
+  const fx = await measure('theater fog + confetti + snow at once', async () => {
+    for (const pid of ['fog-machine', 'confetti-cannon', 'snow-machine']) await tapPiece(pid);
+    await sleep(4500);
+  });
+  fx.show = await page.eval(() => ({ stats: window.__town.scene.show.stats(), state: window.__town.scene.show.state() }));
+  console.log(`${''.padEnd(34)} show pool: peak ${fx.show.stats.peak} particles (cap ${fx.show.state.fx.cap})`);
+  await sleep(3000);
+  await measure('theater fog + confetti + snow again (warm pool)', async () => {
+    for (const pid of ['fog-machine', 'confetti-cannon', 'snow-machine']) await tapPiece(pid);
+    await sleep(4500);
+  });
+  await panTo(400);
+  await measure('theater thunder (flash)', async () => { await tapPiece('thunder-sheet'); await sleep(2500); });
+  await sleep(4000);
+  const idle = await measure('theater idle after effects (3 s)', () => sleep(3000));
+  idle.afterFx = await page.eval(() => ({ anims: document.getAnimations().filter((a) => a.animationName !== 'char-breathe' && a.id !== 'char-idle').length, timers: window.__town.scene.show.state().timers, active: window.__town.scene.show.state().fx.active }));
+  console.log(`${''.padEnd(34)} after effects: ${JSON.stringify(idle.afterFx)}`);
+  await page.send('Emulation.setCPUThrottlingRate', { rate: 1 });
+  console.log(JSON.stringify({ rate: RATE, viewport: VIEWPORT, bootMs, results }, null, 1));
+  if (page.errors.length) console.log('page errors:', page.errors);
+  await page.close();
+  process.exit(0);
+}
 
 await measure('city idle (3 s)', () => sleep(3000));
 const bigImages = await page.eval(() => [...document.images].filter((i) => i.complete && i.naturalWidth)

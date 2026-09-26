@@ -77,3 +77,92 @@ test('first visit: every seeded kind is in the catalog, the cast exists, backpac
   assert.equal(p.colors.back, manifest.props['school-backpack'].wear.colors.rose.back);
   assert.ok(schoolFiles(manifest).length > 0);
 });
+
+// ---- P2d.2: the teaching wall (src/scenes/school-board.js) ----
+import {
+  LETTERS, letterPicture, SIGHT_WORDS, sightWord, MAGNET_WORDS, magnetRows, nextWeather, WEATHERS, DAYS, dateKey,
+  TEACHER_CARDS, isTeacher, MAGNET_KIND,
+} from '../../src/scenes/school-board.js';
+import { whiteboardRows } from '../../src/scenes/school.js';
+
+test('letters: all 26 have a name, a sound, a word and a picture that exists (a star only for U and Z)', () => {
+  assert.equal(Object.keys(LETTERS).length, 26);
+  const stars = [];
+  for (const ch of manifest.school.letters) {
+    const L = LETTERS[ch];
+    assert.ok(L && L[0] && L[1] && L[2], ch);
+    const pic = letterPicture(manifest, ch);
+    if (!pic) { stars.push(ch); continue; }
+    assert.ok(readFileSync(path.join(ROOT, pic.file)).length > 0, `${ch}: ${pic.file}`);
+    assert.ok(Math.max(pic.w, pic.h) <= 84.1);
+    const p = manifest.props[L[3]];
+    assert.ok(p.variants[L[4]], `${ch}: ${L[3]} has variant ${L[4]}`);
+  }
+  assert.deepEqual(stars, ['U', 'Z']);
+  assert.equal(LETTERS.B[2], 'ball');
+});
+
+test('sight words: 16 Pre-K/K words on two pages of 8', () => {
+  assert.equal(SIGHT_WORDS.length, 16);
+  assert.equal(m.rigs.sightWords.cards.length, 8);
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6, 7].map((i) => sightWord(0, i)), ['the', 'I', 'a', 'see', 'can', 'like', 'go', 'is']);
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6, 7].map((i) => sightWord(1, i)), ['my', 'we', 'you', 'and', 'to', 'me', 'it', 'up']);
+  assert.ok(hitAreas(m).some((h) => h.id === 'sight-flip'));
+});
+
+test('magnets: side by side in a row spell a word; a gap or another row breaks it', () => {
+  const at = (id, ch, x, y = 300) => ({ id, ch, x, y, w: 54 });
+  let rows = magnetRows([at('t', 'T', 220), at('c', 'C', 100), at('a', 'A', 160)]);
+  assert.deepEqual(rows, [{ ids: ['c', 'a', 't'], word: 'cat' }]);
+  rows = magnetRows([at('c', 'C', 100), at('a', 'A', 160), at('t', 'T', 400)]);
+  assert.deepEqual(rows.map((r) => r.word), ['ca', 't']);
+  rows = magnetRows([at('d', 'D', 100), at('o', 'O', 160, 300), at('g', 'G', 220, 380)]);
+  assert.deepEqual(rows.map((r) => r.word), ['do', 'g']);
+  for (const w of ['cat', 'dog', 'sun', 'mom', 'dad', 'ian', 'zoe']) assert.ok(MAGNET_WORDS.includes(w), w);
+  assert.ok(catalog[MAGNET_KIND], 'the magnet is a catalog kind');
+  const wb = whiteboardRows(m);
+  assert.equal(wb.length, 2);
+  assert.ok(schoolRoom(m).surfaces.some((s) => s.id === 'wb-row-1'));
+});
+
+test('weather cycles sun, cloud, rain, snow (a blank slot starts at sun); days and dates', () => {
+  assert.equal(nextWeather(null), 'sun');
+  assert.equal(nextWeather('sun'), 'cloud');
+  assert.equal(nextWeather('snow'), 'sun');
+  for (const w of WEATHERS) { assert.ok(m.pieces['weather-today'].variants[w]); assert.ok(m.pieces['class-window'].variants[w]); }
+  assert.equal(DAYS[new Date(2026, 8, 28).getDay()], 'Monday');
+  assert.equal(dateKey(new Date(2026, 8, 6)), '2026-09-06');
+});
+
+test('teacher cards: the teacher by cast or by lanyard; every card says something and has a picture', () => {
+  const st = { entities: { a: { id: 'a', kind: 'char', props: { cast: 'girl9' } }, l: { id: 'l', kind: 'lanyard', parent: 'a', props: {} }, t: { id: 't', kind: 'char', props: { cast: 'teacher' } }, b: { id: 'b', kind: 'char', props: { cast: 'boy5' } } } };
+  assert.equal(isTeacher(st, st.entities.t), true);
+  assert.equal(isTeacher(st, st.entities.a), true);
+  assert.equal(isTeacher(st, st.entities.b), false);
+  for (const [id, c] of Object.entries(TEACHER_CARDS)) {
+    assert.ok(c.say && c.react && c.pic, id);
+    if (c.pic[0] === 'sprite') assert.ok(manifest.props[c.pic[1]], id);
+  }
+  for (const id of ['line-up', 'clean-up', 'wash-hands', 'snack-time', 'story-time', 'recess', 'quiet']) assert.ok(TEACHER_CARDS[id], id);
+});
+
+test('clean up: only floor supplies from here go home; never kids, food, surfaces, far-away things or a magnet row', async () => {
+  const { cleanUpPlan } = await import('../../src/scenes/school-board.js');
+  const tags = { crayon: ['crayon'], cupcake: ['food'], blocks: ['toy', 'buildpiece'], 'letter-magnet': ['magnet'], 'picture-book': ['book'], char: [] };
+  const homes = { crayon: { spawner: 'crayon-cup' }, 'picture-book': { room: SCHOOL_ID }, blocks: { room: 'construction/yard' }, 'letter-magnet': { room: SCHOOL_ID } };
+  const e = (id, kind, x, y, props = {}) => ({ id, kind, room: SCHOOL_ID, x, y, props });
+  const items = [
+    e('c1', 'crayon', 1600, 930, { from: 'bin' }), e('c2', 'crayon', 1470, 837.2, { from: 'bin' }), e('c3', 'crayon', 1500, 950),
+    e('b1', 'picture-book', 1780, 950), e('k', 'char', 900, 900), e('f', 'cupcake', 1700, 960), e('x', 'blocks', 1880, 940),
+    e('x2', 'blocks', 1800, 940, { from: 'blockbin' }), e('m1', 'letter-magnet', 1260, 940, { ch: 'O' }), e('m2', 'letter-magnet', 1300, 960, { ch: 'C' }),
+  ];
+  const plan = cleanUpPlan(items, {
+    roomId: SCHOOL_ID, floorY0: m.floor.y0, surfaces: [{ x0: 1330, x1: 1533, y: 837.2 }],
+    tagsOf: (k) => tags[k], homeOf: (k) => homes[k], fixedOf: () => false,
+    binFor: (it) => (it.kind === 'crayon' ? 'bin' : it.kind === 'picture-book' ? 'books' : it.kind === 'blocks' ? 'blockbin' : null),
+    magnetKind: 'letter-magnet', rowOf: (id) => (id === 'm2' ? 3 : 1),
+  });
+  // c3 has no from and its home is a spawner kind (not this room): stays; x (far-away blocks) stays, x2 came out of a bin here: goes.
+  assert.deepEqual(plan.map((p) => p.id), ['c1', 'b1', 'x2', 'm1']);
+  assert.equal(plan.find((p) => p.id === 'm1').to, 'wall');
+});

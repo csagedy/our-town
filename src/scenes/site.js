@@ -16,8 +16,9 @@
 //   set with store ops. The TOWER CRANE (trolley, hook, lever) and the
 //   WRECKING BALL are src/scenes/site-rigs.js (P2c.2). The DIG PIT (dirt mask
 //   canvas, treasures, spade, wheelbarrow, piles), the EXCAVATOR and the DUMP
-//   TRUCK are src/scenes/site-dig.js (P2c.3). The mixer only wobbles and
-//   makes a sound for now (P2c.4).
+//   TRUCK are src/scenes/site-dig.js (P2c.3). The WORKSHOP (pegboard tools,
+//   saw, drill, cement mixer, cones, thermos, seesaw) is
+//   src/scenes/site-shop.js (P2c.4).
 // - BUILD GRID (src/core/buildgrid.js): build pieces (blocks, planks, beams,
 //   roofs, windows, doors, stairs, flags, chimneys) dropped over the build
 //   deck snap to its 40-unit grid, onto the per-column height map, with a
@@ -61,6 +62,7 @@ import { shapeOf, cellOf, snapDrop, settleGrid, topSurfaces, wobbly, towerOf, he
 import { createSiteRigs, RIG_PIECES } from './site-rigs.js';   // P2c.2: the tower crane and the wrecking ball
 import { HOOK_KIND } from '../core/crane.js';
 import { createSiteDig, DIG_PIECES } from './site-dig.js';   // P2c.3: the dig pit, the excavator, the dump truck
+import { createSiteShop, SHOP_PIECES } from './site-shop.js';   // P2c.4: the workshop, mixer, cones, seesaw
 
 export const SITE_ID = 'construction/yard';
 export const FIXTURES_KIND = 'site-fixtures';
@@ -167,7 +169,8 @@ export const PIECES = {
   // P2c.3: the dig pit's pieces are driven by site-dig.js (DIG_PIECES).
   dirt: { dig: true }, 'dump-truck': { dig: true }, 'truck-bed': { dig: true },
   excavator: { dig: true }, 'excavator-arm': { dig: true }, 'excavator-bucket': { dig: true },
-  'mixer-drum': { react: 'shake', sound: ['whoosh', { pitch: 0.8 }], later: 'P2c.4' },
+  // P2c.4: the cement mixer is driven by site-shop.js (SHOP_PIECES).
+  'mixer-drum': { shop: true },
 };
 
 /** The state of a toggle piece (its manifest default when unset). Pure. */
@@ -437,21 +440,23 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
     el.dataset.piece = pid;
     const rec = { el, body: el.firstChild, img: el.querySelector('img'), shown: null, gen: 0 };
     pieces.set(pid, rec);
-    if (!RIG_PIECES.includes(pid) && !DIG_PIECES.includes(pid)) input.register(el, { onTap: () => tapPiece(pid), pan: true });
+    if (!RIG_PIECES.includes(pid) && !DIG_PIECES.includes(pid) && !SHOP_PIECES.includes(pid)) input.register(el, { onTap: () => tapPiece(pid), pan: true });
   }
   const rigs = createSiteRigs({
     stage, store, input, room, fx, manifest, catalog, pieces, later,
     site: { FIXTURES_KIND, fixtures, placed: () => placed(), isBuild, shapeOfKind, gridSpot, settleNow: () => settleNow() },
   });
+  const showPiece = (pid, variant) => { if (variant) overrides.set(pid, variant); else overrides.delete(pid); renderPieces(); };
+  const surfaceById = (id) => baseSurfaces.find((q) => q.id === id) || null;
+  const shop = createSiteShop({
+    stage, store, input, room, fx, manifest, catalog, pieces, later,
+    site: { fixtures, pieceState: state, showPiece, surface: surfaceById, surfaceAt: (x, y) => surfaceUnder(room.def, x, y), isBuild, placed: () => placed(), grid },
+  });
   const dig = createSiteDig({
     stage, store, input, room, fx, manifest, catalog, pieces, later,
-    site: {
-      fixtures, pieceState: state,
-      showPiece: (pid, variant) => { if (variant) overrides.set(pid, variant); else overrides.delete(pid); renderPieces(); },
-      surface: (id) => baseSurfaces.find((q) => q.id === id) || null,
-    },
+    site: { fixtures, pieceState: state, showPiece, surface: surfaceById, onDrive: (x0, x1, dir) => shop.onDrive(x0, x1, dir) },
   });
-  view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: dig.hooks(rigs.hooks(hooks)), labels: textLabels(catalog, manifest) });
+  view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: shop.hooks(dig.hooks(rigs.hooks(hooks))), labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -492,6 +497,7 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
   applySurfaces();
   rigs.bind(view, chars);
   dig.bind(view, chars);
+  shop.bind(view, chars);
 
   // ---- the build grid ----
   const viewOf = (id) => (view ? view.viewOf(id) : null);
@@ -802,12 +808,14 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
       tops: () => tops.map((t) => ({ id: t.id, x0: t.x0, x1: t.x1, y: t.y })),
       settle: settleNow,
     },
-    stats: () => ({ ...stats, taps: { ...stats.taps }, timers: timers.size, rigs: rigs.stats(), dig: dig.stats() }),
+    stats: () => ({ ...stats, taps: { ...stats.taps }, timers: timers.size, rigs: rigs.stats(), dig: dig.stats(), shop: shop.stats() }),
     /** P2c.2: the tower crane and the wrecking ball (site-rigs.js; tests, debugging). */
     crane: rigs.crane,
     wreck: rigs.wreck,
     /** P2c.3: the dig pit, the excavator and the truck (site-dig.js; tests, debugging). */
     dig: dig.api,
+    /** P2c.4: the workshop, the mixer, the cones and the seesaw (site-shop.js; tests, debugging). */
+    shop: shop.api,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: in front of the build yard, in a row. */
@@ -816,6 +824,7 @@ export async function mountSite(stage, { input, store, manifest, carry = null, f
       unsubscribe();
       rigs.destroy();
       dig.destroy();
+      shop.destroy();
       offStage();
       clearTimeout(camTimer);
       for (const t of timers) clearTimeout(t);

@@ -66,6 +66,14 @@ test('the car parks by each door, never on a painted car, and drives on around t
   // With passengers it heads for a place they can go into.
   assert.equal(nextDoor(doors, 600, { built: true }).building, 'cafe');
   assert.equal(nextDoor(doors.map((d) => ({ ...d, location: null })), 600, { built: true }).building, 'theater');
+  // Every street place built (P2b.1 theater, P2c.1 site, P2d.1 school): with
+  // passengers it goes to the nearest one ahead, and around the block after the last.
+  const all = doors.map((d) => ({ ...d, location: d.location || d.building + '/in' }));
+  assert.equal(nextDoor(all, 600, { built: true }).building, 'theater');
+  assert.equal(nextDoor(all, parkX(810), { built: true }).building, 'construction');
+  assert.equal(nextDoor(all, 1430, { built: true }).building, 'school');
+  assert.equal(nextDoor(all, 1998, { built: true }).building, 'cafe', 'around the block');
+  assert.equal(nextDoor(all, 2300, { built: true }).building, 'cafe');
 });
 
 test('the car and the backpack are catalog containers with art', () => {

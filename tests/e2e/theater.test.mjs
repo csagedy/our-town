@@ -161,11 +161,16 @@ describe('theater (ipad-air, landscape, touch)', () => {
     const wig = (await idsOf(page, 'wig-hats'))[0];
     const wf = await entPoint(page, wig);
     assert.ok(wf, 'a touch point on the wig stand');
+    // Pin the pick for the whole gesture and until she wears it (the spawner
+    // rolls when the drag pulls a new one out; kinds [lion-mane, tiara]).
     await page.eval(() => { window.__rnd = Math.random; Math.random = () => 0.9; });
-    to = await anchor(page, S.maya, 'head');
-    await page.drag(wf, { x: to.x, y: to.y - 20 }, { steps: 18, durationMs: 420 });
-    await page.eval(() => { Math.random = window.__rnd; });
-    await waitWith(page, (id) => { const i = window.__town.scene.chars.inspect(id); return i && i.worn.hat === 'tiara'; }, S.maya);
+    try {
+      to = await anchor(page, S.maya, 'head');
+      await page.drag(wf, { x: to.x, y: to.y - 20 }, { steps: 18, durationMs: 420 });
+      await waitWith(page, (id) => { const i = window.__town.scene.chars.inspect(id); return i && i.worn.hat === 'tiara'; }, S.maya);
+    } finally {
+      await page.eval(() => { if (window.__rnd) Math.random = window.__rnd; });
+    }
     const worn = await page.eval((id) => window.__town.scene.chars.inspect(id).worn, S.maya);
     assert.equal(worn.top, 'gown');
     assert.equal(worn.hat, 'tiara');

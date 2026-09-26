@@ -664,7 +664,9 @@ export function createSiteDig({ stage, store, input, room, fx, manifest, catalog
     const dx = r1(clamp(info.data.dx0 + info.dx, geo.drive[0], geo.drive[1]));
     const moved = dx !== ex.dx;
     ex.dist += Math.abs(dx - ex.dx);
+    const dirE = dx < ex.dx ? -1 : 1;
     ex.dx = dx;
+    if (moved && site.onDrive) { const b = m.pieces.excavator; site.onDrive(b.x + dx + 20, b.x + dx + b.w - 20, dirE); }   // P2c.4: cones in the way fall over
     stats.frames++;
     const pose = placeExc(Math.sin(ex.dist / 9) * 1.6);
     engine(moved, moved);
@@ -745,7 +747,9 @@ export function createSiteDig({ stage, store, input, room, fx, manifest, catalog
     if (tr.mode !== 'drive') return;
     const dx = r1(clamp(info.data.dx0 + info.dx, -250, 60));
     tr.drv.dist += Math.abs(dx - tr.dx);
+    const dirT = dx < tr.dx ? -1 : 1;
     tr.dx = dx;
+    if (site.onDrive) { const b = m.pieces['dump-truck']; site.onDrive(b.x + dx + 20, b.x + dx + b.w - 10, dirT); }   // P2c.4: cones in the way fall over
     stats.frames++;
     placeTruck(Math.sin(tr.drv.dist / 9) * 1.5);
     const dd = dx - info.data.dx0;

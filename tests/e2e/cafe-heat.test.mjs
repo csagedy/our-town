@@ -391,12 +391,29 @@ describe('cafe heat (ipad-air, landscape, touch)', () => {
     assert.equal((await E(page, egg)).props.cooked, undefined, 'still raw');
     await page.goto('index.html');
     await page.waitFor(() => window.__town.at === 'cafe/kitchen' && !window.__town.busy && window.__town.scene.heat);
+    // Stamp the moment the egg cooks in the page itself, so a slow poll (a
+    // loaded machine) doesn't count as a slow cook.
+    const ready = await page.eval((egg) => {
+      const cooked = () => ((window.__store.state.entities[egg] || { props: {} }).props.cooked | 0) >= 1;
+      const r = { at: Date.now(), cooked: cooked() };
+      window.__cookedAt = r.cooked ? r.at : 0;
+      if (!r.cooked) {
+        const off = window.__store.subscribe(() => { if (!window.__cookedAt && cooked()) { window.__cookedAt = Date.now(); off(); } });
+      }
+      return r;
+    }, egg);
     const pan = await E(page, W.pan);
     assert.equal(pan.props.heatAt, heatAt, 'the same heat clock, not restarted');
     assert.deepEqual((await page.eval(() => window.__town.scene.heat.heated())).map((h) => h.id), [W.pan]);
-    await until(page, (e) => (window.__store.state.entities[e].props.cooked | 0) >= 1, egg, { timeout: 8000 });
-    const at = await page.eval(() => Date.now());
-    assert.ok(at - heatAt < 3000 + 1800, 'cooked about one step after the ORIGINAL start: ' + (at - heatAt));
+    await until(page, () => window.__cookedAt > 0, null, { timeout: 8000 });
+    const at = await page.eval(() => window.__cookedAt);
+    if (ready.cooked) {
+      // The reload itself took longer than the step: it cooked on arrival
+      // because its ORIGINAL clock had run out (a restarted clock would wait a full step).
+      assert.ok(ready.at - heatAt >= 3000 - 250, 'cooked on arrival only because the original step had passed: ' + (ready.at - heatAt));
+    } else {
+      assert.ok(at - heatAt < 3000 + 1800, 'cooked about one step after the ORIGINAL start: ' + (at - heatAt));
+    }
     await page.screenshot('heat-14-after-reload');
     await tapPiece(page, 'knob-1');
     assert.deepEqual(page.errors, []);
