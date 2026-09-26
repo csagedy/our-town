@@ -1,0 +1,669 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1536" viewBox="0 0 2048 1536">
+<style>
+.skin{fill:var(--skin)}.skin-sh{fill:var(--skin-sh)}.hair{fill:var(--hair)}.hair-hi{fill:var(--hair-hi)}
+.hair-st{fill:none;stroke:var(--hair-hi);stroke-width:6;stroke-linecap:round}
+.top{fill:var(--top)}.top-sh{fill:var(--top-sh)}.acc{fill:var(--acc)}.acc-sh{fill:var(--acc-sh)}
+.bot{fill:var(--bottom)}.bot-sh{fill:var(--bottom-sh)}.shoe{fill:var(--shoe)}.shoe-sh{fill:var(--shoe-sh)}
+.ink{fill:#2B2340}.wht{fill:#fff}.blush{fill:#FF7E8A;opacity:.45}.mouth{fill:#8A2A3E}.tongue{fill:#FF7C88}
+.ln{fill:none;stroke:#2B2340;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.brow{fill:none;stroke:var(--hair);stroke-width:9;stroke-linecap:round}
+.skin-ln{fill:none;stroke:var(--skin-sh);stroke-width:6;stroke-linecap:round}
+.freck{fill:var(--skin-sh);opacity:.8}
+.shadow{fill:#2B2340;opacity:.13}
+</style>
+<rect width="2048" height="1536" fill="#FFF6E8"/>
+<g transform="translate(190 720) scale(.8)">
+<g id="sz0" style="--skin:#C47F54;--skin-sh:#A5623D;--hair:#2E1A2B;--hair-hi:#51314A;--top:#6CB8EC;--top-sh:#4C97D0;--acc:#F0604D;--acc-sh:#C9473A;--bottom:#3A3F7A;--bottom-sh:#2A2E5E;--shoe:#FFFFFF;--shoe-sh:#D9DDEB">
+  <ellipse class="shadow" cx="0" cy="0" rx="90" ry="16"/>
+  
+  
+  <g id="zoe-legs">
+    <path class="bot" d="M-44 -190 L-40 -34 Q-40 -24 -30 -24 L-16 -24 Q-8 -24 -8 -34 L-6 -190Z"/>
+    <path class="bot" d="M6 -190 L8 -34 Q8 -24 16 -24 L30 -24 Q40 -24 40 -34 L44 -190Z"/>
+    <path class="bot-sh" d="M-8 -150 L-6 -190 L6 -190 L8 -150Z" opacity=".6"/>
+    <!-- sneakers -->
+    <path class="shoe" d="M-6 -2 L-6 -30 Q-6 -46 -24 -46 Q-44 -46 -56 -32 Q-68 -18 -64 -6 Q-62 0 -52 0 L-10 0 Q-6 0 -6 -2Z"/>
+    <path class="shoe" d="M6 -2 L6 -30 Q6 -46 24 -46 Q44 -46 56 -32 Q68 -18 64 -6 Q62 0 52 0 L10 0 Q6 0 6 -2Z"/>
+    <path class="acc" d="M-64 -8 Q-62 0 -52 0 L-10 0 Q-6 0 -6 -2 L-6 -10Z"/>
+    <path class="acc" d="M64 -8 Q62 0 52 0 L10 0 Q6 0 6 -2 L6 -10Z"/>
+    <path class="shoe-sh" d="M-44 -40 Q-30 -30 -34 -18" fill="none" stroke="#D9DDEB" stroke-width="5" stroke-linecap="round"/>
+    <path class="shoe-sh" d="M44 -40 Q30 -30 34 -18" fill="none" stroke="#D9DDEB" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  
+  <g id="zoe-body">
+    <rect class="skin-sh" x="-20" y="-378" width="40" height="46" rx="14"/>
+    <!-- tunic -->
+    <path class="top" d="M-44 -352 L44 -352 Q76 -352 80 -318 L94 -196 Q96 -176 76 -176 L-76 -176 Q-96 -176 -94 -196 L-80 -318 Q-76 -352 -44 -352Z"/>
+    <path class="top-sh" d="M60 -340 Q72 -332 76 -318 L92 -196 Q94 -176 74 -176 L58 -176 Q72 -260 60 -340Z"/>
+    <!-- collar -->
+    <path class="wht" d="M-26 -352 Q0 -326 26 -352 L34 -348 Q0 -312 -34 -348Z"/>
+    <!-- apron -->
+    <path class="acc" d="M-40 -322 L40 -322 Q46 -322 46 -314 L48 -262 L84 -174 Q88 -160 74 -158 L-74 -158 Q-88 -160 -84 -174 L-48 -262 L-46 -314 Q-46 -322 -40 -322Z"/>
+    <path class="acc-sh" d="M48 -262 L84 -174 Q88 -160 74 -158 L50 -158 Q70 -200 48 -262Z"/>
+    <path class="acc" d="M-40 -322 L-30 -350 L-22 -350 L-30 -322Z"/>
+    <path class="acc" d="M40 -322 L30 -350 L22 -350 L30 -322Z"/>
+    <!-- waist tie + bow tail -->
+    <rect class="acc-sh" x="-62" y="-268" width="124" height="14" rx="7"/>
+    <path class="acc" d="M62 -262 Q88 -276 92 -254 Q84 -246 62 -256Z"/>
+    <path class="acc" d="M62 -260 Q80 -240 74 -222 Q64 -226 60 -256Z"/>
+    <!-- pocket with a heart -->
+    <path fill="#FFF6E8" d="M-34 -236 L34 -236 L32 -196 Q31 -186 21 -186 L-21 -186 Q-31 -186 -32 -196Z"/>
+    <path fill="#FF9DB3" d="M0 -196 C-16 -206 -18 -222 -8 -224 C-4 -225 -1 -222 0 -219 C1 -222 4 -225 8 -224 C18 -222 16 -206 0 -196Z"/>
+    <!-- polka dots on apron skirt -->
+    <g fill="#FFF6E8" opacity=".85"><circle cx="-60" cy="-176" r="4"/><circle cx="-46" cy="-246" r="4"/><circle cx="52" cy="-180" r="4"/><circle cx="-6" cy="-300" r="4"/><circle cx="20" cy="-282" r="4"/><circle cx="-24" cy="-282" r="4"/><circle cx="46" cy="-214" r="4"/><circle cx="-52" cy="-206" r="4"/></g>
+  </g>
+  <g id="sz0-arm-l-pivot" transform="translate(-68 -318) rotate(8)">
+    <g id="sz0-arm-l">
+      <rect class="skin" x="-13" y="0" width="26" height="146" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="146" r="21"/><ellipse class="skin" cx="14" cy="138" rx="9" ry="12" transform="rotate(25 14 138)"/>
+    </g></g>
+  <g id="sz0-head" transform="rotate(0 0 -360)">
+    
+  <g id="zoe-hair-back">
+    <path class="hair" d="M80 -720 Q89.4 -696.9 67.9 -682.2 Q62.7 -657.6 35.6 -656.3 Q16.8 -637.7 -6.8 -650.7 Q-33.4 -644.6 -45.8 -667.1 Q-71.1 -675.5 -68.9 -700.3 Q-84.9 -720 -68.9 -739.7 Q-71.1 -764.5 -45.8 -772.9 Q-33.4 -795.4 -6.8 -789.3 Q16.8 -802.3 35.6 -783.7 Q62.7 -782.4 67.9 -757.8 Q89.4 -743.1 80 -720Z"/>
+    <path class="hair-hi" d="M-30 -752 Q-10 -778 20 -770" fill="none" stroke="var(--hair-hi)" stroke-width="8" stroke-linecap="round"/>
+    <path class="hair" d="M-148.5 -462.5 Q-170.7 -482.9 -157.8 -511 Q-173.5 -537.4 -153.4 -560.2 Q-161.1 -590.3 -135.8 -605.9 Q-134.6 -636.9 -106.4 -644.2 Q-96.6 -673.2 -67.7 -671.8 Q-50.4 -696.3 -23.2 -686.2 Q0 -704.2 23.2 -686.2 Q50.4 -696.3 67.7 -671.8 Q96.6 -673.2 106.4 -644.2 Q134.6 -636.9 135.8 -605.9 Q161.1 -590.3 153.4 -560.2 Q173.5 -537.4 157.8 -511 Q170.7 -482.9 148.5 -462.5 C176 -456 168 -404 138 -404 C118 -404 110 -424 112 -440 L-112 -440 C-110 -424 -118 -404 -138 -404 C-168 -404 -176 -456 -150 -440Z"/>
+    <rect x="-46" y="-672" width="96" height="30" rx="15" fill="#FFD470"/>
+    <path d="M-20 -672 Q-24 -656 -20 -642 M14 -672 Q10 -656 14 -642" stroke="#F0B544" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+    
+  <g id="zoe-headshape">
+    <circle class="skin" cx="-128" cy="-500" r="24"/><circle class="skin" cx="128" cy="-500" r="24"/>
+    <circle class="skin-sh" cx="-130" cy="-500" r="11"/><circle class="skin-sh" cx="130" cy="-500" r="11"/>
+    <path class="skin" d="M0 -648 C88 -648 132 -596 132 -514 C132 -426 86 -366 0 -366 C-86 -366 -132 -426 -132 -514 C-132 -596 -88 -648 0 -648Z"/>
+    <!-- soft jaw shade -->
+    <path class="skin-sh" opacity=".35" d="M116 -450 C98 -396 56 -366 0 -366 C40 -380 90 -400 116 -450Z"/>
+    <ellipse class="blush" cx="-82" cy="-452" rx="24" ry="15"/><ellipse class="blush" cx="82" cy="-452" rx="24" ry="15"/>
+    <path class="skin-sh" d="M-10 -476 Q0 -466 10 -476 Q12 -462 0 -460 Q-12 -462 -10 -476Z"/>
+  </g>
+    <g id="sz0-face"><g id="sz0-face-happy" class="face">
+    
+    <ellipse class="ink" cx="-50" cy="-506" rx="14" ry="19"/><ellipse class="ink" cx="50" cy="-506" rx="14" ry="19"/>
+    <circle class="wht" cx="-45" cy="-513" r="5.5"/><circle class="wht" cx="55" cy="-513" r="5.5"/>
+    <circle class="wht" cx="-54" cy="-498" r="2.5"/><circle class="wht" cx="46" cy="-498" r="2.5"/>
+    <path class="ln" d="M-64 -518 L-74 -526" stroke-width="5"/><path class="ln" d="M64 -518 L74 -526" stroke-width="5"/>
+    <path class="brow" d="M-68 -548 Q-50 -560 -32 -552"/><path class="brow" d="M32 -552 Q50 -560 68 -548"/>
+    <path class="mouth" d="M-34 -436 Q0 -428 34 -436 Q30 -396 0 -396 Q-30 -396 -34 -436Z"/>
+    <path class="wht" d="M-28 -434 Q0 -428 28 -434 L26 -424 Q0 -420 -26 -424Z"/>
+    <path class="tongue" d="M-16 -401 Q0 -416 16 -401 Q8 -396 0 -396 Q-8 -396 -16 -401Z"/></g></g>
+    
+  <g id="zoe-hair-front">
+    <path class="hair" d="M-138 -470 C-150 -600 -90 -676 4 -676 C96 -676 152 -604 140 -486
+      C132 -520 122 -552 100 -574 Q84 -548 60 -574 Q44 -552 20 -580 Q-6 -554 -30 -584
+      Q-58 -556 -84 -580 Q-104 -546 -112 -520 Q-122 -500 -138 -470Z"/>
+    <path class="hair-st" d="M-86 -636 Q-60 -652 -36 -646"/>
+    <path class="hair-st" d="M30 -650 Q56 -652 76 -636"/>
+    <path class="hair-st" d="M-120 -560 Q-118 -586 -104 -604"/>
+  </g>
+  </g>
+  
+  <g id="sz0-arm-r-pivot" transform="translate(68 -318) rotate(-8)">
+    <g id="sz0-arm-r">
+      <rect class="skin" x="-13" y="0" width="26" height="146" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="146" r="21"/><ellipse class="skin" cx="-14" cy="138" rx="9" ry="12" transform="rotate(-25 -14 138)"/>
+    </g></g>
+  
+</g></g><g transform="translate(520 720) scale(.8)">
+<g id="sz1" style="--skin:#C47F54;--skin-sh:#A5623D;--hair:#2E1A2B;--hair-hi:#51314A;--top:#6CB8EC;--top-sh:#4C97D0;--acc:#F0604D;--acc-sh:#C9473A;--bottom:#3A3F7A;--bottom-sh:#2A2E5E;--shoe:#FFFFFF;--shoe-sh:#D9DDEB">
+  <ellipse class="shadow" cx="0" cy="0" rx="90" ry="16"/>
+  
+  
+  <g id="zoe-legs">
+    <path class="bot" d="M-44 -190 L-40 -34 Q-40 -24 -30 -24 L-16 -24 Q-8 -24 -8 -34 L-6 -190Z"/>
+    <path class="bot" d="M6 -190 L8 -34 Q8 -24 16 -24 L30 -24 Q40 -24 40 -34 L44 -190Z"/>
+    <path class="bot-sh" d="M-8 -150 L-6 -190 L6 -190 L8 -150Z" opacity=".6"/>
+    <!-- sneakers -->
+    <path class="shoe" d="M-6 -2 L-6 -30 Q-6 -46 -24 -46 Q-44 -46 -56 -32 Q-68 -18 -64 -6 Q-62 0 -52 0 L-10 0 Q-6 0 -6 -2Z"/>
+    <path class="shoe" d="M6 -2 L6 -30 Q6 -46 24 -46 Q44 -46 56 -32 Q68 -18 64 -6 Q62 0 52 0 L10 0 Q6 0 6 -2Z"/>
+    <path class="acc" d="M-64 -8 Q-62 0 -52 0 L-10 0 Q-6 0 -6 -2 L-6 -10Z"/>
+    <path class="acc" d="M64 -8 Q62 0 52 0 L10 0 Q6 0 6 -2 L6 -10Z"/>
+    <path class="shoe-sh" d="M-44 -40 Q-30 -30 -34 -18" fill="none" stroke="#D9DDEB" stroke-width="5" stroke-linecap="round"/>
+    <path class="shoe-sh" d="M44 -40 Q30 -30 34 -18" fill="none" stroke="#D9DDEB" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  
+  <g id="zoe-body">
+    <rect class="skin-sh" x="-20" y="-378" width="40" height="46" rx="14"/>
+    <!-- tunic -->
+    <path class="top" d="M-44 -352 L44 -352 Q76 -352 80 -318 L94 -196 Q96 -176 76 -176 L-76 -176 Q-96 -176 -94 -196 L-80 -318 Q-76 -352 -44 -352Z"/>
+    <path class="top-sh" d="M60 -340 Q72 -332 76 -318 L92 -196 Q94 -176 74 -176 L58 -176 Q72 -260 60 -340Z"/>
+    <!-- collar -->
+    <path class="wht" d="M-26 -352 Q0 -326 26 -352 L34 -348 Q0 -312 -34 -348Z"/>
+    <!-- apron -->
+    <path class="acc" d="M-40 -322 L40 -322 Q46 -322 46 -314 L48 -262 L84 -174 Q88 -160 74 -158 L-74 -158 Q-88 -160 -84 -174 L-48 -262 L-46 -314 Q-46 -322 -40 -322Z"/>
+    <path class="acc-sh" d="M48 -262 L84 -174 Q88 -160 74 -158 L50 -158 Q70 -200 48 -262Z"/>
+    <path class="acc" d="M-40 -322 L-30 -350 L-22 -350 L-30 -322Z"/>
+    <path class="acc" d="M40 -322 L30 -350 L22 -350 L30 -322Z"/>
+    <!-- waist tie + bow tail -->
+    <rect class="acc-sh" x="-62" y="-268" width="124" height="14" rx="7"/>
+    <path class="acc" d="M62 -262 Q88 -276 92 -254 Q84 -246 62 -256Z"/>
+    <path class="acc" d="M62 -260 Q80 -240 74 -222 Q64 -226 60 -256Z"/>
+    <!-- pocket with a heart -->
+    <path fill="#FFF6E8" d="M-34 -236 L34 -236 L32 -196 Q31 -186 21 -186 L-21 -186 Q-31 -186 -32 -196Z"/>
+    <path fill="#FF9DB3" d="M0 -196 C-16 -206 -18 -222 -8 -224 C-4 -225 -1 -222 0 -219 C1 -222 4 -225 8 -224 C18 -222 16 -206 0 -196Z"/>
+    <!-- polka dots on apron skirt -->
+    <g fill="#FFF6E8" opacity=".85"><circle cx="-60" cy="-176" r="4"/><circle cx="-46" cy="-246" r="4"/><circle cx="52" cy="-180" r="4"/><circle cx="-6" cy="-300" r="4"/><circle cx="20" cy="-282" r="4"/><circle cx="-24" cy="-282" r="4"/><circle cx="46" cy="-214" r="4"/><circle cx="-52" cy="-206" r="4"/></g>
+  </g>
+  <g id="sz1-arm-l-pivot" transform="translate(-68 -318) rotate(30)">
+    <g id="sz1-arm-l">
+      <rect class="skin" x="-13" y="0" width="26" height="146" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="146" r="21"/><ellipse class="skin" cx="14" cy="138" rx="9" ry="12" transform="rotate(25 14 138)"/>
+    </g></g>
+  <g id="sz1-head" transform="rotate(-4 0 -360)">
+    
+  <g id="zoe-hair-back">
+    <path class="hair" d="M80 -720 Q89.4 -696.9 67.9 -682.2 Q62.7 -657.6 35.6 -656.3 Q16.8 -637.7 -6.8 -650.7 Q-33.4 -644.6 -45.8 -667.1 Q-71.1 -675.5 -68.9 -700.3 Q-84.9 -720 -68.9 -739.7 Q-71.1 -764.5 -45.8 -772.9 Q-33.4 -795.4 -6.8 -789.3 Q16.8 -802.3 35.6 -783.7 Q62.7 -782.4 67.9 -757.8 Q89.4 -743.1 80 -720Z"/>
+    <path class="hair-hi" d="M-30 -752 Q-10 -778 20 -770" fill="none" stroke="var(--hair-hi)" stroke-width="8" stroke-linecap="round"/>
+    <path class="hair" d="M-148.5 -462.5 Q-170.7 -482.9 -157.8 -511 Q-173.5 -537.4 -153.4 -560.2 Q-161.1 -590.3 -135.8 -605.9 Q-134.6 -636.9 -106.4 -644.2 Q-96.6 -673.2 -67.7 -671.8 Q-50.4 -696.3 -23.2 -686.2 Q0 -704.2 23.2 -686.2 Q50.4 -696.3 67.7 -671.8 Q96.6 -673.2 106.4 -644.2 Q134.6 -636.9 135.8 -605.9 Q161.1 -590.3 153.4 -560.2 Q173.5 -537.4 157.8 -511 Q170.7 -482.9 148.5 -462.5 C176 -456 168 -404 138 -404 C118 -404 110 -424 112 -440 L-112 -440 C-110 -424 -118 -404 -138 -404 C-168 -404 -176 -456 -150 -440Z"/>
+    <rect x="-46" y="-672" width="96" height="30" rx="15" fill="#FFD470"/>
+    <path d="M-20 -672 Q-24 -656 -20 -642 M14 -672 Q10 -656 14 -642" stroke="#F0B544" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+    
+  <g id="zoe-headshape">
+    <circle class="skin" cx="-128" cy="-500" r="24"/><circle class="skin" cx="128" cy="-500" r="24"/>
+    <circle class="skin-sh" cx="-130" cy="-500" r="11"/><circle class="skin-sh" cx="130" cy="-500" r="11"/>
+    <path class="skin" d="M0 -648 C88 -648 132 -596 132 -514 C132 -426 86 -366 0 -366 C-86 -366 -132 -426 -132 -514 C-132 -596 -88 -648 0 -648Z"/>
+    <!-- soft jaw shade -->
+    <path class="skin-sh" opacity=".35" d="M116 -450 C98 -396 56 -366 0 -366 C40 -380 90 -400 116 -450Z"/>
+    <ellipse class="blush" cx="-82" cy="-452" rx="24" ry="15"/><ellipse class="blush" cx="82" cy="-452" rx="24" ry="15"/>
+    <path class="skin-sh" d="M-10 -476 Q0 -466 10 -476 Q12 -462 0 -460 Q-12 -462 -10 -476Z"/>
+  </g>
+    <g id="sz1-face"><g id="sz1-face-surprised" class="face">
+    
+    <ellipse class="ink" cx="-50" cy="-508" rx="14" ry="23"/><ellipse class="ink" cx="50" cy="-508" rx="14" ry="23"/>
+    <circle class="wht" cx="-45" cy="-515" r="5.5"/><circle class="wht" cx="55" cy="-515" r="5.5"/>
+    <circle class="wht" cx="-54" cy="-500" r="2.5"/><circle class="wht" cx="46" cy="-500" r="2.5"/>
+    <path class="ln" d="M-64 -520 L-74 -528" stroke-width="5"/><path class="ln" d="M64 -520 L74 -528" stroke-width="5"/>
+    <path class="brow" d="M-70 -566 Q-52 -582 -32 -572"/><path class="brow" d="M32 -572 Q52 -582 70 -566"/>
+    <ellipse class="mouth" cx="0" cy="-414" rx="17" ry="22"/>
+    <ellipse class="tongue" cx="0" cy="-402" rx="10" ry="7"/></g></g>
+    
+  <g id="zoe-hair-front">
+    <path class="hair" d="M-138 -470 C-150 -600 -90 -676 4 -676 C96 -676 152 -604 140 -486
+      C132 -520 122 -552 100 -574 Q84 -548 60 -574 Q44 -552 20 -580 Q-6 -554 -30 -584
+      Q-58 -556 -84 -580 Q-104 -546 -112 -520 Q-122 -500 -138 -470Z"/>
+    <path class="hair-st" d="M-86 -636 Q-60 -652 -36 -646"/>
+    <path class="hair-st" d="M30 -650 Q56 -652 76 -636"/>
+    <path class="hair-st" d="M-120 -560 Q-118 -586 -104 -604"/>
+  </g>
+  </g>
+  
+  <g id="sz1-arm-r-pivot" transform="translate(68 -318) rotate(-30)">
+    <g id="sz1-arm-r">
+      <rect class="skin" x="-13" y="0" width="26" height="146" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="146" r="21"/><ellipse class="skin" cx="-14" cy="138" rx="9" ry="12" transform="rotate(-25 -14 138)"/>
+    </g></g>
+  
+</g></g><g transform="translate(850 720) scale(.8)">
+<g id="sz2" style="--skin:#C47F54;--skin-sh:#A5623D;--hair:#2E1A2B;--hair-hi:#51314A;--top:#6CB8EC;--top-sh:#4C97D0;--acc:#F0604D;--acc-sh:#C9473A;--bottom:#3A3F7A;--bottom-sh:#2A2E5E;--shoe:#FFFFFF;--shoe-sh:#D9DDEB">
+  <ellipse class="shadow" cx="0" cy="0" rx="90" ry="16"/>
+  
+  
+  <g id="zoe-legs">
+    <path class="bot" d="M-44 -190 L-40 -34 Q-40 -24 -30 -24 L-16 -24 Q-8 -24 -8 -34 L-6 -190Z"/>
+    <path class="bot" d="M6 -190 L8 -34 Q8 -24 16 -24 L30 -24 Q40 -24 40 -34 L44 -190Z"/>
+    <path class="bot-sh" d="M-8 -150 L-6 -190 L6 -190 L8 -150Z" opacity=".6"/>
+    <!-- sneakers -->
+    <path class="shoe" d="M-6 -2 L-6 -30 Q-6 -46 -24 -46 Q-44 -46 -56 -32 Q-68 -18 -64 -6 Q-62 0 -52 0 L-10 0 Q-6 0 -6 -2Z"/>
+    <path class="shoe" d="M6 -2 L6 -30 Q6 -46 24 -46 Q44 -46 56 -32 Q68 -18 64 -6 Q62 0 52 0 L10 0 Q6 0 6 -2Z"/>
+    <path class="acc" d="M-64 -8 Q-62 0 -52 0 L-10 0 Q-6 0 -6 -2 L-6 -10Z"/>
+    <path class="acc" d="M64 -8 Q62 0 52 0 L10 0 Q6 0 6 -2 L6 -10Z"/>
+    <path class="shoe-sh" d="M-44 -40 Q-30 -30 -34 -18" fill="none" stroke="#D9DDEB" stroke-width="5" stroke-linecap="round"/>
+    <path class="shoe-sh" d="M44 -40 Q30 -30 34 -18" fill="none" stroke="#D9DDEB" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  
+  <g id="zoe-body">
+    <rect class="skin-sh" x="-20" y="-378" width="40" height="46" rx="14"/>
+    <!-- tunic -->
+    <path class="top" d="M-44 -352 L44 -352 Q76 -352 80 -318 L94 -196 Q96 -176 76 -176 L-76 -176 Q-96 -176 -94 -196 L-80 -318 Q-76 -352 -44 -352Z"/>
+    <path class="top-sh" d="M60 -340 Q72 -332 76 -318 L92 -196 Q94 -176 74 -176 L58 -176 Q72 -260 60 -340Z"/>
+    <!-- collar -->
+    <path class="wht" d="M-26 -352 Q0 -326 26 -352 L34 -348 Q0 -312 -34 -348Z"/>
+    <!-- apron -->
+    <path class="acc" d="M-40 -322 L40 -322 Q46 -322 46 -314 L48 -262 L84 -174 Q88 -160 74 -158 L-74 -158 Q-88 -160 -84 -174 L-48 -262 L-46 -314 Q-46 -322 -40 -322Z"/>
+    <path class="acc-sh" d="M48 -262 L84 -174 Q88 -160 74 -158 L50 -158 Q70 -200 48 -262Z"/>
+    <path class="acc" d="M-40 -322 L-30 -350 L-22 -350 L-30 -322Z"/>
+    <path class="acc" d="M40 -322 L30 -350 L22 -350 L30 -322Z"/>
+    <!-- waist tie + bow tail -->
+    <rect class="acc-sh" x="-62" y="-268" width="124" height="14" rx="7"/>
+    <path class="acc" d="M62 -262 Q88 -276 92 -254 Q84 -246 62 -256Z"/>
+    <path class="acc" d="M62 -260 Q80 -240 74 -222 Q64 -226 60 -256Z"/>
+    <!-- pocket with a heart -->
+    <path fill="#FFF6E8" d="M-34 -236 L34 -236 L32 -196 Q31 -186 21 -186 L-21 -186 Q-31 -186 -32 -196Z"/>
+    <path fill="#FF9DB3" d="M0 -196 C-16 -206 -18 -222 -8 -224 C-4 -225 -1 -222 0 -219 C1 -222 4 -225 8 -224 C18 -222 16 -206 0 -196Z"/>
+    <!-- polka dots on apron skirt -->
+    <g fill="#FFF6E8" opacity=".85"><circle cx="-60" cy="-176" r="4"/><circle cx="-46" cy="-246" r="4"/><circle cx="52" cy="-180" r="4"/><circle cx="-6" cy="-300" r="4"/><circle cx="20" cy="-282" r="4"/><circle cx="-24" cy="-282" r="4"/><circle cx="46" cy="-214" r="4"/><circle cx="-52" cy="-206" r="4"/></g>
+  </g>
+  <g id="sz2-arm-l-pivot" transform="translate(-68 -318) rotate(4)">
+    <g id="sz2-arm-l">
+      <rect class="skin" x="-13" y="0" width="26" height="146" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="146" r="21"/><ellipse class="skin" cx="14" cy="138" rx="9" ry="12" transform="rotate(25 14 138)"/>
+    </g></g>
+  <g id="sz2-head" transform="rotate(6 0 -360)">
+    
+  <g id="zoe-hair-back">
+    <path class="hair" d="M80 -720 Q89.4 -696.9 67.9 -682.2 Q62.7 -657.6 35.6 -656.3 Q16.8 -637.7 -6.8 -650.7 Q-33.4 -644.6 -45.8 -667.1 Q-71.1 -675.5 -68.9 -700.3 Q-84.9 -720 -68.9 -739.7 Q-71.1 -764.5 -45.8 -772.9 Q-33.4 -795.4 -6.8 -789.3 Q16.8 -802.3 35.6 -783.7 Q62.7 -782.4 67.9 -757.8 Q89.4 -743.1 80 -720Z"/>
+    <path class="hair-hi" d="M-30 -752 Q-10 -778 20 -770" fill="none" stroke="var(--hair-hi)" stroke-width="8" stroke-linecap="round"/>
+    <path class="hair" d="M-148.5 -462.5 Q-170.7 -482.9 -157.8 -511 Q-173.5 -537.4 -153.4 -560.2 Q-161.1 -590.3 -135.8 -605.9 Q-134.6 -636.9 -106.4 -644.2 Q-96.6 -673.2 -67.7 -671.8 Q-50.4 -696.3 -23.2 -686.2 Q0 -704.2 23.2 -686.2 Q50.4 -696.3 67.7 -671.8 Q96.6 -673.2 106.4 -644.2 Q134.6 -636.9 135.8 -605.9 Q161.1 -590.3 153.4 -560.2 Q173.5 -537.4 157.8 -511 Q170.7 -482.9 148.5 -462.5 C176 -456 168 -404 138 -404 C118 -404 110 -424 112 -440 L-112 -440 C-110 -424 -118 -404 -138 -404 C-168 -404 -176 -456 -150 -440Z"/>
+    <rect x="-46" y="-672" width="96" height="30" rx="15" fill="#FFD470"/>
+    <path d="M-20 -672 Q-24 -656 -20 -642 M14 -672 Q10 -656 14 -642" stroke="#F0B544" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+    
+  <g id="zoe-headshape">
+    <circle class="skin" cx="-128" cy="-500" r="24"/><circle class="skin" cx="128" cy="-500" r="24"/>
+    <circle class="skin-sh" cx="-130" cy="-500" r="11"/><circle class="skin-sh" cx="130" cy="-500" r="11"/>
+    <path class="skin" d="M0 -648 C88 -648 132 -596 132 -514 C132 -426 86 -366 0 -366 C-86 -366 -132 -426 -132 -514 C-132 -596 -88 -648 0 -648Z"/>
+    <!-- soft jaw shade -->
+    <path class="skin-sh" opacity=".35" d="M116 -450 C98 -396 56 -366 0 -366 C40 -380 90 -400 116 -450Z"/>
+    <ellipse class="blush" cx="-82" cy="-452" rx="24" ry="15"/><ellipse class="blush" cx="82" cy="-452" rx="24" ry="15"/>
+    <path class="skin-sh" d="M-10 -476 Q0 -466 10 -476 Q12 -462 0 -460 Q-12 -462 -10 -476Z"/>
+  </g>
+    <g id="sz2-face"><g id="sz2-face-yum" class="face">
+    <path class="ln" d="M-68 -500 Q-50 -524 -32 -500"/><path class="ln" d="M32 -500 Q50 -524 68 -500"/>
+    <path class="brow" d="M-68 -552 Q-50 -562 -32 -554"/><path class="brow" d="M32 -554 Q50 -562 68 -552"/>
+    <path class="mouth" d="M-36 -438 Q0 -426 36 -438 Q28 -408 0 -408 Q-28 -408 -36 -438Z"/>
+    <path class="tongue" d="M4 -414 Q22 -420 26 -404 Q26 -390 14 -390 Q4 -392 4 -414Z"/></g></g>
+    
+  <g id="zoe-hair-front">
+    <path class="hair" d="M-138 -470 C-150 -600 -90 -676 4 -676 C96 -676 152 -604 140 -486
+      C132 -520 122 -552 100 -574 Q84 -548 60 -574 Q44 -552 20 -580 Q-6 -554 -30 -584
+      Q-58 -556 -84 -580 Q-104 -546 -112 -520 Q-122 -500 -138 -470Z"/>
+    <path class="hair-st" d="M-86 -636 Q-60 -652 -36 -646"/>
+    <path class="hair-st" d="M30 -650 Q56 -652 76 -636"/>
+    <path class="hair-st" d="M-120 -560 Q-118 -586 -104 -604"/>
+  </g>
+  </g>
+  
+  <g id="sz2-arm-r-pivot" transform="translate(68 -318) rotate(-60)">
+    <g id="sz2-arm-r">
+      <rect class="skin" x="-13" y="0" width="26" height="146" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="146" r="21"/><ellipse class="skin" cx="-14" cy="138" rx="9" ry="12" transform="rotate(-25 -14 138)"/>
+    </g></g>
+  
+</g></g>
+<g transform="translate(1150 720) scale(.9)">
+<g id="si0" style="--skin:#F7C9A3;--skin-sh:#E4A07A;--hair:#E26F34;--hair-hi:#F7985A;--top:#3F86DE;--top-sh:#2E69B8;--acc:#F0604D;--acc-sh:#C9473A;--bottom:#F4B63E;--bottom-sh:#D9962A;--shoe:#E8473B;--shoe-sh:#B7352E">
+  <ellipse class="shadow" cx="0" cy="0" rx="84" ry="16"/>
+  
+  <g id="ian-cape">
+    <path class="acc" d="M-52 -256 Q0 -272 52 -256 Q80 -170 110 -96 Q90 -84 74 -96 Q56 -80 36 -94 Q10 -78 -12 -94 Q-34 -80 -52 -96 Q-70 -82 -86 -98 Q-66 -170 -52 -256Z"/>
+    <path class="acc-sh" d="M-52 -256 Q-30 -230 -34 -170 Q-38 -120 -52 -96 Q-70 -82 -86 -98 Q-66 -170 -52 -256Z"/>
+    <path class="acc-sh" d="M40 -250 Q70 -180 110 -96 Q90 -84 74 -96 Q60 -170 40 -250Z" opacity=".6"/>
+  </g>
+  
+  <g id="ian-legs">
+    <rect class="skin" x="-40" y="-130" width="28" height="110" rx="13"/>
+    <rect class="skin" x="12" y="-130" width="28" height="110" rx="13"/>
+    <rect class="wht" x="-42" y="-54" width="32" height="30" rx="8"/><rect class="wht" x="10" y="-54" width="32" height="30" rx="8"/>
+    <rect x="-42" y="-50" width="32" height="6" fill="#2FA59B"/><rect x="10" y="-50" width="32" height="6" fill="#2FA59B"/>
+    <!-- chunky shoes -->
+    <path class="shoe" d="M-4 -4 L-4 -26 Q-4 -44 -26 -44 Q-50 -44 -62 -28 Q-72 -14 -66 -4 Q-62 2 -52 2 L-8 2 Q-4 2 -4 -4Z"/>
+    <path class="shoe" d="M4 -4 L4 -26 Q4 -44 26 -44 Q50 -44 62 -28 Q72 -14 66 -4 Q62 2 52 2 L8 2 Q4 2 4 -4Z"/>
+    <path fill="#fff" d="M-68 -8 Q-64 2 -52 2 L-8 2 Q-4 2 -4 -4 L-4 -10Z"/><path fill="#fff" d="M68 -8 Q64 2 52 2 L8 2 Q4 2 4 -4 L4 -10Z"/>
+    <rect class="shoe-sh" x="-44" y="-36" width="30" height="10" rx="5"/><rect class="shoe-sh" x="14" y="-36" width="30" height="10" rx="5"/>
+  </g>
+  
+  <g id="ian-body">
+    <!-- shorts -->
+    <path class="bot" d="M-58 -168 L58 -168 L62 -110 Q62 -100 52 -100 L8 -100 L0 -118 L-8 -100 L-52 -100 Q-62 -100 -62 -110Z"/>
+    <path class="bot-sh" d="M-58 -168 L58 -168 L59 -150 L-59 -150Z"/>
+    <rect class="skin-sh" x="-18" y="-280" width="36" height="40" rx="12"/>
+    <!-- tee -->
+    <path class="top" d="M-38 -262 L38 -262 Q64 -262 70 -234 L74 -168 Q74 -150 56 -150 L-56 -150 Q-74 -150 -74 -168 L-70 -234 Q-64 -262 -38 -262Z"/>
+    <path class="top-sh" d="M56 -250 Q68 -242 70 -234 L74 -168 Q74 -150 56 -150 L48 -150 Q62 -200 56 -250Z"/>
+    <path fill="#FFD470" d="M0 -232 L9 -212 L31 -210 L14 -196 L20 -174 L0 -186 L-20 -174 L-14 -196 L-31 -210 L-9 -212Z"/>
+    <!-- cape knot -->
+    <path class="acc" d="M-40 -264 Q0 -246 40 -264 L36 -252 Q0 -236 -36 -252Z"/>
+    <circle class="acc-sh" cx="0" cy="-248" r="10"/><circle class="acc" cx="0" cy="-250" r="8"/>
+  </g>
+  <g id="si0-arm-l-pivot" transform="translate(-60 -236) rotate(30)">
+    <g id="si0-arm-l">
+      <rect class="skin" x="-13" y="0" width="26" height="106" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="106" r="21"/><ellipse class="skin" cx="14" cy="98" rx="9" ry="12" transform="rotate(25 14 98)"/>
+    </g></g>
+  <g id="si0-head" transform="rotate(4 0 -262)">
+    <g id="ian-hair-back"></g>
+    
+  <g id="ian-headshape">
+    <circle class="skin" cx="-130" cy="-376" r="28"/><circle class="skin" cx="130" cy="-376" r="28"/>
+    <circle class="skin-sh" cx="-134" cy="-376" r="13"/><circle class="skin-sh" cx="134" cy="-376" r="13"/>
+    <path class="skin" d="M0 -516 C92 -516 134 -466 134 -386 C134 -302 88 -254 0 -254 C-88 -254 -134 -302 -134 -386 C-134 -466 -92 -516 0 -516Z"/>
+    <path class="skin-sh" opacity=".35" d="M120 -330 C100 -280 56 -254 0 -254 C44 -268 96 -290 120 -330Z"/>
+    <ellipse class="blush" cx="-80" cy="-340" rx="26" ry="16"/><ellipse class="blush" cx="80" cy="-340" rx="26" ry="16"/>
+    <g class="freck"><circle cx="-90" cy="-352" r="3.5"/><circle cx="-76" cy="-346" r="3.5"/><circle cx="-86" cy="-336" r="3.5"/>
+    <circle cx="90" cy="-352" r="3.5"/><circle cx="76" cy="-346" r="3.5"/><circle cx="86" cy="-336" r="3.5"/></g>
+    <ellipse class="skin-sh" cx="0" cy="-360" rx="13" ry="9"/>
+  </g>
+    <g id="si0-face"><g id="si0-face-happy" class="face">
+    
+    <ellipse class="ink" cx="-48" cy="-390" rx="15" ry="20"/><ellipse class="ink" cx="48" cy="-390" rx="15" ry="20"/>
+    <circle class="wht" cx="-43" cy="-397" r="6"/><circle class="wht" cx="53" cy="-397" r="6"/>
+    <circle class="wht" cx="-53" cy="-380" r="2.5"/><circle class="wht" cx="43" cy="-380" r="2.5"/>
+    <path class="brow" d="M-66 -432 Q-48 -442 -30 -434"/><path class="brow" d="M30 -434 Q48 -442 66 -432"/>
+    <path class="mouth" d="M-44 -326 Q0 -316 44 -326 Q38 -282 0 -282 Q-38 -282 -44 -326Z"/>
+    <path class="wht" d="M-24 -321 L-4 -320 L-5 -306 Q-14 -304 -22 -307Z"/><path class="wht" d="M4 -320 L24 -321 L22 -307 Q14 -304 5 -306Z"/>
+    <path class="tongue" d="M-20 -288 Q0 -304 20 -288 Q10 -282 0 -282 Q-10 -282 -20 -288Z"/></g></g>
+    
+  <g id="ian-hair-front">
+    <path class="hair" d="M-136 -396 C-156 -452 -128 -506 -86 -520 C-98 -548 -70 -566 -44 -552
+      C-38 -584 0 -590 12 -560 C32 -588 70 -578 68 -548 C100 -560 126 -532 112 -506
+      C146 -490 156 -440 136 -396 C126 -430 104 -454 74 -462 C62 -440 30 -436 16 -456
+      C0 -434 -32 -436 -42 -458 C-62 -440 -98 -444 -106 -466 C-124 -450 -132 -426 -136 -396Z"/>
+    <path class="hair" d="M8 -560 C-6 -610 50 -628 58 -594 C62 -578 46 -572 40 -584" fill="none" stroke="var(--hair)" stroke-width="12" stroke-linecap="round"/>
+    <path class="hair-st" d="M-96 -500 Q-80 -512 -62 -508"/><path class="hair-st" d="M60 -520 Q80 -524 94 -510"/>
+    <path class="hair-st" d="M-20 -540 Q-6 -548 8 -540"/>
+  </g>
+  </g>
+  
+  <g id="si0-arm-r-pivot" transform="translate(60 -236) rotate(-30)">
+    <g id="si0-arm-r">
+      <rect class="skin" x="-13" y="0" width="26" height="106" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="106" r="21"/><ellipse class="skin" cx="-14" cy="98" rx="9" ry="12" transform="rotate(-25 -14 98)"/>
+    </g></g>
+  
+</g></g><g transform="translate(1470 720) scale(.9)">
+<g id="si1" style="--skin:#F7C9A3;--skin-sh:#E4A07A;--hair:#E26F34;--hair-hi:#F7985A;--top:#3F86DE;--top-sh:#2E69B8;--acc:#F0604D;--acc-sh:#C9473A;--bottom:#F4B63E;--bottom-sh:#D9962A;--shoe:#E8473B;--shoe-sh:#B7352E">
+  <ellipse class="shadow" cx="0" cy="0" rx="84" ry="16"/>
+  
+  <g id="ian-cape">
+    <path class="acc" d="M-52 -256 Q0 -272 52 -256 Q80 -170 110 -96 Q90 -84 74 -96 Q56 -80 36 -94 Q10 -78 -12 -94 Q-34 -80 -52 -96 Q-70 -82 -86 -98 Q-66 -170 -52 -256Z"/>
+    <path class="acc-sh" d="M-52 -256 Q-30 -230 -34 -170 Q-38 -120 -52 -96 Q-70 -82 -86 -98 Q-66 -170 -52 -256Z"/>
+    <path class="acc-sh" d="M40 -250 Q70 -180 110 -96 Q90 -84 74 -96 Q60 -170 40 -250Z" opacity=".6"/>
+  </g>
+  
+  <g id="ian-legs">
+    <rect class="skin" x="-40" y="-130" width="28" height="110" rx="13"/>
+    <rect class="skin" x="12" y="-130" width="28" height="110" rx="13"/>
+    <rect class="wht" x="-42" y="-54" width="32" height="30" rx="8"/><rect class="wht" x="10" y="-54" width="32" height="30" rx="8"/>
+    <rect x="-42" y="-50" width="32" height="6" fill="#2FA59B"/><rect x="10" y="-50" width="32" height="6" fill="#2FA59B"/>
+    <!-- chunky shoes -->
+    <path class="shoe" d="M-4 -4 L-4 -26 Q-4 -44 -26 -44 Q-50 -44 -62 -28 Q-72 -14 -66 -4 Q-62 2 -52 2 L-8 2 Q-4 2 -4 -4Z"/>
+    <path class="shoe" d="M4 -4 L4 -26 Q4 -44 26 -44 Q50 -44 62 -28 Q72 -14 66 -4 Q62 2 52 2 L8 2 Q4 2 4 -4Z"/>
+    <path fill="#fff" d="M-68 -8 Q-64 2 -52 2 L-8 2 Q-4 2 -4 -4 L-4 -10Z"/><path fill="#fff" d="M68 -8 Q64 2 52 2 L8 2 Q4 2 4 -4 L4 -10Z"/>
+    <rect class="shoe-sh" x="-44" y="-36" width="30" height="10" rx="5"/><rect class="shoe-sh" x="14" y="-36" width="30" height="10" rx="5"/>
+  </g>
+  
+  <g id="ian-body">
+    <!-- shorts -->
+    <path class="bot" d="M-58 -168 L58 -168 L62 -110 Q62 -100 52 -100 L8 -100 L0 -118 L-8 -100 L-52 -100 Q-62 -100 -62 -110Z"/>
+    <path class="bot-sh" d="M-58 -168 L58 -168 L59 -150 L-59 -150Z"/>
+    <rect class="skin-sh" x="-18" y="-280" width="36" height="40" rx="12"/>
+    <!-- tee -->
+    <path class="top" d="M-38 -262 L38 -262 Q64 -262 70 -234 L74 -168 Q74 -150 56 -150 L-56 -150 Q-74 -150 -74 -168 L-70 -234 Q-64 -262 -38 -262Z"/>
+    <path class="top-sh" d="M56 -250 Q68 -242 70 -234 L74 -168 Q74 -150 56 -150 L48 -150 Q62 -200 56 -250Z"/>
+    <path fill="#FFD470" d="M0 -232 L9 -212 L31 -210 L14 -196 L20 -174 L0 -186 L-20 -174 L-14 -196 L-31 -210 L-9 -212Z"/>
+    <!-- cape knot -->
+    <path class="acc" d="M-40 -264 Q0 -246 40 -264 L36 -252 Q0 -236 -36 -252Z"/>
+    <circle class="acc-sh" cx="0" cy="-248" r="10"/><circle class="acc" cx="0" cy="-250" r="8"/>
+  </g>
+  
+  <g id="si1-head" transform="rotate(0 0 -262)">
+    <g id="ian-hair-back"></g>
+    
+  <g id="ian-headshape">
+    <circle class="skin" cx="-130" cy="-376" r="28"/><circle class="skin" cx="130" cy="-376" r="28"/>
+    <circle class="skin-sh" cx="-134" cy="-376" r="13"/><circle class="skin-sh" cx="134" cy="-376" r="13"/>
+    <path class="skin" d="M0 -516 C92 -516 134 -466 134 -386 C134 -302 88 -254 0 -254 C-88 -254 -134 -302 -134 -386 C-134 -466 -92 -516 0 -516Z"/>
+    <path class="skin-sh" opacity=".35" d="M120 -330 C100 -280 56 -254 0 -254 C44 -268 96 -290 120 -330Z"/>
+    <ellipse class="blush" cx="-80" cy="-340" rx="26" ry="16"/><ellipse class="blush" cx="80" cy="-340" rx="26" ry="16"/>
+    <g class="freck"><circle cx="-90" cy="-352" r="3.5"/><circle cx="-76" cy="-346" r="3.5"/><circle cx="-86" cy="-336" r="3.5"/>
+    <circle cx="90" cy="-352" r="3.5"/><circle cx="76" cy="-346" r="3.5"/><circle cx="86" cy="-336" r="3.5"/></g>
+    <ellipse class="skin-sh" cx="0" cy="-360" rx="13" ry="9"/>
+  </g>
+    <g id="si1-face"><g id="si1-face-surprised" class="face">
+    
+    <ellipse class="ink" cx="-48" cy="-390" rx="20" ry="26"/><ellipse class="ink" cx="48" cy="-390" rx="20" ry="26"/>
+    <circle class="wht" cx="-41" cy="-400" r="7.5"/><circle class="wht" cx="55" cy="-400" r="7.5"/>
+    <circle class="wht" cx="-53" cy="-380" r="4"/><circle class="wht" cx="43" cy="-380" r="4"/>
+    <path class="brow" d="M-72 -452 Q-50 -468 -28 -454"/><path class="brow" d="M28 -454 Q50 -468 72 -452"/>
+    <path class="mouth" d="M-22 -312 Q0 -334 22 -312 Q26 -280 0 -278 Q-26 -280 -22 -312Z"/>
+    <ellipse class="tongue" cx="0" cy="-288" rx="12" ry="7"/></g></g>
+    
+  <g id="ian-hair-front">
+    <path class="hair" d="M-136 -396 C-156 -452 -128 -506 -86 -520 C-98 -548 -70 -566 -44 -552
+      C-38 -584 0 -590 12 -560 C32 -588 70 -578 68 -548 C100 -560 126 -532 112 -506
+      C146 -490 156 -440 136 -396 C126 -430 104 -454 74 -462 C62 -440 30 -436 16 -456
+      C0 -434 -32 -436 -42 -458 C-62 -440 -98 -444 -106 -466 C-124 -450 -132 -426 -136 -396Z"/>
+    <path class="hair" d="M8 -560 C-6 -610 50 -628 58 -594 C62 -578 46 -572 40 -584" fill="none" stroke="var(--hair)" stroke-width="12" stroke-linecap="round"/>
+    <path class="hair-st" d="M-96 -500 Q-80 -512 -62 -508"/><path class="hair-st" d="M60 -520 Q80 -524 94 -510"/>
+    <path class="hair-st" d="M-20 -540 Q-6 -548 8 -540"/>
+  </g>
+  </g>
+  <g id="si1-arm-l-pivot" transform="translate(-60 -236) rotate(130)">
+    <g id="si1-arm-l">
+      <rect class="skin" x="-13" y="0" width="26" height="106" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="106" r="21"/><ellipse class="skin" cx="14" cy="98" rx="9" ry="12" transform="rotate(25 14 98)"/>
+    </g></g>
+  <g id="si1-arm-r-pivot" transform="translate(60 -236) rotate(-130)">
+    <g id="si1-arm-r">
+      <rect class="skin" x="-13" y="0" width="26" height="106" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="106" r="21"/><ellipse class="skin" cx="-14" cy="98" rx="9" ry="12" transform="rotate(-25 -14 98)"/>
+    </g></g>
+  
+</g></g><g transform="translate(1790 720) scale(.9)">
+<g id="si2" style="--skin:#F7C9A3;--skin-sh:#E4A07A;--hair:#E26F34;--hair-hi:#F7985A;--top:#3F86DE;--top-sh:#2E69B8;--acc:#F0604D;--acc-sh:#C9473A;--bottom:#F4B63E;--bottom-sh:#D9962A;--shoe:#E8473B;--shoe-sh:#B7352E">
+  <ellipse class="shadow" cx="0" cy="0" rx="84" ry="16"/>
+  
+  <g id="ian-cape">
+    <path class="acc" d="M-52 -256 Q0 -272 52 -256 Q80 -170 110 -96 Q90 -84 74 -96 Q56 -80 36 -94 Q10 -78 -12 -94 Q-34 -80 -52 -96 Q-70 -82 -86 -98 Q-66 -170 -52 -256Z"/>
+    <path class="acc-sh" d="M-52 -256 Q-30 -230 -34 -170 Q-38 -120 -52 -96 Q-70 -82 -86 -98 Q-66 -170 -52 -256Z"/>
+    <path class="acc-sh" d="M40 -250 Q70 -180 110 -96 Q90 -84 74 -96 Q60 -170 40 -250Z" opacity=".6"/>
+  </g>
+  
+  <g id="ian-legs">
+    <rect class="skin" x="-40" y="-130" width="28" height="110" rx="13"/>
+    <rect class="skin" x="12" y="-130" width="28" height="110" rx="13"/>
+    <rect class="wht" x="-42" y="-54" width="32" height="30" rx="8"/><rect class="wht" x="10" y="-54" width="32" height="30" rx="8"/>
+    <rect x="-42" y="-50" width="32" height="6" fill="#2FA59B"/><rect x="10" y="-50" width="32" height="6" fill="#2FA59B"/>
+    <!-- chunky shoes -->
+    <path class="shoe" d="M-4 -4 L-4 -26 Q-4 -44 -26 -44 Q-50 -44 -62 -28 Q-72 -14 -66 -4 Q-62 2 -52 2 L-8 2 Q-4 2 -4 -4Z"/>
+    <path class="shoe" d="M4 -4 L4 -26 Q4 -44 26 -44 Q50 -44 62 -28 Q72 -14 66 -4 Q62 2 52 2 L8 2 Q4 2 4 -4Z"/>
+    <path fill="#fff" d="M-68 -8 Q-64 2 -52 2 L-8 2 Q-4 2 -4 -4 L-4 -10Z"/><path fill="#fff" d="M68 -8 Q64 2 52 2 L8 2 Q4 2 4 -4 L4 -10Z"/>
+    <rect class="shoe-sh" x="-44" y="-36" width="30" height="10" rx="5"/><rect class="shoe-sh" x="14" y="-36" width="30" height="10" rx="5"/>
+  </g>
+  
+  <g id="ian-body">
+    <!-- shorts -->
+    <path class="bot" d="M-58 -168 L58 -168 L62 -110 Q62 -100 52 -100 L8 -100 L0 -118 L-8 -100 L-52 -100 Q-62 -100 -62 -110Z"/>
+    <path class="bot-sh" d="M-58 -168 L58 -168 L59 -150 L-59 -150Z"/>
+    <rect class="skin-sh" x="-18" y="-280" width="36" height="40" rx="12"/>
+    <!-- tee -->
+    <path class="top" d="M-38 -262 L38 -262 Q64 -262 70 -234 L74 -168 Q74 -150 56 -150 L-56 -150 Q-74 -150 -74 -168 L-70 -234 Q-64 -262 -38 -262Z"/>
+    <path class="top-sh" d="M56 -250 Q68 -242 70 -234 L74 -168 Q74 -150 56 -150 L48 -150 Q62 -200 56 -250Z"/>
+    <path fill="#FFD470" d="M0 -232 L9 -212 L31 -210 L14 -196 L20 -174 L0 -186 L-20 -174 L-14 -196 L-31 -210 L-9 -212Z"/>
+    <!-- cape knot -->
+    <path class="acc" d="M-40 -264 Q0 -246 40 -264 L36 -252 Q0 -236 -36 -252Z"/>
+    <circle class="acc-sh" cx="0" cy="-248" r="10"/><circle class="acc" cx="0" cy="-250" r="8"/>
+  </g>
+  <g id="si2-arm-l-pivot" transform="translate(-60 -236) rotate(10)">
+    <g id="si2-arm-l">
+      <rect class="skin" x="-13" y="0" width="26" height="106" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="106" r="21"/><ellipse class="skin" cx="14" cy="98" rx="9" ry="12" transform="rotate(25 14 98)"/>
+    </g></g>
+  <g id="si2-head" transform="rotate(-6 0 -262)">
+    <g id="ian-hair-back"></g>
+    
+  <g id="ian-headshape">
+    <circle class="skin" cx="-130" cy="-376" r="28"/><circle class="skin" cx="130" cy="-376" r="28"/>
+    <circle class="skin-sh" cx="-134" cy="-376" r="13"/><circle class="skin-sh" cx="134" cy="-376" r="13"/>
+    <path class="skin" d="M0 -516 C92 -516 134 -466 134 -386 C134 -302 88 -254 0 -254 C-88 -254 -134 -302 -134 -386 C-134 -466 -92 -516 0 -516Z"/>
+    <path class="skin-sh" opacity=".35" d="M120 -330 C100 -280 56 -254 0 -254 C44 -268 96 -290 120 -330Z"/>
+    <ellipse class="blush" cx="-80" cy="-340" rx="26" ry="16"/><ellipse class="blush" cx="80" cy="-340" rx="26" ry="16"/>
+    <g class="freck"><circle cx="-90" cy="-352" r="3.5"/><circle cx="-76" cy="-346" r="3.5"/><circle cx="-86" cy="-336" r="3.5"/>
+    <circle cx="90" cy="-352" r="3.5"/><circle cx="76" cy="-346" r="3.5"/><circle cx="86" cy="-336" r="3.5"/></g>
+    <ellipse class="skin-sh" cx="0" cy="-360" rx="13" ry="9"/>
+  </g>
+    <g id="si2-face"><g id="si2-face-grumpy" class="face">
+    <ellipse class="ink" cx="-48" cy="-386" rx="15" ry="16"/><ellipse class="ink" cx="48" cy="-386" rx="15" ry="16"/>
+    <circle class="wht" cx="-43" cy="-391" r="5"/><circle class="wht" cx="53" cy="-391" r="5"/>
+    <path class="skin" d="M-70 -410 L-26 -396 L-26 -420 L-70 -420Z"/><path class="skin" d="M70 -410 L26 -396 L26 -420 L70 -420Z"/>
+    <path class="brow" d="M-70 -424 L-28 -406"/><path class="brow" d="M28 -406 L70 -424"/>
+    <path class="ln" d="M-22 -300 Q0 -318 22 -300"/>
+    <ellipse class="blush" cx="-80" cy="-336" rx="30" ry="19" opacity=".35"/><ellipse class="blush" cx="80" cy="-336" rx="30" ry="19" opacity=".35"/></g></g>
+    
+  <g id="ian-hair-front">
+    <path class="hair" d="M-136 -396 C-156 -452 -128 -506 -86 -520 C-98 -548 -70 -566 -44 -552
+      C-38 -584 0 -590 12 -560 C32 -588 70 -578 68 -548 C100 -560 126 -532 112 -506
+      C146 -490 156 -440 136 -396 C126 -430 104 -454 74 -462 C62 -440 30 -436 16 -456
+      C0 -434 -32 -436 -42 -458 C-62 -440 -98 -444 -106 -466 C-124 -450 -132 -426 -136 -396Z"/>
+    <path class="hair" d="M8 -560 C-6 -610 50 -628 58 -594 C62 -578 46 -572 40 -584" fill="none" stroke="var(--hair)" stroke-width="12" stroke-linecap="round"/>
+    <path class="hair-st" d="M-96 -500 Q-80 -512 -62 -508"/><path class="hair-st" d="M60 -520 Q80 -524 94 -510"/>
+    <path class="hair-st" d="M-20 -540 Q-6 -548 8 -540"/>
+  </g>
+  </g>
+  
+  <g id="si2-arm-r-pivot" transform="translate(60 -236) rotate(-10)">
+    <g id="si2-arm-r">
+      <rect class="skin" x="-13" y="0" width="26" height="106" rx="13"/>
+      <path class="top" d="M-24 -12 Q0 -30 24 -12 L22 44 Q0 54 -22 44Z"/>
+      <path class="top-sh" d="M-22 34 Q0 46 22 34 L22 44 Q0 54 -22 44Z"/>
+      <circle class="skin" cx="0" cy="106" r="21"/><ellipse class="skin" cx="-14" cy="98" rx="9" ry="12" transform="rotate(-25 -14 98)"/>
+    </g></g>
+  
+</g></g>
+<g transform="translate(300 1180)">
+<g class="prop-pan">
+  <path fill="#C98547" d="M-110 -6 L-210 -2 Q-236 0 -236 14 Q-236 28 -210 28 L-106 20Z"/>
+  <path fill="#E9A765" d="M-110 -6 L-210 -2 Q-236 0 -236 10 Q-236 18 -210 18 L-108 12Z"/>
+  <circle cx="-222" cy="13" r="5" fill="#C98547"/>
+  <rect x="-128" y="-10" width="34" height="30" rx="8" fill="#3A3552"/>
+  <path fill="#3A3552" d="M-112 0 Q-106 58 0 60 Q106 58 112 0Z"/>
+  <ellipse cx="0" cy="0" rx="114" ry="40" fill="#56507A"/>
+  <ellipse cx="0" cy="4" rx="100" ry="31" fill="#3A3552"/>
+  <path d="M-70 36 Q-20 50 40 44" stroke="#56507A" stroke-width="6" fill="none" stroke-linecap="round" opacity=".8"/>
+  <path d="M-80 -14 Q-50 -26 -10 -28" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".35"/>
+  
+<g transform="translate(0 2)">
+  <path fill="#fff" d="M-52 2 C-60 -14 -34 -22 -18 -18 C-8 -28 22 -26 34 -16 C56 -16 62 2 44 10 C38 22 10 24 -4 18 C-26 26 -58 18 -52 2Z"/>
+  <ellipse cx="-2" cy="-2" rx="19" ry="13" fill="#F0B544"/><ellipse cx="-2" cy="-4" rx="17" ry="11" fill="#FFC23D"/>
+  <ellipse cx="-8" cy="-8" rx="6" ry="3.5" fill="#fff" opacity=".7"/>
+</g>
+</g></g>
+<g transform="translate(620 1180)">
+<g class="prop-tomato" transform="scale(1)">
+  <path fill="#EE4336" d="M0 -104 C44 -110 66 -80 64 -52 C62 -18 36 0 0 0 C-36 0 -62 -18 -64 -52 C-66 -80 -44 -110 0 -104Z"/>
+  <path fill="#C22F2A" d="M58 -64 C60 -24 34 0 0 0 C-26 0 -46 -10 -56 -28 C-30 -10 30 -10 58 -64Z"/>
+  <path fill="#FF7A62" d="M-44 -82 Q-50 -60 -40 -46 Q-44 -70 -30 -86Z"/>
+  <path fill="#C22F2A" opacity=".5" d="M-6 -102 Q-2 -60 0 -30 Q4 -60 8 -102Z"/>
+  <path fill="#5DBE6A" d="M0 -100 L-30 -110 L-10 -96 L-28 -80 L-2 -92 L8 -76 L10 -94 L34 -92 L14 -102 L24 -118 L4 -106Z"/>
+  <path d="M2 -104 Q2 -122 12 -130" stroke="#3C9A52" stroke-width="7" fill="none" stroke-linecap="round"/>
+</g></g>
+<g transform="translate(860 1180)">
+<g class="prop-sliced-tomato">
+  <path fill="#EE4336" d="M40 -96 C80 -100 104 -76 104 -48 C104 -16 80 0 50 0 L40 0Z"/>
+  <path fill="#C22F2A" d="M100 -60 C102 -20 80 0 50 0 L42 0 Q90 -14 100 -60Z"/>
+  <path fill="#5DBE6A" d="M60 -96 L44 -108 L62 -104 L74 -118 L74 -100 L92 -100 L74 -92Z"/>
+  <g transform="translate(40 -48) scale(0.34 1)">
+<g class="prop-slice">
+  <circle r="48" fill="#C22F2A"/><circle r="44" fill="#EE4336"/>
+  <circle r="38" fill="#FF8266"/>
+  <ellipse cx="0" cy="-22.1" rx="9.6" ry="13.4" transform="rotate(0 0 -22.1)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-21" rx="2.9" ry="4.8" transform="rotate(0 0 -21)" fill="#FFD98A"/><ellipse cx="21" cy="-6.8" rx="9.6" ry="13.4" transform="rotate(72 21 -6.8)" fill="#FFB199"/>
+      <ellipse cx="19.9" cy="-6.5" rx="2.9" ry="4.8" transform="rotate(72 19.9 -6.5)" fill="#FFD98A"/><ellipse cx="13" cy="17.9" rx="9.6" ry="13.4" transform="rotate(144 13 17.9)" fill="#FFB199"/>
+      <ellipse cx="12.3" cy="17" rx="2.9" ry="4.8" transform="rotate(144 12.3 17)" fill="#FFD98A"/><ellipse cx="-13" cy="17.9" rx="9.6" ry="13.4" transform="rotate(216 -13 17.9)" fill="#FFB199"/>
+      <ellipse cx="-12.3" cy="17" rx="2.9" ry="4.8" transform="rotate(216 -12.3 17)" fill="#FFD98A"/><ellipse cx="-21" cy="-6.8" rx="9.6" ry="13.4" transform="rotate(288 -21 -6.8)" fill="#FFB199"/>
+      <ellipse cx="-19.9" cy="-6.5" rx="2.9" ry="4.8" transform="rotate(288 -19.9 -6.5)" fill="#FFD98A"/>
+  <circle r="7.7" fill="#FFB199"/>
+  <path d="M-28.799999999999997 -26.400000000000002 Q-9.600000000000001 -40.8 12 -38.400000000000006" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+  <g transform="translate(-6 -30) rotate(-8) scale(1 .62)">
+<g class="prop-slice">
+  <circle r="40" fill="#C22F2A"/><circle r="36" fill="#EE4336"/>
+  <circle r="30" fill="#FF8266"/>
+  <ellipse cx="0" cy="-18.4" rx="8" ry="11.2" transform="rotate(0 0 -18.4)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-17.5" rx="2.4" ry="4" transform="rotate(0 0 -17.5)" fill="#FFD98A"/><ellipse cx="17.5" cy="-5.7" rx="8" ry="11.2" transform="rotate(72 17.5 -5.7)" fill="#FFB199"/>
+      <ellipse cx="16.6" cy="-5.4" rx="2.4" ry="4" transform="rotate(72 16.6 -5.4)" fill="#FFD98A"/><ellipse cx="10.8" cy="14.9" rx="8" ry="11.2" transform="rotate(144 10.8 14.9)" fill="#FFB199"/>
+      <ellipse cx="10.3" cy="14.1" rx="2.4" ry="4" transform="rotate(144 10.3 14.1)" fill="#FFD98A"/><ellipse cx="-10.8" cy="14.9" rx="8" ry="11.2" transform="rotate(216 -10.8 14.9)" fill="#FFB199"/>
+      <ellipse cx="-10.3" cy="14.1" rx="2.4" ry="4" transform="rotate(216 -10.3 14.1)" fill="#FFD98A"/><ellipse cx="-17.5" cy="-5.7" rx="8" ry="11.2" transform="rotate(288 -17.5 -5.7)" fill="#FFB199"/>
+      <ellipse cx="-16.6" cy="-5.4" rx="2.4" ry="4" transform="rotate(288 -16.6 -5.4)" fill="#FFD98A"/>
+  <circle r="6.4" fill="#FFB199"/>
+  <path d="M-24 -22 Q-8 -34 10 -32" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+  <g transform="translate(-58 -22) rotate(-14) scale(1 .62)">
+<g class="prop-slice">
+  <circle r="38" fill="#C22F2A"/><circle r="34" fill="#EE4336"/>
+  <circle r="28" fill="#FF8266"/>
+  <ellipse cx="0" cy="-17.5" rx="7.6" ry="10.6" transform="rotate(0 0 -17.5)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-16.6" rx="2.3" ry="3.8" transform="rotate(0 0 -16.6)" fill="#FFD98A"/><ellipse cx="16.6" cy="-5.4" rx="7.6" ry="10.6" transform="rotate(72 16.6 -5.4)" fill="#FFB199"/>
+      <ellipse cx="15.8" cy="-5.1" rx="2.3" ry="3.8" transform="rotate(72 15.8 -5.1)" fill="#FFD98A"/><ellipse cx="10.3" cy="14.1" rx="7.6" ry="10.6" transform="rotate(144 10.3 14.1)" fill="#FFB199"/>
+      <ellipse cx="9.8" cy="13.4" rx="2.3" ry="3.8" transform="rotate(144 9.8 13.4)" fill="#FFD98A"/><ellipse cx="-10.3" cy="14.1" rx="7.6" ry="10.6" transform="rotate(216 -10.3 14.1)" fill="#FFB199"/>
+      <ellipse cx="-9.8" cy="13.4" rx="2.3" ry="3.8" transform="rotate(216 -9.8 13.4)" fill="#FFD98A"/><ellipse cx="-16.6" cy="-5.4" rx="7.6" ry="10.6" transform="rotate(288 -16.6 -5.4)" fill="#FFB199"/>
+      <ellipse cx="-15.8" cy="-5.1" rx="2.3" ry="3.8" transform="rotate(288 -15.8 -5.1)" fill="#FFD98A"/>
+  <circle r="6.1" fill="#FFB199"/>
+  <path d="M-22.8 -20.900000000000002 Q-7.6000000000000005 -32.3 9.5 -30.400000000000002" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+</g></g>
+<g transform="translate(1100 1180)">
+<g class="prop-cupcake" transform="scale(1)">
+  <path fill="#2FA59B" d="M-50 -64 L50 -64 L40 -4 Q39 0 34 0 L-34 0 Q-39 0 -40 -4Z"/>
+  <g stroke="#228179" stroke-width="5" stroke-linecap="round"><path d="M-30 -60 L-24 -6"/><path d="M-10 -60 L-8 -6"/><path d="M10 -60 L8 -6"/><path d="M30 -60 L24 -6"/></g>
+  <path fill="#228179" d="M40 -4 L50 -64 L36 -64 L28 0 L34 0 Q39 0 40 -4Z" opacity=".6"/>
+  <path fill="#FF9DB3" d="M-62 -66 C-74 -86 -52 -100 -40 -94 C-46 -118 -20 -128 -6 -118 C-2 -138 30 -142 36 -120
+    C54 -126 72 -106 60 -90 C78 -86 76 -62 58 -60 L-54 -58 C-66 -58 -70 -62 -62 -66Z"/>
+  <path fill="#FFC4D2" d="M-40 -94 C-30 -108 -8 -106 -6 -118 C4 -104 -20 -94 -40 -94Z"/>
+  <path fill="#EC7896" d="M58 -60 C76 -62 78 -86 60 -90 C62 -76 50 -66 30 -62Z"/>
+  <path fill="#EC7896" d="M-54 -58 L58 -60 Q30 -70 0 -66 Q-30 -70 -54 -58Z" opacity=".7"/>
+  <g stroke-width="6" stroke-linecap="round">
+    <path d="M-34 -80 L-26 -84" stroke="#FFD470"/><path d="M-6 -94 L0 -100" stroke="#9FDBF7"/><path d="M20 -84 L28 -80" stroke="#fff"/>
+    <path d="M-20 -70 L-12 -68" stroke="#9FDBF7"/><path d="M40 -72 L44 -78" stroke="#FFD470"/><path d="M8 -112 L14 -108" stroke="#FFD470"/>
+  </g>
+  <path d="M10 -142 Q12 -164 26 -170" stroke="#3C9A52" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="8" cy="-138" r="17" fill="#EE4336"/><circle cx="3" cy="-143" r="5" fill="#fff" opacity=".7"/>
+</g></g>
+<g transform="translate(1400 1180)">
+<g class="prop-bowl">
+  <!-- whisk (behind rim) -->
+  <g transform="translate(-10 -40) rotate(24 40 -120)">
+    <rect x="30" y="-250" width="20" height="96" rx="10" fill="#F0604D"/>
+    <rect x="30" y="-250" width="7" height="96" rx="3.5" fill="#F98A77"/>
+    <g fill="none" stroke="#8C95B0" stroke-width="6">
+      <path d="M40 -156 C-10 -120 0 -40 40 -40 C80 -40 90 -120 40 -156Z"/>
+      <path d="M40 -156 C14 -120 20 -44 40 -44 C60 -44 66 -120 40 -156Z"/>
+      <path d="M40 -156 L40 -44"/>
+    </g>
+  </g>
+  <ellipse cx="0" cy="-122" rx="150" ry="38" fill="#F0B544"/>
+  <ellipse cx="0" cy="-116" rx="136" ry="28" fill="#FFF0C8"/>
+  <path d="M-60 -122 Q-20 -134 30 -120" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".8"/>
+  <path fill="#9FDBF7" d="M-150 -122 Q-148 -30 -70 -8 L-60 0 L60 0 L70 -8 Q148 -30 150 -122 Q150 -84 0 -84 Q-150 -84 -150 -122Z"/>
+  <path fill="#7CC4EA" d="M150 -122 Q148 -30 70 -8 L60 0 L40 0 Q120 -40 136 -104 Q150 -110 150 -122Z"/>
+  <path fill="#C9ECFB" d="M-128 -96 Q-120 -50 -84 -30 Q-110 -60 -112 -92Z"/>
+  <path fill="#fff" d="M-146 -86 Q0 -60 146 -86 L140 -66 Q0 -40 -140 -66Z" opacity=".9"/>
+  <g fill="#F0604D"><circle cx="-90" cy="-72" r="7"/><circle cx="-45" cy="-64" r="7"/><circle cx="0" cy="-62" r="7"/><circle cx="45" cy="-64" r="7"/><circle cx="90" cy="-72" r="7"/></g>
+  <ellipse cx="0" cy="-2" rx="64" ry="8" fill="#7CC4EA"/>
+</g></g>
+<g transform="translate(1760 1180)">
+<g class="prop-slice">
+  <circle r="60" fill="#C22F2A"/><circle r="56" fill="#EE4336"/>
+  <circle r="50" fill="#FF8266"/>
+  <ellipse cx="0" cy="-27.6" rx="12" ry="16.8" transform="rotate(0 0 -27.6)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-26.2" rx="3.6" ry="6" transform="rotate(0 0 -26.2)" fill="#FFD98A"/><ellipse cx="26.2" cy="-8.5" rx="12" ry="16.8" transform="rotate(72 26.2 -8.5)" fill="#FFB199"/>
+      <ellipse cx="24.9" cy="-8.1" rx="3.6" ry="6" transform="rotate(72 24.9 -8.1)" fill="#FFD98A"/><ellipse cx="16.2" cy="22.3" rx="12" ry="16.8" transform="rotate(144 16.2 22.3)" fill="#FFB199"/>
+      <ellipse cx="15.4" cy="21.2" rx="3.6" ry="6" transform="rotate(144 15.4 21.2)" fill="#FFD98A"/><ellipse cx="-16.2" cy="22.3" rx="12" ry="16.8" transform="rotate(216 -16.2 22.3)" fill="#FFB199"/>
+      <ellipse cx="-15.4" cy="21.2" rx="3.6" ry="6" transform="rotate(216 -15.4 21.2)" fill="#FFD98A"/><ellipse cx="-26.2" cy="-8.5" rx="12" ry="16.8" transform="rotate(288 -26.2 -8.5)" fill="#FFB199"/>
+      <ellipse cx="-24.9" cy="-8.1" rx="3.6" ry="6" transform="rotate(288 -24.9 -8.1)" fill="#FFD98A"/>
+  <circle r="9.6" fill="#FFB199"/>
+  <path d="M-36 -33 Q-12 -51 15 -48" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+</svg>

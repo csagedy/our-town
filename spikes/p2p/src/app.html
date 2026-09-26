@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="P2P Test">
+<link rel="manifest" href="manifest.webmanifest">
+<title>P2P Pair Test</title>
+<!--
+  Spike: offline peer-to-peer between two iPads (bead dollhouse-game-oxg.1).
+  WebRTC data channel, no STUN/TURN, signaling by QR code (or copy/paste).
+  Built from src/app.html by build.mjs. Third-party code inlined below:
+    - qrcode-generator 2.0.4, (c) 2009 Kazuhiko Arase, MIT (vendor/LICENSE-qrcode-generator.txt)
+    - jsQR 1.4.0, (c) Cosmo Wolfe, Apache-2.0 (vendor/LICENSE-jsQR.txt)
+-->
+<style>
+  :root { --bg:#fdf6ec; --ink:#2b2b2b; --accent:#ff7a59; --ok:#2e9e5b; --bad:#d64545; --panel:#fff; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font: 17px/1.35 -apple-system, system-ui, sans-serif; -webkit-user-select:none; user-select:none; }
+  body { padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom); }
+  h1 { font-size: 22px; margin: 12px 0 4px; }
+  button { font: inherit; font-weight:600; min-height:64px; min-width:64px; padding:0 22px; border-radius:16px;
+    border:0; background:var(--accent); color:#fff; margin:6px 8px 6px 0; }
+  button.secondary { background:#ddd; color:var(--ink); }
+  .screen { display:none; }
+  .screen.on { display:block; }
+  #status { font-weight:600; margin:4px 0 8px; }
+  #status.ok { color:var(--ok); } #status.bad { color:var(--bad); }
+  .row { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; }
+  .qrbox { background:#fff; padding:12px; border-radius:12px; display:inline-block; }
+  .qrbox canvas { display:block; image-rendering: pixelated; }
+  video { width: 360px; max-width: 100%; border-radius:12px; background:#000; transform: scaleX(1); }
+  video.mirror { transform: scaleX(-1); }
+  textarea { width:100%; max-width:520px; height:84px; font: 13px ui-monospace, Menlo, monospace;
+    -webkit-user-select:text; user-select:text; border-radius:8px; border:1px solid #ccc; padding:6px; }
+  details { margin-top:10px; }
+  pre#log { font: 12px ui-monospace, Menlo, monospace; white-space:pre-wrap; background:#fff; padding:8px;
+    border-radius:8px; max-height:200px; overflow:auto; -webkit-user-select:text; user-select:text; }
+  #stage { position:relative; width:100%; height:calc(100vh - 150px); min-height:320px; background:#fff;
+    border-radius:16px; overflow:hidden; touch-action:none; }
+  #square { position:absolute; left:0; top:0; width:120px; height:120px; border-radius:20px; will-change:transform;
+    box-shadow: 0 6px 16px rgba(0,0,0,.2); transition: background-color .15s; }
+  #square.held { box-shadow: 0 0 0 6px rgba(0,0,0,.25), 0 10px 22px rgba(0,0,0,.25); }
+  #stats { font-size:14px; color:#555; }
+  .hint { color:#666; font-size:15px; max-width:640px; }
+</style>
+</head>
+<body>
+
+<h1>P2P pair test</h1>
+<div id="status">Not connected</div>
+
+<!-- Screen: choose role -->
+<div id="s-home" class="screen on">
+  <p class="hint">Both iPads must be on the same Wi-Fi (for example the iPhone hotspot).
+    One iPad taps <b>Host</b>, the other taps <b>Join</b>. Allow the camera when asked (this also
+    lets the two iPads find each other directly).</p>
+  <button id="btn-host">Host</button>
+  <button id="btn-join">Join</button>
+  <label style="display:block;margin-top:8px"><input type="checkbox" id="opt-nocam"> No camera (copy/paste codes; desktop testing)</label>
+</div>
+
+<!-- Screen: host shows offer, then scans answer -->
+<div id="s-host" class="screen">
+  <p class="hint"><b>Step 1.</b> Let the other iPad scan this code. <b>Step 2.</b> Then scan the code it shows.</p>
+  <div class="row">
+    <div><div class="qrbox"><canvas id="qr-offer"></canvas></div></div>
+    <div>
+      <video id="video-host" playsinline muted autoplay></video><br>
+      <button class="secondary" id="flip-host">Flip camera</button>
+    </div>
+  </div>
+  <details><summary>Copy/paste instead</summary>
+    <p>My code (give to the other device):</p><textarea id="offer-out" readonly></textarea>
+    <p>Paste the other device's code:</p><textarea id="answer-in"></textarea><br>
+    <button id="btn-answer-paste">Use pasted code</button>
+  </details>
+</div>
+
+<!-- Screen: joiner scans offer, shows answer -->
+<div id="s-join" class="screen">
+  <p class="hint" id="join-hint"><b>Step 1.</b> Point the camera at the host iPad's code.</p>
+  <div class="row">
+    <div id="join-cam">
+      <video id="video-join" playsinline muted autoplay></video><br>
+      <button class="secondary" id="flip-join">Flip camera</button>
+    </div>
+    <div id="join-answer" style="display:none"><div class="qrbox"><canvas id="qr-answer"></canvas></div></div>
+  </div>
+  <details><summary>Copy/paste instead</summary>
+    <p>Paste the host's code:</p><textarea id="offer-in"></textarea><br>
+    <button id="btn-offer-paste">Use pasted code</button>
+    <p>My code (give back to the host):</p><textarea id="answer-out" readonly></textarea>
+  </details>
+</div>
+
+<!-- Screen: connected play -->
+<div id="s-play" class="screen">
+  <div id="stats"></div>
+  <div id="stage"><div id="square"></div></div>
+</div>
+
+<details><summary>Diagnostics</summary><pre id="log"></pre>
+  <button class="secondary" id="btn-reset">Start over</button></details>
+
+<script>/*__QRCODE__*/</script>
+<script>/*__JSQR__*/</script>
+<script>
+'use strict';
+// ---------------------------------------------------------------------------
+// Utilities
+// ---------------------------------------------------------------------------
+const $ = (id) => document.getElementById(id);
+const logEl = $('log');
+function log(...a) {
+  const line = a.map((x) => (typeof x === 'string' ? x : JSON.stringify(x))).join(' ');
+  logEl.textContent += line + '\n';
+  logEl.scrollTop = logEl.scrollHeight;
+  console.log('[p2p]', line);
+}
+function setStatus(text, cls) { const s = $('status'); s.textContent = text; s.className = cls || ''; }
+function show(id) { document.querySelectorAll('.screen').forEach((e) => e.classList.toggle('on', e.id === id)); }
+
+log('UA: ' + navigator.userAgent);
+log('standalone (home-screen app): ' + (navigator.standalone === true || matchMedia('(display-mode: standalone)').matches));
+log('secure context: ' + isSecureContext);
+
+// ---------------------------------------------------------------------------
+// Compact SDP codec. A data-channel-only SDP carries very little that matters:
+// ICE ufrag/pwd, the DTLS fingerprint, the DTLS setup role and the candidates.
+// We send only those (~150-250 bytes) and rebuild a canonical SDP on the other side.
+// Format (fields separated by "|"):
+//   P1|<o|a>|<setup a/c/p>|<ufrag>|<pwd>|<fingerprint base64>|<cand>;<cand>...
+//   cand = <u|t><address>/<port>   (u = udp, t = tcp; address may be an mDNS *.local name)
+// Fallback for unexpected SDPs: S|<o|a>|<base64 of full SDP>.
+// ---------------------------------------------------------------------------
+const SETUP = { actpass: 'a', active: 'c', passive: 'p' };
+const SETUP_R = { a: 'actpass', c: 'active', p: 'passive' };
+
+function hexToB64(hex) {
+  const bytes = hex.split(':').map((h) => parseInt(h, 16));
+  return btoa(String.fromCharCode(...bytes));
+}
+function b64ToHex(b64) {
+  return Array.from(atob(b64), (c) => c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join(':');
+}
+
+function encodeDesc(desc) {
+  const sdp = desc.sdp;
+  const kind = desc.type === 'offer' ? 'o' : 'a';
+  const get = (re) => { const m = sdp.match(re); return m ? m[1].trim() : null; };
+  const ufrag = get(/a=ice-ufrag:(.+)/);
+  const pwd = get(/a=ice-pwd:(.+)/);
+  const fp = sdp.match(/a=fingerprint:(\S+) ([0-9A-Fa-f:]+)/);
+  const setup = get(/a=setup:(\S+)/);
+  const cands = [];
+  for (const m of sdp.matchAll(/a=candidate:\S+ (\d) (\S+) \d+ (\S+) (\d+) typ (\S+)/g)) {
+    const [, component, proto, addr, port, typ] = m;
+    if (component !== '1') continue;
+    if (typ !== 'host' && typ !== 'srflx') continue; // no TURN in this spike
+    const p = proto.toLowerCase() === 'udp' ? 'u' : 't';
+    if (p === 't') continue; // TCP candidates are rarely useful here and cost QR space
+    cands.push(p + addr + '/' + port);
+  }
+  const ok = ufrag && pwd && fp && fp[1].toLowerCase() === 'sha-256' && setup && SETUP[setup]
+    && !/[|;]/.test(ufrag + pwd) && /m=application/.test(sdp) && !/m=(audio|video)/.test(sdp);
+  if (!ok) {
+    log('compact encode not possible; using full SDP fallback');
+    return 'S|' + kind + '|' + btoa(sdp);
+  }
+  return ['P1', kind, SETUP[setup], ufrag, pwd, hexToB64(fp[2]), cands.join(';')].join('|');
+}
+
+function decodeDesc(text) {
+  text = text.trim();
+  const parts = text.split('|');
+  if (parts[0] === 'S') return { type: parts[1] === 'o' ? 'offer' : 'answer', sdp: atob(parts[2]) };
+  if (parts[0] !== 'P1' || parts.length !== 7) throw new Error('Not a pairing code');
+  const [, kind, setupC, ufrag, pwd, fpB64, candStr] = parts;
+  const lines = [
+    'v=0',
+    'o=- ' + (Date.now() % 1e9) + ' 2 IN IP4 127.0.0.1',
+    's=-',
+    't=0 0',
+    'a=group:BUNDLE 0',
+    'a=msid-semantic: WMS',
+    'm=application 9 UDP/DTLS/SCTP webrtc-datachannel',
+    'c=IN IP4 0.0.0.0',
+    'a=ice-ufrag:' + ufrag,
+    'a=ice-pwd:' + pwd,
+    'a=ice-options:trickle',
+    'a=fingerprint:sha-256 ' + b64ToHex(fpB64),
+    'a=setup:' + SETUP_R[setupC],
+    'a=mid:0',
+    'a=sctp-port:5000',
+    'a=max-message-size:262144',
+  ];
+  let prio = 2130706431;
+  candStr.split(';').filter(Boolean).forEach((c, i) => {
+    const proto = c[0] === 'u' ? 'udp' : 'tcp';
+    const slash = c.lastIndexOf('/');
+    const addr = c.slice(1, slash);
+    const port = c.slice(slash + 1);
+    lines.push('a=candidate:' + (i + 1) + ' 1 ' + proto + ' ' + (prio - i) + ' ' + addr + ' ' + port + ' typ host generation 0');
+  });
+  lines.push('a=end-of-candidates');
+  return { type: kind === 'o' ? 'offer' : 'answer', sdp: lines.join('\r\n') + '\r\n' };
+}
+
+// ---------------------------------------------------------------------------
+// QR display + camera scanning
+// ---------------------------------------------------------------------------
+function drawQR(canvas, text) {
+  const qr = qrcode(0, 'M');
+  qr.addData(text, 'Byte');
+  qr.make();
+  const n = qr.getModuleCount();
+  const quiet = 4;
+  const size = Math.min(window.innerWidth - 60, 420);
+  const cell = Math.max(3, Math.floor(size / (n + quiet * 2)));
+  canvas.width = canvas.height = cell * (n + quiet * 2);
+  const g = canvas.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, canvas.width, canvas.height);
+  g.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++)
+    if (qr.isDark(r, c)) g.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+  log('QR: ' + text.length + ' bytes -> version ' + ((n - 17) / 4) + ' (' + n + 'x' + n + ' modules)');
+}
+
+let camStream = null;
+let facing = 'user'; // front camera by default: hold the two iPads screen-to-screen
+let scanTimer = null;
+
+async function getCamera() {
+  if (camStream) return camStream;
+  if ($('opt-nocam').checked) return null;
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 1280 } }, audio: false });
+    log('camera granted (' + facing + '); host candidates will be real IPs');
+    return camStream;
+  } catch (e) {
+    log('camera unavailable: ' + e.name + ' ' + e.message + ' (host candidates will be mDNS .local names)');
+    return null;
+  }
+}
+function stopCamera() {
+  if (scanTimer) { clearInterval(scanTimer); scanTimer = null; }
+  if (camStream) { camStream.getTracks().forEach((t) => t.stop()); camStream = null; }
+}
+async function flipCamera(video, onCode) {
+  facing = facing === 'user' ? 'environment' : 'user';
+  stopCamera();
+  await startScan(video, onCode);
+}
+
+async function startScan(video, onCode) {
+  const stream = await getCamera();
+  if (!stream) return false;
+  video.srcObject = stream;
+  video.classList.toggle('mirror', facing === 'user');
+  await video.play().catch(() => {});
+  const canvas = document.createElement('canvas');
+  const g = canvas.getContext('2d', { willReadFrequently: true });
+  scanTimer = setInterval(() => {
+    if (video.readyState < 2) return;
+    const w = 640, h = Math.round(640 * video.videoHeight / video.videoWidth) || 480;
+    canvas.width = w; canvas.height = h;
+    g.drawImage(video, 0, 0, w, h);
+    const img = g.getImageData(0, 0, w, h);
+    const code = jsQR(img.data, w, h, { inversionAttempts: 'dontInvert' });
+    if (code && code.data && /^(P1|S)\|/.test(code.data)) {
+      clearInterval(scanTimer); scanTimer = null;
+      log('scanned ' + code.data.length + ' bytes');
+      onCode(code.data);
+    }
+  }, 120);
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+// WebRTC. No iceServers at all: nothing leaves the local network.
+// ---------------------------------------------------------------------------
+let pc = null, dc = null, role = null;
+
+function newPC() {
+  pc = new RTCPeerConnection({ iceServers: [] });
+  pc.onicecandidate = (e) => { if (e.candidate) log('local cand: ' + e.candidate.candidate); };
+  pc.oniceconnectionstatechange = () => log('ice: ' + pc.iceConnectionState);
+  pc.onconnectionstatechange = () => {
+    log('conn: ' + pc.connectionState);
+    if (pc.connectionState === 'failed') setStatus('Connection failed. See Diagnostics, then Start over.', 'bad');
+    if (pc.connectionState === 'disconnected') setStatus('Disconnected (other iPad asleep or out of range?)', 'bad');
+  };
+  return pc;
+}
+
+function waitIceComplete(timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    if (pc.iceGatheringState === 'complete') return resolve();
+    const t = setTimeout(() => { log('ICE gathering timeout; using what we have'); resolve(); }, timeoutMs);
+    pc.addEventListener('icegatheringstatechange', () => {
+      if (pc.iceGatheringState === 'complete') { clearTimeout(t); resolve(); }
+    });
+  });
+}
+
+async function startHost() {
+  role = 'host';
+  show('s-host');
+  setStatus('Preparing...');
+  // IMPORTANT: ask for the camera BEFORE creating the peer connection. In WebKit a
+  // granted getUserMedia turns off ICE candidate filtering for the page, so our host
+  // candidates carry real LAN IPs instead of mDNS names another device must resolve.
+  const video = $('video-host');
+  await getCamera();
+  newPC();
+  setupChannel(pc.createDataChannel('game', { ordered: true }));
+  await pc.setLocalDescription(await pc.createOffer());
+  await waitIceComplete();
+  const code = encodeDesc(pc.localDescription);
+  $('offer-out').value = code;
+  drawQR($('qr-offer'), code);
+  setStatus('Waiting for the other iPad...');
+  const onAnswer = (text) => acceptAnswer(text);
+  await startScan(video, onAnswer);
+  $('flip-host').onclick = () => flipCamera(video, onAnswer);
+}
+
+async function acceptAnswer(text) {
+  try {
+    stopCamera();
+    await pc.setRemoteDescription(decodeDesc(text));
+    setStatus('Connecting...');
+  } catch (e) { log('bad answer: ' + e); setStatus('That code did not work: ' + e.message, 'bad'); }
+}
+
+async function startJoin() {
+  role = 'guest';
+  show('s-join');
+  const video = $('video-join');
+  const onOffer = (text) => acceptOffer(text);
+  const ok = await startScan(video, onOffer);
+  if (!ok) $('join-hint').textContent = 'No camera: open "Copy/paste instead" below.';
+  $('flip-join').onclick = () => flipCamera(video, onOffer);
+}
+
+async function acceptOffer(text) {
+  try {
+    stopCamera();
+    newPC();
+    pc.ondatachannel = (e) => setupChannel(e.channel);
+    await pc.setRemoteDescription(decodeDesc(text));
+    await pc.setLocalDescription(await pc.createAnswer());
+    await waitIceComplete();
+    const code = encodeDesc(pc.localDescription);
+    $('answer-out').value = code;
+    $('join-cam').style.display = 'none';
+    $('join-answer').style.display = '';
+    $('join-hint').innerHTML = '<b>Step 2.</b> Now let the host iPad scan this code.';
+    drawQR($('qr-answer'), code);
+    setStatus('Waiting for the host to scan...');
+  } catch (e) { log('bad offer: ' + e); setStatus('That code did not work: ' + e.message, 'bad'); }
+}
+
+// ---------------------------------------------------------------------------
+// Shared world: host-authoritative state with per-object "grab ownership".
+// Host owns the truth. Guest sends intents (grab/move/drop/tap); host applies
+// them if allowed and broadcasts state. The holder moves the object locally
+// right away so dragging feels instant on both sides.
+// ---------------------------------------------------------------------------
+const COLORS = ['#ff7a59', '#4f8cff', '#2eb872', '#f5b700', '#b45cff'];
+const world = { sq: { x: 0.4, y: 0.4, color: 0, owner: null, rev: 0 } };
+const me = () => role; // 'host' or 'guest'
+
+function send(msg) { if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
+
+function setupChannel(ch) {
+  dc = ch;
+  dc.onopen = () => {
+    log('data channel open');
+    show('s-play');
+    setStatus('Connected! Drag the square. Tap it to change color.', 'ok');
+    render();
+    if (role === 'host') send({ t: 'state', sq: world.sq });
+    reportPath();
+    setInterval(() => send({ t: 'ping', at: performance.now() }), 2000);
+  };
+  dc.onclose = () => { log('data channel closed'); setStatus('Disconnected', 'bad'); };
+  dc.onmessage = (e) => onMessage(JSON.parse(e.data));
+}
+
+function onMessage(m) {
+  if (m.t === 'ping') return send({ t: 'pong', at: m.at });
+  if (m.t === 'pong') { lastRtt = Math.round(performance.now() - m.at); return renderStats(); }
+  const sq = world.sq;
+  if (role === 'host') {
+    // Host arbitrates guest intents.
+    if (m.t === 'grab') { if (!sq.owner) sq.owner = 'guest'; }
+    else if (m.t === 'move') { if (sq.owner === 'guest') { sq.x = m.x; sq.y = m.y; } }
+    else if (m.t === 'drop') { if (sq.owner === 'guest') { sq.x = m.x; sq.y = m.y; sq.owner = null; } }
+    else if (m.t === 'tap') { if (!sq.owner || sq.owner === 'guest') sq.color = (sq.color + 1) % COLORS.length; }
+    sq.rev++;
+    render();
+    send({ t: 'state', sq });
+  } else if (m.t === 'state') {
+    // Guest: accept host truth, except position while we hold it (avoid jitter).
+    const holding = dragging && m.sq.owner === 'guest';
+    Object.assign(sq, holding ? { ...m.sq, x: sq.x, y: sq.y } : m.sq);
+    if (dragging && m.sq.owner !== 'guest') dragging = false; // grab denied: host holds it
+    render();
+  }
+}
+
+function hostChanged() { world.sq.rev++; render(); send({ t: 'state', sq: world.sq }); }
+
+// Pointer handling (works for touch and mouse).
+const stage = $('stage'), square = $('square');
+let dragging = false, grabDX = 0, grabDY = 0, downAt = 0, moved = false;
+let lastSent = 0;
+
+function stageRect() { return stage.getBoundingClientRect(); }
+function toNorm(px, py) {
+  const r = stageRect();
+  const nx = (px - r.left - grabDX) / (r.width - square.offsetWidth);
+  const ny = (py - r.top - grabDY) / (r.height - square.offsetHeight);
+  return { x: Math.min(1, Math.max(0, nx)), y: Math.min(1, Math.max(0, ny)) };
+}
+
+square.addEventListener('pointerdown', (e) => {
+  const sq = world.sq;
+  if (sq.owner && sq.owner !== me()) return; // someone else is holding it
+  square.setPointerCapture(e.pointerId);
+  const r = square.getBoundingClientRect();
+  grabDX = e.clientX - r.left; grabDY = e.clientY - r.top;
+  dragging = true; moved = false; downAt = performance.now();
+  if (role === 'host') { sq.owner = 'host'; hostChanged(); }
+  else { sq.owner = 'guest'; send({ t: 'grab' }); render(); }
+});
+square.addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  moved = true;
+  const p = toNorm(e.clientX, e.clientY);
+  world.sq.x = p.x; world.sq.y = p.y;
+  render();
+  const now = performance.now();
+  if (now - lastSent < 16) return; // ~60 msgs/s max
+  lastSent = now;
+  if (role === 'host') send({ t: 'state', sq: world.sq });
+  else send({ t: 'move', x: p.x, y: p.y });
+});
+function endDrag() {
+  if (!dragging) return;
+  dragging = false;
+  const sq = world.sq;
+  const isTap = !moved && performance.now() - downAt < 300;
+  if (role === 'host') {
+    sq.owner = null;
+    if (isTap) sq.color = (sq.color + 1) % COLORS.length;
+    hostChanged();
+  } else {
+    send({ t: 'drop', x: sq.x, y: sq.y });
+    if (isTap) send({ t: 'tap' });
+  }
+}
+square.addEventListener('pointerup', endDrag);
+square.addEventListener('pointercancel', endDrag);
+
+function render() {
+  const sq = world.sq;
+  const r = stageRect();
+  const tx = sq.x * (r.width - square.offsetWidth);
+  const ty = sq.y * (r.height - square.offsetHeight);
+  square.style.transform = 'translate(' + tx + 'px,' + ty + 'px)';
+  square.style.backgroundColor = COLORS[sq.color];
+  square.classList.toggle('held', !!sq.owner);
+}
+window.addEventListener('resize', render);
+
+let lastRtt = null, pathText = '';
+function renderStats() {
+  $('stats').textContent = 'I am ' + role + ' · round trip ' + (lastRtt == null ? '?' : lastRtt + ' ms') + ' · ' + pathText;
+}
+async function reportPath() {
+  try {
+    const stats = await pc.getStats();
+    let pair = null;
+    stats.forEach((s) => { if (s.type === 'candidate-pair' && (s.nominated || s.selected) && s.state === 'succeeded') pair = s; });
+    if (pair) {
+      const l = stats.get(pair.localCandidateId), r = stats.get(pair.remoteCandidateId);
+      const addr = (c) => (c && (c.address || c.ip)) || 'hidden/mDNS';
+      pathText = 'path ' + addr(l) + ' (' + (l && l.candidateType) + ') <-> ' + addr(r) + ' (' + (r && r.candidateType) + ')';
+      log(pathText);
+    }
+  } catch (e) { log('getStats failed: ' + e); }
+  renderStats();
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('btn-host').onclick = () => startHost().catch((e) => { log('host error: ' + e); setStatus(String(e), 'bad'); });
+$('btn-join').onclick = () => startJoin().catch((e) => { log('join error: ' + e); setStatus(String(e), 'bad'); });
+$('btn-answer-paste').onclick = () => acceptAnswer($('answer-in').value);
+$('btn-offer-paste').onclick = () => acceptOffer($('offer-in').value);
+$('btn-reset').onclick = () => location.reload();
+
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').then(() => log('service worker registered (offline ready)'))
+    .catch((e) => log('service worker failed: ' + e));
+}
+// Exposed for automated desktop testing only.
+window.__p2p = { encodeDesc, decodeDesc, world, get pc() { return pc; }, get dc() { return dc; } };
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-85 -180 170 190">
+<g class="prop-cupcake" transform="scale(1)">
+  <path fill="#2FA59B" d="M-50 -64 L50 -64 L40 -4 Q39 0 34 0 L-34 0 Q-39 0 -40 -4Z"/>
+  <g stroke="#228179" stroke-width="5" stroke-linecap="round"><path d="M-30 -60 L-24 -6"/><path d="M-10 -60 L-8 -6"/><path d="M10 -60 L8 -6"/><path d="M30 -60 L24 -6"/></g>
+  <path fill="#228179" d="M40 -4 L50 -64 L36 -64 L28 0 L34 0 Q39 0 40 -4Z" opacity=".6"/>
+  <path fill="#FF9DB3" d="M-62 -66 C-74 -86 -52 -100 -40 -94 C-46 -118 -20 -128 -6 -118 C-2 -138 30 -142 36 -120
+    C54 -126 72 -106 60 -90 C78 -86 76 -62 58 -60 L-54 -58 C-66 -58 -70 -62 -62 -66Z"/>
+  <path fill="#FFC4D2" d="M-40 -94 C-30 -108 -8 -106 -6 -118 C4 -104 -20 -94 -40 -94Z"/>
+  <path fill="#EC7896" d="M58 -60 C76 -62 78 -86 60 -90 C62 -76 50 -66 30 -62Z"/>
+  <path fill="#EC7896" d="M-54 -58 L58 -60 Q30 -70 0 -66 Q-30 -70 -54 -58Z" opacity=".7"/>
+  <g stroke-width="6" stroke-linecap="round">
+    <path d="M-34 -80 L-26 -84" stroke="#FFD470"/><path d="M-6 -94 L0 -100" stroke="#9FDBF7"/><path d="M20 -84 L28 -80" stroke="#fff"/>
+    <path d="M-20 -70 L-12 -68" stroke="#9FDBF7"/><path d="M40 -72 L44 -78" stroke="#FFD470"/><path d="M8 -112 L14 -108" stroke="#FFD470"/>
+  </g>
+  <path d="M10 -142 Q12 -164 26 -170" stroke="#3C9A52" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="8" cy="-138" r="17" fill="#EE4336"/><circle cx="3" cy="-143" r="5" fill="#fff" opacity=".7"/>
+</g></svg>

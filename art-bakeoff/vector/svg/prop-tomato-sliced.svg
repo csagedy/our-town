@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -125 225 135">
+<g class="prop-sliced-tomato">
+  <path fill="#EE4336" d="M40 -96 C80 -100 104 -76 104 -48 C104 -16 80 0 50 0 L40 0Z"/>
+  <path fill="#C22F2A" d="M100 -60 C102 -20 80 0 50 0 L42 0 Q90 -14 100 -60Z"/>
+  <path fill="#5DBE6A" d="M60 -96 L44 -108 L62 -104 L74 -118 L74 -100 L92 -100 L74 -92Z"/>
+  <g transform="translate(40 -48) scale(0.34 1)">
+<g class="prop-slice">
+  <circle r="48" fill="#C22F2A"/><circle r="44" fill="#EE4336"/>
+  <circle r="38" fill="#FF8266"/>
+  <ellipse cx="0" cy="-22.1" rx="9.6" ry="13.4" transform="rotate(0 0 -22.1)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-21" rx="2.9" ry="4.8" transform="rotate(0 0 -21)" fill="#FFD98A"/><ellipse cx="21" cy="-6.8" rx="9.6" ry="13.4" transform="rotate(72 21 -6.8)" fill="#FFB199"/>
+      <ellipse cx="19.9" cy="-6.5" rx="2.9" ry="4.8" transform="rotate(72 19.9 -6.5)" fill="#FFD98A"/><ellipse cx="13" cy="17.9" rx="9.6" ry="13.4" transform="rotate(144 13 17.9)" fill="#FFB199"/>
+      <ellipse cx="12.3" cy="17" rx="2.9" ry="4.8" transform="rotate(144 12.3 17)" fill="#FFD98A"/><ellipse cx="-13" cy="17.9" rx="9.6" ry="13.4" transform="rotate(216 -13 17.9)" fill="#FFB199"/>
+      <ellipse cx="-12.3" cy="17" rx="2.9" ry="4.8" transform="rotate(216 -12.3 17)" fill="#FFD98A"/><ellipse cx="-21" cy="-6.8" rx="9.6" ry="13.4" transform="rotate(288 -21 -6.8)" fill="#FFB199"/>
+      <ellipse cx="-19.9" cy="-6.5" rx="2.9" ry="4.8" transform="rotate(288 -19.9 -6.5)" fill="#FFD98A"/>
+  <circle r="7.7" fill="#FFB199"/>
+  <path d="M-28.799999999999997 -26.400000000000002 Q-9.600000000000001 -40.8 12 -38.400000000000006" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+  <g transform="translate(-6 -30) rotate(-8) scale(1 .62)">
+<g class="prop-slice">
+  <circle r="40" fill="#C22F2A"/><circle r="36" fill="#EE4336"/>
+  <circle r="30" fill="#FF8266"/>
+  <ellipse cx="0" cy="-18.4" rx="8" ry="11.2" transform="rotate(0 0 -18.4)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-17.5" rx="2.4" ry="4" transform="rotate(0 0 -17.5)" fill="#FFD98A"/><ellipse cx="17.5" cy="-5.7" rx="8" ry="11.2" transform="rotate(72 17.5 -5.7)" fill="#FFB199"/>
+      <ellipse cx="16.6" cy="-5.4" rx="2.4" ry="4" transform="rotate(72 16.6 -5.4)" fill="#FFD98A"/><ellipse cx="10.8" cy="14.9" rx="8" ry="11.2" transform="rotate(144 10.8 14.9)" fill="#FFB199"/>
+      <ellipse cx="10.3" cy="14.1" rx="2.4" ry="4" transform="rotate(144 10.3 14.1)" fill="#FFD98A"/><ellipse cx="-10.8" cy="14.9" rx="8" ry="11.2" transform="rotate(216 -10.8 14.9)" fill="#FFB199"/>
+      <ellipse cx="-10.3" cy="14.1" rx="2.4" ry="4" transform="rotate(216 -10.3 14.1)" fill="#FFD98A"/><ellipse cx="-17.5" cy="-5.7" rx="8" ry="11.2" transform="rotate(288 -17.5 -5.7)" fill="#FFB199"/>
+      <ellipse cx="-16.6" cy="-5.4" rx="2.4" ry="4" transform="rotate(288 -16.6 -5.4)" fill="#FFD98A"/>
+  <circle r="6.4" fill="#FFB199"/>
+  <path d="M-24 -22 Q-8 -34 10 -32" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+  <g transform="translate(-58 -22) rotate(-14) scale(1 .62)">
+<g class="prop-slice">
+  <circle r="38" fill="#C22F2A"/><circle r="34" fill="#EE4336"/>
+  <circle r="28" fill="#FF8266"/>
+  <ellipse cx="0" cy="-17.5" rx="7.6" ry="10.6" transform="rotate(0 0 -17.5)" fill="#FFB199"/>
+      <ellipse cx="0" cy="-16.6" rx="2.3" ry="3.8" transform="rotate(0 0 -16.6)" fill="#FFD98A"/><ellipse cx="16.6" cy="-5.4" rx="7.6" ry="10.6" transform="rotate(72 16.6 -5.4)" fill="#FFB199"/>
+      <ellipse cx="15.8" cy="-5.1" rx="2.3" ry="3.8" transform="rotate(72 15.8 -5.1)" fill="#FFD98A"/><ellipse cx="10.3" cy="14.1" rx="7.6" ry="10.6" transform="rotate(144 10.3 14.1)" fill="#FFB199"/>
+      <ellipse cx="9.8" cy="13.4" rx="2.3" ry="3.8" transform="rotate(144 9.8 13.4)" fill="#FFD98A"/><ellipse cx="-10.3" cy="14.1" rx="7.6" ry="10.6" transform="rotate(216 -10.3 14.1)" fill="#FFB199"/>
+      <ellipse cx="-9.8" cy="13.4" rx="2.3" ry="3.8" transform="rotate(216 -9.8 13.4)" fill="#FFD98A"/><ellipse cx="-16.6" cy="-5.4" rx="7.6" ry="10.6" transform="rotate(288 -16.6 -5.4)" fill="#FFB199"/>
+      <ellipse cx="-15.8" cy="-5.1" rx="2.3" ry="3.8" transform="rotate(288 -15.8 -5.1)" fill="#FFD98A"/>
+  <circle r="6.1" fill="#FFB199"/>
+  <path d="M-22.8 -20.900000000000002 Q-7.6000000000000005 -32.3 9.5 -30.400000000000002" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"/>
+</g></g>
+</g></svg>

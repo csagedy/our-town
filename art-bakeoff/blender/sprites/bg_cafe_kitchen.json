@@ -1,0 +1,12 @@
+{
+  "file": "bg_cafe_kitchen.png",
+  "w": 2048,
+  "h": 1536,
+  "ppm": 393.8461538461538,
+  "cam_center": [
+    0.0,
+    1.47
+  ],
+  "pitch_deg": 14.0,
+  "note": "world->pixel: toylib.origin_px(cx, cy, w, h, world=(x, y, z))"
+}

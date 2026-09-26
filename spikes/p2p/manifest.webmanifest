@@ -1,0 +1,10 @@
+{
+  "name": "P2P Pair Test",
+  "short_name": "P2P Test",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#fdf6ec",
+  "theme_color": "#ff7a59"
+}

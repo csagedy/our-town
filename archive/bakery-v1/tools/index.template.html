@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#F3EDE0">
+<title>Little Lantern Bakery</title>
+<link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+
+<!-- Every sprite in the game, drawn by tools/*.py and inlined at build time.
+     Inlined rather than linked because Chrome will not resolve
+     <use href="other-file.svg#id">, and because it keeps the whole game to a
+     single request that also works from a file:// double-click. -->
+<!--SPRITE_SHEET-->
+
+<div id="app">
+  <div id="stagewrap">
+    <div id="stage">
+      <img id="roomart" alt="" draggable="false">
+      <div id="items"></div>
+      <div id="fx"></div>
+      <div id="grain"></div>
+    </div>
+  </div>
+
+  <header id="topbar">
+    <button id="namebtn" class="chip" title="Name your bakery">
+      <span id="shopname">Little Lantern Bakery</span>
+    </button>
+    <button id="menubtn" class="chip icon" title="Settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/>
+        <circle cx="12" cy="19" r="2"/>
+      </svg>
+    </button>
+  </header>
+
+  <nav id="rooms"></nav>
+
+  <div id="basket">
+    <div id="basketlabel">Basket</div>
+    <div id="basketslots"></div>
+  </div>
+
+  <div id="menu" class="sheet" hidden>
+    <h2>Settings</h2>
+    <label class="row"><input type="checkbox" id="optsound"> Sounds</label>
+    <label class="row"><input type="checkbox" id="opthints" checked> Show little labels</label>
+    <p class="note">Everything saves by itself on this device.</p>
+    <button id="resetbtn" class="danger">Start a brand new bakery</button>
+    <button id="closemenu" class="primary">Done</button>
+  </div>
+
+  <div id="namesheet" class="sheet" hidden>
+    <h2>What is your bakery called?</h2>
+    <input id="nameinput" maxlength="28" autocomplete="off">
+    <button id="namedone" class="primary">That's it</button>
+  </div>
+
+  <div id="scrim" hidden></div>
+</div>
+
+<script type="application/json" id="gamedata"><!--GAME_DATA--></script>
+<script src="js/engine.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+{
+  "bg_cafe_kitchen": {
+    "px": [
+      2048,
+      1536
+    ],
+    "render_only": 11.59,
+    "seconds": 11.59
+  },
+  "char_big_kid": {
+    "layer": "body",
+    "px": [
+      339,
+      504
+    ],
+    "seconds": 0.85
+  },
+  "char_big_kid__face_layers": {
+    "count": 10,
+    "seconds": 8.54
+  },
+  "char_big_kid__total": {
+    "seconds": 9.57
+  },
+  "char_little_kid": {
+    "layer": "body",
+    "px": [
+      256,
+      446
+    ],
+    "seconds": 0.8
+  },
+  "char_little_kid__face_layers": {
+    "count": 10,
+    "seconds": 8.79
+  },
+  "char_little_kid__total": {
+    "seconds": 9.77
+  },
+  "prop_cupcake": {
+    "px": [
+      122,
+      166
+    ],
+    "render_only": 2.2,
+    "seconds": 3.56
+  },
+  "prop_frying_pan": {
+    "px": [
+      281,
+      69
+    ],
+    "render_only": 0.94,
+    "seconds": 1.13
+  },
+  "prop_mixing_bowl": {
+    "px": [
+      207,
+      194
+    ],
+    "render_only": 0.88,
+    "seconds": 1.13
+  },
+  "prop_tomato_sliced": {
+    "px": [
+      190,
+      141
+    ],
+    "render_only": 0.87,
+    "seconds": 1.24
+  },
+  "prop_tomato_whole": {
+    "px": [
+      121,
+      111
+    ],
+    "render_only": 0.46,
+    "seconds": 0.47
+  }
+}

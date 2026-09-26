@@ -58,20 +58,33 @@ This protocol applies when ending a Beads implementation workflow. It is subordi
 <!-- END BEADS INTEGRATION -->
 
 
+## The Project: "our town" pretend-play game
+
+A Toca Boca-style open-ended pretend-play game for two kids:
+- **Zoe (9)**: voracious reader; loves cooking and dreams of opening a cafe; loves singing and theater.
+- **Ian (5)**: starting kindergarten, knows only a handful of sight words; loves building and Spider-Man; plays "school" to understand it.
+
+**Toca Boca mechanics, not a "game":** no score, no timers, no failure, no win state. Everything is draggable, everything reacts to a tap (squish, sound, face change), characters and objects carry between locations, the state autosaves. Joy is in the tactile details and funny reactions.
+
+**Locations (city map hub):** Cafe (kitchen and dining room), Theater (stage, costume closet, lights, singing), Construction Site (build, dig, stack), School (kindergarten classroom and recess). Superhero play lives in the theater costume closet: generic capes, masks, a web-slinger suit. **No Marvel/Disney IP, names, or logos.**
+
+**Hard requirements**
+- Target: **iPad Safari, landscape, touch-first**, installable to the home screen as a PWA.
+- **Must run fully offline** (road trips). Service worker precaches everything; no CDNs, no network calls at runtime.
+- **Zero reading required** for Ian: all core play is icons, pictures and sound. Text is an optional layer for Zoe (menu board, dish names, show programs, name tags).
+- Mic recording in the theater must work offline and on-device only; never upload anything.
+- Performance on older iPads: animate only transform and opacity; big hit targets (at least 64pt).
+- **Target devices:** an original iPad Pro (A9X, which tops out at **iPadOS 16 / Safari 16**, 2 to 4GB RAM) and an iPad Air 5th gen (M1). **Safari 16 is the compatibility floor**: no syntax or APIs newer than Safari 16.0 (check caniuse), and performance is judged on the old Pro.
+- **Hosting:** GitHub Pages under the csagedy account, same as `/Users/chris/workspace/games` (kids-arcade). Reuse its PWA/service-worker update pattern (`sw.js`, version shown in menu, "Update now" button). Creating or pushing a repo needs the user's OK.
+- **Mechanics must actually work.** The last attempt's interactions "didn't seem to work as intended". Every interaction bead must be verified by driving it with real synthetic touch/pointer events in a browser (touch emulation, iPad-sized viewport), not just by unit tests or reading the code. Describe in the close note exactly what you did and saw.
+- The old bakery prototype is in `archive/bakery-v1/`. It's reference only. Don't build on it without a reason.
+
+**Workflow:** all work is tracked in beads (`bd`). Orchestrator is the main Claude session; subagents claim a bead, do the work, and close it with a note on what changed and how it was verified. Don't commit unless the orchestrator asks.
+
 ## Build & Test
 
-_Add your build and test commands here_
-
-```bash
-# Example:
-# npm install
-# npm test
-```
+_To be filled in once the engine exists._
 
 ## Architecture Overview
 
-_Add a brief overview of your project architecture_
-
-## Conventions & Patterns
-
-_Add your project-specific conventions here_
+_To be filled in once the engine exists. Design doc: `docs/design.md`._

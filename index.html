@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- No zoom: the stage handles every gesture itself. viewport-fit=cover lets
+     the art run under the rounded corners and status bar; UI chrome uses the
+     --safe-* variables in src/app.css to stay clear of them. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Our Town">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#ffd66e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="src/app.css">
+<title>Our Town</title>
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
