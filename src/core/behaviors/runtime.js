@@ -45,6 +45,7 @@
 import { resolveBehaviors } from './registry.js';
 import './builtin.js';
 import './cafe.js';
+import './site.js';     // P2c.1: build pieces, the hose
 import { childrenOf, getEntity, inRoom } from '../../engine/world.js';
 import { settle, stackZ, DEPTH_SCALE } from '../../engine/surfaces.js';
 import * as tween from '../../engine/tween.js';
@@ -112,6 +113,7 @@ export function createBehaviors({ catalog, store, random = Math.random }) {
     const others = [];
     for (const o of inRoom(store.state, room.id)) {
       if (skip.has(o.id)) continue;
+      if (catalog.hasTag(o.kind, 'station')) continue;   // invisible prep stations take no room (P2a.2)
       const v = view.viewOf(o.id);
       if (v && v.held) continue;
       const sz = sizeOf(o);
@@ -309,7 +311,7 @@ export function createBehaviors({ catalog, store, random = Math.random }) {
       if (!catalog.has(e.kind)) return null;
       for (const b of listOf(e.kind)) {
         if (!b.def.sprite) continue;
-        const s = b.def.sprite(e, b.p, { catalog, look: lookOf(e) });
+        const s = b.def.sprite(e, b.p, { catalog, look: lookOf(e), children: () => childrenOf(store.state, e.id) });
         if (s) return s;
       }
       return catalog.sprite(e.kind, lookOf(e));
@@ -364,7 +366,9 @@ export function createBehaviors({ catalog, store, random = Math.random }) {
     layoutOf(parent, kids) {
       const p = containerOf(parent.kind);
       if (!p) return null;
-      return layoutSlots(p, sizeOf(parent), kids.map((k) => Object.assign({ id: k.id, slot: k.slot }, sizeOf(k))));
+      const lay = layoutSlots(p, sizeOf(parent), kids.map((k) => Object.assign({ id: k.id, slot: k.slot }, sizeOf(k))));
+      for (const b of listOf(parent.kind)) if (b.def.layoutKids) b.def.layoutKids(parent, kids, lay, b.p);
+      return lay;
     },
 
     /** A drag starting on a spawner: the id of the new clone the finger carries, or null. */

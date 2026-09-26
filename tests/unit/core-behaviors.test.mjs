@@ -164,7 +164,7 @@ test('cycle: steps the looks; a one-way cycle at its end falls back, never dead'
   w.tap(mug);
   assert.equal(w.b.lookOf(w.e(mug)), 'empty');
   const egg = w.spawn('egg');
-  assert.deepEqual(w.tap(egg).via, ['cycle']);
+  assert.deepEqual(w.tap(egg).via, ['food'], 'a tap cracks it (P2a.2: the food behavior)');
   assert.equal(w.b.lookOf(w.e(egg)), 'cracked');
   const r = w.tap(egg);
   assert.deepEqual(r.via, [], 'nothing left to crack');
@@ -215,7 +215,7 @@ test('container: accepts the right tags, refuses others (and when full) playfull
   assert.equal(childrenOf(w.store.state, bowl).length, 3);
   const extra = w.spawn('egg');
   w.b.onDropInto(w.e(extra), w.e(bowl), w.ctx);
-  assert.deepEqual(w.b.log().at(-1).via, ['container:refuse'], 'full');
+  assert.deepEqual(w.b.log().at(-1).via, ['mix:refuse'], 'full (an egg goes through the bowl\'s mix behavior, P2a.2)');
   assert.equal(w.b.log().at(-1).reason, 'full');
   assert.deepEqual(childrenOf(w.store.state, bowl).map((c) => c.slot).sort(), ['s0', 's1', 's2']);
   // The cookie jar takes sweets only; the pan takes ingredients only.
@@ -224,7 +224,8 @@ test('container: accepts the right tags, refuses others (and when full) playfull
   assert.deepEqual(w.b.log().at(-1).via, ['container:refuse']);
   const pan = w.spawn('pan', 750, 540);
   w.b.onDropInto(w.e(extra), w.e(pan), w.ctx);
-  assert.deepEqual(w.b.log().at(-1).via, ['container:accept']);
+  assert.deepEqual(w.b.log().at(-1).via, ['mix:accept']);
+  assert.equal(w.e(extra).props.cracked, 1, 'it cracked on the rim');
   assert.equal(w.b.lookOf(w.e(pan)), 'egg');
 });
 

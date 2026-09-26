@@ -36,6 +36,7 @@
 //   page.externalRequests()           requests not to the local server (must stay empty)
 //   page.setViewport(name|{width,height})
 //   page.send(method, params)         raw CDP escape hatch
+//   page.onEvent(fn)                  raw CDP events of this page: fn(method, params) (e.g. Tracing.dataCollected)
 //   page.stopServer()                 kill the web server (offline tests)
 //   page.close()                      kill Chrome and the server
 //
@@ -303,6 +304,7 @@ export async function openPage(opts = {}) {
     errors: [],
     requests: [],
     send,
+    onEvent(fn) { cdp.on((msg) => { if (msg.sessionId === sessionId && msg.method) fn(msg.method, msg.params); }); },
     externalRequests() {
       return this.requests.filter((u) => !u.startsWith(origin) && !/^(data|blob|about):/.test(u));
     },

@@ -224,7 +224,8 @@ function bite(e, rx, p) {
       // Eaten up: the plate (or bowl...) stays where the dish was, in the
       // same hand or container slot. One combine, so it can't half-happen.
       const at = e.parent ? { parent: e.parent, slot: e.slot || undefined } : { room: e.room, x: e.x, y: e.y, z: e.z || 0 };
-      rx.dispatch('combine', Object.assign({ ids: [e.id], resultId: rx.newId(), resultKind: p.leaves }, at));
+      // It is left dirty (the sink cleans it, P2a.2).
+      rx.dispatch('combine', Object.assign({ ids: [e.id], resultId: rx.newId(), resultKind: p.leaves, props: { dirty: 1 } }, at));
     } else rx.dispatch('remove', { id: e.id, hard: true });
     return true;
   }
@@ -253,10 +254,12 @@ defineBehavior('eatable', {
   verbs: { bite },
 });
 
-// Random props for a new clone: { color: ['red', 'blue'] } -> { color: 'blue' }.
-function varyProps(p, random) {
+// Random props for a new clone: { color: ['red', 'blue'] } -> { color: 'blue' };
+// then the `keep` props copied from the spawner (e) itself.
+function varyProps(p, random, e = null) {
   const out = {};
   if (p.vary) for (const k of Object.keys(p.vary)) out[k] = pick(p.vary[k], random);
+  if (p.keep && e) for (const k of p.keep) if (e.props[k] !== undefined) out[k] = e.props[k];
   return out;
 }
 
@@ -268,12 +271,14 @@ defineBehavior('spawner', {
     vary: null,      // random props per clone: { "color": ["red", "blue"] }
     sound: 'pop',
     homeSound: 'whoosh',   // a clone dropped back on it goes home
+    keep: null,      // prop keys a clone copies from the spawner itself (a red paint can gives red cans)
   },
   check(p, { kinds, sounds }) {
     if (!isStrList(p.kinds)) return 'kinds must list at least one kind';
     const missing = p.kinds.filter((k) => !kinds[k]);
     if (missing.length) return 'unknown kinds ' + missing.join(', ');
     if (p.vary != null && !(p.vary && typeof p.vary === 'object' && Object.values(p.vary).every((l) => Array.isArray(l) && l.length))) return 'vary must map props to lists';
+    if (p.keep != null && !isStrList(p.keep)) return 'keep must list prop names';
     return soundOk(p.sound, sounds) && soundOk(p.homeSound, sounds) ? null : 'unknown sound';
   },
   canDrag: () => false,   // the spawner stays put; a drag on it pulls out a clone (dragOut)
@@ -289,7 +294,7 @@ defineBehavior('spawner', {
     const fy = typeof info.y === 'number' ? info.y : rx.where().y - 40;
     const x = Math.round(Math.max(s.w / 2, Math.min(rx.room.def.width - s.w / 2, fx)));
     const y = Math.round(Math.max(s.h, Math.min(1000, fy + s.h * 0.45)));
-    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x, y, props: Object.assign({ from: e.id }, varyProps(p, rx.random)) })) return null;
+    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x, y, props: Object.assign({ from: e.id }, varyProps(p, rx.random, e)) })) return null;
     rx.play(p.sound, { pitch: 1.15 });
     rx.squish({ amount: 0.7 });
     rx.burst('sparkle', { count: 4 });
@@ -302,7 +307,7 @@ defineBehavior('spawner', {
     const id = rx.newId();
     const at = rx.where();
     const [spot] = rx.spots([{ id, kind }], { from: at });
-    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: Object.assign({ from: e.id }, varyProps(p, rx.random)) })) return false;
+    if (!rx.dispatch('spawn', { id, kind, room: rx.room.id, x: spot.x, y: spot.y, z: spot.z, props: Object.assign({ from: e.id }, varyProps(p, rx.random, e)) })) return false;
     rx.popFrom(id, at.x, at.y - rx.size().h);
     rx.play(p.sound);
     rx.squish({ amount: 1.2 });

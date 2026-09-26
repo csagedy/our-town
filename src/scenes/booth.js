@@ -320,14 +320,13 @@ function createMaker({ store, input, room, view, fx, rig, stats, random }) {
         return box(0, (y0 + y1) / 2, Math.max(y1 - y0, (sk.shoulder[0] + sk.armR * 2 + 34) * 2));
       }
       case 'belt': {
-        // The waist with the pouches and the hands beside them.
-        const y0 = sk.hipY - sk.legR * 2 - 20, y1 = sk.hipY + sk.legR * 3 + 12;
-        return box(0, (y0 + y1) / 2, Math.max(y1 - y0, (sk.halfW + sk.handR) * 2 + 24));
+        // The waist: band, buckle and both pouches.
+        return box(0, sk.hipY - sk.legR * 0.5, (sk.halfW + sk.handR) * 2 + 8);
       }
       case 'hands': {
         // One hand (the right one, the glove's authored side) and its cuff.
         const [x, y] = res.anchors.handR;
-        return box(x, y - sk.handR * 0.9, sk.handR * 5.2);
+        return box(x, y - sk.handR * 0.6, sk.handR * 5.6);
       }
       case 'bottom': { const top = sk.hipY - sk.legR * 2.5; return box(0, top / 2 + 10, Math.max(-top + 40, sk.halfW * 2 + 60)); }
       case 'shoes': { const knee = sk.hipY + sk.thigh; return box(0, knee / 2 + 6, Math.max(-knee + 50, sk.hip[0] * 2 + 120)); }

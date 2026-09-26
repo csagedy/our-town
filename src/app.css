@@ -232,6 +232,11 @@ body {
 .fx-sparkle { width: 26px; height: 26px; fill: #fff6a8; }
 .fx-puff { width: 40px; height: 40px; fill: rgba(255, 255, 255, 0.85); }
 .fx-heart { width: 34px; height: 34px; fill: #ff5d8f; }
+.fx-drop { width: 16px; height: 16px; fill: #8FC6EC; }
+.fx-bit { width: 18px; height: 18px; color: #F4DC98; }
+.fx-bubble { width: 26px; height: 26px; }
+.fx-swirl { width: 36px; height: 36px; color: #FFFFFF; }
+.fx-chick { width: 46px; height: 46px; }
 
 /* ---- P1.7 test room placeholder art (src/scenes/test-room.js), temporary ---- */
 .art i { position: absolute; display: block; }

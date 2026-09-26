@@ -44,6 +44,7 @@
 //   landSound(entity, surfaceSound)      -> the landing sound (default: the surface's)
 // Custom entities (P1.10 characters, src/engine/characters.js; all optional):
 //   sortKeyOf(entity)                    -> a sort key overriding sortKey() (a seated character), or null
+//   scaleOf(entity)                      -> a drawn scale overriding the depth scale (build pieces on the site's grid: exactly 1), or null
 //   onRender(entity, ctx)                after the view drew the entity (update a live SVG in place)
 //   onDragStart(entity, ctx)             after a drag of it started (a character dangles)
 //   onDragMove(entity, ctx)              on every drag move
@@ -144,6 +145,11 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
     const v = pool.pop() || create();
     v.id = e.id;
     v.rev = -1;
+    // Always paint a pooled element afresh: a custom sprite's owner (a
+    // character's live SVG, characters.js) forgot it when it was released,
+    // so a matching key left over from its last use must not skip the paint
+    // (bead mhf.20: a character back from the booth stage had no rig).
+    v.spriteKey = null;
     v.el.dataset.id = e.id;
     v.parentView = pv;
     v.local = local;
@@ -260,7 +266,8 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
       const custom = behaviors.sortKeyOf ? behaviors.sortKeyOf(e) : null;
       const key = custom != null ? custom : sortKey(def, e.x, e.y).key;
       v.x = e.x; v.y = e.y; v.z = e.z || 0; v.key = key;
-      v.scale = depthScale(def, key);
+      const cs = behaviors.scaleOf ? behaviors.scaleOf(e) : null;
+      v.scale = cs != null ? cs : depthScale(def, key);
       setZ(v, zIndexFor(key, v.z));
       setTransform(v, transformOf(v, e.x, e.y, v.scale));
     }
@@ -392,6 +399,12 @@ export function createRoomView({ stage, store, input, room, fx = null, sfx = nul
     if (single) {
       sync(state, env.args.id);
       if (env.op === 'detach' || env.op === 'move') refreshParents(state, parentsTouched(prev, env));
+      else if (was && was.parent && (env.op === 'set' || env.op === 'inc') && views.has(was.parent)) {
+        // A thing inside a container changed (an egg stirred into batter): the
+        // container's look and its layout may depend on it (P2a.2).
+        refreshParents(state, [was.parent]);
+        fullSync(state, true);
+      }
     } else {
       fullSync(state, true);
       refreshParents(state, parentsTouched(prev, env));

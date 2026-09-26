@@ -212,7 +212,7 @@ test('thumbnails take off what covers the choice (hat over hair), never the real
   // Belt and gloves (mhf.20): the belt goes over the top and apron, so those tabs take it off.
   const belted = specOf(props, Object.assign({ belt: { kind: 'tool-belt', props: {} }, hands: { kind: 'gloves', props: {} } }, worn));
   assert.ok(!('belt' in thumbSpec(belted, 'top').wear) && !('belt' in thumbSpec(belted, 'over').wear));
-  assert.deepEqual(Object.keys(thumbSpec(belted, 'belt').wear).sort(), ['belt', 'bottom', 'face', 'hands', 'hat', 'over', 'shoes', 'top']);
+  assert.deepEqual(Object.keys(thumbSpec(belted, 'belt').wear).sort(), ['belt', 'bottom', 'face', 'hat', 'over', 'shoes', 'top']);
   assert.ok('hands' in thumbSpec(belted, 'hands').wear && !('back' in thumbSpec(belted, 'hands').wear));
   assert.equal(JSON.stringify(spec), before, 'the spec itself is untouched');
   // A headscarf hides all the hair; the hair thumbnails take it off, so every style draws.

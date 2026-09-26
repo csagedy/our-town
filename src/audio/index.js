@@ -28,6 +28,8 @@ export const speech = createSpeech({
 audio.onGesture(() => speech.prime());
 
 export function initAudio() { audio.install(); }
+/** Create the (suspended) AudioContext now, outside a gesture: see context.js prepare(). */
+export function prepareAudio() { return audio.prepare(); }
 export function setMuted(m) {
   audio.setMuted(m);
   if (m) speech.cancel();

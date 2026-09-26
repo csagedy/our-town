@@ -3378,7 +3378,217 @@
     "night": {
      "file": "assets/rooms/city/back-night.webp",
      "bytes": 105490
-    }
+    },
+    "tiles": [
+     {
+      "file": "assets/rooms/city/tiles/back-0.webp",
+      "bytes": 12522,
+      "x": -100,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-0-night.webp",
+       "bytes": 10498
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-1.webp",
+      "bytes": 11324,
+      "x": 100,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-1-night.webp",
+       "bytes": 8286
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-2.webp",
+      "bytes": 12890,
+      "x": 300,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-2-night.webp",
+       "bytes": 11158
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-3.webp",
+      "bytes": 12274,
+      "x": 500,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-3-night.webp",
+       "bytes": 10788
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-4.webp",
+      "bytes": 9954,
+      "x": 700,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-4-night.webp",
+       "bytes": 7736
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-5.webp",
+      "bytes": 13792,
+      "x": 900,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-5-night.webp",
+       "bytes": 9950
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-6.webp",
+      "bytes": 10070,
+      "x": 1100,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-6-night.webp",
+       "bytes": 7940
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-7.webp",
+      "bytes": 8836,
+      "x": 1300,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-7-night.webp",
+       "bytes": 7008
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-8.webp",
+      "bytes": 10040,
+      "x": 1500,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-8-night.webp",
+       "bytes": 8156
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-9.webp",
+      "bytes": 10994,
+      "x": 1700,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-9-night.webp",
+       "bytes": 9320
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-10.webp",
+      "bytes": 9022,
+      "x": 1900,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-10-night.webp",
+       "bytes": 6698
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-11.webp",
+      "bytes": 11678,
+      "x": 2100,
+      "y": -100,
+      "w": 201.33,
+      "h": 1200,
+      "px": [
+       302,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-11-night.webp",
+       "bytes": 8750
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/back-12.webp",
+      "bytes": 16248,
+      "x": 2300,
+      "y": -100,
+      "w": 200,
+      "h": 1200,
+      "px": [
+       300,
+       1800
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/back-12-night.webp",
+       "bytes": 12856
+      }
+     }
+    ]
    },
    {
     "id": "front",
@@ -3396,7 +3606,217 @@
     "night": {
      "file": "assets/rooms/city/front-night.webp",
      "bytes": 42594
-    }
+    },
+    "tiles": [
+     {
+      "file": "assets/rooms/city/tiles/front-0.webp",
+      "bytes": 6834,
+      "x": -95.33,
+      "y": 762.67,
+      "w": 196.66,
+      "h": 300,
+      "px": [
+       295,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-0-night.webp",
+       "bytes": 5218
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-1.webp",
+      "bytes": 2046,
+      "x": 100,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-1-night.webp",
+       "bytes": 1730
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-2.webp",
+      "bytes": 4128,
+      "x": 300,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-2-night.webp",
+       "bytes": 3110
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-3.webp",
+      "bytes": 7972,
+      "x": 500,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-3-night.webp",
+       "bytes": 5964
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-4.webp",
+      "bytes": 4572,
+      "x": 700,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-4-night.webp",
+       "bytes": 3452
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-5.webp",
+      "bytes": 5006,
+      "x": 900,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-5-night.webp",
+       "bytes": 4008
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-6.webp",
+      "bytes": 2972,
+      "x": 1100,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-6-night.webp",
+       "bytes": 2412
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-7.webp",
+      "bytes": 2972,
+      "x": 1300,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-7-night.webp",
+       "bytes": 2446
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-8.webp",
+      "bytes": 10338,
+      "x": 1500,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-8-night.webp",
+       "bytes": 7692
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-9.webp",
+      "bytes": 1196,
+      "x": 1700,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-9-night.webp",
+       "bytes": 1112
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-10.webp",
+      "bytes": 3136,
+      "x": 1900,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-10-night.webp",
+       "bytes": 2324
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-11.webp",
+      "bytes": 3312,
+      "x": 2100,
+      "y": 762.67,
+      "w": 201.33,
+      "h": 300,
+      "px": [
+       302,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-11-night.webp",
+       "bytes": 2486
+      }
+     },
+     {
+      "file": "assets/rooms/city/tiles/front-12.webp",
+      "bytes": 8382,
+      "x": 2300,
+      "y": 762.67,
+      "w": 200,
+      "h": 300,
+      "px": [
+       300,
+       450
+      ],
+      "night": {
+       "file": "assets/rooms/city/tiles/front-12-night.webp",
+       "bytes": 5864
+      }
+     }
+    ]
    }
   ],
   "pieces": {

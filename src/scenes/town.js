@@ -4,7 +4,7 @@
 // every location, docs/STYLE.md section 7) brings you back to the map.
 //
 //   const town = await mountTown(stage, { input, store });
-//   town.at            'city' | 'cafe/kitchen'
+//   town.at            'city' | 'cafe/kitchen' | 'booth' | 'construction/yard'
 //   town.go(location)  animated; resolves when the new scene is up
 //   town.busy          true during a transition (taps are ignored meanwhile)
 //
@@ -15,18 +15,23 @@
 // Transition (transform/opacity only): the old scene zooms toward the door
 // while a round iris grows from it and covers the screen; the new scene is
 // mounted underneath (its images decoded first) and the iris shrinks away.
+// Memory (bead 6hn): the two scenes are never decoded at once. Only once the
+// iris is closed is the old scene destroyed (its image srcs released), then
+// the new one's images are decoded and it is mounted, and the iris opens only
+// when its visible tiles are ready (no blank flash).
 
 import { loadArt, preload } from './art.js';
 import { mountCity, cityFiles, CITY_ID } from './city.js';
 import { KITCHEN_ID } from './kitchen.js';
 import { mountCafe, cafeFiles } from './cafe.js';   // P2a.1: the cafe strip (location id stays 'cafe/kitchen')
 import { mountBooth, boothFiles, BOOTH_ID } from './booth.js';
+import { mountSite, siteFiles, SITE_ID } from './site.js';   // P2c.1: the construction site strip
 import * as tween from '../engine/tween.js';
 import { sfx } from '../audio/index.js';
 import { createCarry } from './carry.js';
 
 export const HERE_KEY = 'ourtown.here';
-export const LOCATIONS = [CITY_ID, KITCHEN_ID, BOOTH_ID];
+export const LOCATIONS = [CITY_ID, KITCHEN_ID, BOOTH_ID, SITE_ID];
 const ZOOM_MS = 460;
 const OPEN_MS = 420;
 
@@ -82,11 +87,13 @@ export async function mountTown(stage, { input, store, storage } = {}) {
   // P1.14: the pocket tray, hold-to-go, the car (src/scenes/carry.js).
   const carry = createCarry({ stage, input, store, manifest, storage, town: { at: () => here.at, go: (to, o) => go(to, o), button: btn, scene: () => scene } });
 
-  async function mount(at, from = null) {
+  async function mount(at, from = null, files = null) {
     if (scene) scene.destroy();
     scene = null;
+    if (files) await preload(files);
     if (at === KITCHEN_ID) scene = await mountCafe(stage, { input, store, manifest, carry, from, storage });
     else if (at === BOOTH_ID) scene = await mountBooth(stage, { input, store, manifest, carry });   // P1.15
+    else if (at === SITE_ID) scene = await mountSite(stage, { input, store, manifest, carry, from, storage });   // P2c.1
     else scene = await mountCity(stage, { input, store, manifest, carry, cameraX: here.mapX, from, onEnter: (_, loc, pt) => go(loc, { from: pt }) });
     here.at = at;
     saveHere(here, storage);
@@ -95,7 +102,13 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     input.setEnabled(btn, !home);
     document.body.dataset.location = at;
     carry.mounted(scene);
+    await sceneReady(scene);
   }
+  // A scene's visible tiles are decoded (their <img>s get a src only then).
+  const sceneReady = (sc) => {
+    const p = sc.ready ? sc.ready() : sc.tiles && sc.tiles.ready ? sc.tiles.ready() : null;
+    return p ? Promise.race([p, new Promise((res) => setTimeout(res, 4000))]) : null;
+  };
 
   // Remember how far the map is panned (on settle only: no per-frame writes).
   stage.onChange((_, why) => {
@@ -144,10 +157,10 @@ export async function mountTown(stage, { input, store, storage } = {}) {
     roomEl.style.transformOrigin = `${w.x}px ${w.y}px`;
     const zoom = tween.animate(roomEl, [{ transform: 'scale(1)' }, { transform: 'scale(1.8)' }], { duration: ZOOM_MS, easing: 'ease-in', fill: 'forwards' });
     sfx.play('whoosh', { gain: 0.7 });
-    const files = to === KITCHEN_ID ? cafeFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night);
-    await Promise.all([tween.done(irisAnim(pt, true, ZOOM_MS)), preload(files), tween.done(zoom)]);
+    const files = to === KITCHEN_ID ? cafeFiles(manifest) : to === BOOTH_ID ? boothFiles(manifest) : to === SITE_ID ? siteFiles(manifest) : cityFiles(manifest.map, !!store.state.map.night, { cameraX: here.mapX });
+    await Promise.all([tween.done(irisAnim(pt, true, ZOOM_MS)), tween.done(zoom)]);
     zoom.cancel();
-    await mount(to, leaving);
+    await mount(to, leaving, files);   // releases the old scene, then decodes the new one (bead 6hn)
     // Coming home: open the iris on the door we came out of.
     let openAt = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
     if (to === CITY_ID && scene.doorPoint) {

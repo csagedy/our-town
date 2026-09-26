@@ -33,7 +33,8 @@
       "tags": ["dish", "cup", "drink"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
-        { "use": "cycle", "key": "fill", "looks": ["empty", "full"], "sound": "bubble" }
+        { "use": "cycle", "key": "fill", "looks": ["empty", "full"], "sound": "bubble" },
+        { "use": "dish", "at": 0.3 }
       ],
       "label": "Mug",
       "home": { "room": "cafe/kitchen" }
@@ -130,8 +131,10 @@
       "tags": ["dish", "container"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
+        { "use": "mix" },
         { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "heap", "area": [0.12, 0.3, 0.88, 1], "scale": 0.8, "peek": 0.55 },
-        { "use": "spill", "on": "tap" }
+        { "use": "spill", "on": "tap" },
+        { "use": "dish", "at": 0.3 }
       ],
       "label": "Bowl",
       "home": { "room": "cafe/kitchen" }
@@ -143,6 +146,7 @@
       "tags": ["cookware", "container"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
+        { "use": "mix" },
         { "use": "container", "accepts": ["ingredient"], "capacity": 2, "look": "egg", "sound": "sizzle" },
         { "use": "spill", "on": "tap" }
       ],
@@ -181,8 +185,7 @@
       "tags": ["food", "ingredient"],
       "sounds": { "tap": "tap", "drop": "squish" },
       "behaviors": [
-        { "use": "food", "crack": ["whole", "cracked"], "cook": ["cracked", "fried", "fried", "toasty"], "method": "fried" },
-        { "use": "cycle", "key": "cracked", "looks": ["whole", "cracked"], "loop": false, "sound": "pop", "fx": "puff" }
+        { "use": "food", "crack": ["whole", "cracked"], "crackIn": "fried", "cook": ["cracked", "fried", "fried", "toasty"], "method": "fried" }
       ],
       "label": "Egg",
       "home": { "room": "cafe/kitchen" }
@@ -403,7 +406,8 @@
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
         { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "plate", "area": [0.16, 0.3, 0.84, 0.5], "scale": 0.85 },
-        { "use": "spill", "on": "longPress" }
+        { "use": "spill", "on": "longPress" },
+        { "use": "dish", "at": 0.35 }
       ],
       "label": "Plate",
       "home": { "room": "cafe/kitchen" }
@@ -585,7 +589,7 @@
       "tags": ["food", "ingredient", "veg"],
       "sounds": { "tap": "squish", "drop": "squish" },
       "behaviors": [
-        { "use": "food", "cut": ["whole", "chopped"] }
+        { "use": "food", "cut": ["whole", "chopped"], "peel": true, "peelColor": "#B8A3C9" }
       ],
       "label": "Onion",
       "home": { "room": "cafe/kitchen" }
@@ -597,7 +601,7 @@
       "tags": ["food", "ingredient", "veg"],
       "sounds": { "tap": "squish", "drop": "squish" },
       "behaviors": [
-        { "use": "food", "cut": ["whole", "sticks"], "cook": ["sticks", "fries", "fries", "toasty"] }
+        { "use": "food", "cut": ["whole", "sticks"], "peel": true, "peelColor": "#C9A06A", "cook": ["sticks", "fries", "fries", "toasty"] }
       ],
       "label": "Potato",
       "home": { "room": "cafe/kitchen" }
@@ -609,8 +613,7 @@
       "tags": ["food", "ingredient", "fruit"],
       "sounds": { "tap": "squish", "drop": "squish" },
       "behaviors": [
-        { "use": "food", "cut": ["peeled", "sliced"] },
-        { "use": "cycle", "key": "peel", "looks": ["whole", "peeled"], "loop": false, "sound": "squish", "fx": "sparkle" }
+        { "use": "food", "cut": ["peeled", "sliced"], "peel": true, "peelColor": "#F5DB7A" }
       ],
       "label": "Banana",
       "home": { "room": "cafe/kitchen" }
@@ -878,7 +881,8 @@
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
         { "use": "variant", "key": "fill" },
-        { "use": "sound", "name": "clink", "pitches": [1, 1.12, 1.26] }
+        { "use": "sound", "name": "clink", "pitches": [1, 1.12, 1.26] },
+        { "use": "dish", "at": 0.3 }
       ],
       "label": "Cup",
       "home": { "room": "cafe/kitchen" }
@@ -903,6 +907,7 @@
       "tags": ["cookware", "container", "pot"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
+        { "use": "mix" },
         { "use": "container", "accepts": ["food"], "capacity": 3, "layout": "heap", "area": [0.08, 0.2, 0.6, 1], "scale": 0.75, "peek": 0.5 },
         { "use": "spill", "on": "longPress" }
       ],
@@ -916,8 +921,10 @@
       "tags": ["cookware", "container", "bowl"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
+        { "use": "mix", "stir": true },
         { "use": "container", "accepts": ["food"], "capacity": 5, "layout": "heap", "area": [0.1, 0.25, 0.9, 1], "scale": 0.8, "peek": 0.55 },
-        { "use": "spill", "on": "longPress" }
+        { "use": "spill", "on": "longPress" },
+        { "use": "dish" }
       ],
       "label": "Mixing Bowl",
       "home": { "room": "cafe/kitchen" }
@@ -993,7 +1000,8 @@
       "tags": ["dish", "cup", "drink"],
       "sounds": { "tap": "clink", "drop": "clink" },
       "behaviors": [
-        { "use": "sound", "name": "clink", "pitches": [1.3, 1.5] }
+        { "use": "sound", "name": "clink", "pitches": [1.3, 1.5] },
+        { "use": "dish", "at": 0.3 }
       ],
       "label": "Glass",
       "home": { "room": "cafe/kitchen" }
@@ -1615,6 +1623,450 @@
       ],
       "fixed": true,
       "home": { "room": "cafe/kitchen" }
+    },
+    "station-blender": {
+      "ph": { "shape": "box", "fill": "#E9F4F1" },
+      "size": [56, 132],
+      "tags": ["station", "hotspot"],
+      "sounds": { "tap": "whoosh", "drop": "plink" },
+      "behaviors": [
+        { "use": "blender" },
+        { "use": "container", "accepts": ["food"], "capacity": 4, "layout": "heap", "area": [0.04, 0.58, 0.96, 0.62], "peek": 1, "scale": 0.5, "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "station-toaster": {
+      "ph": { "shape": "box", "fill": "#CFE5DA" },
+      "size": [90, 60],
+      "tags": ["station", "hotspot"],
+      "sounds": { "tap": "knock", "drop": "knock" },
+      "behaviors": [
+        { "use": "toaster" },
+        { "use": "container", "accepts": ["bread"], "capacity": 2, "layout": "hidden", "sound": "knock" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "station-sink": {
+      "ph": { "shape": "box", "fill": "#D8DADC" },
+      "size": [126, 44],
+      "tags": ["station", "hotspot"],
+      "sounds": { "tap": "bubble", "drop": "bubble" },
+      "behaviors": [
+        { "use": "sink" },
+        { "use": "container", "accepts": ["*"], "capacity": 3, "layout": "row", "cols": 3, "area": [0.08, 0.3, 0.92, 0.95], "scale": 0.8, "sound": "bubble" }
+      ],
+      "fixed": true,
+      "home": { "room": "cafe/kitchen" }
+    },
+    "block-1x1": {
+      "art": { "sprite": "block-1x1" },
+      "ph": { "shape": "box", "fill": "#E4846F" },
+      "size": [48, 47],
+      "tags": ["buildpiece", "construction", "paintable", "brick"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Small Block",
+      "home": { "room": "construction/yard" }
+    },
+    "block-2x1": {
+      "art": { "sprite": "block-2x1" },
+      "ph": { "shape": "box", "fill": "#E4846F" },
+      "size": [87, 47],
+      "tags": ["buildpiece", "construction", "paintable", "brick"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Brick",
+      "home": { "room": "construction/yard" }
+    },
+    "block-2x2": {
+      "art": { "sprite": "block-2x2" },
+      "ph": { "shape": "box", "fill": "#E4846F" },
+      "size": [87, 88],
+      "tags": ["buildpiece", "construction", "paintable", "brick"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Big Block",
+      "home": { "room": "construction/yard" }
+    },
+    "plank": {
+      "art": { "sprite": "plank" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [168, 28],
+      "tags": ["buildpiece", "construction", "paintable", "wood", "sawable"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Plank",
+      "home": { "room": "construction/yard" }
+    },
+    "plank-half": {
+      "art": { "sprite": "plank-half" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [87, 28],
+      "tags": ["buildpiece", "construction", "paintable", "wood"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Short Plank",
+      "home": { "room": "construction/yard" }
+    },
+    "beam": {
+      "art": { "sprite": "beam" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [247, 28],
+      "tags": ["buildpiece", "construction", "paintable", "metal"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Steel Beam",
+      "home": { "room": "construction/yard" }
+    },
+    "roof-triangle": {
+      "art": { "sprite": "roof-triangle" },
+      "ph": { "shape": "box", "fill": "#E4846F" },
+      "size": [168, 88],
+      "tags": ["buildpiece", "construction", "paintable", "roof"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Roof",
+      "home": { "room": "construction/yard" }
+    },
+    "roof-flat": {
+      "art": { "sprite": "roof-flat" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [173, 30],
+      "tags": ["buildpiece", "construction", "paintable", "roof"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Flat Roof",
+      "home": { "room": "construction/yard" }
+    },
+    "window": {
+      "art": { "sprite": "window" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [48, 47],
+      "tags": ["buildpiece", "construction", "paintable"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Window",
+      "home": { "room": "construction/yard" }
+    },
+    "round-window": {
+      "art": { "sprite": "round-window" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [48, 47],
+      "tags": ["buildpiece", "construction", "paintable"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Round Window",
+      "home": { "room": "construction/yard" }
+    },
+    "door": {
+      "art": { "sprite": "door" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [48, 88],
+      "tags": ["buildpiece", "construction", "paintable"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece", "states": ["closed", "open"] }
+      ],
+      "label": "Door",
+      "home": { "room": "construction/yard" }
+    },
+    "stairs": {
+      "art": { "sprite": "stairs" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [87, 88],
+      "tags": ["buildpiece", "construction", "paintable"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Stairs",
+      "home": { "room": "construction/yard" }
+    },
+    "flag": {
+      "art": { "sprite": "flag" },
+      "ph": { "shape": "box", "fill": "#E4846F" },
+      "size": [48, 90],
+      "tags": ["buildpiece", "construction", "paintable", "topper"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Flag",
+      "home": { "room": "construction/yard" }
+    },
+    "chimney": {
+      "art": { "sprite": "chimney" },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [45, 47],
+      "tags": ["buildpiece", "construction", "paintable", "topper"],
+      "sounds": { "tap": "clack", "drop": "clack" },
+      "behaviors": [
+        { "use": "buildpiece" }
+      ],
+      "label": "Chimney",
+      "home": { "room": "construction/yard" }
+    },
+    "hammer": {
+      "art": { "sprite": "hammer" },
+      "ph": { "shape": "tall", "fill": "#C39068" },
+      "size": [83, 98],
+      "tags": ["construction", "tool", "hammer"],
+      "sounds": { "tap": "bonk", "drop": "knock" },
+      "behaviors": [
+        { "use": "sound", "name": "bonk", "pitches": [1, 1.15] }
+      ],
+      "label": "Hammer",
+      "home": { "room": "construction/yard" }
+    },
+    "paintbrush": {
+      "art": { "sprite": "paintbrush" },
+      "ph": { "shape": "tall", "fill": "#C39068" },
+      "size": [52, 86],
+      "tags": ["construction", "tool", "brush", "paint"],
+      "sounds": { "tap": "squish", "drop": "tap" },
+      "behaviors": [
+        { "use": "variant", "key": "paint" }
+      ],
+      "label": "Paintbrush",
+      "home": { "room": "construction/yard" }
+    },
+    "paint-can": {
+      "art": { "sprite": "paint-can" },
+      "ph": { "shape": "cup", "fill": "#E4846F" },
+      "size": [55, 66],
+      "tags": ["construction", "tool", "paint"],
+      "sounds": { "tap": "bubble", "drop": "knock" },
+      "behaviors": [
+        { "use": "variant", "key": "paint" },
+        { "use": "wobble", "amount": 0.5 }
+      ],
+      "label": "Paint Can",
+      "home": { "room": "construction/yard" }
+    },
+    "traffic-cone": {
+      "art": { "sprite": "traffic-cone" },
+      "ph": { "shape": "tall", "fill": "#EE9A55" },
+      "size": [61, 89],
+      "tags": ["construction", "tool", "cone"],
+      "sounds": { "tap": "squeak", "drop": "tap" },
+      "behaviors": [
+        { "use": "toggle", "key": "down", "looks": ["up", "down"], "sounds": ["squeak", "squeak"], "fx": "puff" }
+      ],
+      "label": "Traffic Cone",
+      "home": { "room": "construction/yard" }
+    },
+    "hose": {
+      "art": { "sprite": "hose" },
+      "ph": { "shape": "blob", "fill": "#96C47F" },
+      "size": [104, 51],
+      "tags": ["construction", "tool", "water"],
+      "sounds": { "tap": "whoosh", "drop": "thud" },
+      "behaviors": [
+        { "use": "hose" }
+      ],
+      "label": "Hose",
+      "home": { "room": "construction/yard" }
+    },
+    "lunchbox": {
+      "art": { "sprite": "lunchbox" },
+      "ph": { "shape": "box", "fill": "#E4846F" },
+      "size": [72, 61],
+      "tags": ["construction", "container", "lunch"],
+      "sounds": { "tap": "knock", "drop": "thud" },
+      "behaviors": [
+        { "use": "toggle", "key": "open", "looks": ["closed", "open"], "sounds": ["knock", "pop"], "fx": "sparkle" },
+        { "use": "container", "accepts": ["food", "drink", "lunch"], "capacity": 3, "layout": "hidden" },
+        { "use": "spill", "on": "longPress" }
+      ],
+      "label": "Lunchbox",
+      "home": { "room": "construction/yard" }
+    },
+    "thermos": {
+      "art": { "sprite": "thermos" },
+      "ph": { "shape": "tall", "fill": "#8CBDB8" },
+      "size": [47, 89],
+      "tags": ["construction", "drink", "lunch"],
+      "sounds": { "tap": "bubble", "drop": "knock" },
+      "behaviors": [
+        { "use": "sound", "name": "bubble", "pitches": [0.8, 1] }
+      ],
+      "label": "Thermos",
+      "home": { "room": "construction/yard" }
+    },
+    "site-lumber": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [190, 135],
+      "tags": ["spawner", "stock", "hotspot", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["plank", "beam"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "site-bricks": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [96, 125],
+      "tags": ["spawner", "stock", "hotspot", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["block-2x1", "block-1x1", "block-2x2"], "sound": "clack", "vary": { "paint": ["red", "yellow", "blue", "green", "purple"] } }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "site-cones": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [66, 115],
+      "tags": ["spawner", "stock", "hotspot", "construction"],
+      "sounds": { "tap": "squeak", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["traffic-cone"], "sound": "squeak" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "site-paint": {
+      "art": { "sprite": "paint-can", "scale": 0.75 },
+      "ph": { "shape": "cup", "fill": "#E4846F" },
+      "size": [45, 50],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "bubble", "drop": "thud" },
+      "behaviors": [
+        { "use": "variant", "key": "paint" },
+        { "use": "spawner", "kinds": ["paint-can"], "sound": "bubble", "keep": ["paint"] }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "site-hardhats": {
+      "ph": { "shape": "box", "fill": "#EFE4D6" },
+      "size": [110, 80],
+      "tags": ["spawner", "stock", "hotspot", "construction"],
+      "sounds": { "tap": "plink", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["hard-hat", "safety-vest"], "sound": "plink" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-roof-triangle": {
+      "art": { "sprite": "roof-triangle", "scale": 0.6 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [101, 53],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["roof-triangle"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-roof-flat": {
+      "art": { "sprite": "roof-flat", "scale": 0.6 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [104, 18],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["roof-flat"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-chimney": {
+      "art": { "sprite": "chimney", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [36, 38],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["chimney"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-flag": {
+      "art": { "sprite": "flag", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [38, 72],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["flag"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-window": {
+      "art": { "sprite": "window", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [38, 38],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["window"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-round-window": {
+      "art": { "sprite": "round-window", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [38, 38],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["round-window"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-door": {
+      "art": { "sprite": "door", "scale": 0.8 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [38, 70],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["door"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
+    },
+    "stock-stairs": {
+      "art": { "sprite": "stairs", "scale": 0.6 },
+      "ph": { "shape": "box", "fill": "#F1D19B" },
+      "size": [52, 53],
+      "tags": ["spawner", "stock", "construction"],
+      "sounds": { "tap": "clack", "drop": "thud" },
+      "behaviors": [
+        { "use": "spawner", "kinds": ["stairs"], "sound": "clack" }
+      ],
+      "fixed": true,
+      "home": { "room": "construction/yard" }
     }
   }
 }

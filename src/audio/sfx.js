@@ -283,6 +283,59 @@ export const RECIPES = {
       });
     },
   },
+  // P2a.2 cafe prep. The knife on the board: a woody "thock" with a blade tick.
+  chop: {
+    dur: 0.2,
+    play(v) {
+      tone(v, { f: 190, sweep: [[0.08, 85]], dur: 0.12, peak: 0.5, attack: 0.004 });
+      noise(v, { dur: 0.05, peak: 0.2, filter: { type: 'bandpass', f: 1300, q: 1.1 } });
+      tone(v, { type: 'triangle', f: 2900, dur: 0.05, peak: 0.05, attack: 0.004, filter: { type: 'lowpass', f: 4000 } });
+    },
+  },
+  // An egg on the rim: a crisp crackle, then the yolk's little plop.
+  crack: {
+    dur: 0.36,
+    play(v) {
+      [0, 0.025, 0.055].forEach((at, i) => noise(v, { at, dur: 0.03, peak: 0.26 - i * 0.05, filter: { type: 'highpass', f: 2600 } }));
+      tone(v, { f: 260, sweep: [[0.08, 120]], at: 0.17, dur: 0.14, peak: 0.3, attack: 0.006 });
+    },
+  },
+  // A whisk round the bowl: an airy swish with a faint wire ring.
+  whisk: {
+    dur: 0.36,
+    play(v) {
+      noise(v, { dur: 0.3, peak: 0.24, attack: 0.05, filter: { type: 'bandpass', f: 1600, q: 1.4, sweep: [[0.12, 3600], [0.28, 1400]] } });
+      tone(v, { f: 3100, at: 0.04, dur: 0.18, peak: 0.025, attack: 0.01 });
+    },
+  },
+  // The blender: a buzzy motor that winds up, wobbles and winds down.
+  whirr: {
+    dur: 1.3,
+    play(v) {
+      tone(v, {
+        type: 'triangle', f: 90, sweep: [[0.25, 190], [1.0, 170], [1.2, 80]], dur: 1.2, peak: 0.16, attack: 0.08, hold: 0.8,
+        vib: { rate: 11, depth: 12 }, filter: { type: 'lowpass', f: 900, fixed: true },
+      });
+      noise(v, { dur: 1.2, peak: 0.1, attack: 0.1, hold: 0.8, filter: { type: 'bandpass', f: 700, q: 1.2, sweep: [[0.3, 1400]] } });
+    },
+  },
+  // Water in the sink: a splashy hiss and a couple of bloops.
+  splash: {
+    dur: 0.52,
+    play(v) {
+      noise(v, { dur: 0.42, peak: 0.34, attack: 0.008, filter: { type: 'lowpass', f: 3600, q: 1, sweep: [[0.38, 700]] } });
+      tone(v, { f: 330, sweep: [[0.08, 900]], at: 0.12, dur: 0.1, peak: 0.14 });
+      tone(v, { f: 420, sweep: [[0.07, 1100]], at: 0.28, dur: 0.1, peak: 0.1 });
+    },
+  },
+  // Pouring a drink: a glugging gurgle that fills up (pitch rises).
+  pour: {
+    dur: 0.95,
+    play(v) {
+      noise(v, { dur: 0.85, peak: 0.12, attack: 0.05, hold: 0.4, filter: { type: 'bandpass', f: 520, q: 2.5, sweep: [[0.8, 900]] } });
+      [0, 0.18, 0.34, 0.5, 0.64].forEach((at, i) => tone(v, { f: 200 + i * 40, sweep: [[0.07, 420 + i * 70]], at, dur: 0.1, peak: 0.16 }));
+    },
+  },
   bubble: {
     dur: 0.22,
     play(v) {
@@ -356,6 +409,36 @@ export const RECIPES = {
         tone(v, { type: 'triangle', f: 392, at, dur: 0.18, peak: 0.3, attack: 0.012, hold: 0.07, filter: { type: 'lowpass', f: 1500 } });
         tone(v, { type: 'triangle', f: 494, at, dur: 0.18, peak: 0.2, attack: 0.012, hold: 0.07, filter: { type: 'lowpass', f: 1500 } });
       }
+    },
+  },
+  // P2c.1 construction site. A wooden block landing on another: a hollow
+  // "tok" with a little woody knock (pitch rises with the tower).
+  clack: {
+    dur: 0.2,
+    play(v) {
+      tone(v, { type: 'triangle', f: 520, sweep: [[0.04, 380]], dur: 0.12, peak: 0.36, attack: 0.005, filter: { type: 'lowpass', f: 2200 } });
+      tone(v, { f: 1040, dur: 0.05, peak: 0.08, attack: 0.005 });
+      noise(v, { dur: 0.03, peak: 0.1, filter: { type: 'bandpass', f: 1400, q: 1.6 } });
+    },
+  },
+  // The hammer: a cartoon "bonk" (a drop in pitch with a metal ping on top).
+  bonk: {
+    dur: 0.42,
+    play(v) {
+      tone(v, { f: 420, sweep: [[0.12, 150]], dur: 0.2, peak: 0.45, attack: 0.005 });
+      tone(v, { type: 'triangle', f: 1560, dur: 0.36, peak: 0.07, attack: 0.005, filter: { type: 'lowpass', f: 3000 } });
+      noise(v, { dur: 0.04, peak: 0.12, filter: { type: 'bandpass', f: 2200, q: 1.2 } });
+    },
+  },
+  // The portable toilet: a whooshing swirl that gurgles down the drain.
+  flush: {
+    dur: 1.5,
+    play(v) {
+      noise(v, { dur: 1.1, peak: 0.22, attack: 0.08, hold: 0.3, filter: { type: 'bandpass', f: 700, q: 1.1, sweep: [[0.5, 1500], [1.05, 380]] } });
+      [0.35, 0.55, 0.72, 0.9, 1.08].forEach((at, i) => {
+        tone(v, { f: 300 - i * 30, sweep: [[0.08, 700 - i * 60]], at, dur: 0.12, peak: 0.16 });
+      });
+      tone(v, { type: 'triangle', f: 220, sweep: [[0.3, 90]], at: 1.1, dur: 0.34, peak: 0.18, attack: 0.01, filter: { type: 'lowpass', f: 900 } });
     },
   },
   doorbell: {

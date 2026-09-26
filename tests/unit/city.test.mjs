@@ -58,21 +58,40 @@ test('the map has the four buildings with their moving parts, 6 lots, Lost & Fou
   assert.equal(DOORS.cafe, KITCHEN_ID);
 });
 
-test('cityRoom: one art element per piece and lot, day or night sources only', () => {
+test('cityRoom: one art element per piece and lot, layers as column tiles, no src until the loaders set one', () => {
   const day = normalizeRoom(cityRoom(map, false));
   assert.equal(day.width, map.width);
   const ids = day.art.map((a) => a.id);
-  assert.ok(ids.includes('back') && ids.includes('front') && ids.includes('lot-5') && ids.includes('cafe-door'));
-  const back = day.art.find((a) => a.id === 'back');
-  assert.match(back.html, /class="city-day"[^>]* src="assets\/rooms\/city\/back\.webp"/);
-  assert.doesNotMatch(back.html, /back-night\.webp/, 'night art not loaded by day');
-  const night = cityRoom(map, true).art.find((a) => a.id === 'back');
-  assert.match(night.html, /back-night\.webp/);
-  assert.doesNotMatch(night.html, /city-day"[^>]* src=/);
-  assert.ok(cityFiles(map, true).every((f) => f.includes('-night') || /sun|moon/.test(f)));
+  assert.ok(ids.includes('back-0') && ids.includes('front-0') && ids.includes('lot-5') && ids.includes('cafe-door'));
+  assert.ok(day.art.every((a) => !/ src=/.test(a.html)), 'no <img> is given a src up front (src/engine/tiles.js decodes first)');
+  // Bead 6hn: both layers are cut into columns that cover them, day and night.
+  for (const L of map.layers) {
+    assert.ok(L.tiles.length >= 10, `${L.id}: ${L.tiles.length} tiles`);
+    assert.ok(Math.abs(L.tiles[0].x - L.x) < 0.01 && Math.abs(L.tiles.at(-1).x + L.tiles.at(-1).w - (L.x + L.w)) < 0.01, `${L.id} tiles span the layer`);
+    L.tiles.forEach((t, i) => {
+      checkFile(t);
+      checkFile(t.night);
+      if (i) assert.ok(t.x < L.tiles[i - 1].x + L.tiles[i - 1].w, `${L.id}-${i} overlaps its left neighbour (no seam)`);
+      assert.ok(t.w <= 202, `${L.id}-${i} is one column`);
+    });
+  }
+  const images = cityRoom(map, false).images;
+  assert.equal(images.length, day.art.length, 'every art element has one image slot');
+  const back0 = images.find((i) => i.id === 'back-0');
+  assert.match(back0.day, /tiles\/back-0\.webp$/);
+  assert.match(back0.night, /tiles\/back-0-night\.webp$/);
+  assert.equal(images.find((i) => i.id === 'sun').night, null, 'the sun has no night variant');
+  // ?tiles=0: the whole layers (docs/perf.md "before").
+  const whole = cityRoom(map, false, { tiled: false });
+  assert.ok(whole.art.some((a) => a.id === 'back') && !whole.art.some((a) => a.id === 'back-0'));
+  // Preload lists: one mode only, and only what is near the camera.
+  const nightFiles = cityFiles(map, true, { cameraX: 0 });
+  assert.ok(nightFiles.every((f) => f.includes('-night') || /sun|moon/.test(f)));
+  assert.ok(nightFiles.some((f) => /tiles\/back-0-night/.test(f)) && !nightFiles.some((f) => /tiles\/back-12-night|school-night/.test(f)), 'far east not preloaded at x 0');
+  assert.ok(cityFiles(map, false, { cameraX: 960 }).some((f) => /tiles\/back-12\.webp|school\.webp/.test(f)));
   // Draw order: sky things < buildings < their parts < bus < lots < front layer.
   const z = (id) => day.art.find((a) => a.id === id).depth;
-  assert.ok(z('sun') < z('cafe') && z('cafe') < z('cafe-door') && z('cafe-door') < z('bus') && z('bus') < z('lot-0') && z('lot-0') < z('front'));
+  assert.ok(z('sun') < z('cafe') && z('cafe') < z('cafe-door') && z('cafe-door') < z('bus') && z('bus') < z('lot-0') && z('lot-0') < z('front-0'));
 });
 
 test('kitchenRoom: the kitchen layers and manifest surfaces for the view layer', () => {

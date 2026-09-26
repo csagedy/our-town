@@ -68,7 +68,6 @@ async function center(page, sel) {
 
 /** Drag a floor character (grabbed at its chest) so its feet (or seat point) land at world (tx, ty). */
 async function carry(page, id, tx, ty, anchor = 'feet') {
-  console.log('DBG errors', JSON.stringify(page.errors)); console.log('DBG carry', id, JSON.stringify(await page.eval((i) => { const e = window.__store.state.entities[i]; const v = window.__town.scene.view.viewOf(i); return { kind: e && e.kind, room: e && e.room, parent: e && e.parent, seat: e && e.props.seat, insp: !!window.__town.scene.chars.inspect(i), v: !!v, anims: v && v.el.getAnimations().map((a) => [a.id, a.playState, String(a.effect && a.effect.getTiming().iterations)]) }; }, id)));
   await page.waitFor(`(() => { const l = window.__town.scene.chars.inspect(${JSON.stringify(id)}); const v = window.__town.scene.view.viewOf(${JSON.stringify(id)}); return l && !l.dragging && v && v.el.getAnimations().length === 0; })()`);
   const c = await page.eval((i) => {
     const e = window.__store.state.entities[i];
@@ -177,7 +176,7 @@ describe('character maker booth (ipad-air, landscape, touch)', () => {
     }
   });
 
-  it.skip('a hero suit worn as a costume: chosen on the top tab; picking a top takes it off onto the floor with a sparkle (mhf.20)', async () => {
+  it('a hero suit worn as a costume: chosen on the top tab; picking a top takes it off onto the floor with a sparkle (mhf.20)', async () => {
     // Put the suit on like a drop from the world does: a worn child in wear-top.
     const suit = await page.eval(() => {
       const d = window.__town.scene.maker.draftId;

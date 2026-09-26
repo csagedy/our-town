@@ -6,7 +6,15 @@
 //   const tiles = createTileLoader({ stage, tiles: [{ img, file, x, w, px }] });
 //   tiles.update()        after the room is up (also runs on every camera change)
 //   tiles.loaded()        files whose <img> has a src right now
+//   tiles.ready()         resolves once nothing wanted is still decoding
+//   tiles.setActive(on)   off: load nothing and drop every src (the city's
+//                         day or night set that is not showing)
+//   tiles.release()       drop every src for good (a scene leaving)
 //   tiles.destroy()
+//
+// Options: restMargin / moveMargin (world units, default REST_MARGIN /
+// MOVE_MARGIN), active (default true). A tile may also be any image with an
+// x/w span, not only a layer column (the city's building pieces).
 //
 // Rules:
 // - At rest a tile is wanted if it lies within REST_MARGIN of the visible
@@ -37,11 +45,12 @@ export function tilesNear(tiles, left, right, margin) {
 /** Decoded bitmap bytes of tiles (width x height x 4). Pure. */
 export const decodedBytes = (tiles) => tiles.reduce((n, t) => n + (t.px ? t.px[0] * t.px[1] * 4 : 0), 0);
 
-export function createTileLoader({ stage, tiles, onChange = null }) {
-  const recs = tiles.map((t) => ({ ...t, state: 'idle', gen: 0 }));   // idle | loading | loaded
+export function createTileLoader({ stage, tiles, onChange = null, restMargin = REST_MARGIN, moveMargin = MOVE_MARGIN, active = true }) {
+  const recs = tiles.map((t) => ({ ...t, state: 'idle', gen: 0, job: null }));   // idle | loading | loaded
   const stats = { loads: 0, unloads: 0 };
   let timer = 0;
   let destroyed = false;
+  let on = active;
 
   function view() {
     const v = stage.visibleWorld();
@@ -56,19 +65,21 @@ export function createTileLoader({ stage, tiles, onChange = null }) {
     pre.decoding = 'async';
     pre.src = r.file;
     const show = () => {
+      r.job = null;
       if (destroyed || r.gen !== gen || r.state !== 'loading') return;
       r.state = 'loaded';
       r.img.src = r.file;
       stats.loads++;
       if (onChange) onChange();
     };
-    (pre.decode ? pre.decode() : Promise.resolve()).then(show, show);
+    r.job = (pre.decode ? pre.decode() : Promise.resolve()).then(show, show);
   }
 
   function unload(r) {
     if (r.state === 'idle') return;
     r.gen++;
     r.state = 'idle';
+    r.job = null;
     r.img.removeAttribute('src');
     stats.unloads++;
     if (onChange) onChange();
@@ -76,11 +87,11 @@ export function createTileLoader({ stage, tiles, onChange = null }) {
 
   /** Load what the camera needs; with `settled`, also drop what it no longer needs. */
   function update(settled = false) {
-    if (destroyed) return;
+    if (destroyed || !on) return;
     const cam = stage.camera;
     const moving = cam.dragging || cam.moving;
     const { left, right } = view();
-    const want = new Set(tilesNear(recs, left, right, moving ? MOVE_MARGIN : REST_MARGIN));
+    const want = new Set(tilesNear(recs, left, right, moving ? moveMargin : restMargin));
     recs.forEach((r, i) => { if (want.has(i)) load(r); });
     if (settled && !moving) recs.forEach((r, i) => { if (!want.has(i)) unload(r); });
   }
@@ -107,7 +118,31 @@ export function createTileLoader({ stage, tiles, onChange = null }) {
     /** Decoded bytes of the loaded tiles. */
     bytes: () => decodedBytes(recs.filter((r) => r.state === 'loaded')),
     /** Files a camera at x would want at rest (for preloading before a transition). */
-    filesAt(cameraX, width = 1440) { return tilesNear(recs, cameraX, cameraX + width, REST_MARGIN).map((i) => recs[i].file); },
+    filesAt(cameraX, width = 1440) { return tilesNear(recs, cameraX, cameraX + width, restMargin).map((i) => recs[i].file); },
+    /** Resolves once no tile is decoding (what the camera wants now has a src). */
+    async ready() {
+      for (;;) {
+        const jobs = recs.filter((r) => r.state === 'loading' && r.job).map((r) => r.job);
+        if (!jobs.length || destroyed) return;
+        await Promise.all(jobs);
+      }
+    },
+    get active() { return on; },
+    /** Switch the whole set on (load what the camera wants) or off (drop every src now). */
+    setActive(v) {
+      v = !!v;
+      if (v === on || destroyed) return;
+      on = v;
+      if (on) update(false);
+      else recs.forEach(unload);
+    },
+    /** Drop every src and stop (the scene is leaving: its bitmaps can go before the next scene decodes). */
+    release() {
+      on = false;
+      clearTimeout(timer);
+      timer = 0;
+      recs.forEach(unload);
+    },
     stats: () => ({ ...stats, loaded: recs.filter((r) => r.state === 'loaded').length, loading: recs.filter((r) => r.state === 'loading').length, total: recs.length, settleTimer: !!timer }),
     destroy() {
       destroyed = true;

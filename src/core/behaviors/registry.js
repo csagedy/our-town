@@ -10,7 +10,7 @@
 //     params: { key: 'on', ... },          defaults; also the list of allowed param names
 //     check(p, {kinds, sounds, kind}),     optional: a problem string for bad params (catalog validation)
 //     look(e, p, w),                       optional: a look (art variant) name for the entity's state, or null
-//     sprite(e, p, {catalog, look}),       optional: a whole sprite (a composite, e.g. the Mystery Dish), or null
+//     sprite(e, p, {catalog, look, children}), optional: a whole sprite (a composite, e.g. the Mystery Dish), or null
 //     onTap(e, rx, p),                     optional: react; return true if it did something
 //     onLongPress(e, rx, p),               optional: same, for a long press
 //     accepts(target, item, p),            optional: true if `target` wants drops at all (it becomes a drop target)
@@ -18,6 +18,8 @@
 //     canDrag(e, p),                       optional: false to pin it (spawners)
 //     dragOut(e, rx, p),                   optional: a drag that starts on it pulls out a NEW entity
 //                                          instead (spawners): spawn it and return its id, or null
+//     layoutKids(parent, kids, lay, p),    optional: adjust the container layout's Map (lay) in place
+//                                          (a mixing bowl sinks what is stirred in; P2a.2)
 //     verbs: { name(e, rx, p) },           optional: actions other systems call (a character eats: 'bite')
 //   });
 //
@@ -35,7 +37,7 @@
 
 export const BEHAVIORS = Object.create(null);
 
-const HOOKS = ['check', 'look', 'sprite', 'onTap', 'onLongPress', 'accepts', 'receive', 'canDrag', 'dragOut'];
+const HOOKS = ['check', 'look', 'sprite', 'onTap', 'onLongPress', 'accepts', 'receive', 'canDrag', 'dragOut', 'layoutKids'];
 
 /** Register a behavior. Throws on a duplicate name or a malformed definition (a bug). */
 export function defineBehavior(name, def) {

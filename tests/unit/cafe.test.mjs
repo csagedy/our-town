@@ -160,7 +160,8 @@ test('foodLook: cut, crack and doneness pick the manifest prep variants; no cook
   assert.equal(foodLook({ cooked: 3 }, egg), 'toasty');
   const tomato = { ...manifest.props.tomato.prep, tint: true };
   assert.equal(foodLook({ cut: 1 }, tomato), 'sliced');
-  assert.equal(foodLook({ cut: 9 }, tomato), 'sliced');
+  assert.equal(foodLook({ cut: 2 }, tomato), 'chopped', 'the knife goes on past the art: whole -> sliced -> chopped (P2a.2)');
+  assert.equal(foodLook({ cut: 9 }, tomato), 'chopped', 'the cut counter is an inc, clamped when read');
   assert.equal(foodLook({ cut: 1, cooked: 2 }, tomato), 'sliced@2');
   assert.equal(foodLook({ cooked: 1 }, tomato), '@1');
   const bread = manifest.props.bread.prep;
@@ -212,9 +213,15 @@ test('food verbs: cut, crack and cook step the state (ready for P2a.2/P2a.3)', (
   const tomato = w.spawn('tomato');
   assert.equal(w.b.act(tomato, 'cut'), true);
   assert.equal(w.b.lookOf(w.e(tomato)), 'sliced');
+  assert.equal(w.b.act(tomato, 'cut'), true);
+  assert.equal(w.b.lookOf(w.e(tomato)), 'chopped');
   assert.equal(w.b.act(tomato, 'cut'), false, 'no more cuts');
+  assert.equal(w.e(tomato).props.cut, 2);
   assert.equal(w.b.act(tomato, 'cook'), true);
-  assert.equal(w.b.spriteOf(w.e(tomato)).filter, manifest.cafe.doneness.tint[1]);
+  const heap = w.b.spriteOf(w.e(tomato));
+  assert.equal(heap.src, manifest.props.tomato.variants.sliced.file, 'chopped is drawn as a heap of little slices');
+  assert.ok(heap.filter.includes(manifest.cafe.doneness.tint[1]), 'with the doneness tint');
+  assert.equal(heap.overlays.length, 4);
   const egg = w.spawn('egg');
   assert.equal(w.b.act(egg, 'crack'), true);
   for (let i = 0; i < 3; i++) assert.equal(w.b.act(egg, 'cook'), true);

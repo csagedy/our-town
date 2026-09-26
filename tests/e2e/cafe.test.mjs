@@ -58,6 +58,21 @@ async function piecePoint(page, pid) {
   }, pid);
 }
 
+/** A screen point on the prep station over piece `pid` (P2a.2), or null. */
+const stationPoint = (page, pid) => page.eval((pid) => {
+  const sc = window.__town.scene;
+  const kind = Object.keys(sc.prep.spots).find((k) => sc.prep.spots[k].piece === pid);
+  const id = kind && sc.prep.stations()[kind];
+  const v = id && sc.view.viewOf(id);
+  if (!v) return null;
+  const r = v.el.getBoundingClientRect();
+  for (const fy of [0.5, 0.4, 0.6, 0.3, 0.7]) for (const fx of [0.5, 0.4, 0.6]) {
+    const x = r.left + r.width * fx, y = r.top + r.height * fy;
+    if (window.__input.hitTest(x, y) === v.el) return { x, y };
+  }
+  return null;
+}, pid);
+
 /** A screen point where a touch picks entity `id` (nearest its centre; its neighbours may overlap it). */
 const entPoint = (page, id) => page.eval((id) => {
   const v = window.__town.scene.view.viewOf(id);
@@ -268,7 +283,9 @@ for (const name of Object.keys(VIEWPORTS)) {
       const PIECES = await page.eval(async () => (await import('./src/scenes/cafe.js')).PIECES);
       for (const pid of ids) {
         await page.waitFor(() => !window.__stage.camera.moving);
-        const p = await piecePoint(page, pid);
+        // P2a.2: the toaster (and parts of the blender and sink) sit under an
+        // invisible prep station that takes the touch and answers for its piece.
+        const p = (await piecePoint(page, pid)) || (await stationPoint(page, pid));
         assert.ok(p, `${pid}: a touch can reach it`);
         const spec = PIECES[pid];
         const target = spec.controls || pid;

@@ -57,8 +57,8 @@ Biggest decoded images on the city: `city/back.webp` 3900x1800 = **26.8 MB**, `c
 
 ### Risks for the A9X (filed as bd bugs)
 
-- **City map decoded memory 46.8 MB** (STYLE.md estimated ~30 MB), before GPU layer copies; during a city -> kitchen transition both scenes are alive, so the peak is ~77 MB of bitmaps alone. On a 2 GB iPad Pro that leaves little room once Phase 2 adds more places. Options: lower `pxPerUnit` for the city back layer (the map is never zoomed), split it into tiles and drop the off-screen ones, or release the city's images before decoding the next place.
-- **Long task at the start of a city pan** (68 ms at x4/x5, 140 ms at x6, 116 ms frame): likely the promotion/raster of the 3900 px wide room layer when `will-change` goes on at drag start. A visible hitch on the A9X when a kid starts to swipe the map. Check it in Web Inspector's Rendering Frames; if confirmed, keep the room layer promoted while the map is up, or pre-promote on mount.
+- ~~**City map decoded memory 46.8 MB**~~ fixed in bead 6hn (34 MB at either end, transition peak 39 MB), see "City map memory" below. Was: **City map decoded memory 46.8 MB** (STYLE.md estimated ~30 MB), before GPU layer copies; during a city -> kitchen transition both scenes are alive, so the peak is ~77 MB of bitmaps alone. On a 2 GB iPad Pro that leaves little room once Phase 2 adds more places. Options: lower `pxPerUnit` for the city back layer (the map is never zoomed), split it into tiles and drop the off-screen ones, or release the city's images before decoding the next place.
+- ~~**Long task at the start of a city pan**~~ fixed in bead bp8: it was the AudioContext being created in the first gesture, see "City map memory" below. Was: **Long task at the start of a city pan** (68 ms at x4/x5, 140 ms at x6, 116 ms frame): likely the promotion/raster of the 3900 px wide room layer when `will-change` goes on at drag start. A visible hitch on the A9X when a kid starts to swipe the map. Check it in Web Inspector's Rendering Frames; if confirmed, keep the room layer promoted while the map is up, or pre-promote on mount.
 - ~~**Idle characters cause layouts**~~ fixed in bead lm8, see "Idle characters" below.
 - The overlay's own rAF loop is not counted against any of this (it is off in normal play).
 
@@ -84,6 +84,12 @@ Not risky: idle characters (after lm8), drag input handling, idle city (no work 
 
 Without the overlay (the real idle state), kitchen, throttle x6, 10 s windows, after: **cast of 4: 0 layouts, 64 style recalcs (8.7 ms), 4.8 ms script** for 11 idle events; **cast of 12: 0 layouts, 156 recalcs (26 ms), 6.5 ms script** for 30 events (~5 recalcs per event: its start and end, never per frame). Before, 4 characters did ~45 layouts and ~80 recalcs in 3 s. The cost is ~17 more DOM nodes per character (the layer `<svg>`s and wrappers). Regression test: `tests/e2e/characters.test.mjs` "every kind of idle life costs no layout" (24 blinks/glances/tilts on 8 characters: at most 2 layouts) and the 4 s idle test (at most 2 layouts).
 
+**Flaky recalc count (bead mhf.19, 2026-09-26).** The regression test counted 15-25 style recalcs for its 24 events most runs and 87-110 on some (bimodal, more often under load). Two causes, found by tracing (`blink.animations` category: each `Animation` trace event carries `compositeFailed`, a bit set of Blink's `CompositorAnimations::FailureReason`):
+- **A product bug.** `chars.idle(id, 'glance'|'tilt')` could start a transform animation on a box the shared timer's own glance/tilt was still animating. Blink can't composite two animations of one property on one element (`compositeFailed` 64, `kTargetHasIncompatibleAnimations`), so it ran the new one on the main thread: a style recalc every frame for its 1.3-1.7 s, ~80-100 recalcs. The timer itself never overlapped (it skips a character with idle life running), but anything that restarts idle life on a busy character would. Fix: `idleAnim` now cancels an idle animation still playing on the same box before starting the new one (same look: the new move starts from rest, as before). Any future WAAPI on those boxes should do the same. (`compositeFailed` 131072, `kAnimationHasNoVisibleChange`, on the blink's constant-opacity keyframes is expected and harmless: 130 ms.)
+- **Test noise.** The shared idle timer kept adding its own random events (~5 recalcs each) to the window. `chars.idleHold(true)` now holds the timer; the test holds it, waits until no idle animation runs, then plays exactly 24 events: **16-17 recalcs every run** (0 when nothing plays: breathing costs no recalcs), bound 1.5 per event. A second test plays 16 glances/tilts over running ones: 13-14 recalcs (106 without the fix).
+
+Method, for the next one: `Performance.getMetrics` RecalcStyleCount over a fixed window, several instances of the page in parallel to reproduce load-dependent spikes; then a `Tracing.start` on the browser target (DevToolsActivePort in the harness's temp profile) with categories `blink.animations,devtools.timeline` and look at `compositeFailed` on the `Animation` events.
+
 ## Cafe strip memory (P2a.1, bead q62.1, 2026-09-26)
 
 The cafe is one 2880-wide strip (kitchen, counter, dining). Its four depth layers as whole images decode to **62.8 MB** (back 4620x1800 alone is 33 MB), about twice the old one-screen kitchen: too much for the 2 GB 9.7" iPad Pro next to the city map (46.8 MB, above).
@@ -101,3 +107,41 @@ Measured with `index.html?perf` (`__perf.snapshot().imageMB`, width x height x 4
 | kitchen (0) | 64.9 MB | **37.0 MB** | 34.8 MB (tiles 32.8) |
 
 So about 23-28 MB less at rest (~40% off). While panning, the tiles decoded ahead can briefly add one or two columns (up to ~10 MB) until the settle drops them. The city -> cafe transition peak is now ~47 + ~39 MB instead of ~47 + ~65 MB. Still to check with Web Inspector on the real A9X: that WebKit actually frees a dropped `<img>` src promptly, and whether a 1352 px-wide column (the widest) decodes in time during a fast fling (if not, raise `MOVE_MARGIN`). The e2e test `tests/e2e/cafe.test.mjs` asserts at every stop that exactly the nearby tiles have a src and no whole-layer image is in the page.
+
+## City map memory and the pan-start stall (beads 6hn, bp8, 2026-09-26)
+
+### Memory (6hn)
+
+The cafe strip's mechanism, applied to the map:
+- **Build** (`tools/art/build.mjs` `buildMapTiles`, additive to `buildMap`): the back and front layers, day and night, also ship as even 200-unit columns (300 px, the last one 2 px shorter; tiles overlap 2 px): `assets/rooms/city/tiles/{back,front}-<i>[-night].webp`, 13 per layer and variant, 468 KB in all. The map has no camera stops, so the columns are even (`MAP_TILE_W`). Whole-layer files stay (contact sheet, `?tiles=0`).
+- **Runtime** (`src/scenes/city.js`): no `<img>` gets a src in the HTML. Every image, each tile and each piece (buildings, lots...), goes through a `createTileLoader` (`src/engine/tiles.js`); there are three loaders: the day set, the night set, and the pieces with no night variant (sun, moon). Only the loader of the set showing is active: the other holds no src at all. At rest a loader keeps what is on screen plus `CITY_REST_MARGIN` = 200 units (one column) each side, so the next column is already decoded when a pan starts; while moving it decodes 420 ahead; the rest is dropped 350 ms after the map stops. Night: the new set's loader decodes what the camera wants, then the night images cross-fade, then the old set's loader drops everything.
+- **Transition** (`src/scenes/town.js`): the old scene is kept only until the iris has closed. Then it is destroyed (the city's loaders `release()` every src), the next place's first files are decoded (`preload`), it mounts, and the iris opens only once its visible tiles have a src (`scene.ready()` / `scene.tiles.ready()`, capped at 4 s). The cafe and the city are never decoded at once. The iris stays shut a little longer while the new place decodes (about as long as the old overlap took; the whole transition was 1.34-1.41 s before and 1.22-1.35 s after at x6).
+- `tiles.js` gained options and methods, all additive (the cafe is unchanged): `restMargin`/`moveMargin`/`active` options, `ready()`, `setActive(on)`, `release()`.
+
+`node tools/perf.mjs --rate 6`, `ipad-pro-9.7`. "Peak" is new in perf.mjs: the decoded bitmaps referenced at any moment of the city -> cafe transition, i.e. `<img>`s with a loaded src plus off-screen images being decoded (a preload, a decode-ahead), each URL once, sampled every frame and at each `decode()` resolution. Rest numbers from `__perf.snapshot().imageMB` after settling; `?tiles=0` gives the whole layers through the same loaders:
+
+| | before | after |
+|---|---|---|
+| city at rest, camera 0 (home, the west end) | 47.5 MB | **34.1 MB** |
+| city at rest, camera 480 (middle: every building on screen) | 47.5 MB | 42.5 MB |
+| city at rest, camera 960 (east end) | 47.5 MB | **34.8 MB** |
+| the same at night | 47.5 MB | 34.1 / 42.5 / 34.8 MB |
+| peak during city -> cafe | **71-83 MB** (city + the cafe preloading under the iris) | **39 MB** (= the cafe alone) |
+
+The middle of the map saves least: at camera 480 all four buildings are on screen and only ~5 MB of far columns can go. Still to check on the A9X with Web Inspector (Timelines > Memory, "Images"): that WebKit frees a dropped src promptly, and that a 300 px column decodes ahead of a fast fling (if not, raise `moveMargin` for the city).
+
+### The pan-start stall (bp8)
+
+Root cause, from a CDP trace (`Tracing.start` with `devtools.timeline`, `blink`, `cc`, `v8.execute`, `blink.image_decode`; `page.onEvent` was added to `tools/harness.mjs` to read `Tracing.dataCollected`) of the first swipe of a fresh page at x6: the long task was **not** layer promotion. It was one `FunctionCall` of 157 ms inside the `pointerup` of the first swipe: `gesture()` in `src/audio/context.js` constructing the `AudioContext` (the first user gesture of the page unlocks audio). `new AudioContext()` alone measures ~165 ms in headless Chrome. A second swipe, or a swipe after a warm-up tap, had no long task. Separately the cold trace had a 325 ms compositor draw right at pan start (Chrome's software compositor decoding offscreen buildings and rastering them as they entered the view for the first time); with the tile loader everything within a column of the view is decoded ahead with `img.decode()`, and that draw is gone from the after-trace. `will-change` toggling (stage.js) showed no cost in either trace and is unchanged.
+
+Fix: `audio.prepare()` (`src/audio/context.js`, `prepareAudio()` in `src/audio/index.js`) creates the context outside a gesture; it starts suspended and the first gesture only resumes it (the iOS unlock is the same resume + silent buffer). `src/main.js` calls it in the town 600 ms after boot, deferred while a finger is down or the camera or a transition is moving. The dev routes (`?room=buddy`...) keep the create-on-first-tap path that `tests/e2e/audio.test.mjs` drives.
+
+| x6, ipad-pro-9.7 | before | after |
+|---|---|---|
+| first swipe of the session: worst frame | 183-217 ms | **16.8 ms** |
+| first swipe: long tasks | 1 (204-232 ms) | **0** |
+| later swipes | 16.8 ms, 0 long tasks | same |
+| city idle (3 s, right after boot) | 0 long tasks | 1 (72-171 ms: the context being made while nothing moves) |
+
+Tests: `tests/e2e/city.test.mjs` "city map memory (ipad-pro-9.7)": at rest (day and night, camera 0/480/960/130) exactly the images within one column of the view have a src, nothing of the other set or far away, no whole-layer image; a drag decodes the columns ahead; city -> cafe -> city stays within max(city, cafe) + 4 MB and nothing on screen is blank when the iris opens; the AudioContext exists before any gesture and the first tap only resumes it. `tests/unit/city.test.mjs` checks the tiles in the manifest.
+

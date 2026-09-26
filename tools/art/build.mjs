@@ -223,12 +223,16 @@ export async function buildMap(page, map, written) {
     return out;
   }
   const layers = [];
+  const layerSvgs = [];
   for (const L of map.layers) {
     const { art, lit } = map.collect(L.art);
     const day = (L.sky ? L.sky() : '') + art;
     const v = await variants(L.id, day, night(art, lit, L.nightSky ? L.nightSky() : ''), !!L.opaque);
     layers.push({ id: L.id, opaque: !!L.opaque, ...v });
+    layerSvgs.push({ day, night: night(art, lit, L.nightSky ? L.nightSky() : '') });
   }
+  // Column tiles of the big layers, day and night (bead 6hn; docs/perf.md "City map memory").
+  await buildMapTiles(page, map, job, write, layers, layerSvgs);
   const pieces = {};
   for (const piece of map.pieces) {
     const { art, lit } = map.collect(piece.art);
@@ -239,6 +243,39 @@ export async function buildMap(page, map, written) {
     pieces[piece.id] = { ...v, depth: piece.depth, pivot: piece.pivot ? toWorld(...piece.pivot) : null, copies };
   }
   return { id: map.id, width: map.width, height: 1000, canvas: map.canvas, pxPerUnit: ROOM_PX, backdrop: map.backdrop, layers, pieces };
+}
+
+// ---- city map column tiles (bead 6hn; docs/perf.md "City map memory") ----
+// The map has no camera stops (it pans freely), so its layers are cut into
+// even columns: at rest the runtime keeps the visible columns plus one on
+// each side (src/engine/tiles.js, restMargin = one column).
+export const MAP_TILE_W = 200;    // world units (300 output px at ROOM_PX)
+
+/** Even column edges (world x) over [x0, x0 + w], each a whole number of output px. Pure. */
+export function mapTileEdges(x0, w, { col = MAP_TILE_W } = {}) {
+  const edges = [];
+  for (let e = x0; e < x0 + w - 1; e += col) edges.push(e);
+  edges.push(x0 + w);
+  return edges;
+}
+
+async function buildMapTiles(page, map, job, write, layers, svgs) {
+  const edges = mapTileEdges(map.canvas.x, map.canvas.w);
+  for (const [li, out] of layers.entries()) {
+    out.tiles = [];
+    const lx1 = out.x + out.w;
+    for (let i = 0; i + 1 < edges.length; i++) {
+      const a = Math.max(edges[i], out.x);
+      const b = Math.min(edges[i + 1] + TILE_OVERLAP_PX / ROOM_PX, lx1);
+      if (b - a < 2) continue;
+      const box = [a, out.y, b - a, out.h];
+      const n = out.tiles.length;
+      const d = await rasterize(page, job(svgs[li].day, box, out.opaque));
+      const t = { ...write(`tiles/${out.id}-${n}`, d), x: round(box[0], 2), y: round(box[1], 2), w: round(box[2], 2), h: round(box[3], 2), px: d.px };
+      if (out.night) t.night = write(`tiles/${out.id}-${n}-night`, await rasterize(page, job(svgs[li].night, box, out.opaque)));
+      out.tiles.push(t);
+    }
+  }
 }
 
 async function buildProps(page, written) {

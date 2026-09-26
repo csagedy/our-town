@@ -73,7 +73,7 @@ export const THUMB_HIDE = {
   eyes: ['face', 'hat'], brows: ['face', 'hat'], cheeks: ['face'], facial: ['face'],
   face: [], hat: [],
   top: ['over', 'back', 'belt'], over: ['back', 'belt'], bottom: ['over', 'back', 'belt'], shoes: [],
-  belt: ['back'], hands: ['back'],
+  belt: ['back', 'hands'], hands: ['back'],
   body: [], skin: ['face'], back: [],
 };
 

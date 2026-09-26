@@ -6,7 +6,7 @@ import { mountBoot } from './scenes/boot.js';
 import { mountTestRoom, TEST_SETS } from './scenes/test-room.js';
 import { mountTown } from './scenes/town.js';
 import { registerServiceWorker } from './pwa.js';
-import { initAudio, setMuted, setVolume, setSpeechOn, sfx } from './audio/index.js';
+import { initAudio, prepareAudio, setMuted, setVolume, setSpeechOn, sfx } from './audio/index.js';
 import { installParentMenu } from './ui/parent-menu.js';
 import { openWorld } from './core/persist.js';
 import { getEntity } from './engine/world.js';
@@ -31,6 +31,21 @@ function buddyEntity(store) {
   const id = store.newId();
   store.dispatch('spawn', { id, kind: 'buddy', room: 'boot', x: 720, y: 560, props: { squishes: 0 } });
   return store.state.entities[id];
+}
+
+// Bead bp8 (docs/perf.md "City map memory"): creating the AudioContext
+// blocks the main thread for a while, and it used to happen in the first
+// pointerup, a hitch at the end of the first swipe of the map. In the town
+// it is created once nothing is touched or moving; the first gesture then
+// only resumes it. (Dev routes keep the create-on-first-tap path the audio
+// e2e test drives.)
+function prepareAudioWhenIdle(stage, input) {
+  const attempt = () => {
+    const busy = input.debug().pointers.length || stage.camera.dragging || stage.camera.moving || (window.__town && window.__town.busy);
+    if (busy) setTimeout(attempt, 400);
+    else prepareAudio();
+  };
+  setTimeout(attempt, 600);
 }
 
 async function boot() {
@@ -85,6 +100,7 @@ async function boot() {
   window.__input = input;
   window.__scene = scene;
   document.body.dataset.boot = 'ready';     // the test harness waits for this
+  if (window.__town) prepareAudioWhenIdle(stage, input);
   registerServiceWorker();
 }
 

@@ -30,7 +30,7 @@ export const CHAR_KIND = 'char';
 export const HANDS = { L: 'hand-l', R: 'hand-r' };
 export const SIDE_OF = { 'hand-l': 'L', 'hand-r': 'R' };
 export const REMOVABLE = ['hat', 'face', 'over', 'back'];   // wear slots that are entities (the Character Maker's worn tabs)
-// Also worn as entities, with no Maker tab yet: the tool belt and gloves (P2c).
+// Also worn as entities: the tool belt and gloves (P2c; Maker tabs since mhf.20, char-maker MAKER_WORN).
 export const WORN = REMOVABLE.concat(['belt', 'hands']);
 export const BASE_WEAR = ['top', 'bottom', 'shoes'];         // clothes drawn from props.wear
 export const wearSlotName = (slot) => 'wear-' + slot;

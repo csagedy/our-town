@@ -137,6 +137,16 @@ for (const name of ['ipad-air', 'ipad-pro-9.7']) {
     });
 
     it('tap the car: it honks, drives to the cafe and its passenger goes inside (with us)', async () => {
+      // P2c.1 built the construction site, the next place to the right of the
+      // car's first spot: park it past the site first, so the next built place
+      // is the cafe, around the block.
+      await page.eval((id) => {
+        const e = window.__store.state.entities[id];
+        window.__store.dispatch('move', { id, room: 'city', x: 1700, y: e.y });
+        window.__stage.camera.panTo(1700 - 720);
+      }, ids.car);
+      await page.waitFor(() => !window.__stage.camera.moving);
+      await page.frames(4);
       const car = await at(page, ids.car);
       await page.tap(car.x, car.y);
       await page.waitFor(() => window.__town.carry.stats.drives === 1);

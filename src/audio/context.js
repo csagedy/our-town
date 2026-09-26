@@ -114,6 +114,18 @@ export function createAudioCore(deps = {}) {
     }
   }
 
+  /**
+   * Create the context ahead of the first gesture, while nothing moves. It
+   * starts suspended; the first gesture then only resumes it. Creating one
+   * blocks the main thread (165 ms in Chrome at x6 CPU throttle, bead bp8),
+   * which inside a kid's first pointerup was a hitch at the end of the first
+   * swipe. Returns the state.
+   */
+  function prepare() {
+    if (!unsupported) get(true);
+    return state();
+  }
+
   /** Call from inside a user gesture. Creates, resumes and primes the context. */
   function gesture() {
     lastGesture = now();
@@ -188,6 +200,7 @@ export function createAudioCore(deps = {}) {
     get,
     state,
     gesture,
+    prepare,
     visibility,
     install,
     canPlay,

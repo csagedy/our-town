@@ -43,6 +43,7 @@ import { useArtSprites } from './art.js';
 import { mountCharacters, seedCharacters, CHAR_KIND } from '../engine/characters.js';
 import { textLabels } from './kitchen.js';
 import * as tween from '../engine/tween.js';
+import { createPrep, ensureStations } from './cafe-prep.js';
 
 export const CAFE_ID = 'cafe/kitchen';
 export const FIXTURES_KIND = 'cafe-fixtures';
@@ -201,8 +202,10 @@ export const HOTSPOTS = [
 // kitchen, dishes on the cup shelves and the sideboard, food on the counter
 // and at the customers' tables.
 export const CAFE_ITEMS = [
-  ['pan', 'island-top', 610], ['saucepan', 'island-shelf', 810],
-  ['knife', 'cutting-board', 846], ['mixing-bowl', 'island-top', 720], ['egg', 'island-top', 790],
+  // The mixing bowl on the island's left, clear of the chef at the island
+  // stool (P2a.2: the bowl is where Zoe mixes); the pan by the chef.
+  ['pan', 'island-top', 830], ['saucepan', 'island-shelf', 810],
+  ['knife', 'cutting-board', 846], ['mixing-bowl', 'island-top', 612], ['egg', 'island-top', 700],
   ['tomato', 'counter-sink', 612], ['baking-tray', 'island-shelf', 700],
   ['whisk', 'window-sill', 640], ['spatula', 'window-sill', 770], ['garnish-shaker', 'window-sill', 705, null, { flavor: 'herbs' }],
   ['mug', 'cup-shelf-1', 1784], ['cafe-cup', 'cup-shelf-1', 1834], ['glass', 'cup-shelf-1', 1884],
@@ -346,6 +349,20 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     },
     dropTarget: (item, other) => !hidden.has(other.id) && !(other.parent && shutIn(other)) && (base.dropTarget ? base.dropTarget(item, other) : false),
   });
+  // P2a.2 prep stations: the knife, whisk, blender, sink, toaster and coffee machine.
+  const prep = createPrep({
+    store, catalog, behaviors, m, room, fx,
+    pieceApi: {
+      el: (pid) => (pieces.get(pid) || {}).el || null,
+      state: (pid) => state(pid),
+      set: (pid, value) => { const f = fixtures(); if (f) store.dispatch('set', { id: f.id, path: 'props.' + pid, value }); },
+      tap: (pid) => tapPiece(pid, { raw: true }),
+      press: (pid, variant) => press(pid, Object.assign({}, PIECES[pid], { press: variant })),
+      render: () => renderPieces(),
+      fixtures: () => fixtures(),
+    },
+  });
+  const prepHooks = prep.wrap(hooks);
   // Pieces take touches (registered before the entity views, so where a
   // padded hit box is a tie the thing in front of the fixture wins).
   const pieces = new Map();          // id -> {el, body, img, shown, gen}
@@ -357,7 +374,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     pieces.set(pid, rec);
     input.register(el, { onTap: () => tapPiece(pid), pan: true });
   }
-  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: hooks, labels: textLabels(catalog, manifest) });
+  const view = createRoomView({ stage, store, input, room, fx, sfx, behaviors: prepHooks, labels: textLabels(catalog, manifest) });
   behaviors.bind(view, fx);
   if (chars) chars.bind(view, fx);
 
@@ -373,9 +390,10 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       }
       seedCafe(store, { ...room.def, surfaces: allSurfaces }, catalog);
       // P1.14's first backpack (carry.js puts one in the cafe if the town has
-      // none): here, on the kitchen counter by the pillar, clear of the pocket tray.
+      // none): here, on the floor by the pillar, clear of the pocket tray (and
+      // off the counter, where the blender pours its smoothies, P2a.2).
       const hasBag = Object.keys(store.state.entities).some((id) => store.state.entities[id].kind === 'backpack' && getEntity(store.state, id));
-      if (!hasBag) store.dispatch('spawn', { id: store.newId(), kind: 'backpack', room: CAFE_ID, x: 1310, y: 504 });
+      if (!hasBag) store.dispatch('spawn', { id: store.newId(), kind: 'backpack', room: CAFE_ID, x: 1330, y: 868 });
       if (chars && !here.some((e) => e.kind === CHAR_KIND)) {
         const ids = seedCharacters(store, chars.rig, { room: CAFE_ID, seats: chars.seats, placements: CAFE_CAST });
         for (const w of CAFE_CAST_WEAR) if (ids[w.cast]) store.dispatch('spawn', { id: store.newId(), kind: w.kind, parent: ids[w.cast], slot: w.slot });
@@ -383,6 +401,9 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     }
   }
   firstVisit = false;
+  // The prep stations over the blender, toaster and sink (older saves get them too).
+  ensureStations(store, m, CAFE_ID);
+  prep.bind(view);
 
   // ---- pieces ----
   const overrides = new Map();       // id -> variant shown for a moment (a bell press)
@@ -407,7 +428,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
 
   function renderPieces() {
     const props = fprops();
-    for (const pid of pieces.keys()) swap(pid, overrides.get(pid) || pieceVariant(pid, props, m.pieces, { ovenFull }));
+    for (const pid of pieces.keys()) swap(pid, overrides.get(pid) || prep.pieceVariant(pid, props) || pieceVariant(pid, props, m.pieces, { ovenFull }));
   }
 
   // Inside surfaces follow their doors; things on them hide and show.
@@ -439,10 +460,17 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
     timers.add(t);
   }
 
-  function tapPiece(pid) {
+  function tapPiece(pid, { raw = false } = {}) {
     const spec = PIECES[pid] || {};
     const p = pieces.get(pid);
     stats.taps[pid] = (stats.taps[pid] || 0) + 1;
+    // A prep station answers for its appliance (the blender blends, the
+    // coffee machine fills the cup under it, the toaster pops its toast).
+    if (!raw && prep.onPieceTap(pid)) {
+      if (pid !== 'blender') tween.squish(p.body, { amount: 0.6, duration: 320 });
+      burstAt(pid, 'sparkle', { count: 4 });
+      return;
+    }
     const target = spec.controls || pid;
     const tspec = PIECES[target] || {};
     if (tspec.toggle) {
@@ -464,6 +492,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       playS(spec.sound || ['pop']);
       burstAt(pid, 'sparkle', { count: 4 });
     }
+    if (!raw) prep.afterPieceTap(pid);
   }
 
   applyInside();
@@ -499,6 +528,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       stats: () => ({ ...stats, taps: { ...stats.taps }, timers: timers.size }),
     },
     hidden: () => [...hidden],
+    prep,
     surfaces: () => room.def.surfaces.map((s) => s.id),
     fixtures,
     /** Where things arriving by car stand: inside the front door, in a row. */
@@ -513,6 +543,7 @@ export async function mountCafe(stage, { input, store, manifest, carry = null, f
       clearTimeout(camTimer);
       for (const t of timers) clearTimeout(t);
       timers.clear();
+      prep.destroy();
       for (const p of pieces.values()) input.unregister(p.el);
       tiles.destroy();
       view.destroy();

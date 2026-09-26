@@ -14,6 +14,14 @@
 // cross-fade (both decoded first; the unused variant's src is then dropped
 // so only one set stays in memory).
 //
+// Memory (bead 6hn, docs/perf.md "City map memory"): the two layers ship as
+// 200-unit column tiles (tools/art/build.mjs buildMapTiles) and every image,
+// tile or piece, goes through a tile loader (src/engine/tiles.js): only what
+// is on screen plus one column each side is decoded, more ahead while the map
+// moves, the rest dropped once it is still. One loader per set (day, night,
+// and the pieces with no night variant); the set not showing holds nothing.
+// Leaving releases every src (town.js then decodes the next place).
+//
 // Performance: no per-frame work. Reactions are short WAAPI tweens on
 // transform/opacity (tween.js); nothing loops while nobody touches the iPad.
 
@@ -27,6 +35,7 @@ import { loadCatalog } from '../core/catalog.js';
 import { createBehaviors } from '../core/behaviors/index.js';
 import { mountCharacters } from '../engine/characters.js';
 import { useArtSprites } from './art.js';
+import { createTileLoader, tilesNear } from '../engine/tiles.js';
 
 export const CITY_ID = 'city';
 
@@ -40,7 +49,7 @@ const OWNER = {
   booth: 'booth', 'booth-curtain': 'booth',   // P1.15: the Character Maker
 };
 // Built locations: a tap goes in. The rest react ("coming soon").
-export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth' };
+export const DOORS = { cafe: 'cafe/kitchen', booth: 'booth', construction: 'construction/yard' };   // P2c.1: the site
 export const BUILDINGS = ['cafe', 'theater', 'construction', 'school'];
 // P1.14: things and characters carried onto the map rest on the street (the
 // upper sidewalk, the road, the lower sidewalk) and are drawn this much
@@ -52,31 +61,57 @@ export const CITY_ENTITY_SCALE = 0.45;
 const DOOR_PIECE = { cafe: 'cafe-door', theater: 'theater-curtains', construction: 'construction', school: 'school' };
 
 const later = (ms, fn) => setTimeout(fn, ms);
+// At rest the loaders keep what is on screen plus this much each side: one
+// tile column (tools/art/build.mjs MAP_TILE_W), so the columns next to the
+// view are already decoded when a pan starts (bead bp8).
+export const CITY_REST_MARGIN = 200;
+const READY_TIMEOUT = 4000;   // ms: never hold a transition longer than this for decodes
 
-/** Room definition for the view layer, from the manifest's map entry. Pure. */
-export function cityRoom(map, night = false) {
-  const img = (v) => `<div class="city-body"><img class="city-day" alt="" draggable="false" decoding="async"${night && v.night ? '' : ` src="${v.file}"`}>`
-    + (v.night ? `<img class="city-night" alt="" draggable="false" decoding="async"${night ? ` src="${v.night.file}"` : ''}>` : '') + '</div>';
+/**
+ * Room definition for the view layer, from the manifest's map entry. Pure.
+ * No <img> gets a src here: `images` lists every image slot ({id, x, w, px,
+ * day, night} files, night null when the piece has no night variant) for the
+ * tile loaders. opts.tiled: the layers as column tiles (default) or whole
+ * (`?tiles=0`, docs/perf.md "before").
+ */
+export function cityRoom(map, night = false, { tiled = true } = {}) {
+  const img = (v) => '<div class="city-body"><img class="city-day" alt="" draggable="false" decoding="async">'
+    + (v.night ? '<img class="city-night" alt="" draggable="false" decoding="async">' : '') + '</div>';
   const art = [];
+  const images = [];
+  const slot = (id, x, w, v) => images.push({ id, x, w, px: v.px, day: v.file, night: v.night ? v.night.file : null });
+  const layer = (L, layerName, depth) => {
+    const parts = tiled && L.tiles && L.tiles.length ? L.tiles.map((t, i) => [`${L.id}-${i}`, t]) : [[L.id, L]];
+    for (const [id, t] of parts) {
+      art.push({ id, layer: layerName, depth, x: t.x, y: t.y, w: t.w, h: t.h, cls: 'city-static', html: img(t) });
+      slot(id, t.x, t.w, t);
+    }
+  };
   const [back, front] = map.layers;
-  art.push({ id: 'back', layer: 'back', x: back.x, y: back.y, w: back.w, h: back.h, cls: 'city-static', html: img(back) });
+  layer(back, 'back');
   for (const [id, p] of Object.entries(map.pieces)) {
     const boxes = p.copies || [[p.x, p.y]];
     boxes.forEach(([x, y], i) => {
-      art.push({ id: p.copies ? `${id}-${i}` : id, layer: 'mid', depth: p.depth, x, y, w: p.w, h: p.h, cls: `city-piece city-${id}`, html: img(p) });
+      const aid = p.copies ? `${id}-${i}` : id;
+      art.push({ id: aid, layer: 'mid', depth: p.depth, x, y, w: p.w, h: p.h, cls: `city-piece city-${id}`, html: img(p) });
+      slot(aid, x, p.w, p);
     });
   }
-  if (front) art.push({ id: 'front', layer: 'mid', depth: 1100, x: front.x, y: front.y, w: front.w, h: front.h, cls: 'city-static', html: img(front) });
+  if (front) layer(front, 'mid', 1100);
   const b = map.backdrop[night ? 'night' : 'day'];
-  return { id: CITY_ID, width: map.width, backdrop: b, floor: Object.assign({ sound: 'tap' }, CITY_FLOOR), entityScale: CITY_ENTITY_SCALE, surfaces: [], art };
+  return { id: CITY_ID, width: map.width, backdrop: b, floor: Object.assign({ sound: 'tap' }, CITY_FLOOR), entityScale: CITY_ENTITY_SCALE, surfaces: [], art, images };
 }
 
-/** Every image file the map shows in one mode (for preloading). */
-export function cityFiles(map, night = false) {
-  const files = [];
-  for (const v of [...map.layers, ...Object.values(map.pieces)]) files.push(night && v.night ? v.night.file : v.file);
-  return files;
+/**
+ * The image files the map shows first in one mode with the camera at
+ * cameraX (for preloading): the tiles and pieces the loaders want at rest.
+ */
+export function cityFiles(map, night = false, { cameraX = 0, width = 1440 } = {}) {
+  const { images } = cityRoom(map, night);
+  return tilesNear(images, cameraX, cameraX + width, CITY_REST_MARGIN).map((i) => (night && images[i].night) || images[i].day);
 }
+
+const withTimeout = (p, ms) => Promise.race([p, new Promise((r) => setTimeout(r, ms))]);
 
 /**
  * Mount the map. opts: { input, store, manifest, cameraX, onEnter(building,
@@ -86,15 +121,37 @@ export function cityFiles(map, night = false) {
  */
 export async function mountCity(stage, opts) {
   const city = cityScene(stage, opts);
-  await city.play(opts);
+  await Promise.all([city.play(opts), city.ready()]);
   return city;
 }
 
 function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null, from = null }) {
   const map = manifest.map;
   let night = !!store.state.map.night;
-  const room = mountRoom(stage, Object.assign(cityRoom(map, night), { cameraX }));
+  const tiled = !(typeof location !== 'undefined' && new URLSearchParams(location.search).get('tiles') === '0');
+  const def = cityRoom(map, night, { tiled });
+  const room = mountRoom(stage, Object.assign(def, { cameraX }));
   room.el.classList.add('city');
+
+  // ---- image loading (bead 6hn): three loaders, only one of day/night active ----
+  const recs = { day: [], night: [], always: [] };
+  for (const im of def.images) {
+    const el = room.art.get(im.id);
+    const base = { id: im.id, x: im.x, w: im.w, px: im.px };
+    if (im.night) {
+      recs.day.push({ ...base, img: el.querySelector('.city-day'), file: im.day });
+      recs.night.push({ ...base, img: el.querySelector('.city-night'), file: im.night });
+    } else recs.always.push({ ...base, img: el.querySelector('.city-day'), file: im.day });
+  }
+  const margin = { restMargin: tiled ? CITY_REST_MARGIN : Infinity };
+  const loaders = {
+    day: createTileLoader({ stage, tiles: recs.day, active: !night, ...margin }),
+    night: createTileLoader({ stage, tiles: recs.night, active: night, ...margin }),
+    always: createTileLoader({ stage, tiles: recs.always, ...margin }),
+  };
+  const allLoaders = Object.values(loaders);
+  for (const l of allLoaders) l.update();
+  const nightImgs = recs.night.map((r) => r.img);
   const fx = createFx(room.fxLayer);
   const stats = { reactions: 0, entered: 0, toggles: 0, last: '' };
   const els = [...room.art.values()];
@@ -119,35 +176,30 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
   room.el.classList.toggle('is-night', night);
 
   let swapSeq = 0;
-  /** Swap every image to the day or night variant. animate: cross-fade. */
+  /**
+   * Swap to the day or night set. The new set's loader decodes what the
+   * camera wants first; then the night images (stacked on the day ones)
+   * fade in or out (animate) and the old set's loader drops its srcs.
+   */
   function applyNight(on, animate) {
     const seq = ++swapSeq;
-    const jobs = [];
-    for (const el of els) {
-      const nightImg = el.querySelector('.city-night');
-      const dayImg = el.querySelector('.city-day');
-      if (!nightImg) continue;
-      const show = on ? nightImg : dayImg;
-      const want = on ? nightFile(el) : dayFile(el);
-      if (want && show.getAttribute('src') !== want) show.setAttribute('src', want);
-      jobs.push((show.decode ? show.decode() : Promise.resolve()).catch(() => {}).then(() => ({ nightImg, dayImg })));
-    }
-    return Promise.all(jobs).then((list) => {
+    const show = on ? loaders.night : loaders.day;
+    const hide = on ? loaders.day : loaders.night;
+    show.setActive(true);
+    return show.ready().then(() => {
       if (seq !== swapSeq) return;
-      for (const { nightImg, dayImg } of list) {
-        // The night image sits on top of the day image: fade it in or out.
-        nightImg.style.opacity = on ? '1' : '0';
-        const drop = () => { if (seq === swapSeq) (on ? dayImg : nightImg).removeAttribute('src'); };
-        if (animate) tween.done(tween.animate(nightImg, [{ opacity: on ? 0 : 1 }, { opacity: on ? 1 : 0 }], { duration: 450, easing: 'ease-in-out' })).then(drop);
-        else drop();
+      const drop = () => { if (seq === swapSeq) hide.setActive(false); };
+      const fades = [];
+      for (const img of nightImgs) {
+        img.style.opacity = on ? '1' : '0';
+        if (animate && img.getAttribute('src')) fades.push(tween.done(tween.animate(img, [{ opacity: on ? 0 : 1 }, { opacity: on ? 1 : 0 }], { duration: 450, easing: 'ease-in-out' })));
       }
+      Promise.all(fades).then(drop);
     });
   }
-  // Which file an element shows in each mode (element -> piece id).
-  const pieceOf = (el) => { const id = el.dataset.art; return id === 'back' || id === 'front' ? map.layers.find((L) => L.id === id) : map.pieces[id.replace(/-\d+$/, '')] || map.pieces[id]; };
-  const dayFile = (el) => pieceOf(el).file;
-  const nightFile = (el) => { const p = pieceOf(el); return p.night ? p.night.file : null; };
-  for (const el of els) { const n = el.querySelector('.city-night'); if (n) n.style.opacity = night ? '1' : '0'; }
+  // The manifest piece an element shows (element -> piece id).
+  const pieceOf = (el) => { const id = el.dataset.art; return map.pieces[id.replace(/-\d+$/, '')] || map.pieces[id]; };
+  for (const img of nightImgs) img.style.opacity = night ? '1' : '0';
   showSky();
 
   /** Night on/off (from a store change: our tap or the other iPad's). */
@@ -229,7 +281,8 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
         { transform: 'scale(1, 1)' },
       ], { duration: 900, easing: 'ease-in-out' }));
     },
-    construction() {
+    construction(el, info) {
+      if (entering) return;
       bounce('construction', 0.16);
       sfx.play('whistle');
       later(380, () => sfx.play('knock'));
@@ -239,6 +292,15 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
         { transform: 'rotate(0deg)' }, { transform: 'rotate(-7deg)', offset: 0.22 }, { transform: 'rotate(5deg)', offset: 0.48 },
         { transform: 'rotate(-3deg)', offset: 0.72 }, { transform: 'rotate(1.5deg)', offset: 0.88 }, { transform: 'rotate(0deg)' },
       ], { duration: 1300, easing: 'ease-in-out' }));
+      // P2c.1: the site is built: the whistle blows and in we go (a tap only;
+      // the car's poke(), info null, just plays the reaction).
+      if (info && DOORS.construction && onEnter) {
+        entering = true;
+        stats.entered++;
+        const d = doorBox('construction');
+        const at = stage.worldToScreen((d.x0 + d.x1) / 2, d.y0 + (d.y1 - d.y0) * 0.55);
+        later(420, () => onEnter('construction', DOORS.construction, at));
+      }
     },
     school() {
       bounce('school', 0.2);
@@ -368,15 +430,25 @@ function cityScene(stage, { input, store, manifest, cameraX = 0, onEnter = null,
     screenPoint(id, dy = 0.5) { const el = room.art.get(id); if (!el) return null; const c = center(el, dy); return stage.worldToScreen(c.x, c.y); },
     /** World point where a location's door is (the transition zooms there). */
     doorPoint(location) {
+      if (location === DOORS.construction) return this.doorWorld('construction');   // P2c.1
       const piece = location === DOORS.cafe ? 'cafe-door' : location === DOORS.booth ? 'booth-curtain' : null;
       if (!piece) return null;
       const p = map.pieces[piece];
       return { x: p.x + p.w / 2, y: p.y + p.h * 0.55 };
     },
+    /** Resolves once what the camera wants is decoded (bounded: never hangs a transition). */
+    ready: () => withTimeout(Promise.all(allLoaders.map((l) => l.ready())), READY_TIMEOUT),
+    /** The image loaders (tests, docs/perf.md): {day, night, always}. */
+    loaders,
+    /** Files with a src right now, and their decoded bytes (width x height x 4). */
+    loaded: () => allLoaders.flatMap((l) => l.loaded()),
+    decodedBytes: () => allLoaders.reduce((n, l) => n + l.bytes(), 0),
     destroy() {
       if (play) { play.view.destroy(); if (play.chars) play.chars.destroy(); play.removeSource(); play = null; }
       unsubscribe();
       swapSeq++;
+      // Let the bitmaps go before the next place decodes (town.js).
+      for (const l of allLoaders) { l.release(); l.destroy(); }
       for (const el of pieceEls) input.unregister(el);
       fx.clear();
       room.destroy();

@@ -104,7 +104,7 @@ const FIRST_TAP = {
   pan: [[], null],
   cupcake: [['eatable'], { bites: 1 }],
   apple: [['eatable'], { bites: 1 }],
-  egg: [['cycle'], { cracked: 1 }],
+  egg: [['food'], { cracked: 1 }],        // P2a.2: the food behavior cracks it
   gift: [['toggle'], { open: true }],
   ball: [['sound'], null],
   blocks: [['wobble'], null],
@@ -172,7 +172,7 @@ for (const name of ['ipad-pro-9.7', 'ipad-air']) {
 
     it('taps with nothing left to do still react (egg cracked, apple core, cupcake eaten up)', async () => {
       const ids = await idsByKind(page);
-      const egg = await tapEntity(page, ids.egg);             // one-way cycle at its end
+      const egg = await tapEntity(page, ids.egg);             // cracked already: nothing left to crack
       assert.deepEqual(egg.via, []);
       await tapEntity(page, ids.apple);                         // bite1 -> core
       const core = await tapEntity(page, ids.apple);
@@ -236,7 +236,9 @@ describe('containers: accept by tag, refuse with a bounce-back, spill (ipad-air)
     assert.deepEqual(r.via, ['container:accept']);
     assert.equal((await ent(page, ids.cupcake)).parent, ids['cookie-jar']);
     r = await dropOnto(page, ids.egg, ids.pan);
-    assert.deepEqual(r.via, ['container:accept']);
+    // P2a.2: an uncracked egg goes in through the pan's mix behavior (it cracks on the rim).
+    assert.ok(['container:accept', 'mix:accept'].includes(r.via[0]) && r.via.length === 1, r.via.join());
+    assert.equal((await ent(page, ids.egg)).props.cracked, 1);
     assert.match((await ent(page, ids.pan)).spriteKey, /:egg$/);
     await page.screenshot('behaviors-containers-filled');
   });
