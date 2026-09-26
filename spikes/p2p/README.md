@@ -7,6 +7,9 @@ No server is involved: no STUN or TURN, and no signaling server. Once the page i
 
 See `FINDINGS.md` for the research and the recommendation.
 
+**The real game now has this built in** (bead oxg.2, `src/net/`). To test the real app on two iPads, use
+[`docs/two-ipad-test.md`](../../docs/two-ipad-test.md). This page stays as the bare-bones connectivity check.
+
 ## Files
 
 | File | What it is |

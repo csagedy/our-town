@@ -1,0 +1,134 @@
+/* Two-iPad pairing screens and feedback (src/net/pairing.js, together.js).
+   Safari 16 floor: no nesting, no color-mix(); animate transform/opacity only. */
+
+.tg-panel[hidden], .tg-panel [hidden], .tg-badge[hidden] { display: none !important; }
+
+.tg-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  padding: 8px;
+  margin: 0;
+  min-width: 72px;
+  min-height: 72px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 6px 0 rgba(43, 45, 66, 0.18);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+.tg-btn svg { display: block; width: 56px; height: 56px; }
+.tg-btn:active { transform: translateY(4px) scale(0.97); box-shadow: 0 2px 0 rgba(43, 45, 66, 0.18); }
+
+/* Corner badge: two little iPads */
+.tg-badge {
+  position: fixed;
+  z-index: 40;
+  top: calc(var(--safe-top, 0px) + 12px);
+  right: calc(var(--safe-right, 0px) + 12px);
+  background: rgba(255, 255, 255, 0.85);
+}
+.tg-badge .tg-link, .tg-badge .tg-broken { opacity: 0; }
+.tg-badge[data-status="hosting"] .tg-link, .tg-badge[data-status="visiting"] .tg-link { opacity: 1; }
+.tg-badge[data-status="away"] .tg-broken { opacity: 1; }
+.tg-badge.tg-pop { animation: tg-pop 600ms ease-out; }
+
+/* Panel */
+.tg-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(43, 45, 66, 0.55);
+  padding: calc(var(--safe-top, 0px) + 16px) calc(var(--safe-right, 0px) + 16px) calc(var(--safe-bottom, 0px) + 16px) calc(var(--safe-left, 0px) + 16px);
+}
+.tg-card {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  background: #fdf6ec;
+  border-radius: 32px;
+  padding: 28px 28px 24px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+  animation: tg-in 220ms ease-out;
+}
+.tg-close { position: absolute; top: 10px; right: 10px; min-width: 64px; min-height: 64px; }
+.tg-close svg { width: 44px; height: 44px; }
+.tg-screen { display: none; }
+.tg-screen.tg-on { display: block; }
+.tg-row { display: flex; gap: 24px; align-items: center; justify-content: center; flex-wrap: wrap; }
+
+.tg-choices { padding: 36px 64px 24px; }
+.tg-choices .tg-btn { padding: 16px; border-radius: 32px; }
+.tg-choices .tg-btn svg { width: 150px; height: 150px; }
+.tg-choices .tg-home { background: #e8f7ee; }
+
+/* Hold the iPads face to face */
+.tg-facing { display: flex; justify-content: center; margin: 0 56px 12px; }
+.tg-facing svg { width: 220px; height: 110px; }
+.tg-facing-arrows { animation: tg-nudge 1.2s ease-in-out infinite; }
+
+.tg-qrbox { position: relative; background: #fff; border-radius: 18px; padding: 10px; min-width: 240px; min-height: 240px; display: flex; align-items: center; justify-content: center; }
+.tg-qr { display: block; image-rendering: pixelated; opacity: 0; }
+.tg-has-qr .tg-qr { opacity: 1; }
+.tg-wait { position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 6px solid #ffd66e; border-top-color: #ff7a59; animation: tg-spin 900ms linear infinite; }
+.tg-has-qr .tg-wait { display: none; }
+
+.tg-cam { position: relative; }
+.tg-view { position: relative; width: 300px; height: 225px; border-radius: 18px; overflow: hidden; background: #2b2d42; display: none; }
+.tg-has-cam .tg-view { display: block; }
+.tg-video { width: 100%; height: 100%; object-fit: cover; }
+.tg-video.tg-mirror { transform: scaleX(-1); }
+.tg-frame { position: absolute; left: 18%; top: 12%; width: 64%; height: 76%; border: 6px dashed rgba(255, 255, 255, 0.85); border-radius: 16px; animation: tg-breathe 1.4s ease-in-out infinite; }
+.tg-nocam { display: none; }
+.tg-no-cam .tg-nocam { display: block; }
+.tg-nocam svg { width: 96px; height: 96px; }
+
+/* Host: the QR code is the big thing; join: the viewfinder is, until its QR shows. */
+.tg-panel[data-mode="join"] .tg-view { width: 440px; height: 330px; }
+.tg-panel[data-mode="join"] .tg-qrbox { display: none; }
+.tg-panel[data-mode="join"].tg-has-qr .tg-qrbox { display: flex; }
+.tg-panel[data-mode="join"].tg-has-qr .tg-cam { display: none; }
+.tg-waiting .tg-cam { opacity: 0.35; }
+
+.tg-tools { margin-top: 16px; }
+.tg-tools .tg-btn { min-width: 64px; min-height: 64px; }
+.tg-tools .tg-btn svg { width: 44px; height: 44px; }
+.tg-flip { display: none; }
+.tg-has-cam .tg-flip { display: block; }
+
+.tg-paste { display: flex; gap: 12px; align-items: center; justify-content: center; margin-top: 14px; }
+.tg-paste textarea {
+  width: 260px;
+  font: 12px ui-monospace, Menlo, monospace;
+  border-radius: 10px;
+  border: 2px solid #d9cbb5;
+  padding: 6px;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: auto;
+}
+.tg-my-code { background: #f3ede3; }
+
+.tg-done { display: flex; justify-content: center; padding: 24px 64px; }
+.tg-done svg { width: 320px; height: 186px; }
+.tg-heart { transform-origin: 120px 44px; animation: tg-heart 900ms ease-out both; }
+.tg-oops { display: flex; justify-content: center; padding: 20px 64px 8px; }
+.tg-oops svg { width: 160px; height: 160px; animation: tg-wobble 600ms ease-in-out; }
+
+/* Hooks on game elements (data-entity) */
+.tg-held-other { opacity: 0.6; }
+.tg-busy { animation: tg-busy 420ms ease-in-out; }   /* the rotate property, so the element's own transform stays */
+
+@keyframes tg-in { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes tg-spin { to { transform: rotate(360deg); } }
+@keyframes tg-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@keyframes tg-breathe { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes tg-pop { 0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); } }
+@keyframes tg-heart { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.5); opacity: 1; } 70% { transform: scale(0.9); } 100% { transform: scale(1.1); opacity: 1; } }
+@keyframes tg-busy { 0%, 100% { rotate: 0deg; } 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+@keyframes tg-wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }

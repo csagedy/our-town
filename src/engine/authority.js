@@ -71,6 +71,18 @@ export function createHost(store, { broadcast = () => {}, now = () => Date.now()
       if (holder(id) === device) leases.delete(id);
     },
 
+    /** Drop every lease `device` holds (its link dropped mid-drag). */
+    releaseAll(device) {
+      for (const id of Array.from(leases.keys())) if (leases.get(id).device === device) leases.delete(id);
+    },
+
+    /** Live leases as { entityId: device } (expired ones are dropped). */
+    leases() {
+      const out = {};
+      for (const id of Array.from(leases.keys())) { const who = holder(id); if (who) out[id] = who; }
+      return out;
+    },
+
     /** Validate and sequence an op from any device. Returns { ok, reason, env }. */
     submit(env) {
       const reason = validate(store.state, env) ||
