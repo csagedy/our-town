@@ -101,7 +101,6 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
   const timers = new Set();
   const later = (ms, fn) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; };
   const stats = { cuts: 0, strokes: 0, stirs: 0, blends: 0, pours: 0, pops: 0, washes: 0, fills: 0 };
-  const blending = new Map();     // station id -> variant to keep showing while the jug shakes
   let view = null;
   let hooks = null;
   let base = null;
@@ -114,7 +113,6 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
   const isStation = (e) => STATION_KINDS.includes(e.kind);
   const station = (kind) => stationOf(store.state, roomId, kind);
   const boardFoods = () => inRoom(store.state, roomId).filter((e) => foodParams(e.kind) && onBoard(board, e));
-  const ctxFor = (info = {}) => ({ view, fx, info });
   const pieceBody = (pid) => { const el = pieceApi.el(pid); return el ? el.firstChild : null; };
 
   // ---- knife ----
@@ -244,7 +242,6 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
   function blenderVariant(props) {
     const s = station('station-blender');
     if (!s) return null;
-    if (blending.has(s.id)) return blending.get(s.id);
     const mixed = childrenOf(store.state, s.id).filter((k) => isMixed(k.props));
     return mixed.length ? smoothieOf(mixed.map((k) => ({ kind: k.kind, props: k.props }))) : 'empty';
   }
@@ -261,15 +258,20 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
     tween.animate(body, f, { duration: ms, easing: 'linear' });
   }
 
-  function tapBlender(s, info) {
-    const before = blenderVariant();
-    blending.set(s.id, before);
-    base.onTap(getEntity(store.state, s.id), ctxFor(info));
+  function tapBlender(s) {
+    // Whirr and shake first, the fruit tumbling in the jug; then it is all
+    // blended (the ops) and the jug shows the smoothie colour.
     stats.blends++;
+    view.play('whirr');
     shakeBlender();
-    // The kids' pieces bounce in the jug while it whirrs (they are hidden once blended).
-    later(BLEND_MS, () => { blending.delete(s.id); pieceApi.render(); });
-    pieceApi.render();
+    for (const k of childrenOf(store.state, s.id)) {
+      const kv = view.viewOf(k.id);
+      if (!kv || !kv.body) continue;
+      const f = [];
+      for (let i = 0; i <= 8; i++) f.push({ transform: i === 0 || i === 8 ? 'translate3d(0, 0, 0)' : `translate3d(${(i % 2 ? 6 : -6)}px, ${-8 - (i % 3) * 7}px, 0) rotate(${(i % 2 ? 40 : -40) * i}deg)` });
+      tween.animate(kv.body, f, { duration: BLEND_MS, easing: 'ease-in-out' });
+    }
+    later(BLEND_MS, () => { if (getEntity(store.state, s.id)) behaviors.act(s.id, 'blend'); });
   }
 
   // ---- toaster ----
@@ -365,7 +367,7 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
         return handled;
       },
       onTap(e, ctx) {
-        if (e.kind === 'station-blender') { tapBlender(e, ctx.info); return true; }
+        if (e.kind === 'station-blender') { tapBlender(e); return true; }
         if (e.kind === 'station-toaster') {
           if (!toasterPop()) pieceApi.tap('toaster');
           return true;
@@ -406,7 +408,7 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
       return null;
     },
     onPieceTap(pid) {
-      if (pid === 'blender') { const s = station('station-blender'); if (s) { tapBlender(s, {}); return true; } }
+      if (pid === 'blender') { const s = station('station-blender'); if (s) { tapBlender(s); return true; } }
       if (pid === 'toaster') return toasterPop();
       if (pid === 'coffee-machine') return pourCoffee();
       return false;
@@ -421,7 +423,6 @@ export function createPrep({ store, catalog, behaviors, m, room, fx, pieceApi })
     destroy() {
       for (const t of timers) clearTimeout(t);
       timers.clear();
-      blending.clear();
     },
   };
 }

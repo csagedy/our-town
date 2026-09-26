@@ -392,7 +392,7 @@ export const CUPS = ['glass', 'cafe-cup', 'mug'];
 
 function blend(e, rx) {
   const kids = rx.children();
-  rx.play('whirr');
+  if (rx.trigger !== 'verb:blend') rx.play('whirr');   // the cafe scene whirrs first, then blends
   if (!kids.length) { rx.reason = 'empty'; rx.shake({ amount: 0.5 }); return true; }
   for (const k of kids) if (!isMixed(k.props)) rx.dispatch('inc', { id: k.id, path: 'props.stir', by: MIX_DONE - (k.props.stir | 0) });
   const color = SMOOTHIE_HEX[smoothieOf(itemsOf(kids))];

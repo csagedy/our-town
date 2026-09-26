@@ -26,6 +26,11 @@
 // - SPAWNERS (P1.9 `spawner` behavior): the fridge stock (visible, drawn
 //   small), and invisible hot spots over the painted pantry, fruit bowl, cup
 //   and plate stacks and ice-cream tubs. Drag one out, or tap for a pop-out.
+// - PREP (P2a.2, cafe-prep.js): the knife on the cutting board, the whisk
+//   over the mixing bowl, invisible station containers over the blender,
+//   toaster and sink (spawned on every mount if missing), the coffee machine
+//   filling the cup under its spout; prep.pieceVariant() colours the blender
+//   jug, prep.onPieceTap() lets a station answer for its piece.
 // - FIRST VISIT: the stock, cookware and dishes on the shelves and tables,
 //   the kitchen cast and two customers at the tables.
 
